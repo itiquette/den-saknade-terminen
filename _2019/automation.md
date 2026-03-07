@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Automation"
+title: "Automatisering"
 presenter: Jose
 date: 2019-01-24
 order: 3
@@ -10,29 +10,34 @@ video:
 special: true
 ---
 
-Sometimes you write a script that does something but you want for it to run periodically, say a backup task. You can always write an *ad hoc* solution that runs in the background and comes online periodically. However, most UNIX systems come with the cron daemon which can run task with a frequency up to a minute based on simple rules.
+Ibland skriver du ett skript som gör något, men du vill att det ska köras periodiskt, till exempel en säkerhetskopieringsuppgift.
+Du kan alltid skriva en *ad hoc*-lösning som kör i bakgrunden och vaknar med jämna mellanrum.
+Men de flesta UNIX-system kommer med cron-demonen, som kan köra uppgifter så ofta som varje minut utifrån enkla regler.
 
-On most UNIX systems the cron daemon, `crond` will be running by default but you can always check using `ps aux | grep crond`.
+På de flesta UNIX-system kör cron-demonen `crond` som standard, men du kan alltid kontrollera med `ps aux | grep crond`.
 
-## The crontab
+## Crontab
 
-The configuration file for cron can be displayed running `crontab -l` edited running `crontab -e` The time format that cron uses are five space separated fields along with the user and command
+Cron-konfigurationen kan visas med `crontab -l` och redigeras med `crontab -e`.
+Tidsformatet som cron använder består av fem blankstegsseparerade fält, tillsammans med användare och kommando.
 
-- **minute** -  What minute of the hour the command will run on,
-     and is between '0' and '59'
-- **hour** -    This controls what hour the command will run on, and is specified in
-         the 24 hour clock, values must be between 0 and 23 (0 is midnight)
-- **dom** - This is the Day of Month, that you want the command run on, e.g. to
-     run a command on the 19th of each month, the dom would be 19.
-- **month** -   This is the month a specified command will run on, it may be specified
-     numerically (0-12), or as the name of the month (e.g. May)
-- **dow** - This is the Day of Week that you want a command to be run on, it can
-     also be numeric (0-7) or as the name of the day (e.g. sun).
-- **user** -    This is the user who runs the command.
-- **command** - This is the command that you want run. This field may contain
-     multiple words or spaces.
+- **minute** - vilken minut i timmen kommandot ska köras på,
+     och ligger mellan '0' och '59'
+- **hour** - styr vilken timme kommandot ska köras på, och anges i
+         24-timmarsformat, värdet måste vara mellan 0 och 23 (0 är midnatt)
+- **dom** - detta är Day of Month, alltså vilken dag i månaden kommandot ska köras,
+     t.ex. för att köra den 19:e varje månad är dom 19.
+- **month** - detta är månaden som ett kommando ska köras i, den kan anges
+     numeriskt (0-12), eller som månadens namn (t.ex. May)
+- **dow** - detta är Day of Week som ett kommando ska köras på, det kan
+     också anges numeriskt (0-7) eller som veckodagens namn (t.ex. sun).
+- **user** - användaren som kör kommandot.
+- **command** - kommandot du vill köra.
+     Det här fältet kan innehålla flera ord eller blanksteg.
 
-Note that using an asterisk `*` means all and using an asterisk followed by a slash and number means every nth value. So `*/5` means every five. Some examples are
+Observera att en asterisk `*` betyder alla värden, och en asterisk följd av snedstreck och tal betyder varje n:te värde.
+Alltså betyder `*/5` var femte.
+Några exempel:
 
 ```shell
 */5   *    *   *   *       # Every five minutes
@@ -42,31 +47,38 @@ Note that using an asterisk `*` means all and using an asterisk followed by a sl
   0   0    *   *   5       # Every Friday at 12:00 am
   0   0    1   */2 *       # Every other month, the first day, 12:00am
 ```
-You can find many more examples of common crontab schedules in [crontab.guru](https://crontab.guru/examples.html)
+Du hittar många fler exempel på vanliga crontab-scheman på [crontab.guru](https://crontab.guru/examples.html).
 
-## Shell environment and logging
+## Skalmiljö och loggning
 
-A common pitfall when using cron is that it does not load the same environment scripts that common shells do such as `.bashrc`, `.zshrc`, &c and it does not log the output anywhere by default. Combined with the maximum frequency being one minute, it can become quite painful to debug cronscripts initially.
+En vanlig fallgrop med cron är att den inte läser in samma miljöskript som vanliga skal, till exempel `.bashrc`, `.zshrc`, osv, och den loggar inte heller utdata någonstans som standard.
+Tillsammans med att högsta frekvens är en minut kan det göra felsökning av cron-skript ganska plågsam i början.
 
-To deal with the environment, make sure that you use absolute paths in all your scripts and modify your environment variables such as `PATH` so the script can run successfully. To simplify logging, a good recommendation is to write your crontab in a format like this
+För att hantera miljön bör du använda absoluta sökvägar i alla skript och justera miljövariabler som `PATH` så att skriptet kan köras korrekt.
+För enklare loggning är en bra rekommendation att skriva din crontab i stil med detta.
 
 
 ```shell
 * * * * *   user  /path/to/cronscripts/every_minute.sh >> /tmp/cron_every_minute.log 2>&1
 ```
 
-And write the script in a separate file. Remember that `>>` appends to the file and that `2>&1` redirects `stderr` to `stdout` (you might to want keep them separate though).
+Skriv skriptet i en separat fil.
+Kom ihåg att `>>` appenderar till filen och att `2>&1` omdirigerar `stderr` till `stdout` (du kan vilja hålla dem separata).
 
 ## Anacron
 
-One caveat of using cron is that if the computer is powered off or asleep when the cron script should run then it is not executed. For frequent tasks this might be fine, but if a task runs less often, you may want to ensure that it is executed. [anacron](https://linux.die.net/man/8/anacron) works similar to `cron` except that the frequency is specified in days. Unlike cron, it does not assume that the machine is running continuously. Hence, it can be used on machines that aren't running 24 hours a day, to control regular jobs as daily, weekly, and monthly jobs.
+En begränsning med cron är att om datorn är avstängd eller i viloläge när cron-skriptet skulle köras, så körs det inte.
+För täta uppgifter kan det vara okej, men om en uppgift körs mer sällan kan du vilja säkerställa att den faktiskt körs.
+[anacron](https://linux.die.net/man/8/anacron) fungerar likt `cron`, men frekvensen anges i dagar.
+Till skillnad från cron antar det inte att maskinen körs kontinuerligt.
+Det gör att det kan användas på maskiner som inte är igång dygnet runt, för återkommande jobb som dagliga, veckovisa och månatliga jobb.
 
 
-## Exercises
+## Övningar
 
-1. Make a script that looks every minute in your downloads folder for any file that is a picture (you can look into [MIME types](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) or use a regular expression to match common extensions) and moves them into your Pictures folder.
+1. Skapa ett skript som varje minut tittar i din nedladdningsmapp efter filer som är bilder (du kan använda [MIME-typer](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types) eller ett reguljärt uttryck som matchar vanliga filändelser) och flyttar dem till din bildmapp.
 
-1. Write a cron script to weekly check for outdated packages in your system and prompts you to update them or updates them automatically.
+1. Skriv ett cron-skript som varje vecka kontrollerar om du har föråldrade paket i systemet och antingen frågar om uppdatering eller uppdaterar automatiskt.
 
 
 

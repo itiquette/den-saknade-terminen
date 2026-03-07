@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Shell Tools and Scripting"
+title: "Skalverktyg och skriptning"
 description: >
-  Learn how to write shell scripts and use powerful command-line tools.
+  Lär dig skriva skalskript och använda kraftfulla kommandoradsverktyg.
 thumbnail: /static/assets/thumbnails/2020/lec2.png
 date: 2020-01-14
 ready: true
@@ -11,36 +11,38 @@ video:
   id: kgII-YWo3Zw
 ---
 
-In this lecture, we will present some of the basics of using bash as a scripting language along with a number of shell tools that cover several of the most common tasks that you will be constantly performing in the command line.
+I den här föreläsningen går vi igenom grunderna i att använda bash som skriptspråk tillsammans med ett antal skalverktyg som täcker flera av de vanligaste uppgifterna du ständigt utför i kommandoraden.
 
-# Shell Scripting
+# Skalskriptning
 
-So far we have seen how to execute commands in the shell and pipe them together.
-However, in many scenarios you will want to perform a series of commands and make use of control flow expressions like conditionals or loops.
+Hittills har vi sett hur man kör kommandon i skalet och kopplar ihop dem med rör.
+I många scenarier vill du dock köra en serie kommandon och använda styrflöde som villkor eller loopar.
 
-Shell scripts are the next step in complexity.
-Most shells have their own scripting language with variables, control flow and its own syntax.
-What makes shell scripting different from other scripting programming languages is that it is optimized for performing shell-related tasks.
-Thus, creating command pipelines, saving results into files, and reading from standard input are primitives in shell scripting, which makes it easier to use than general purpose scripting languages.
-For this section we will focus on bash scripting since it is the most common.
+Skalskript är nästa steg i komplexitet.
+De flesta skal har ett eget skriptspråk med variabler, styrflöde och egen syntax.
+Det som skiljer skalskriptning från andra skriptspråk är att det är optimerat för skalrelaterade uppgifter.
+Att bygga kommandokedjor, spara resultat i filer och läsa från standard input är därför grundfunktioner i skalskriptning, vilket ofta gör det enklare att använda än allmänna skriptspråk.
+I det här avsnittet fokuserar vi på bash-skriptning eftersom det är vanligast.
 
-To assign variables in bash, use the syntax `foo=bar` and access the value of the variable with `$foo`.
-Note that `foo = bar` will not work since it is interpreted as calling the `foo` program with arguments `=` and `bar`.
-In general, in shell scripts the space character will perform argument splitting. This behavior can be confusing to use at first, so always check for that.
+För att tilldela variabler i bash använder du syntaxen `foo=bar` och läser värdet med `$foo`.
+Observera att `foo = bar` inte fungerar, eftersom det tolkas som att programmet `foo` körs med argumenten `=` och `bar`.
+Generellt gäller att blanktecken i skalskript orsakar argumentsplittring.
+Detta beteende kan vara förvirrande i början, så var alltid uppmärksam på det.
 
-Strings in bash can be defined with `'` and `"` delimiters, but they are not equivalent.
-Strings delimited with `'` are literal strings and will not substitute variable values whereas `"` delimited strings will.
+Strängar i bash kan avgränsas med `'` och `"`, men de är inte likvärdiga.
+Strängar med `'` är bokstavliga och expanderar inte variabler, medan strängar med `"` gör det.
 
 ```bash
 foo=bar
 echo "$foo"
-# prints bar
+# skriver ut bar
 echo '$foo'
-# prints $foo
+# skriver ut $foo
 ```
 
-As with most programming languages, bash supports control flow techniques including `if`, `case`, `while` and `for`.
-Similarly, `bash` has functions that take arguments and can operate with them. Here is an example of a function that creates a directory and `cd`s into it.
+Som de flesta programmeringsspråk stöder bash styrflödestekniker som `if`, `case`, `while` och `for`.
+På samma sätt har `bash` funktioner som tar argument och kan arbeta med dem.
+Här är ett exempel på en funktion som skapar en katalog och går in i den med `cd`.
 
 
 ```bash
@@ -50,110 +52,123 @@ mcd () {
 }
 ```
 
-Here `$1` is the first argument to the script/function.
-Unlike other scripting languages, bash uses a variety of special variables to refer to arguments, error codes, and other relevant variables. Below is a list of some of them. A more comprehensive list can be found [here](https://tldp.org/LDP/abs/html/special-chars.html).
-- `$0` - Name of the script
-- `$1` to `$9` - Arguments to the script. `$1` is the first argument and so on.
-- `$@` - All the arguments
-- `$#` - Number of arguments
-- `$?` - Return code of the previous command
-- `$$` - Process identification number (PID) for the current script
-- `!!` - Entire last command, including arguments. A common pattern is to execute a command only for it to fail due to missing permissions; you can quickly re-execute the command with sudo by doing `sudo !!`
-- `$_` - Last argument from the last command. If you are in an interactive shell, you can also quickly get this value by typing `Esc` followed by `.` or `Alt+.`
+Här är `$1` det första argumentet till skriptet/funktionen.
+Till skillnad från andra skriptspråk använder bash en mängd specialvariabler för att referera till argument, felkoder och andra relevanta värden.
+Nedan är en lista över några av dem.
+En mer komplett lista finns [här](https://tldp.org/LDP/abs/html/special-chars.html).
+- `$0` - Skriptets namn
+- `$1` till `$9` - Argument till skriptet. `$1` är första argumentet och så vidare.
+- `$@` - Alla argument
+- `$#` - Antal argument
+- `$?` - Returkod för föregående kommando
+- `$$` - Process-ID (PID) för det aktuella skriptet
+- `!!` - Hela senaste kommandot inklusive argument. Ett vanligt mönster är att köra ett kommando som misslyckas på grund av saknade rättigheter; då kan du snabbt köra om det med sudo genom att skriva `sudo !!`
+- `$_` - Sista argumentet i senaste kommandot. I ett interaktivt skal kan du också snabbt få värdet genom att skriva `Esc` följt av `.` eller `Alt+.`
 
-Commands will often return output using `STDOUT`, errors through `STDERR`, and a Return Code to report errors in a more script-friendly manner.
-The return code or exit status is the way scripts/commands have to communicate how execution went.
-A value of 0 usually means everything went OK; anything different from 0 means an error occurred.
+Kommandon returnerar ofta utdata via `STDOUT`, fel via `STDERR` och en returkod för att rapportera fel på ett skriptvänligt sätt.
+Returkoden, eller exit-status, är hur skript/kommandon kommunicerar hur körningen gick.
+Värdet 0 betyder vanligtvis att allt gick bra; allt annat än 0 betyder att ett fel uppstod.
 
-Exit codes can be used to conditionally execute commands using `&&` (and operator) and `||` (or operator), both of which are [short-circuiting](https://en.wikipedia.org/wiki/Short-circuit_evaluation) operators. Commands can also be separated within the same line using a semicolon `;`.
-The `true` program will always have a 0 return code and the `false` command will always have a 1 return code.
-Let's see some examples
+Exit-koder kan användas för villkorad körning av kommandon med `&&` (och-operator) och `||` (eller-operator), som båda är [kortslutande](https://en.wikipedia.org/wiki/Short-circuit_evaluation) operatorer.
+Kommandon kan också separeras på samma rad med semikolon `;`.
+Programmet `true` returnerar alltid 0 och kommandot `false` returnerar alltid 1.
+Låt oss se några exempel.
 
 ```bash
-false || echo "Oops, fail"
-# Oops, fail
+false || echo "Oj, fel"
+# skriver ut: Oj, fel
 
-true || echo "Will not be printed"
-#
+true || echo "Skrivs inte ut"
+# skriver inte ut något
 
-true && echo "Things went well"
-# Things went well
+true && echo "Allt gick bra"
+# skriver ut: Allt gick bra
 
-false && echo "Will not be printed"
-#
+false && echo "Skrivs inte ut"
+# skriver inte ut något
 
-true ; echo "This will always run"
-# This will always run
+true ; echo "Det här körs alltid"
+# Det här körs alltid
 
-false ; echo "This will always run"
-# This will always run
+false ; echo "Det här körs alltid"
+# Det här körs alltid
 ```
 
-Another common pattern is wanting to get the output of a command as a variable. This can be done with _command substitution_.
-Whenever you place `$( CMD )` it will execute `CMD`, get the output of the command and substitute it in place.
-For example, if you do `for file in $(ls)`, the shell will first call `ls` and then iterate over those values.
-A lesser known similar feature is _process substitution_, `<( CMD )` will execute `CMD` and place the output in a temporary file and substitute the `<()` with that file's name. This is useful when commands expect values to be passed by file instead of by STDIN. For example, `diff <(ls foo) <(ls bar)` will show differences between files in dirs  `foo` and `bar`.
+Ett annat vanligt mönster är att vilja få utdata från ett kommando till en variabel.
+Det kan göras med _command substitution_ (kommandosubstitution).
+Varje gång du skriver `$( CMD )` körs `CMD`, kommandots utdata hämtas och ersätter uttrycket på plats.
+Om du till exempel skriver `for file in $(ls)` kommer skalet först att köra `ls` och sedan iterera över värdena.
+En mindre känd liknande funktion är _process substitution_ (processsubstitution), där `<( CMD )` kör `CMD`, lägger utdata i en temporär fil och ersätter `<()` med filens namn.
+Detta är användbart när kommandon förväntar sig värden via fil i stället för via STDIN.
+Till exempel visar `diff <(ls foo) <(ls bar)` skillnader mellan filer i katalogerna `foo` och `bar`.
 
 
-Since that was a huge information dump, let's see an example that showcases some of these features. It will iterate through the arguments we provide, `grep` for the string `foobar`, and append it to the file as a comment if it's not found.
+Eftersom det var mycket information på en gång tar vi ett exempel som visar några av funktionerna.
+Det itererar över argumenten vi skickar in, kör `grep` efter strängen `foobar` och appenderar den till filen som en kommentar om den inte hittas.
 
 ```bash
 #!/bin/bash
 
-echo "Starting program at $(date)" # Date will be substituted
+echo "Startar programmet $(date)" # Datumet ersätts här
 
-echo "Running program $0 with $# arguments with pid $$"
+echo "Kör programmet $0 med $# argument och PID $$"
 
 for file in "$@"; do
     grep foobar "$file" > /dev/null 2> /dev/null
-    # When pattern is not found, grep has exit status 1
-    # We redirect STDOUT and STDERR to a null register since we do not care about them
+    # När mönstret inte hittas får grep exit-status 1
+    # Vi omdirigerar STDOUT och STDERR till /dev/null eftersom vi inte bryr oss om utdata här
     if [[ $? -ne 0 ]]; then
-        echo "File $file does not have any foobar, adding one"
+        echo "Filen $file innehåller inte foobar, lägger till en rad"
         echo "# foobar" >> "$file"
     fi
 done
 ```
 
-In the comparison we tested whether `$?` was not equal to 0.
-Bash implements many comparisons of this sort - you can find a detailed list in the manpage for [`test`](https://www.man7.org/linux/man-pages/man1/test.1.html).
-When performing comparisons in bash, try to use double brackets `[[ ]]` in favor of simple brackets `[ ]`. Chances of making mistakes are lower although it won't be portable to `sh`. A more detailed explanation can be found [here](https://mywiki.wooledge.org/BashFAQ/031).
+I jämförelsen testade vi om `$?` inte var lika med 0.
+Bash implementerar många jämförelser av detta slag; en detaljerad lista finns i manualsidan för [`test`](https://www.man7.org/linux/man-pages/man1/test.1.html).
+När du gör jämförelser i bash, försök använda dubbla hakparenteser `[[ ]]` i stället för enkla `[ ]`.
+Risken för misstag är mindre, även om det då inte blir portabelt till `sh`.
+En mer detaljerad förklaring finns [här](https://mywiki.wooledge.org/BashFAQ/031).
 
-When launching scripts, you will often want to provide arguments that are similar. Bash has ways of making this easier, expanding expressions by carrying out filename expansion. These techniques are often referred to as shell _globbing_.
-- Wildcards - Whenever you want to perform some sort of wildcard matching, you can use `?` and `*` to match one or any amount of characters respectively. For instance, given files `foo`, `foo1`, `foo2`, `foo10` and `bar`, the command `rm foo?` will delete `foo1` and `foo2` whereas `rm foo*` will delete all but `bar`.
-- Curly braces `{}` - Whenever you have a common substring in a series of commands, you can use curly braces for bash to expand this automatically. This comes in very handy when moving or converting files.
+När du startar skript vill du ofta skicka in liknande argument.
+Bash har sätt att underlätta detta genom att expandera uttryck via filnamnsexpansion.
+Dessa tekniker kallas ofta skalglobbing.
+- Jokertecken - När du vill matcha med jokertecken kan du använda `?` och `*` för att matcha ett respektive valfritt antal tecken. Givet filerna `foo`, `foo1`, `foo2`, `foo10` och `bar` tar kommandot `rm foo?` bort `foo1` och `foo2`, medan `rm foo*` tar bort alla utom `bar`.
+- Måsvingar `{}` - När du har en gemensam delsträng i en serie kommandon kan du använda måsvingar för att låta bash expandera detta automatiskt. Detta är mycket praktiskt när du flyttar eller konverterar filer.
 
 ```bash
 convert image.{png,jpg}
-# Will expand to
+# Expanderar till
 convert image.png image.jpg
 
 cp /path/to/project/{foo,bar,baz}.sh /newpath
-# Will expand to
+# Expanderar till
 cp /path/to/project/foo.sh /path/to/project/bar.sh /path/to/project/baz.sh /newpath
 
-# Globbing techniques can also be combined
+# Globbingtekniker kan kombineras
 mv *{.py,.sh} folder
-# Will move all *.py and *.sh files
+# Flyttar alla *.py- och *.sh-filer
 
 
 mkdir foo bar
-# This creates files foo/a, foo/b, ... foo/h, bar/a, bar/b, ... bar/h
+# Detta skapar filerna foo/a, foo/b, ... foo/h, bar/a, bar/b, ... bar/h
 touch {foo,bar}/{a..h}
 touch foo/x bar/y
-# Show differences between files in foo and bar
+# Visa skillnader mellan filer i foo och bar
 diff <(ls foo) <(ls bar)
-# Outputs
+# Skriver ut
 # < x
 # ---
 # > y
 ```
 
-<!-- Lastly, pipes `|` are a core feature of scripting. Pipes connect one program's output to the next program's input. We will cover them more in detail in the data wrangling lecture. -->
+<!-- Slutligen är rör `|` en kärnfunktion i skriptning. Rör kopplar utdata från ett program till indata för nästa program. Vi går igenom dem mer i detalj i föreläsningen om datahantering. -->
 
-Writing `bash` scripts can be tricky and unintuitive. There are tools like [shellcheck](https://github.com/koalaman/shellcheck) that will help you find errors in your sh/bash scripts.
+Att skriva `bash`-skript kan vara knepigt och ibland ointuitivt.
+Det finns verktyg som [shellcheck](https://github.com/koalaman/shellcheck) som hjälper dig hitta fel i dina sh/bash-skript.
 
-Note that scripts need not necessarily be written in bash to be called from the terminal. For instance, here's a simple Python script that outputs its arguments in reversed order:
+Observera att skript inte måste skrivas i bash för att kunna anropas från terminalen.
+Här är till exempel ett enkelt Python-skript som skriver ut sina argument i omvänd ordning:
 
 ```python
 #!/usr/local/bin/python
@@ -162,153 +177,165 @@ for arg in reversed(sys.argv[1:]):
     print(arg)
 ```
 
-The kernel knows to execute this script with a python interpreter instead of a shell command because we included a [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line at the top of the script.
-It is good practice to write shebang lines using the [`env`](https://www.man7.org/linux/man-pages/man1/env.1.html) command that will resolve to wherever the command lives in the system, increasing the portability of your scripts. To resolve the location, `env` will make use of the `PATH` environment variable we introduced in the first lecture.
-For this example the shebang line would look like `#!/usr/bin/env python`.
+Kärnan vet att skriptet ska köras med en Python-tolk i stället för som ett skalkommando eftersom vi inkluderade en [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) längst upp i skriptet.
+Det är god praxis att skriva shebang-rader med kommandot [`env`](https://www.man7.org/linux/man-pages/man1/env.1.html), som pekar på var kommandot finns i systemet och ökar portabiliteten i dina skript.
+För att hitta platsen använder `env` miljövariabeln `PATH` som vi introducerade i första föreläsningen.
+I detta exempel skulle shebang-raden se ut som `#!/usr/bin/env python`.
 
-Some differences between shell functions and scripts that you should keep in mind are:
-- Functions have to be in the same language as the shell, while scripts can be written in any language. This is why including a shebang for scripts is important.
-- Functions are loaded once when their definition is read. Scripts are loaded every time they are executed. This makes functions slightly faster to load, but whenever you change them you will have to reload their definition.
-- Functions are executed in the current shell environment whereas scripts execute in their own process. Thus, functions can modify environment variables, e.g. change your current directory, whereas scripts can't. Environment variables which have been exported using [`export`](https://www.man7.org/linux/man-pages/man1/export.1p.html) are passed by value to scripts.
-- As with any programming language, functions are a powerful construct to achieve modularity, code reuse, and clarity of shell code. Often shell scripts will include their own function definitions.
+Några skillnader mellan skalfunktioner och skript att ha i åtanke är:
+- Funktioner måste skrivas i samma språk som skalet, medan skript kan skrivas i vilket språk som helst. Därför är shebang viktig för skript.
+- Funktioner laddas en gång när deras definition läses in. Skript laddas varje gång de körs. Detta gör funktioner något snabbare att ladda, men när du ändrar dem måste du ladda om definitionen.
+- Funktioner körs i den aktuella skalmiljön medan skript körs i en egen process. Därför kan funktioner ändra miljövariabler, t.ex. byta aktuell katalog, medan skript inte kan det. Miljövariabler som exporterats med [`export`](https://www.man7.org/linux/man-pages/man1/export.1p.html) skickas med värde till skript.
+- Som i alla programmeringsspråk är funktioner en kraftfull konstruktion för modularitet, kodåteranvändning och tydlighet i skalkod. Ofta innehåller skalskript egna funktionsdefinitioner.
 
-# Shell Tools
+# Skalverktyg
 
-## Finding how to use commands
+## Ta reda på hur kommandon används
 
-At this point, you might be wondering how to find the flags for the commands in the aliasing section such as `ls -l`, `mv -i` and `mkdir -p`.
-More generally, given a command, how do you go about finding out what it does and its different options?
-You could always start googling, but since UNIX predates StackOverflow, there are built-in ways of getting this information.
+Vid det här laget kanske du undrar hur man hittar flaggorna för kommandon i avsnittet om alias, som `ls -l`, `mv -i` och `mkdir -p`.
+Mer generellt: givet ett kommando, hur tar du reda på vad det gör och vilka alternativ som finns?
+Du kan alltid börja googla, men eftersom UNIX är äldre än StackOverflow finns inbyggda sätt att få den informationen.
 
-As we saw in the shell lecture, the first-order approach is to call said command with the `-h` or `--help` flags. A more detailed approach is to use the `man` command.
-Short for manual, [`man`](https://www.man7.org/linux/man-pages/man1/man.1.html) provides a manual page (called manpage) for a command you specify.
-For example, `man rm` will output the behavior of the `rm` command along with the flags that it takes, including the `-i` flag we showed earlier.
-In fact, what I have been linking so far for every command is the online version of the Linux manpages for the commands.
-Even non-native commands that you install will have manpage entries if the developer wrote them and included them as part of the installation process.
-For interactive tools such as the ones based on ncurses, help for the commands can often be accessed within the program using the `:help` command or typing `?`.
+Som vi såg i föreläsningen om skalet är förstahandsmetoden att köra kommandot med flaggan `-h` eller `--help`.
+En mer detaljerad metod är kommandot `man`.
+Kort för manual ger [`man`](https://www.man7.org/linux/man-pages/man1/man.1.html) en manualsida (manpage) för kommandot du anger.
+Till exempel skriver `man rm` ut beteendet för kommandot `rm` tillsammans med flaggorna det accepterar, inklusive `-i`-flaggan vi visade tidigare.
+Faktum är att det jag har länkat till för varje kommando hittills är onlineversionen av Linux-manpages.
+Även externa kommandon du installerar kan få manpage-poster om utvecklaren har skrivit och inkluderat dem i installationsprocessen.
+För interaktiva verktyg, som de som bygger på ncurses, går hjälp för kommandon ofta att nå inifrån programmet med kommandot `:help` eller genom att trycka `?`.
 
-Sometimes manpages can provide overly detailed descriptions of the commands, making it hard to decipher what flags/syntax to use for common use cases.
-[TLDR pages](https://tldr.sh/) are a nifty complementary solution that focuses on giving example use cases of a command so you can quickly figure out which options to use.
-For instance, I find myself referring back to the tldr pages for [`tar`](https://tldr.inbrowser.app/pages/common/tar) and [`ffmpeg`](https://tldr.inbrowser.app/pages/common/ffmpeg) way more often than the manpages.
+Ibland kan manpages vara väldigt detaljerade, vilket gör det svårt att snabbt se vilka flaggor/syntax som behövs i vanliga situationer.
+[TLDR pages](https://tldr.sh/) är ett smidigt komplement som fokuserar på konkreta exempel så att du snabbt kan se vilka alternativ du ska använda.
+Jag märker till exempel att jag går tillbaka till tldr-sidorna för [`tar`](https://tldr.inbrowser.app/pages/common/tar) och [`ffmpeg`](https://tldr.inbrowser.app/pages/common/ffmpeg) mycket oftare än till manpages.
 
 
-## Finding files
+## Hitta filer
 
-One of the most common repetitive tasks that every programmer faces is finding files or directories.
-All UNIX-like systems come packaged with [`find`](https://www.man7.org/linux/man-pages/man1/find.1.html), a great shell tool to find files. `find` will recursively search for files matching some criteria. Some examples:
+En av de vanligaste repetitiva uppgifterna för programmerare är att hitta filer eller kataloger.
+Alla UNIX-liknande system levereras med [`find`](https://www.man7.org/linux/man-pages/man1/find.1.html), ett utmärkt skalverktyg för att hitta filer.
+`find` söker rekursivt efter filer som matchar vissa kriterier.
+Några exempel:
 
 ```bash
-# Find all directories named src
+# Hitta alla kataloger som heter src
 find . -name src -type d
-# Find all python files that have a folder named test in their path
+# Hitta alla Python-filer som har en mapp med namnet test i sökvägen
 find . -path '*/test/*.py' -type f
-# Find all files modified in the last day
+# Hitta alla filer som ändrats det senaste dygnet
 find . -mtime -1
-# Find all zip files with size in range 500k to 10M
+# Hitta alla zip-filer med storlek mellan 500k och 10M
 find . -size +500k -size -10M -name '*.tar.gz'
 ```
-Beyond listing files, find can also perform actions over files that match your query.
-This property can be incredibly helpful to simplify what could be fairly monotonous tasks.
+Utöver att lista filer kan find också utföra åtgärder på filer som matchar din sökning.
+Den egenskapen är mycket hjälpsam för att förenkla uppgifter som annars kan bli monotona.
 ```bash
-# Delete all files with .tmp extension
+# Ta bort alla filer med filändelsen .tmp
 find . -name '*.tmp' -exec rm {} \;
 
-# Find all PNG files and convert them to JPG
+# Hitta alla PNG-filer och konvertera dem till JPG
 find . -name '*.png' -exec magick {} {}.jpg \;
 ```
 
-Despite `find`'s ubiquitousness, its syntax can sometimes be tricky to remember.
-For instance, to simply find files that match some pattern `PATTERN` you have to execute `find -name '*PATTERN*'` (or `-iname` if you want the pattern matching to be case insensitive).
-You could start building aliases for those scenarios, but part of the shell philosophy is that it is good to explore alternatives.
-Remember, one of the best properties of the shell is that you are just calling programs, so you can find (or even write yourself) replacements for some.
-For instance, [`fd`](https://github.com/sharkdp/fd) is a simple, fast, and user-friendly alternative to `find`.
-It offers some nice defaults like colorized output, default regex matching, and Unicode support. It also has, in my opinion, a more intuitive syntax.
-For example, the syntax to find a pattern `PATTERN` is `fd PATTERN`.
+Trots att `find` finns överallt kan syntaxen ibland vara svår att komma ihåg.
+För att bara hitta filer som matchar ett mönster `PATTERN` måste du till exempel köra `find -name '*PATTERN*'` (eller `-iname` om matchningen ska vara skiftlägesokänslig).
+Du kan bygga alias för sådana scenarier, men en del av skalfilosofin är att det är bra att utforska alternativ.
+Kom ihåg att en av skalets bästa egenskaper är att du bara anropar program, så du kan hitta (eller skriva själv) ersättare för vissa verktyg.
+Till exempel är [`fd`](https://github.com/sharkdp/fd) ett enkelt, snabbt och användarvänligt alternativ till `find`.
+Det har bra standardval som färgad utdata, regexmatchning som standard och Unicode-stöd.
+Det har också, enligt min mening, en mer intuitiv syntax.
+Syntaxen för att hitta mönstret `PATTERN` är till exempel bara `fd PATTERN`.
 
-Most would agree that `find` and `fd` are good, but some of you might be wondering about the efficiency of looking for files every time versus compiling some sort of index or database for quickly searching.
-That is what [`locate`](https://www.man7.org/linux/man-pages/man1/locate.1.html) is for.
-`locate` uses a database that is updated using [`updatedb`](https://www.man7.org/linux/man-pages/man1/updatedb.1.html).
-In most systems, `updatedb` is updated daily via [`cron`](https://www.man7.org/linux/man-pages/man8/cron.8.html).
-Therefore one trade-off between the two is speed vs freshness.
-Moreover `find` and similar tools can also find files using attributes such as file size, modification time, or file permissions, while `locate` just uses the file name.
-A more in-depth comparison can be found [here](https://unix.stackexchange.com/questions/60205/locate-vs-find-usage-pros-and-cons-of-each-other).
+Många håller med om att `find` och `fd` är bra, men vissa undrar om det är effektivare att söka filer varje gång jämfört med att bygga ett index eller en databas för snabb sökning.
+Det är just vad [`locate`](https://www.man7.org/linux/man-pages/man1/locate.1.html) är till för.
+`locate` använder en databas som uppdateras med [`updatedb`](https://www.man7.org/linux/man-pages/man1/updatedb.1.html).
+I de flesta system uppdateras `updatedb` dagligen via [`cron`](https://www.man7.org/linux/man-pages/man8/cron.8.html).
+En avvägning mellan verktygen är därför hastighet kontra färskhet.
+Dessutom kan `find` och liknande verktyg söka på attribut som filstorlek, ändringstid eller filrättigheter, medan `locate` bara använder filnamn.
+En mer djupgående jämförelse finns [här](https://unix.stackexchange.com/questions/60205/locate-vs-find-usage-pros-and-cons-of-each-other).
 
-## Finding code
+## Hitta kod
 
-Finding files by name is useful, but quite often you want to search based on file *content*.
-A common scenario is wanting to search for all files that contain some pattern, along with where in those files said pattern occurs.
-To achieve this, most UNIX-like systems provide [`grep`](https://www.man7.org/linux/man-pages/man1/grep.1.html), a generic tool for matching patterns from the input text.
-`grep` is an incredibly valuable shell tool that we will cover in greater detail during the data wrangling lecture.
+Att hitta filer via namn är användbart, men ofta vill du söka baserat på *innehåll*.
+Ett vanligt scenario är att hitta alla filer som innehåller ett visst mönster, inklusive var i filerna mönstret förekommer.
+För detta erbjuder de flesta UNIX-liknande system [`grep`](https://www.man7.org/linux/man-pages/man1/grep.1.html), ett generellt verktyg för att matcha mönster i indata.
+`grep` är ett otroligt värdefullt skalverktyg som vi går in djupare på i föreläsningen om datahantering.
 
-For now, know that `grep` has many flags that make it a very versatile tool.
-Some I frequently use are `-C` for getting **C**ontext around the matching line and `-v` for in**v**erting the match, i.e. print all lines that do **not** match the pattern. For example, `grep -C 5` will print 5 lines before and after the match.
-When it comes to quickly searching through many files, you want to use `-R` since it will **R**ecursively go into directories and look for files for the matching string.
+För nu räcker det att veta att `grep` har många flaggor som gör det mycket mångsidigt.
+Några jag ofta använder är `-C` för **C**ontext runt matchande rad och `-v` för att in**v**ertera matchningen, dvs. skriva ut alla rader som **inte** matchar mönstret.
+Till exempel skriver `grep -C 5` ut 5 rader före och efter matchningen.
+När du snabbt vill söka genom många filer vill du använda `-R` eftersom det går **R**ekursivt in i kataloger och letar i filer efter matchsträngen.
 
-But `grep -R` can be improved in many ways, such as ignoring `.git` folders, using multi CPU support, &c.
-Many `grep` alternatives have been developed, including [ack](https://github.com/beyondgrep/ack3), [ag](https://github.com/ggreer/the_silver_searcher) and [rg](https://github.com/BurntSushi/ripgrep).
-All of them are fantastic and pretty much provide the same functionality.
-For now I am sticking with ripgrep (`rg`), given how fast and intuitive it is. Some examples:
+Men `grep -R` kan förbättras på många sätt, som att ignorera `.git`-mappar, använda flera CPU-kärnor, &c.
+Många alternativ till `grep` har utvecklats, bland annat [ack](https://github.com/beyondgrep/ack3), [ag](https://github.com/ggreer/the_silver_searcher) och [rg](https://github.com/BurntSushi/ripgrep).
+Alla är utmärkta och erbjuder i stort sett samma funktionalitet.
+Just nu håller jag mig till ripgrep (`rg`) tack vare dess hastighet och intuitiva användning.
+Några exempel:
 ```bash
-# Find all python files where I used the requests library
+# Hitta alla Python-filer där jag använder biblioteket requests
 rg -t py 'import requests'
-# Find all files (including hidden files) without a shebang line
+# Hitta alla filer (inklusive dolda) utan shebang-rad
 rg -u --files-without-match "^#\!"
-# Find all matches of foo and print the following 5 lines
+# Hitta alla träffar på foo och skriv ut de följande 5 raderna
 rg foo -A 5
-# Print statistics of matches (# of matched lines and files )
+# Skriv ut statistik för träffarna (antal matchande rader och filer)
 rg --stats PATTERN
 ```
 
-Note that as with `find`/`fd`, it is important that you know that these problems can be quickly solved using one of these tools, while the specific tools you use are not as important.
+Observera att precis som med `find`/`fd` är det viktigaste att känna till att problemen snabbt kan lösas med något av verktygen; exakt vilket verktyg du använder är mindre viktigt.
 
-## Finding shell commands
+## Hitta skalkommandon
 
-So far we have seen how to find files and code, but as you start spending more time in the shell, you may want to find specific commands you typed at some point.
-The first thing to know is that typing the up arrow will give you back your last command, and if you keep pressing it you will slowly go through your shell history.
+Hittills har vi sett hur man hittar filer och kod, men när du lägger mer tid i skalet kan du vilja hitta särskilda kommandon du skrev tidigare.
+Det första att känna till är att uppåtpilen ger dig senaste kommandot tillbaka, och om du fortsätter trycka går du gradvis bakåt i skalhistoriken.
 
-The `history` command will let you access your shell history programmatically.
-It will print your shell history to the standard output.
-If we want to search there we can pipe that output to `grep` and search for patterns.
-`history | grep find` will print commands that contain the substring "find".
+Kommandot `history` låter dig komma åt skalhistoriken programmatiskt.
+Det skriver ut historiken till standard output.
+Om vi vill söka i den kan vi skicka utdata genom ett rör till `grep` och leta efter mönster.
+`history | grep find` skriver ut kommandon som innehåller delsträngen "find".
 
-In most shells, you can make use of `Ctrl+R` to perform backwards search through your history.
-After pressing `Ctrl+R`, you can type a substring you want to match for commands in your history.
-As you keep pressing it, you will cycle through the matches in your history.
-This can also be enabled with the UP/DOWN arrows in [zsh](https://github.com/zsh-users/zsh-history-substring-search).
-A nice addition on top of `Ctrl+R` comes with using [fzf](https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings#ctrl-r) bindings.
-`fzf` is a general-purpose fuzzy finder that can be used with many commands.
-Here it is used to fuzzily match through your history and present results in a convenient and visually pleasing manner.
+I de flesta skal kan du använda `Ctrl+R` för bakåtsökning i historiken.
+Efter att ha tryckt `Ctrl+R` kan du skriva en delsträng som ska matcha kommandon i historiken.
+Om du fortsätter trycka cyklar du genom träffarna.
+Detta kan också aktiveras med UP/DOWN-pilar i [zsh](https://github.com/zsh-users/zsh-history-substring-search).
+Ett trevligt tillägg till `Ctrl+R` är bindningar med [fzf](https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings#ctrl-r).
+`fzf` är en generell fuzzy finder som kan användas med många kommandon.
+Här används den för fuzzy-matchning i historiken och presenterar resultat på ett smidigt och visuellt tilltalande sätt.
 
-Another cool history-related trick I really enjoy is **history-based autosuggestions**.
-First introduced by the [fish](https://fishshell.com/) shell, this feature dynamically autocompletes your current shell command with the most recent command that you typed that shares a common prefix with it.
-It can be enabled in [zsh](https://github.com/zsh-users/zsh-autosuggestions) and it is a great quality of life trick for your shell.
+Ett annat historiktrick jag gillar mycket är **history-based autosuggestions**.
+Funktionen introducerades först i skalet [fish](https://fishshell.com/) och autokompletterar dynamiskt aktuellt kommando med det senaste kommandot du skrivit som delar prefix.
+Den kan aktiveras i [zsh](https://github.com/zsh-users/zsh-autosuggestions) och är ett riktigt bra livskvalitetstrick för skalet.
 
-You can modify your shell's history behavior, like preventing commands with a leading space from being included. This comes in handy when you are typing commands with passwords or other bits of sensitive information.
-To do this, add `HISTCONTROL=ignorespace` to your `.bashrc` or `setopt HIST_IGNORE_SPACE` to your `.zshrc`.
-If you make the mistake of not adding the leading space, you can always manually remove the entry by editing your `.bash_history` or `.zsh_history`.
+Du kan ändra historikbeteendet i skalet, till exempel förhindra att kommandon med inledande blanksteg sparas.
+Det är praktiskt när du skriver kommandon med lösenord eller annan känslig information.
+För att göra det, lägg till `HISTCONTROL=ignorespace` i `.bashrc` eller `setopt HIST_IGNORE_SPACE` i `.zshrc`.
+Om du glömmer inledande blanksteg kan du alltid manuellt ta bort posten genom att redigera `.bash_history` eller `.zsh_history`.
 
-## Directory Navigation
+## Katalognavigering
 
-So far, we have assumed that you are already where you need to be to perform these actions. But how do you go about quickly navigating directories?
-There are many simple ways that you could do this, such as writing shell aliases or creating symlinks with [ln -s](https://www.man7.org/linux/man-pages/man1/ln.1.html), but the truth is that developers have figured out quite clever and sophisticated solutions by now.
+Hittills har vi antagit att du redan befinner dig där du behöver vara för att utföra dessa åtgärder.
+Men hur navigerar man snabbt mellan kataloger?
+Det finns många enkla sätt, som att skriva skalalias eller skapa symlänkar med [ln -s](https://www.man7.org/linux/man-pages/man1/ln.1.html), men sanningen är att utvecklare redan har tagit fram ganska smarta och sofistikerade lösningar.
 
-As with the theme of this course, you often want to optimize for the common case.
-Finding frequent and/or recent files and directories can be done through tools like [`fasd`](https://github.com/clvv/fasd) and [`autojump`](https://github.com/wting/autojump).
-Fasd ranks files and directories by [_frecency_](https://web.archive.org/web/20210421120120/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/Places/Frecency_algorithm), that is, by both _frequency_ and _recency_.
-By default, `fasd` adds a `z` command that you can use to quickly `cd` using a substring of a _frecent_ directory. For example, if you often go to `/home/user/files/cool_project` you can simply use `z cool` to jump there. Using autojump, this same change of directory could be accomplished using `j cool`.
+Som så ofta i den här kursen vill du optimera för det vanliga fallet.
+Att hitta frekventa och/eller nyligen använda filer och kataloger går med verktyg som [`fasd`](https://github.com/clvv/fasd) och [`autojump`](https://github.com/wting/autojump).
+Fasd rankar filer och kataloger efter [_frecency_](https://web.archive.org/web/20210421120120/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/Places/Frecency_algorithm), alltså både _frequency_ och _recency_.
+Som standard lägger `fasd` till kommandot `z` som låter dig göra snabb `cd` med en delsträng av en _frecent_ katalog.
+Om du ofta går till `/home/user/files/cool_project` kan du till exempel bara skriva `z cool` för att hoppa dit.
+Med autojump kan samma katalogbyte göras med `j cool`.
 
-More complex tools exist to quickly get an overview of a directory structure: [`tree`](https://linux.die.net/man/1/tree), [`broot`](https://github.com/Canop/broot) or even full fledged file managers like [`nnn`](https://github.com/jarun/nnn) or [`ranger`](https://github.com/ranger/ranger).
+Mer avancerade verktyg finns för att snabbt få en översikt av katalogstrukturer: [`tree`](https://linux.die.net/man/1/tree), [`broot`](https://github.com/Canop/broot) eller fullfjädrade filhanterare som [`nnn`](https://github.com/jarun/nnn) och [`ranger`](https://github.com/ranger/ranger).
 
-# Exercises
+<span id="exercises"></span>
+# Övningar
 
-1. Read [`man ls`](https://www.man7.org/linux/man-pages/man1/ls.1.html) and write an `ls` command that lists files in the following manner
+1. Läs [`man ls`](https://www.man7.org/linux/man-pages/man1/ls.1.html) och skriv ett `ls`-kommando som listar filer enligt följande
 
-    - Includes all files, including hidden files
-    - Sizes are listed in human readable format (e.g. 454M instead of 454279954)
-    - Files are ordered by recency
-    - Output is colorized
+    - Inkluderar alla filer, även dolda filer
+    - Storlekar visas i människoläsbart format (t.ex. 454M i stället för 454279954)
+    - Filer sorteras efter hur nyligen de ändrats
+    - Utdata är färgsatt
 
-    A sample output would look like this
+    En exempelutdata kan se ut så här
 
     ```
     -rw-r--r--   1 user group 1.1M Jan 14 09:53 baz
@@ -322,9 +349,9 @@ More complex tools exist to quickly get an overview of a directory structure: [`
 ls -lath --color=auto
 {% endcomment %}
 
-1. Write bash functions  `marco` and `polo` that do the following.
-Whenever you execute `marco` the current working directory should be saved in some manner, then when you execute `polo`, no matter what directory you are in, `polo` should `cd` you back to the directory where you executed `marco`.
-For ease of debugging you can write the code in a file `marco.sh` and (re)load the definitions to your shell by executing `source marco.sh`.
+1. Skriv bash-funktionerna `marco` och `polo` som gör följande.
+När du kör `marco` ska nuvarande arbetskatalog sparas på något sätt, och när du sedan kör `polo` ska `polo` göra `cd` tillbaka till katalogen där du körde `marco`, oavsett var du befinner dig.
+För enklare felsökning kan du skriva koden i en fil `marco.sh` och (om)ladda definitionerna i skalet genom att köra `source marco.sh`.
 
 {% comment %}
 marco() {
@@ -336,9 +363,10 @@ polo() {
 }
 {% endcomment %}
 
-1. Say you have a command that fails rarely. In order to debug it you need to capture its output but it can be time consuming to get a failure run.
-Write a bash script that runs the following script until it fails and captures its standard output and error streams to files and prints everything at the end.
-Bonus points if you can also report how many runs it took for the script to fail.
+1. Säg att du har ett kommando som sällan misslyckas.
+För att felsöka det behöver du fånga utdata, men det kan ta tid innan du får en körning som faktiskt fallerar.
+Skriv ett bash-skript som kör följande skript tills det misslyckas, fångar standard output och felström till filer och skriver ut allt i slutet.
+Bonuspoäng om du också rapporterar hur många körningar det tog innan skriptet misslyckades.
 
     ```bash
     #!/usr/bin/env bash
@@ -346,12 +374,12 @@ Bonus points if you can also report how many runs it took for the script to fail
     n=$(( RANDOM % 100 ))
 
     if [[ n -eq 42 ]]; then
-       echo "Something went wrong"
-       >&2 echo "The error was using magic numbers"
+       echo "Något gick fel"
+       >&2 echo "Felet var användning av magiska tal"
        exit 1
     fi
 
-    echo "Everything went according to plan"
+    echo "Allt gick enligt plan"
     ```
 
 {% comment %}
@@ -364,22 +392,26 @@ do
   ./random.sh &> out.txt
 done
 
-echo "found error after $count runs"
+echo "hittade fel efter $count körningar"
 cat out.txt
 {% endcomment %}
 
-1. As we covered in the lecture `find`'s `-exec` can be very powerful for performing operations over the files we are searching for.
-However, what if we want to do something with **all** the files, like creating a zip file?
-As you have seen so far commands will take input from both arguments and STDIN.
-When piping commands, we are connecting STDOUT to STDIN, but some commands like `tar` take inputs from arguments.
-To bridge this disconnect there's the [`xargs`](https://www.man7.org/linux/man-pages/man1/xargs.1.html) command which will execute a command using STDIN as arguments.
-For example `ls | xargs rm` will delete the files in the current directory.
+1. Som vi tog upp i föreläsningen kan `find` med `-exec` vara mycket kraftfullt för att utföra operationer på filer vi söker efter.
+Men vad händer om vi vill göra något med **alla** filer, till exempel skapa en zip-fil?
+Som du sett hittills tar kommandon indata både via argument och STDIN.
+När vi kopplar ihop kommandon med rör kopplar vi STDOUT till STDIN, men vissa kommandon som `tar` tar indata via argument.
+För att överbrygga detta finns kommandot [`xargs`](https://www.man7.org/linux/man-pages/man1/xargs.1.html), som kör ett kommando med STDIN som argument.
+Till exempel tar `ls | xargs rm` bort filerna i aktuell katalog.
 
-    Your task is to write a command that recursively finds all HTML files in the folder and makes a zip with them. Note that your command should work even if the files have spaces (hint: check `-d` flag for `xargs`).
+    Din uppgift är att skriva ett kommando som rekursivt hittar alla HTML-filer i mappen och gör en zip av dem.
+    Observera att kommandot ska fungera även om filnamnen innehåller blanksteg (tips: titta på flaggan `-d` för `xargs`).
     {% comment %}
     find . -type f -name "*.html" | xargs -d '\n'  tar -cvzf archive.tar.gz
     {% endcomment %}
 
-    If you're on macOS, note that the default BSD `find` is different from the one included in [GNU coreutils](https://en.wikipedia.org/wiki/List_of_GNU_Core_Utilities_commands). You can use `-print0` on `find` and the `-0` flag on `xargs`. As a macOS user, you should be aware that command-line utilities shipped with macOS may differ from the GNU counterparts; you can install the GNU versions if you like by [using brew](https://formulae.brew.sh/formula/coreutils).
+    Om du använder macOS, notera att standardversionen av BSD `find` skiljer sig från den som ingår i [GNU coreutils](https://en.wikipedia.org/wiki/List_of_GNU_Core_Utilities_commands).
+    Du kan använda `-print0` på `find` och flaggan `-0` på `xargs`.
+    Som macOS-användare bör du känna till att kommandoradsverktygen som levereras med macOS kan skilja sig från GNU-motsvarigheterna; du kan installera GNU-versionerna om du vill genom att [använda brew](https://formulae.brew.sh/formula/coreutils).
 
-1. (Advanced) Write a command or script to recursively find the most recently modified file in a directory. More generally, can you list all files by recency?
+1. (Avancerad) Skriv ett kommando eller skript som rekursivt hittar den senast ändrade filen i en katalog.
+Mer allmänt, kan du lista alla filer efter hur nyligen de ändrats?

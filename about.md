@@ -1,140 +1,118 @@
 ---
 layout: lecture
-title: "Why we are teaching this class"
+title: "Varför vi undervisar i den här kursen"
 ---
 
-During a traditional Computer Science education, chances are you will take
-plenty of classes that teach you advanced topics within CS, everything from
-Operating Systems to Programming Languages to Machine Learning. But at many
-institutions there is one essential topic that is rarely covered and is instead
-left for students to pick up on their own: computing ecosystem literacy.
+I en traditionell utbildning i datavetenskap läser du sannolikt många kurser som lär ut avancerade ämnen, allt från operativsystem till programmeringsspråk och maskininlärning.
+Men på många lärosäten finns ett viktigt område som sällan täcks och ofta lämnas åt studenterna att lära sig själva: att bli trygga med verktygen.
 
-Over the years, we have helped teach several classes at MIT, and over and over
-we have seen that many students have limited knowledge of the tools available
-to them. Computers were built to automate manual tasks, yet students often
-perform repetitive tasks by hand or fail to take full advantage of powerful
-tools such as version control and text editors. In the best case, this results
-in inefficiencies and wasted time; in the worst case, it results in issues like
-data loss or inability to complete certain tasks.
+Under åren har vi hjälpt till att undervisa i flera kurser på MIT, och gång på gång har vi sett att många studenter har begränsad kunskap om de verktyg de kan använda.
+Datorer byggdes för att automatisera manuella uppgifter, men studenter utför ofta repetitiva moment för hand eller missar att dra full nytta av kraftfulla verktyg som versionshantering och textredigerare.
+I bästa fall leder det till ineffektivitet och bortkastad tid; i värsta fall leder det till problem som dataförlust eller att vissa uppgifter inte går att slutföra.
 
-These topics are not taught as part of the university curriculum: students are
-never shown how to use these tools, or at least not how to use them
-efficiently, and thus waste time and effort on tasks that _should_ be simple.
-The standard CS curriculum is missing critical topics about the computing
-ecosystem that could make students' lives significantly easier.
+De här ämnena ingår sällan i universitetets ordinarie kursplan: studenter får ofta inte lära sig hur verktygen används, eller åtminstone inte hur de används effektivt, och lägger därför tid och energi på uppgifter som _borde_ vara enkla.
+Den vanliga datavetenskapsutbildningen saknar kritiska delar om datorernas ekosystem som skulle kunna göra studenters vardag betydligt enklare.
 
-# The missing semester of your CS education
+# Den saknade terminen i din datavetenskapsutbildning
 
-To help remedy this, we created a class that covers all the topics we
-consider crucial to be an effective computer scientist and programmer. The
-class is pragmatic and practical, and it provides hands-on introduction to
-tools and techniques that you can immediately apply in a wide variety of
-situations you will encounter. The latest iteration of this class, with
-substantially revised material, is being run during MIT's "Independent
-Activities Period" in January 2026 — a one-month semester that features shorter
-student-run classes. While the lectures themselves are only available to the MIT
-community, we will provide all lecture materials along with video recordings of
-lectures to the public.
+För att ändra på det skapade vi en kurs som täcker alla ämnen vi anser vara avgörande för att bli en effektiv datavetare och programmerare.
+Kursen är pragmatisk och praktisk, och den ger en handfast introduktion till verktyg och tekniker som du direkt kan använda i många olika situationer.
+Den senaste versionen av kursen, med kraftigt omarbetat material, ges under MIT:s "Independent Activities Period" i januari 2026 — en enmånadersperiod med kortare studentdrivna kurser.
+Även om själva föreläsningarna bara är tillgängliga för MIT-gemenskapen kommer vi att publicera allt kursmaterial tillsammans med videoinspelningar av föreläsningarna.
 
-If this sounds like it might be for you, here are some concrete
-examples of what the class will teach:
+Om det här låter intressant kommer här några konkreta exempel på vad kursen lär ut:
 
-## Command shell
+## Kommandoskal
 
-How to automate common and repetitive tasks with aliases, scripts,
-and build systems. No more copy-pasting commands from a text
-document. No more "run these 15 commands one after the other". No
-more "you forgot to run this thing" or "you forgot to pass this
-argument".
+Hur du automatiserar vanliga och repetitiva uppgifter med alias, skript och byggsystem.
+Du slipper att kopiera och klistra in kommandon från ett textdokument.
+Du slipper att hamna i lägen där du måste "köra de här 15 kommandona ett efter ett".
+Du slipper också missar av typen "du glömde köra det här" eller "du glömde skicka med det här argumentet".
 
-For example, searching through your history quickly can be a huge time saver. In the example below we show several tricks related to navigating your shell history for `convert` commands.
+Att snabbt söka i historiken kan till exempel spara mycket tid.
+I exemplet nedan visar vi flera knep för att navigera i skalhistoriken för `convert`-kommandon.
 
 <video autoplay="autoplay" loop="loop" controls muted playsinline  oncontextmenu="return false;"  preload="auto"  class="demo">
-  <source src="/static/media/demos/history.mp4" type="video/mp4">
+  <source src="{{ '/static/media/demos/history.mp4' | relative_url }}" type="video/mp4">
 </video>
 
-## Version control
+## Versionshantering
 
-How to use version control _properly_, and take advantage of it to
-save you from disaster, collaborate with others, and quickly find and
-isolate problematic changes. No more `rm -rf; git clone`. No more
-merge conflicts (well, fewer of them at least). No more huge blocks
-of commented-out code. No more fretting over how to find what broke
-your code. No more "oh no, did we delete the working code?!". We'll
-even teach you how to contribute to other people's projects with pull
-requests!
+Hur du använder versionshantering _på rätt sätt_ för att undvika katastrofer, samarbeta med andra och snabbt hitta och isolera problematiska ändringar.
+Du slipper `rm -rf; git clone`.
+Du slipper att fastna i sammanslagningskonflikter (eller åtminstone får du färre av dem).
+Du slipper stora block med utkommenterad kod.
+Du slipper att fundera på vad som fick koden att gå sönder.
+Du slipper tänka "åh nej, raderade vi den fungerande koden?!".
+Vi lär dig till och med hur du bidrar till andras projekt med ändringsförfrågningar (pull requests).
 
-In the example below we use `git bisect` to find which commit broke a unit test and then we fix it with `git revert`.
+I exemplet nedan använder vi `git bisect` för att hitta vilken incheckning som fick ett enhetstest att fallera, och rättar det sedan med `git revert`.
 <video autoplay="autoplay" loop="loop" controls muted playsinline  oncontextmenu="return false;"  preload="auto"  class="demo">
-  <source src="/static/media/demos/git.mp4" type="video/mp4">
+  <source src="{{ '/static/media/demos/git.mp4' | relative_url }}" type="video/mp4">
 </video>
 
-## Text editing
+## Textredigering
 
-How to efficiently edit files from the command-line, both locally and
-remotely, and take advantage of advanced editor features. No more
-copying files back and forth. No more repetitive file editing.
+Hur du redigerar filer effektivt från kommandoraden, både lokalt och på fjärrmaskiner, och drar nytta av avancerade redigerarfunktioner.
+Du slipper att kopiera filer fram och tillbaka.
+Du slipper repetitiv filredigering.
 
-Vim macros are one of its best features, in the example below we quickly convert an html table to csv format using a nested vim macro.
+Vim-makron är en av Vims bästa funktioner, och i exemplet nedan konverterar vi snabbt en HTML-tabell till CSV-format med ett nästlat Vim-makro.
 <video autoplay="autoplay" loop="loop" controls muted playsinline  oncontextmenu="return false;"  preload="auto"  class="demo">
-  <source src="/static/media/demos/vim.mp4" type="video/mp4">
+  <source src="{{ '/static/media/demos/vim.mp4' | relative_url }}" type="video/mp4">
 </video>
 
-## Remote machines
+## Fjärrmaskiner
 
-How to stay sane when working with remote machines using SSH keys and
-terminal multiplexing. No more keeping many terminals open just to
-run two commands at once. No more typing your password every time you
-connect. No more losing everything just because your Internet
-disconnected or you had to reboot your laptop.
+Hur du behåller arbetsron när du arbetar med fjärrmaskiner med SSH-nycklar och terminalmultiplexering.
+Du slipper att hålla många terminaler öppna bara för att köra två kommandon samtidigt.
+Du slipper skriva lösenordet varje gång du ansluter.
+Du slipper förlora allt bara för att internetanslutningen bröts eller du behövde starta om din dator.
 
-In the example below we use `tmux` to keep sessions alive in remote servers and `mosh` to support network roaming and disconnection.
+I exemplet nedan använder vi `tmux` för att hålla sessioner vid liv på fjärrservrar och `mosh` för att hantera nätverksbyten och avbrott.
 
 <video autoplay="autoplay" loop="loop" controls muted playsinline  oncontextmenu="return false;"  preload="auto"  class="demo">
-  <source src="/static/media/demos/ssh.mp4" type="video/mp4">
+  <source src="{{ '/static/media/demos/ssh.mp4' | relative_url }}" type="video/mp4">
 </video>
 
-## Finding files
+## Hitta filer
 
-How to quickly find files that you are looking for. No
-more clicking through files in your project until you find the one
-that has the code you want.
+Hur du snabbt hittar filerna du letar efter.
+Du slipper att klicka dig genom filer i projektet tills du hittar den som innehåller koden du vill ha.
 
-In the example below we quickly look for files with `fd` and for code snippets with `rg`. We also quickly `cd` and `vim` recent/frequent files/folder using `fasd`.
+I exemplet nedan hittar vi snabbt filer med `fd` och kodsnuttar med `rg`.
+Vi använder också `fasd` för att snabbt `cd` och `vim` i nyligen och ofta använda filer och mappar.
 
 <video autoplay="autoplay" loop="loop" controls muted playsinline  oncontextmenu="return false;"  preload="auto"  class="demo">
-  <source src="/static/media/demos/find.mp4" type="video/mp4">
+  <source src="{{ '/static/media/demos/find.mp4' | relative_url }}" type="video/mp4">
 </video>
 
-## Data wrangling
+## Databearbetning
 
-How to quickly and easily modify, view, parse, plot, and compute over
-data and files directly from the command-line. No more copy pasting
-from log files. No more manually computing statistics over data. No
-more spreadsheet plotting.
+Hur du snabbt och enkelt ändrar, visar, parsar, plottar och beräknar på data och filer direkt från kommandoraden.
+Du slipper att kopiera och klistra in från loggfiler.
+Du slipper manuella statistikberäkningar över data.
+Du slipper diagram i kalkylblad för enkla uppgifter.
 
-## Code quality and continuous integration
+## Kodkvalitet och kontinuerlig integration
 
-How to use autoformatting, linting, testing, and code coverage tools to improve
-code quality. No more ugly code. No more regressions. No more code that works
-on your computer but crashes on everyone else's.
+Hur du använder verktyg för autoformatering, lintning, testning och kodtäckning för att förbättra kodkvaliteten.
+Du slipper ful kod.
+Du slipper regressioner.
+Du slipper kod som fungerar på din dator men kraschar hos alla andra.
 
-## Beyond the code
+## Bortom koden
 
-How to write great documentation, communicate clearly with open-source
-maintainers, submit actionable issues, and contribute pull requests that get
-merged. No more confused users who can't get started using your software. No
-more ghosting from maintainers.
+Hur du skriver bra dokumentation, kommunicerar tydligt med förvaltare i öppen källkod, skickar in åtgärdbara ärenden och bidrar med ändringsförfrågningar (pull requests) som faktiskt blir sammanslagna.
+Du slipper förvirrade användare som inte kommer igång med din programvara.
+Du minskar risken att mötas av tystnad från förvaltare.
 
-# Conclusion
+# Avslut
 
-This, and more, will be covered across the 9 class lectures, each including
-exercises for you to get more familiar with the tools on your own. If you can't
-wait until January 2026, you can also take a look at the lectures from the
-[previous offering of the course](/2020/), which covers many of the same
-topics.
+Allt detta och mer täcks i kursens nio föreläsningar, där varje föreläsning innehåller övningar så att du kan bli mer bekant med verktygen på egen hand.
+Om du inte vill vänta till januari 2026 kan du också titta på föreläsningarna från [kursens tidigare omgång]({{ '/2020/' | relative_url }}), som täcker många av samma ämnen.
 
-We hope to see you in January, whether virtually or in person!
+Vi hoppas att vi ses i januari, antingen virtuellt eller på plats!
 
-Happy hacking,<br>
-[Anish](https://anish.io/), [Jon](https://thesquareplanet.com/), and [Jose](https://josejg.com/)
+Lycka till med hackandet,<br>
+[Anish](https://anish.io/), [Jon](https://thesquareplanet.com/) och [Jose](https://josejg.com/)

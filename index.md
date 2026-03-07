@@ -1,36 +1,26 @@
 ---
 layout: page
-title: The Missing Semester of Your CS Education
+title: Den saknade terminen i din datavetenskapsutbildning
 description: >
-  Master powerful tools that will make you a more productive computer scientist and programmer.
+  Bemästra kraftfulla verktyg som gör dig till en mer produktiv datavetare och programmerare.
 # subtitle: IAP 2026
 subtitle: "2026"
 nositetitle: true
 ---
 
-Classes teach you all about advanced topics within CS, from operating systems
-to machine learning, but there's one critical subject that's rarely covered,
-and is instead left to students to figure out on their own: proficiency with
-their tools. We'll teach you how to master the command-line, use a powerful
-text editor, use fancy features of version control systems, and much more!
+På många datavetenskapskurser lär du dig avancerade ämnen, från operativsystem till maskininlärning.
+Men ett avgörande område hamnar ofta i skymundan och lämnas åt studenterna själva: att bli skicklig med sina verktyg.
+Vi lär dig att behärska kommandoraden, använda en kraftfull textredigerare, utnyttja avancerade funktioner i versionshanteringssystem och mer därtill.
 
-Students spend hundreds of hours using these tools over the course of their
-education (and thousands over their career), so it makes sense to make the
-experience as fluid and frictionless as possible. Mastering these tools not
-only enables you to spend less time on figuring out how to bend your tools to
-your will, but it also lets you solve problems that would previously seem
-impossibly complex.
+Studenter lägger hundratals timmar på de här verktygen under utbildningen (och tusentals under arbetslivet), så det är rimligt att göra arbetet så smidigt som möjligt.
+När du behärskar de här verktygen lägger du mindre tid på att få dem att göra som du vill, och kan samtidigt lösa problem som tidigare verkade nästan omöjliga.
 
-These days, many aspects of software engineering are also in flux
-through the introduction of AI-enabled and AI-enhanced tools and
-workflows. When used appropriately and with awareness of their
-shortcomings, these can often provide significant benefits to
-CS practitioners and are thus worth developing working knowledge of.
-Since AI is a cross-functional enabling technology, there is not a
-standalone AI lecture; we've instead folded the use of the latest
-applicable AI tools and techniques into each lecture directly.
+I dag förändras också många delar av programvaruutveckling genom införandet av AI-stödda verktyg och arbetsflöden.
+När de används på rätt sätt, och med förståelse för deras begränsningar, kan de ge tydliga fördelar för alla som jobbar med programvara.
+Därför är det värt att bygga upp praktisk kunskap om dem.
+Eftersom AI är en tvärgående teknik har vi ingen fristående AI-föreläsning; i stället har vi vävt in relevanta AI-verktyg och tekniker direkt i varje föreläsning.
 
-Read about the [motivation behind this class](/about/).
+Läs om [motivationen för kursen]({{ '/about/' | relative_url }}).
 
 {% comment %}
 # Registration
@@ -38,7 +28,7 @@ Read about the [motivation behind this class](/about/).
 Sign up for the IAP 2026 class by filling out this [registration form](https://forms.gle/j2wMzi7qeiZmzEWy9).
 {% endcomment %}
 
-# Syllabus
+# Kursplan
 
 {% comment %}
 **Lecture**: [35-225](https://whereis.mit.edu/?go=35), 1:30--2:30pm (_exception_: 3--4pm on Friday 1/16)<br>
@@ -52,18 +42,18 @@ Sign up for the IAP 2026 class by filling out this [registration form](https://f
         <li>
         <strong>{{ lecture.date | date: '%-m/%-d/%y' }}</strong>:
         {% if lecture.ready %}
-            <a href="{{ lecture.url }}">{{ lecture.title }}</a>
+            <a href="{{ lecture.url | relative_url }}">{{ lecture.title }}</a>
         {% else %}
-            {{ lecture.title }} {% if lecture.noclass %}[no class]{% endif %}
+            {{ lecture.title }} {% if lecture.noclass %}[ingen föreläsning]{% endif %}
         {% endif %}
         </li>
     {% endif %}
 {% endfor %}
 </ul>
 
-## Special topics from previous years
+## Specialämnen från tidigare år
 
-The topics we cover vary from year to year. For students who are interested in the complete set of topics we have covered over the years, we highlight topics covered in previous years that we did not cover in 2026.
+Ämnena vi tar upp varierar från år till år. För studenter som är intresserade av alla ämnen vi har behandlat genom åren lyfter vi här fram ämnen från tidigare år som inte ingick 2026.
 
 {% comment %} pop to remove default "posts" collection {% endcomment %}
 {% assign sorted_collections = site.collections | sort: 'label' | pop | reverse %}
@@ -76,7 +66,7 @@ The topics we cover vary from year to year. For students who are interested in t
             {% if lecture.special == true %}
                 <li>
                     <strong>{{ lecture.date | date: '%-m/%-d/%y' }}</strong>:
-                    <a href="{{ lecture.url }}">{{ lecture.title }}</a>
+                    <a href="{{ lecture.url | relative_url }}">{{ lecture.title }}</a>
                 </li>
             {% endif %}
         {% endfor %}
@@ -85,23 +75,26 @@ The topics we cover vary from year to year. For students who are interested in t
 </ul>
 
 {% comment %}
-Lecture videos will be made available to MIT students immediately after lecture (via Panopto). The system has a limitation that only those with an MIT Kerberos can access the raw lecture videos. We are working on editing lecture videos and uploading them to YouTube. A couple have been uploaded already; we expect the rest to be uploaded by mid-February.
+Lecture videos will be made available to MIT students immediately after lecture (via Panopto).
+The system has a limitation that only those with an MIT Kerberos can access the raw lecture videos.
+We are working on editing lecture videos and uploading them to YouTube.
+A couple have been uploaded already; we expect the rest to be uploaded by mid-February.
 
 If you can't wait until January 2026, you can also take a look at the lectures
-from the [previous offering of the course](/2020/), which covers many of the
+from the [previous offering of the course]({{ '/2020/' | relative_url }}), which covers many of the
 same topics.
 {% endcomment %}
 
-# General information
+# Allmän information
 
-**Staff**: This class is co-taught by [Anish](https://anish.io/), [Jon](https://thesquareplanet.com/), and [Jose](https://josejg.com/).<br>
-**Questions**: Email us at [missing-semester@mit.edu](mailto:missing-semester@mit.edu).<br>
-**Discussion**: [OSSU Discord](https://ossu.dev/#community) (use `#missing-semester-forum` like you would use Piazza, and `#missing-semester` to chat with the class/instructors).
+**Lärare**: Den här kursen undervisas tillsammans av [Anish](https://anish.io/), [Jon](https://thesquareplanet.com/) och [Jose](https://josejg.com/).<br>
+**Frågor**: Mejla oss på [missing-semester@mit.edu](mailto:missing-semester@mit.edu).<br>
+**Diskussion**: [OSSU Discord](https://ossu.dev/#community) (använd `#missing-semester-forum` ungefär som Piazza, och `#missing-semester` för att prata med klassen och lärarna).
 
-# Beyond MIT
+# Bortom MIT
 
-We've also shared this class beyond MIT in the hopes that others may
-benefit from these resources. You can find posts and discussion on
+Vi har också delat den här kursen bortom MIT i hopp om att fler ska kunna dra nytta av materialet.
+Du hittar inlägg och diskussioner på
 
  - Hacker News ([2026](https://news.ycombinator.com/item?id=47124171), [2020](https://news.ycombinator.com/item?id=22226380), [2019](https://news.ycombinator.com/item?id=19078281))
  - Lobsters ([2026](https://lobste.rs/s/q4ykw7/missing_semester_your_cs_education_2026), [2020](https://lobste.rs/s/ti1k98/missing_semester_your_cs_education_mit), [2019](https://lobste.rs/s/h6157x/mit_hacker_tools_lecture_series_on))
@@ -113,7 +106,7 @@ benefit from these resources. You can find posts and discussion on
  - LinkedIn ([2026](https://www.linkedin.com/posts/anishathalye_i-returned-to-mit-during-iap-january-term-activity-7430285026933522433-Ehr9))
  - YouTube ([2026](https://www.youtube.com/playlist?list=PLyzOVJj3bHQunmnnTXrNbZnBaCA-ieK4L), [2020](https://www.youtube.com/playlist?list=PLyzOVJj3bHQuloKGG59rS43e29ro7I57J), [2019](https://www.youtube.com/playlist?list=PLyzOVJj3bHQuiujH1lpn8cA9dsyulbYRv))
 
-# Translations
+# Översättningar
 
 {% comment %} keep these in alphabetical order {% endcomment %}
 
@@ -136,25 +129,25 @@ benefit from these resources. You can find posts and discussion on
 - [Turkish](https://missing-semester-tr.github.io/)
 - [Vietnamese](https://missing-semester-vn.github.io/)
 
-Note: these are external links to community translations. We have not vetted
-them.
+Obs: detta är externa länkar till gemenskapsöversättningar.
+Vi har inte granskat dem.
 
-Have you created a translation of the course notes from this class? Submit a
-[pull request](https://github.com/missing-semester/missing-semester/pulls) so
-we can add it to the list!
+Har du skapat en översättning av kursanteckningarna från den här kursen?
+Skicka en [ändringsförfrågan (PR)](https://github.com/missing-semester/missing-semester/pulls) så kan vi lägga till den i listan.
 
-## Acknowledgments
+## Tack
 
 {% comment %}
 2026 acks; previous years' acks are on their respective pages
 {% endcomment %}
 
-We thank Elaine Mello and [MIT Open Learning](https://openlearning.mit.edu/) for making it possible for us to record lecture videos. We thank Luis Turino / [SIPB](https://sipb.mit.edu/) for supporting this class as part of [SIPB IAP 2026](https://sipb.mit.edu/iap/).
+Vi tackar Elaine Mello och [MIT Open Learning](https://openlearning.mit.edu/) för att de gjorde det möjligt för oss att spela in föreläsningsvideor.
+Vi tackar Luis Turino / [SIPB](https://sipb.mit.edu/) för att de stöttar den här kursen som en del av [SIPB IAP 2026](https://sipb.mit.edu/iap/).
 
 ---
 
 <div class="small center">
-<p><a href="https://github.com/missing-semester/missing-semester">Source code</a>.</p>
-<p>Licensed under CC BY-NC-SA.</p>
-<p>See <a href="/license/">here</a> for contribution &amp; translation guidelines.</p>
+<p><a href="https://github.com/missing-semester/missing-semester">Källkod</a>.</p>
+<p>Licensierat under CC BY-NC-SA.</p>
+<p>Se <a href="{{ '/license/' | relative_url }}">här</a> för riktlinjer för bidrag och översättning.</p>
 </div>

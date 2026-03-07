@@ -1,30 +1,30 @@
-# The Missing Semester of Your CS Education
+# Den saknade terminen i din datavetenskapsutbildning
 
-[![Build Status](https://github.com/missing-semester/missing-semester/actions/workflows/build.yml/badge.svg)](https://github.com/missing-semester/missing-semester/actions/workflows/build.yml) [![Links Status](https://github.com/missing-semester/missing-semester/actions/workflows/links.yml/badge.svg)](https://github.com/missing-semester/missing-semester/actions/workflows/links.yml)
+[![Build Status](https://github.com/itiquette/den-saknade-terminen/actions/workflows/build.yml/badge.svg)](https://github.com/itiquette/den-saknade-terminen/actions/workflows/build.yml) [![Links Status](https://github.com/itiquette/den-saknade-terminen/actions/workflows/links.yml/badge.svg)](https://github.com/itiquette/den-saknade-terminen/actions/workflows/links.yml)
 
-Website for [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/)!
+Webbplats för [Den saknade terminen i din datavetenskapsutbildning](https://itiquette.github.io/den-saknade-terminen/) - den svenska översättningen av MIT-kursen [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/)
 
-Contributions are most welcome! If you have edits or new content to add, please
-open an issue or submit a pull request.
+Bidrag är varmt välkomna! Om du har ändringar eller nytt innehåll att lägga till,
+öppna gärna ett ärende eller skicka en ändringsförfrågan (PR).
 
-## Development
+## Utveckling
 
-To build and view the site locally, run:
+För att bygga och visa webbplatsen lokalt, kör:
 
 ```bash
 bundle exec jekyll serve -w
 ```
 
-If you'd prefer to develop the site in a Docker container (e.g., to avoid
-having to install Ruby and dependencies on your host machine), run:
+Om du föredrar att utveckla webbplatsen i en container (t.ex. för att
+slippa installera Ruby och beroenden på värdmaskinen), kör:
 
 ```bash
 docker compose up --build
 ```
 
-Then, navigate to <http://localhost:4000> on your host machine to view the
-website. Jekyll will rebuild the website as you make changes to files.
+Därefter går du till <http://localhost:4000> i webbläsaren på värdmaskinen för
+att visa webbplatsen. Jekyll bygger om webbplatsen automatiskt när du ändrar filer.
 
-## License
+## Licens
 
-All content in this course, including the website source code, lecture notes, exercises, and lecture videos, is licensed under Attribution-NonCommercial-ShareAlike 4.0 International [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). See [here](https://missing.csail.mit.edu/license) for more information on contributions or translations.
+Allt innehåll i kursen, inklusive webbplatsens källkod, föreläsningsanteckningar, övningar och föreläsningsvideor, är licensierat under Attribution-NonCommercial-ShareAlike 4.0 International [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Se [här](https://missing.csail.mit.edu/license) för mer information om bidrag eller översättningar.

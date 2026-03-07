@@ -1,8 +1,8 @@
 ---
 layout: page
-title: "2019 Lectures"
+title: "Föreläsningar 2019"
 description: >
-  Lecture notes and videos for Missing Semester, MIT IAP 2019.
+  Föreläsningsanteckningar och videor för Den saknade terminen, MIT IAP 2019.
 permalink: /2019/
 phony: true
 ---
@@ -16,16 +16,16 @@ phony: true
   {% for lecture in lectures %}
     {% if lecture.phony != true %}
       <li>
-        <a href="{{ lecture.url }}">{{ lecture.title }}</a>
+        <a href="{{ lecture.url | relative_url }}">{{ lecture.title }}</a>
       </li>
     {% endif %}
   {% endfor %}
   </ul>
 {% endfor %}
 
-# Beyond MIT
+# Bortom MIT
 
-We've also shared this class beyond MIT in the hopes that others may benefit from these resources. You can find posts and discussion on
+Vi har också delat kursen bortom MIT i hopp om att fler ska ha nytta av materialet. Du hittar inlägg och diskussioner på
 
 - [Hacker News](https://news.ycombinator.com/item?id=19078281)
 - [Lobsters](https://lobste.rs/s/h6157x/mit_hacker_tools_lecture_series_on)
@@ -34,6 +34,6 @@ We've also shared this class beyond MIT in the hopes that others may benefit fro
 - [Twitter](https://twitter.com/Jonhoo/status/1091896192332693504)
 - [YouTube](https://www.youtube.com/playlist?list=PLyzOVJj3bHQuiujH1lpn8cA9dsyulbYRv)
 
-# Acknowledgments
+# Tack
 
-This class was taught as part of [SIPB IAP 2019](https://sipb.mit.edu/iap/2019/) and co-sponsored by [SIPB](https://sipb.mit.edu/) and [MIT EECS](https://www.eecs.mit.edu/).
+Den här kursen gavs inom [SIPB IAP 2019](https://sipb.mit.edu/iap/2019/) och medarrangerades av [SIPB](https://sipb.mit.edu/) och [MIT EECS](https://www.eecs.mit.edu/).

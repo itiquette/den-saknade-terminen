@@ -1,7 +1,11 @@
 name: Links
 on:
   push:
+    branches:
+      - swedish
   pull_request:
+    branches:
+      - swedish
   schedule:
     - cron: '0 8 * * 6'
 jobs:
@@ -55,6 +59,13 @@ jobs:
             ^https:\/\/medium\.com\/
             ^https:\/\/www\.gnu\.org\/
             ^https:\/\/openai\.com\/
+            ^https:\/\/vim\.fandom\.com\/
+            ^https:\/\/valerieaurora\.org\/
+            ^https:\/\/vimways\.org\/
+            ^https:\/\/www\.hamvocke\.com\/
+            ^https:\/\/jvns\.ca\/
           swap_urls: |
-            {"^https:\\/\\/missing\\.csail\\.mit\\.edu/": "/",
+            {"^https:\\/\\/itiquette\\.github\\.io\\/den-saknade-terminen/": "/",
+             "^\\/den-saknade-terminen\\/": "/",
+             "^https:\\/\\/missing\\.csail\\.mit\\.edu/": "/",
              "^(https:\\/\\/github\\.com/.*)#.*$": "\\1"}

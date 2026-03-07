@@ -1,8 +1,8 @@
 ---
 layout: page
-title: "2020 Lectures"
+title: "Föreläsningar 2020"
 description: >
-  Lecture notes and videos for Missing Semester, MIT IAP 2020.
+  Föreläsningsanteckningar och videor för Den saknade terminen, MIT IAP 2020.
 permalink: /2020/
 phony: true
 ---
@@ -14,11 +14,11 @@ phony: true
       <li>
         <strong>{{ lecture.date | date: '%-m/%-d' }}</strong>:
         {% if lecture.ready %}
-          <a href="{{ lecture.url }}">{{ lecture.title }}</a>
+          <a href="{{ lecture.url | relative_url }}">{{ lecture.title }}</a>
         {% elsif lecture.noclass %}
-          {{ lecture.title }} [no class]
+          {{ lecture.title }} [ingen föreläsning]
         {% else %}
-          {{ lecture.title }} [coming soon]
+          {{ lecture.title }} [kommer snart]
         {% endif %}
         {% if lecture.details %}
           <br>
@@ -29,11 +29,12 @@ phony: true
   {% endfor %}
 </ul>
 
-Video recordings of the lectures are available [on YouTube](https://www.youtube.com/playlist?list=PLyzOVJj3bHQuloKGG59rS43e29ro7I57J).
+Videoinspelningarna finns [på YouTube](https://www.youtube.com/playlist?list=PLyzOVJj3bHQuloKGG59rS43e29ro7I57J).
 
-# Beyond MIT
+# Bortom MIT
 
-We've also shared this class beyond MIT in the hopes that others may benefit from these resources. You can find posts and discussion on
+Vi har också delat kursen bortom MIT i hopp om att fler ska ha nytta av materialet.
+Du hittar inlägg och diskussioner på:
 
  - [Hacker News](https://news.ycombinator.com/item?id=22226380)
  - [Lobsters](https://lobste.rs/s/ti1k98/missing_semester_your_cs_education_mit)
@@ -43,7 +44,7 @@ We've also shared this class beyond MIT in the hopes that others may benefit fro
  - [YouTube](https://www.youtube.com/playlist?list=PLyzOVJj3bHQuloKGG59rS43e29ro7I57J)
 
 {% comment %}
-Some more URLs:
+Några fler länkar:
 
 - https://news.ycombinator.com/item?id=27154577
 - https://news.ycombinator.com/item?id=34934216
@@ -55,6 +56,6 @@ Some more URLs:
 - https://twitter.com/MIT_CSAIL/status/1581313961093484545
 {% endcomment %}
 
-# Acknowledgments
+# Tack
 
-We thank Elaine Mello, Jim Cain, and [MIT Open Learning](https://openlearning.mit.edu/) for making it possible for us to record lecture videos; Anthony Zolnik and [MIT AeroAstro](https://aeroastro.mit.edu/) for A/V equipment; and Brandi Adams and [MIT EECS](https://www.eecs.mit.edu/) for supporting this class.
+Vi tackar Elaine Mello, Jim Cain och [MIT Open Learning](https://openlearning.mit.edu/) för att de gjorde det möjligt för oss att spela in föreläsningsvideor; Anthony Zolnik och [MIT AeroAstro](https://aeroastro.mit.edu/) för A/V-utrustning; och Brandi Adams och [MIT EECS](https://www.eecs.mit.edu/) för stöd till kursen.

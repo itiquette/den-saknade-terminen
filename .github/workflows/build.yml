@@ -1,7 +1,11 @@
 name: Build
 on:
   push:
+    branches:
+      - swedish
   pull_request:
+    branches:
+      - swedish
   schedule:
     - cron: '0 8 * * 6'
 jobs:

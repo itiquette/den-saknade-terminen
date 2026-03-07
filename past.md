@@ -1,16 +1,18 @@
 ---
 layout: page
-title: Past Offerings
+title: Tidigare omgångar
 description: >
-  Find all past offerings of Missing Semester.
+  Hitta alla tidigare omgångar av Den saknade terminen.
 ---
 
 {% comment %} pop to remove default "posts" collection {% endcomment %}
 {% assign sorted_collections = site.collections | sort: 'label' | pop | reverse %}
 <ul>
 {% for collection in sorted_collections %}
-    <li><a href="/{{ collection.label }}/">{{ collection.label }}</a></li>
+    <li><a href="{{ '/' | append: collection.label | append: '/' | relative_url }}">{{ collection.label }}</a></li>
 {% endfor %}
 </ul>
 
-Each year's lectures are fully self-contained. We recommend starting with the most recent version of the material. There is variation in the topics covered year to year, so we continue to host notes and videos for earlier versions of this course.
+Varje års föreläsningar är helt fristående.
+Vi rekommenderar att du börjar med den senaste versionen av materialet.
+Ämnena varierar från år till år, så vi fortsätter att tillgängliggöra anteckningar och videor från tidigare versioner av kursen.

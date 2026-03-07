@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Version Control"
+title: "Versionshantering"
 presenter: Jon
 date: 2019-01-22
 order: 2
@@ -9,50 +9,63 @@ video:
   id: 3fig2Vz8QXs
 ---
 
-Whenever you are working on something that changes over time, it's
-useful to be able to _track_ those changes. This can be for a number of
-reasons: it gives you a record of what changed, how to undo it, who
-changed it, and possibly even why. Version control systems (VCS) give
-you that ability. They let you _commit_ changes to a set of files, along
-with a message describing the change, as well as look at and undo
-changes you've made in the past.
+När du arbetar med något som förändras över tid
+är det användbart att kunna _spåra_ ändringarna.
+Det finns flera skäl:
+du får en historik över vad som ändrats,
+hur du ångrar det,
+vem som ändrade det,
+och ibland även varför.
+Versionshanteringssystem (VCS) ger dig den förmågan.
+De låter dig _checka in_ ändringar i en uppsättning filer,
+med ett meddelande som beskriver ändringen,
+samt granska och ångra tidigare ändringar.
 
-Most VCS support sharing the commit history between multiple users. This
-allows for convenient collaboration: you can see the changes I've made,
-and I can see the changes you've made. And since the VCS tracks
-_changes_, it can often (though not always) figure out how to combine
-our changes as long as they touch relatively disjoint things.
+De flesta VCS stöder delning av incheckningshistorik mellan flera användare.
+Det möjliggör smidigt samarbete.
+Du kan se ändringarna jag gjort,
+och jag kan se ändringarna du gjort.
+Eftersom VCS spårar _ändringar_ kan systemet ofta (men inte alltid)
+räkna ut hur våra ändringar kan kombineras,
+så länge de rör relativt separata delar.
 
-There [_a
-lot_](https://en.wikipedia.org/wiki/Comparison_of_version-control_software)
-of VCSes out there that differ a lot in what they support, how they
-function, and how you interact with them. Here, we'll focus on
-[git](https://git-scm.com/), one of the more commonly used ones, but I
-recommend you also take a look at
-[Mercurial](https://www.mercurial-scm.org/).
+Det finns [_väldigt
+många_](https://en.wikipedia.org/wiki/Comparison_of_version-control_software)
+VCS-system,
+och de skiljer sig mycket i vad de stödjer,
+hur de fungerar,
+och hur man interagerar med dem.
+Här fokuserar vi på [git](https://git-scm.com/),
+ett av de vanligaste,
+men jag rekommenderar att du också tittar på [Mercurial](https://www.mercurial-scm.org/).
 
-With that all said -- to the cliffnotes!
+Med det sagt, nu till snabbversionen.
 
-## Is git dark magic?
+## Är git mörk magi?
 
-not quite.. you need to understand the data model.
-we're going to skip over some of the details, but roughly speaking,
-the _core_ "thing" in git is a commit.
+Inte riktigt.
+Du behöver förstå datamodellen.
+Vi hoppar över vissa detaljer,
+men i grova drag är den centrala "saken" i git en incheckning.
 
- - every commit has a unique name, "revision hash"
-   a long hash like `998622294a6c520db718867354bf98348ae3c7e2`
-   often shortened to a short (unique-ish) prefix: `9986222`
- - commit has author + commit message
- - also has the hash of any _ancestor commits_
-   usually just the hash of the previous commit
- - commit also represents a _diff_, a representation of how you get from
-   the commit's ancestors to the commit (e.g., remove this line in this
-   file, add these lines to this file, rename that file, etc.)
-   - in reality, git stores the full before and after state
-   - probably don't want to store big files that change!
+  - varje incheckning har ett unikt namn, en "revisionshash"
+   en lång hash som `998622294a6c520db718867354bf98348ae3c7e2`
+   förkortas ofta till ett kort (ungefär unikt) prefix: `9986222`
+  - en incheckning har författare + incheckningsmeddelande
+  - den har också hashen för eventuella _förfäder_
+    oftast bara hashen för föregående incheckning
+  - en incheckning representerar också en _diff_,
+    alltså en beskrivning av hur man går från incheckningens förfäder till incheckningen
+   (t.ex. ta bort den här raden i en fil,
+   lägg till de här raderna i en annan,
+   byt namn på en fil,
+   osv.)
+   - i praktiken lagrar git hela tillståndet före och efter
+   - du vill troligen inte lagra stora filer som ändras ofta
 
-initially, the _repository_ (roughly: the folder that git manages) has
-no content, and no commits. let's set that up:
+Initialt har ett kodförråd (ungefär mappen som git hanterar)
+inget innehåll och inga incheckningar.
+Låt oss sätta upp det:
 
 ```console
 $ git init hackers
@@ -60,109 +73,116 @@ $ cd hackers
 $ git status
 ```
 
-the output here actually gives us a good starting point. let's dig in
-and make sure we understand it all.
+Utdatan här ger faktiskt en bra utgångspunkt.
+Låt oss gå igenom den och se till att vi förstår allt.
 
-first, "On branch master".
+Först: "On branch master".
 
- - don't want to use hashes all the time.
- - branches are names that point to hashes.
- - master is traditionally the name for the "latest" commit.
-   every time a new commit is made, the master name will be made to
-   point to the new commit's hash.
- - special name `HEAD` refers to "current" name
- - you can also make your own names with `git branch` (or `git tag`)
-   we'll get back to that
+ - man vill inte arbeta med hashar hela tiden
+  - grenar är namn som pekar på hashar
+  - master är traditionellt namnet för den "senaste" incheckningen
+    varje gång en ny incheckning skapas flyttas master till den nya incheckningens hash
+ - det särskilda namnet `HEAD` betyder "aktuellt" namn
+ - du kan också skapa egna namn med `git branch` (eller `git tag`)
+   vi kommer tillbaka till det
 
-let's skip over "No commits yet" because that's all there is to it.
+Vi hoppar över "No commits yet" eftersom det är självförklarande.
 
-then, "nothing to commit".
+Sedan: "nothing to commit".
 
- - every commit contains a diff with all the changes you made.
-   but how is that diff constructed in the first place?
- - _could_ just always commit _all_ changes you've made since the last
-   commit
-   - sometimes you want to only commit some of them (e.g., not `TODO`s)
-   - sometimes you want to break up a change into multiple commits to
-     give a separate commit message for each one
- - git lets you _stage_ changes to construct a commit
-   - add changes to a file or files to the staged changes with `git add`
-     - add only some changes in a file with `git add -p`
-     - without argument `git add` operates on "all known files"
-   - remove a file and stage its removal with `git rm`
-   - empty the set of staged changes `git reset`
-     - note that this does *not* change any of your files!
-       it *only* means that no changes will be included in a commit
-     - to remove only some staged changes:
-       `git reset FILE` or `git reset -p`
-   - check staged changes with `git diff --staged`
-   - see remaining changes with `git diff`
-   - when you're happy with the stage, make a commit with `git commit`
-     - if you just want to commit *all* changes: `git commit -a`
-     - `git help add` has a bunch more helpful info
+  - varje incheckning innehåller en diff med alla ändringar du gjort
+   men hur byggs den diffen från början?
+  - man _skulle_ kunna checka in _alla_ ändringar sedan senaste incheckning
+    - ibland vill du bara checka in en del (t.ex. inte `TODO`s)
+    - ibland vill du dela upp en ändring i flera incheckningar
+      för att ge separata incheckningsmeddelanden
+  - git låter dig mellanlagra ändringar för att konstruera en incheckning
+    - lägg till ändringar i en eller flera filer till mellanlagret med `git add`
+     - lägg till bara vissa ändringar i en fil med `git add -p`
+     - utan argument arbetar `git add` på "alla kända filer"
+    - ta bort en fil och mellanlagra borttagningen med `git rm`
+    - töm mängden mellanlagrade ändringar med `git reset`
+     - notera att detta *inte* ändrar några filer
+        det betyder *bara* att inga ändringar tas med i nästa incheckning
+      - för att ta bort bara vissa mellanlagrade ändringar:
+       `git reset FILE` eller `git reset -p`
+    - se mellanlagrade ändringar med `git diff --staged`
+   - se återstående ändringar med `git diff`
+    - när du är nöjd med mellanlagret, skapa en incheckning med `git commit`
+      - om du vill checka in *alla* ändringar direkt: `git commit -a`
+     - `git help add` har mer hjälpsam information
 
-while you're playing with the above, try to run `git status` to see what
-git thinks you're doing -- it's surprisingly helpful!
+Medan du testar ovan,
+försök köra `git status` för att se vad git tycker att du gör.
+Det är förvånansvärt hjälpsamt.
 
-## A commit you say...
+## En incheckning säger du...
 
-okay, we have a commit, now what?
+Okej,
+vi har en incheckning.
+Vad nu?
 
- - we can look at recent changes: `git log` (or `git log --oneline`)
- - we can look at the full changes: `git log -p`
- - we can show a particular commit: `git show master`
-   - or with `-p` for full diff/patch
- - we can go back to the state at a commit using `git checkout NAME`
-   - if `NAME` is a commit hash, git says we're "detached". this just
-     means there's no `NAME` that refers to this commit, so if we make
-     commits, no-one will know about them.
- - we can revert a change with `git revert NAME`
-   - applies the diff in the commit at `NAME` in reverse.
- - we can compare an older version to this one using `git diff NAME..`
-   - `a..b` is a commit _range_. if either is left out, it means `HEAD`.
- - we can show all the commits between using `git log NAME..`
-   - `-p` works here too
- - we can change `master` to point to a particular commit (effectively
-   undoing everything since) with `git reset NAME`:
-   - huh, why? wasn't `reset` to change staged changes?
-     reset has a "second" form (see `git help reset`) which sets `HEAD`
-     to the commit pointed to by the given name.
-   - notice that this didn't change any files -- `git diff` now
-     effectively shows `git diff NAME..`.
+ - vi kan titta på senaste ändringarna: `git log` (eller `git log --oneline`)
+ - vi kan titta på fullständiga ändringar: `git log -p`
+  - vi kan visa en specifik incheckning: `git show master`
+    - eller med `-p` för full diff/patch
+  - vi kan gå tillbaka till tillståndet vid en incheckning med `git checkout NAME`
+    - om `NAME` är en incheckningshash säger git att vi är "detached"
+      det betyder bara att inget `NAME` pekar på incheckningen,
+      så om vi gör incheckningar är det ingen som känner till dem
+  - vi kan återställa en ändring med `git revert NAME`
+    - det applicerar diffen i incheckningen vid `NAME` i omvänd riktning
+ - vi kan jämföra en äldre version med den här via `git diff NAME..`
+  - `a..b` är ett incheckningsintervall.
+     Om någon sida utelämnas betyder det `HEAD`.
+  - vi kan visa alla incheckningar mellan två punkter med `git log NAME..`
+   - `-p` fungerar här också
+  - vi kan flytta `master` till en viss incheckning (och i praktiken
+   ångra allt efter den) med `git reset NAME`:
+   - va?
+     var inte `reset` till för mellanlagret?
+     `reset` har en "andra" form (se `git help reset`) som sätter `HEAD`
+     till incheckningen som namnet pekar på
+   - notera att detta inte ändrar några filer,
+     `git diff` visar nu i praktiken `git diff NAME..`
 
-## What's in a name?
+## Vad betyder ett namn?
 
-clearly, names are important in git. and they're the key to
-understanding *a lot* of what goes on in git. so far, we've talked about
-commit hashes, master, and `HEAD`. but there's more!
+Namn är uppenbart viktiga i git.
+De är nyckeln till att förstå *mycket* av vad som händer i git.
+Hittills har vi pratat om incheckningshashar,
+master,
+och `HEAD`.
+Men det finns mer.
 
- - you can make your own branches (like master) with `git branch b`
-   - creates a new name, `b`, which points to the commit at `HEAD`
-   - you're still "on" master though, so if you make a new commit,
-     master will point to that new commit, `b` will not.
-   - switch to a branch with `git checkout b`
-     - any commits you make will now update the `b` name
-     - switch back to master with `git checkout master`
-       - all your changes in `b` are hidden away
-     - a very handy way to be able to easily test out changes
- - tags are other names that never change, and that have their own
-   message. often used to mark releases + changelogs.
- - `NAME^` means "the commit before `NAME`
-   - can apply recursively: `NAME^^^`
-   - you _most likely_ mean `~` when you use `~`
-     - `~` is "temporal", whereas `^` goes by ancestors
-     - `~~` is the same as `^^`
-     - with `~` you can also write `X~3` for "3 commits older than `X`
-     - you don't want `^3`
+  - du kan skapa egna grenar (som master) med `git branch b`
+    - det skapar ett nytt namn, `b`, som pekar på incheckningen vid `HEAD`
+   - du är fortfarande "på" master,
+      så om du gör en ny incheckning uppdateras master men inte `b`
+    - byt till gren med `git checkout b`
+      - incheckningar du gör nu uppdaterar namnet `b`
+     - byt tillbaka till master med `git checkout master`
+       - då "försvinner" ändringarna i `b` ur sikte
+      - detta är ett smidigt sätt att testa ändringar
+ - taggar är andra namn som aldrig ändras
+   och som har egna meddelanden
+    används ofta för utgåvor och ändringsloggar
+  - `NAME^` betyder "incheckningen före `NAME`"
+   - kan appliceras rekursivt: `NAME^^^`
+   - du menar _oftast_ `~` när du använder den typen av notation
+     - `~` är "temporal", medan `^` går via förfäder
+     - `~~` är samma som `^^`
+      - med `~` kan du också skriva `X~3` för "3 incheckningar äldre än `X`"
+     - du vill inte ha `^3`
    - `git diff HEAD^`
- - `-` means "the previous name"
- - most commands operate on `HEAD` unless you give another argument
+ - `-` betyder "föregående namn"
+ - de flesta kommandon arbetar på `HEAD` om du inte anger annat argument
 
-## Clean up your mess
+## Städa upp historiken
 
-your commit history will _very_ often end up as:
+Din incheckningshistorik kommer _väldigt_ ofta att se ut så här:
 
- - `add feature x` -- maybe even with a commit message about `x`!
+  - `lägg till funktion x` -- kanske till och med med ett bra incheckningsmeddelande om `x`
  - `forgot to add file`
  - `fix bug`
  - `typo`
@@ -177,152 +197,163 @@ your commit history will _very_ often end up as:
  - `x`
  - `x`
 
-that's _fine_ as far as git is concerned, but is not very helpful to
-your future self, or to other people who are curious about what has
-changed. git lets you clean up these things:
+Det är _okej_ för git,
+men inte särskilt hjälpsamt för ditt framtida jag
+eller för andra som vill förstå vad som ändrats.
+git låter dig städa upp detta:
 
- - `git commit --amend`: fold staged changes into previous commit
-   - note that this _changes_ the previous commit, giving it a new hash!
- - `git rebase -i HEAD~13` is _magical_.
-   for each commit from past 13, choose what to do:
-   - default is `pick`; do nothing
-   - `r`: change commit message
-   - `e`: change commit (add or remove files)
-   - `s`: combine commit with previous and edit commit message
-   - `f`: "fixup" -- combine commit with previous; discard commit msg
-   - at the end, `HEAD` is made to point to what is now the last commit
-   - often referred to as _squashing_ commits
-   - what it really does: rewind `HEAD` to rebase start point, then
-     re-apply the commits in order as directed.
- - `git reset --hard NAME`: reset the state of all files to that of
-   `NAME` (or `HEAD` if no name is given). handy for undoing changes.
+  - `git commit --amend`: vik in mellanlagrade ändringar i föregående incheckning
+    - notera att detta _ändrar_ föregående incheckning och ger den en ny hash
+  - `git rebase -i HEAD~13` är mycket kraftfullt
+    för varje incheckning i de senaste 13 väljer du vad som ska göras:
+   - standard är `pick`: gör inget
+    - `r`: ändra incheckningsmeddelande
+    - `e`: ändra incheckning (lägg till eller ta bort filer)
+    - `s`: slå ihop incheckning med föregående och redigera incheckningsmeddelandet
+    - `f`: "fixup" -- slå ihop med föregående och kasta incheckningsmeddelandet
+    - i slutet pekar `HEAD` på det som nu är sista incheckning
+    - kallas ofta för att slå ihop incheckningar
+   - det som faktiskt händer är:
+     backa `HEAD` till rebasens startpunkt,
+      och återapplicera incheckningar i ordning enligt dina val
+ - `git reset --hard NAME`: återställ alla filer till tillståndet i `NAME`
+   (eller `HEAD` om inget namn anges)
+   praktiskt för att ångra ändringar
 
-## Playing with others
+## Arbeta med andra
 
-a common use-case for version control is to allow multiple people to
-make changes to a set of files without stepping on each other's toes.
-or rather, to make sure that _if_ they step on each other's toes, they
-won't just silently overwrite each other's changes.
+Ett vanligt användningsfall för versionshantering
+är att låta flera personer göra ändringar i samma filsamling
+utan att trampa varandra på tårna.
+Eller rättare sagt,
+att säkerställa att om de gör det,
+så skrivs ändringarna inte bara över tyst.
 
-git is a _distributed_ VCS: everyone has a local copy of the entire
-repository (well, of everything others have chosen to publish). some
-VCSes are _centralized_ (e.g., subversion): a server has all the
-commits, clients only have the files they have "checked out". basically,
-they only have the _current_ files, and need to ask the server if they
-want anything else.
+git är ett _distribuerat_ VCS.
+Alla har en lokal kopia av hela kodförrådet
+(eller åtminstone allt andra har valt att publicera).
+Vissa VCS är _centraliserade_ (t.ex. subversion):
+en server har alla incheckningar,
+och klienter har bara filerna de har "checkat ut".
+I princip har de bara de _aktuella_ filerna
+och måste fråga servern för allt annat.
 
-every copy of a git repository can be listed as a "remote". you can copy
-an existing git repository using `git clone ADDRESS` (instead of `git
-init`). this creates a remote called _origin_ that points to `ADDRESS`.
-you can fetch names and the commits they point to from a remote with
-`git fetch REMOTE`. all names at a remote are available to you as
-`REMOTE/NAME`, and you can use them just like local names.
+Varje kopia av ett git-kodförråd kan listas som ett fjärrförråd.
+Du kan kopiera ett befintligt kodförråd med `git clone ADDRESS`
+(i stället för `git init`).
+Detta skapar ett fjärrförråd som heter _origin_ och pekar på `ADDRESS`.
+Du kan hämta namn och incheckningar de pekar på från ett fjärrförråd med `git fetch REMOTE`.
+Alla namn på remoten blir tillgängliga som `REMOTE/NAME`,
+och du kan använda dem som lokala namn.
 
-if you have write access to a remote, you can change names at the remote
-to point to commits you've made using `git push`. for example, let's
-make the master name (branch) at the remote `origin` point to the commit
-that our master branch currently points to:
+Om du har skrivåtkomst till ett fjärrförråd
+kan du ändra namn på fjärren så att de pekar på incheckningar du skapat via `git push`.
+Till exempel,
+låt oss få master på fjärren `origin` att peka på samma incheckning
+som vår lokala master pekar på:
 
    - `git push origin master:master`
-   - for convenience, you can set `origin/master` as the default target
-     for when you `git push` from the current branch with `-u`
-   - consider: what does this do? `git push origin master:HEAD^`
+   - för bekvämlighet kan du sätta `origin/master` som standardmål
+      för `git push` från aktuell gren med `-u`
+   - fundera: vad gör `git push origin master:HEAD^`?
 
-often you'll use GitHub, GitLab, BitBucket, or something else as your
-remote. there's nothing "special" about that as far as git is concerned.
-it's all just names and commits. if someone makes a change to master and
-updates `github/master` to point to their commit (we'll get back to
-that in a second), then when you `git fetch github`, you'll be able to
-see their changes with `git log github/master`.
+Ofta använder du GitHub,
+GitLab,
+BitBucket,
+eller något annat som fjärrförråd.
+Det är inget "särskilt" ur gits perspektiv.
+Det är bara namn och incheckningar.
+Om någon ändrar master och flyttar `github/master` till sin incheckning
+(vi återkommer till det strax),
+kan du efter `git fetch github` se deras ändringar med `git log github/master`.
 
-## Working with others
+## Samarbete i praktiken
 
-so far, branches seem pretty useless: you can create them, do work on
-them, but then what? eventually, you'll just make master point to them
-anyway, right?
+Hittills verkar grenar ganska meningslösa.
+Du kan skapa dem,
+jobba i dem,
+men sedan då?
+Till slut flyttar du väl ändå master till dem,
+eller?
 
- - what if you had to fix something while working on a big feature?
- - what if someone else made a change to master in the meantime?
+  - vad händer om du måste fixa något medan du arbetar på en stor funktion?
+ - vad händer om någon annan under tiden gör en ändring i master?
 
-inevitably, you will have to _merge_ changes in one branch with changes
-in another, whether those changes are made by you or someone else. git
-lets you do this with, unsurprisingly, `git merge NAME`. `merge` will:
+Förr eller senare måste du slå samman ändringar i en gren med ändringar i en annan,
+oavsett om ändringarna gjorts av dig eller någon annan.
+git gör detta med `git merge NAME`.
+`merge` kommer att:
 
- - look for the latest point where `HEAD` and `NAME` shared a commit
-   ancestor (i.e., where they diverged)
- - (try to) apply all those changes to the current `HEAD`
- - produce a commit that contains all those changes, and lists both
-   `HEAD` and `NAME` as its ancestors
- - set `HEAD` to that commit's hash
+  - hitta senaste punkt där `HEAD` och `NAME` delade incheckningsförfader
+   (alltså där de divergerade)
+ - försöka applicera alla dessa ändringar på aktuell `HEAD`
+  - skapa en incheckning som innehåller alla ändringar
+   och listar både `HEAD` och `NAME` som förfäder
+  - sätta `HEAD` till den incheckningens hash
 
-once your big feature has been finished, you can merge its branch into
-master, and git will ensure that you don't lose any changes from either
-branch!
+När din stora funktion är klar
+kan du slå samman dess gren till master,
+och git ser till att du inte tappar ändringar från någon gren.
 
-if you've used git in the past, you may recognize `merge` by a different
-name: `pull`. when you do `git pull REMOTE BRANCH`, that is:
+Om du har använt git tidigare känner du kanske igen `merge` under ett annat namn: `pull`.
+När du kör `git pull REMOTE BRANCH` händer följande:
 
- - `git fetch REMOTE`
- - `git merge REMOTE/BRANCH`
- - where, like `push`, `REMOTE` and `BRANCH` are often omitted and use
-   the "tracking" remote branch (remember `-u`?)
+- `git fetch REMOTE`
+- `git merge REMOTE/BRANCH`
+- där `REMOTE` och `BRANCH`, liksom med `push`, ofta utelämnas och då används den spårade fjärrgrenen (minns `-u`)
 
-this usually works _great_. as long as the changes to the branches being
-merged are disjoint. if they are not, you get a _merge conflict_. sounds
-scary...
+Det här fungerar oftast bra så länge ändringarna i grenarna är separata.
+Om de inte är det får du en _sammanslagningskonflikt_.
+Det låter läskigt.
 
- - a merge conflict is just git telling you that it doesn't know what
-   the final diff should look like
- - git pauses and asks you to finish staging the "merge commit"
- - open the conflicted file in your editor and look for lots of angle
-   brackets (`<<<<<<<`). the stuff above `=======` is the change made in
-   the `HEAD` since the shared ancestor commit. the stuff below is the
-   change made in the `NAME` since the shared commit.
- - `git mergetool` is pretty handy -- opens a diff editor
- - once you've _resolved_ the conflict by figuring out what the file
-   should now look like, stage those changes with `git add`.
- - when all the conflicts are resolved, finish with `git commit`
-   - you can give up with `git merge --abort`
+- en sammanslagningskonflikt betyder bara att git inte vet hur den slutliga diffen ska se ut
+- git pausar och ber dig slutföra mellanlagringen av sammanslagningsincheckningen
+- öppna den konfliktande filen i redigeraren och leta efter många vinkelparenteser (`<<<<<<<`)
+  texten ovanför `=======` är ändringen i `HEAD` sedan gemensam förfader
+  texten under `=======` är ändringen i `NAME` sedan samma förfader
+- `git mergetool` är praktiskt, eftersom det öppnar ett diffverktyg
+- när du _löst_ konflikten genom att bestämma hur filen ska se ut, mellanlagra ändringarna med `git add`
+- när alla konflikter är lösta, avsluta med `git commit`
+  - du kan avbryta med `git merge --abort`
 
-you've just resolved your first git merge conflict! \o/
-now you can publish your finished changes with `git push`
+Du har just löst din första git-sammanslagningskonflikt.
+\o/
+Nu kan du publicera dina färdiga ändringar med `git push`.
 
-## When worlds collide
+## När världar krockar
 
-when you `push`, git checks that no-one else's work is lost if you
-update the remote name you're pushing too. it does this by checking
-that the current commit of the remote name is an ancestor of the commit
-you are pushing. if it is, git can safely just update the name; this is
-called _fast-forwarding_. if it is not, git will refuse to update the
-remote name, and tell you there have been changes.
+När du `push`ar kontrollerar git att ingen annans arbete går förlorat när du uppdaterar namnet på fjärren du pushar till.
+Det görs genom att kontrollera att fjärrnamnets nuvarande incheckning är en förfader till incheckningen du pushar.
+Om så är fallet kan git säkert uppdatera namnet.
+Det kallas snabb framflyttning (_fast-forwarding_).
+Om inte vägrar git uppdatera fjärrnamnet och säger att det har tillkommit ändringar.
 
-if your push is rejected, what do you do?
+Om din push nekas,
+vad gör du då?
 
- - merge remote changes with `git pull` (i.e., `fetch` + `merge`)
- - force the push with `--force`: this will lose other people's changes!
-   - there's also `--force-with-lease`, which will only force the change
-     if the remote name hasn't changed since the last time you fetched
-     from that remote. much safer!
-   - if you've rebased local commits that you've previously pushed
-     ("history rewriting"; probably don't do this), you'll have to force
-     push. think about why!
- - try to re-apply your changes "on top of" the changes made remotely
-   - this is a `rebase`!
-     - rewind all local commits since shared ancestor
-     - fast-forward `HEAD` to commit at remote name
-     - apply local commits in-order
-       - may have conflicts you have to manually resolve
-       - `git rebase --continue` or `--abort`
-     - lots more [here](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
-   - `git pull --rebase` will start this process for you
-   - whether you should merge or rebase is a hot topic! some good reads:
-     - [this](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
-     - [this](https://web.archive.org/web/20210106220723/https://derekgourlay.com/blog/git-when-to-merge-vs-when-to-rebase/)
-     - [this](https://stackoverflow.com/questions/804115/when-do-you-use-git-rebase-instead-of-git-merge)
+- slå samman ändringar från fjärren med `git pull` (alltså `fetch` + `merge`)
+- tvinga push med `--force`
+  Då förloras andras ändringar.
+  - det finns också `--force-with-lease`, som bara tvingar om fjärrnamnet inte ändrats sedan senaste `fetch`; det är klart säkrare
+  - om du har rebasat lokala incheckningar som du tidigare pushat (historikomskrivning, gör helst inte det) måste du tvångspusha
+- försök återapplicera dina ändringar "ovanpå" fjärrändringarna
+  - det är en ombasering (`rebase`)
+    - backa alla lokala incheckningar sedan gemensam förfader
+    - fast-forward `HEAD` till incheckningen vid fjärrnamnet
+    - applicera lokala incheckningar i ordning
+      - konflikter kan uppstå och behöva lösas manuellt
+      - använd `git rebase --continue` eller `--abort`
+    - mer [här](https://git-scm.com/book/en/v2/Git-Branching-Rebasing)
+  - `git pull --rebase` startar processen åt dig
+  - om man bör slå samman eller basera om är en het diskussion
+    några bra läsningar:
+    - [den här](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
+    - [den här](https://web.archive.org/web/20210106220723/https://derekgourlay.com/blog/git-when-to-merge-vs-when-to-rebase/)
+    - [den här](https://stackoverflow.com/questions/804115/when-do-you-use-git-rebase-instead-of-git-merge)
 
-# Further reading
+# Vidare läsning
 
-[![XKCD on git](https://imgs.xkcd.com/comics/git.png)](https://xkcd.com/1597/)
+[![XKCD om git](https://imgs.xkcd.com/comics/git.png)](https://xkcd.com/1597/)
 
  - [Learn git branching](https://learngitbranching.js.org/)
  - [How to explain git in simple words](https://smusamashah.github.io/blog/2017/10/14/explain-git-in-simple-words)
@@ -331,28 +362,76 @@ if your push is rejected, what do you do?
  - [Oh shit, git!](https://ohshitgit.com/)
  - [The Pro Git book](https://git-scm.com/book/en/v2)
 
-# Exercises
+# Övningar
 
-1. On a repo try modifying an existing file. What happens when you do `git stash`? What do you see when running `git log --all --oneline`? Run `git stash pop` to undo what you did with `git stash`. In what scenario might this be useful?
+1. I ett kodförråd, prova att ändra en befintlig fil.
+   Vad händer när du kör `git stash`?
+   Vad ser du med `git log --all --oneline`?
+   Kör `git stash pop` för att ångra det du gjorde med `git stash`.
+   I vilket scenario kan detta vara användbart?
 
-1. One common mistake when learning git is to commit large files that should not be managed by git or adding sensitive information. Try adding a file to a repository, making some commits and then deleting that file from history (you may want to look at [this](https://help.github.com/articles/removing-sensitive-data-from-a-repository/)). Also if you do want git to manage large  files for you, look into [Git-LFS](https://git-lfs.github.com/)
+1. Ett vanligt misstag när man lär sig git är att checka in stora filer som inte bör hanteras av git,
+   eller att råka lägga till känslig information.
+   Prova att lägga till en fil i ett kodförråd,
+   skapa några incheckningar,
+   och ta sedan bort filen ur historiken
+   (du kan titta på [det här](https://help.github.com/articles/removing-sensitive-data-from-a-repository/)).
+   Om du faktiskt vill låta git hantera stora filer,
+   titta på [Git-LFS](https://git-lfs.github.com/).
 
-1. Git is really convenient for undoing changes but one has to be familiar even with the most unlikely changes
-   1. If a file is mistakenly modified in some commit it can be reverted with `git revert`. However if a commit involves several changes `revert` might not be the best option. How can we use `git checkout` to recover a file version from a specific commit?
-   1. Create a branch, make a commit in said branch and then delete it. Can you still recover said commit? Try looking into `git reflog`. (Note: Recover dangling things quickly, git will periodically automatically clean up commits that nothing points to.)
-   1. If one is too trigger happy with `git reset --hard` instead of `git reset` changes can be easily lost. However since the changes were staged, we can recover them. (look into `git fsck --lost-found` and `.git/lost-found`)
+1. Git är väldigt bra för att ångra ändringar,
+   men man behöver känna till även ovanliga lägen.
+   1. Om en fil råkar ändras i en incheckning kan den återställas med `git revert`.
+      Men om incheckningen innehåller flera ändringar är `revert` kanske inte bästa val.
+      Hur kan vi använda `git checkout` för att återställa en filversion från en specifik incheckning?
+   1. Skapa en gren,
+      gör en incheckning i den,
+      och ta sedan bort branchen.
+      Kan du fortfarande återställa incheckningen?
+      Titta på `git reflog`.
+      (Obs: återställ "hängande" saker snabbt,
+      git städar periodiskt bort incheckningar som inget pekar på.)
+   1. Om man är för snabb med `git reset --hard` i stället för `git reset`
+      kan ändringar lätt gå förlorade.
+       Eftersom ändringarna var mellanlagrade kan de dock återställas.
+      (Titta på `git fsck --lost-found` och `.git/lost-found`.)
 
-1. In any git repo look under the folder `.git/hooks` you will find a bunch of scripts that end with `.sample`. If you rename them without the `.sample` they will run based on their name. For instance `pre-commit` will execute before doing a commit. Experiment with them
+1. I valfritt git-kodförråd,
+   titta i mappen `.git/hooks`.
+   Där finns skript som slutar på `.sample`.
+   Om du byter namn på dem och tar bort `.sample` körs de enligt sitt namn.
+   Till exempel körs `pre-commit` före en incheckning.
+   Experimentera med dem.
 
-1. Like many command line tools `git` provides a configuration file (or dotfile) called `~/.gitconfig` . Create and alias using `~/.gitconfig` so that when you run `git graph` you get the output of `git log --oneline --decorate --all --graph` (this is a good command to quickly visualize the commit graph)
+1. Liksom många kommandoradsverktyg har `git` en konfigurationsfil (dotfile) som heter `~/.gitconfig`.
+   Skapa ett alias i `~/.gitconfig` så att `git graph` ger samma utdata som `git log --oneline --decorate --all --graph`
+   (det här är ett bra kommando för att snabbt visualisera incheckningsgrafen).
 
-1. Git also lets you define global ignore patterns under `~/.gitignore_global`, this is useful to prevent common errors like adding RSA keys. Create a `~/.gitignore_global` file and add the pattern `*rsa`, then test that it works in a repo.
+1. Git låter dig också definiera globala ignore-mönster i `~/.gitignore_global`.
+   Det är användbart för att förebygga vanliga misstag,
+   som att lägga till RSA-nycklar.
+   Skapa en `~/.gitignore_global`-fil,
+   lägg till mönstret `*rsa`,
+   och testa att det fungerar i ett kodförråd.
 
-1. Once you start to get more familiar with `git`, you will find yourself running into common tasks, such as editing your `.gitignore`. [git extras](https://github.com/tj/git-extras/blob/master/Commands.md) provides a bunch of little utilities that integrate with `git`. For example `git ignore PATTERN` will add the specified pattern to the `.gitignore` file in your repo and `git ignore-io LANGUAGE` will fetch the common ignore patterns for that language from [gitignore.io](https://www.gitignore.io). Install `git extras` and try using some tools like `git alias` or `git ignore`.
+1. När du blir mer van vid `git` kommer du märka återkommande uppgifter,
+   som att redigera `.gitignore`.
+   [git extras](https://github.com/tj/git-extras/blob/master/Commands.md) erbjuder många småverktyg som integrerar med `git`.
+   Till exempel lägger `git ignore PATTERN` till mönstret i kodförrådets `.gitignore`,
+   och `git ignore-io LANGUAGE` hämtar vanliga ignore-mönster för språket från [gitignore.io](https://www.gitignore.io).
+   Installera `git extras` och testa verktyg som `git alias` eller `git ignore`.
 
-1. Git GUI programs can be a great resource sometimes. Try running [gitk](https://git-scm.com/docs/gitk) in a git repo an explore the different parts of the interface. Then run `gitk --all` what are the differences?
+1. Git-GUI-program kan ibland vara mycket användbara.
+   Prova att köra [gitk](https://git-scm.com/docs/gitk) i ett kodförråd och utforska gränssnittets olika delar.
+   Kör sedan `gitk --all`.
+   Vilka skillnader ser du?
 
-1. Once you get used to command line applications GUI tools can feel cumbersome/bloated. A nice compromise between the two are ncurses based tools which can be navigated from the command line and still provide an interactive interface. Git has [tig](https://github.com/jonas/tig), try installing it and running it in a repo. You can find some usage examples [here](https://www.atlassian.com/blog/git/git-tig).
+1. När man väl vant sig vid kommandoradsprogram kan GUI-verktyg kännas tunga.
+   En bra kompromiss är ncurses-baserade verktyg,
+   som kan navigeras från kommandoraden men fortfarande erbjuder ett interaktivt gränssnitt.
+   Git har [tig](https://github.com/jonas/tig).
+   Prova att installera det och köra det i ett kodförråd.
+   Du hittar användningsexempel [här](https://www.atlassian.com/blog/git/git-tig).
 
 
 {% comment %}

@@ -1,6 +1,7 @@
 # Setup
-title: 'Missing Semester'
-url: https://missing.csail.mit.edu
+title: 'Den saknade terminen'
+url: https://itiquette.github.io
+baseurl: /den-saknade-terminen
 thumbnail: "/static/assets/thumbnails/default.png"
 
 # Settings
@@ -12,7 +13,7 @@ highlighter: rouge
 permalink: /:title/
 future: true
 # safe: true # breaks local rendering if enabled
-timezone: America/New_York
+timezone: Europe/Stockholm
 analytics:
   tracking_id: G-P7WVHD84D1
 

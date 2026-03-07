@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Packaging and Shipping Code"
+title: "Paketera och leverera kod"
 description: >
-  Learn about project packaging, environments, versioning, and deploying libraries, applications, and services.
+  Lär dig om projektpaketering, miljöer, versionshantering och distribution av bibliotek, applikationer och tjänster.
 thumbnail: /static/assets/thumbnails/2026/lec6.png
 date: 2026-01-20
 ready: true
@@ -11,32 +11,34 @@ video:
   id: KBMiB-8P4Ns
 ---
 
-Getting code to work as intended is hard; getting that same code to run on a machine different from your own is often harder.
+Att få kod att fungera som tänkt är svårt.
+Att få samma kod att köra på en annan maskin än din egen är ofta ännu svårare.
 
-Shipping code means taking the code you wrote and converting it into a usable form that someone else can run without your computer's exact setup.
-Shipping code takes many forms and depends on the choices of programming language, system libraries, and operating system, among many other factors.
-It also depends on what you are building: a software library, a command line tool, and a web service all have different requirements and deployment steps.
-Regardless, there is a common pattern between all these scenarios: we need to define what the deliverable is --- a.k.a. the _artifact_ --- and what assumptions it makes about the environment around it.
+Att leverera kod innebär att ta koden du skrev och omvandla den till en användbar form som någon annan kan köra utan din dators exakta miljö.
+Att leverera kod kan se ut på många sätt och beror på val av programmeringsspråk, systembibliotek, operativsystem och många andra faktorer.
+Det beror också på vad du bygger; ett programbibliotek, ett kommandoradsverktyg och en webbtjänst har olika krav och driftsättningssteg.
+Oavsett finns ett gemensamt mönster i alla dessa scenarier: vi måste definiera vad leverabeln är --- det vill säga en artefakt --- och vilka antaganden den gör om miljön runt omkring.
 
-In this lecture, we'll cover:
+I den här föreläsningen går vi igenom:
 
-- [Dependencies & Environments](#dependencies--environments)
-- [Artifacts & Packaging](#artifacts--packaging)
-- [Releases & Versioning](#releases--versioning)
-- [Reproducibility](#reproducibility)
-- [VMs & Containers](#vms--containers)
-- [Configuration](#configuration)
-- [Services & Orchestration](#services--orchestration)
-- [Publishing](#publishing)
+- [Beroenden och miljöer](#dependencies--environments)
+- [Artefakter och paketering](#artifacts--packaging)
+- [Utgåvor och versionering](#utgavor-och-versionering)
+- [Reproducerbarhet](#reproducibility)
+- [VM:ar och containers](#vms--containers)
+- [Konfiguration](#configuration)
+- [Tjänster och orkestrering](#services--orchestration)
+- [Publicering](#publishing)
 
-We'll explain these concepts through examples from the Python ecosystem, as concrete examples are helpful for understanding. While the tools are different for other programming language ecosystems, the concepts will largely be the same.
+Vi förklarar dessa koncept med exempel från Python-ekosystemet, eftersom konkreta exempel hjälper förståelsen.
+Verktygen är annorlunda i andra språks ekosystem, men koncepten är till stor del desamma.
 
-# Dependencies & Environments
+# Beroenden och miljöer {#dependencies--environments}
 
-In modern software development, layers of abstraction are ubiquitous.
-Programs naturally offload logic to other libraries or services.
-However, this introduces a _dependency_ relationship between your program and the libraries it requires to function.
-For instance, in Python, to fetch the content of a website we often do:
+I modern programvaruutveckling är abstraktionslager överallt.
+Program flyttar naturligt över logik till andra bibliotek eller tjänster.
+Detta introducerar dock ett beroendeförhållande mellan ditt program och biblioteken det behöver för att fungera.
+I Python gör vi till exempel ofta följande för att hämta innehållet på en webbsida:
 
 ```python
 import requests
@@ -44,7 +46,7 @@ import requests
 response = requests.get("https://missing.csail.mit.edu")
 ```
 
-Yet the `requests` library does not come bundled with the Python runtime, so if we try to run this code without having `requests` installed, Python will raise an error:
+Men biblioteket `requests` följer inte med standardinstallationen av Python, så om vi försöker köra koden utan att ha `requests` installerat får vi ett fel från Python:
 
 ```console
 $ python fetch.py
@@ -54,14 +56,14 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'requests'
 ```
 
-To make this library available we need to first run `pip install requests` to install it.
-`pip` is the command line tool that the Python programming language provides for installing packages.
-Executing `pip install requests` produces the following sequence of actions:
+För att göra biblioteket tillgängligt måste vi först köra `pip install requests` för att installera det.
+`pip` är kommandoradsverktyget som Python-språket tillhandahåller för att installera paket.
+Att köra `pip install requests` ger följande sekvens av steg:
 
-1. Search for requests in the Python Package Index ([PyPI](https://pypi.org/))
-1. Search for the appropriate artifact for the platform we are running under
-1. Resolve dependencies --- the `requests` library itself depends on other packages, so the installer must find compatible versions of all transitive dependencies and install them beforehand
-1. Download the artifacts, then unpack and copy the files into the right places in our filesystem
+1. Sök efter requests i Python Package Index ([PyPI](https://pypi.org/)).
+1. Sök efter rätt artefakt för plattformen vi kör på.
+1. Lös beroenden --- biblioteket `requests` beror själv på andra paket, så installeraren måste hitta kompatibla versioner av alla transitiva beroenden och installera dem först.
+1. Ladda ner artefakter, packa upp och kopiera filer till rätt platser i filsystemet.
 
 ```console
 $ pip install requests
@@ -79,8 +81,8 @@ Installing collected packages: urllib3, idna, charset-normalizer, certifi, reque
 Successfully installed certifi-2024.8.30 charset-normalizer-3.4.0 idna-3.10 requests-2.32.3 urllib3-2.2.3
 ```
 
-Here we can see that `requests` has its own dependencies such as `certifi` or `charset-normalizer` and that they have to be installed before `requests` can be installed.
-Once installed, the Python runtime can find this library when importing it.
+Här ser vi att `requests` har egna beroenden som `certifi` och `charset-normalizer`, och att de måste installeras innan `requests` kan installeras.
+När det är installerat kan Python hitta biblioteket vid import.
 
 ```console
 $ python -c 'import requests; print(requests.__path__)'
@@ -90,19 +92,19 @@ $ pip list | grep requests
 requests        2.32.3
 ```
 
-Programming languages have different tools, conventions and practices for installing and publishing libraries.
-In some languages like Rust, the toolchain is unified --- `cargo` handles building, testing, dependency management, and publishing.
-In others like Python, the unification happens at a specification level --- rather than a single tool, there are standardized specifications that define how packaging works, allowing multiple competing tools for each task (`pip` vs [`uv`](https://docs.astral.sh/uv/), `setuptools` vs [`hatch`](https://hatch.pypa.io/) vs [`poetry`](https://python-poetry.org/)).
-And in some ecosystems like LaTeX, distributions like TeX Live or MacTeX come bundled with thousands of packages pre-installed.
+Programmeringsspråk har olika verktyg, konventioner och arbetssätt för att installera och publicera bibliotek.
+I vissa språk som Rust är verktygskedjan enhetlig --- `cargo` hanterar bygg, test, beroendehantering och publicering.
+I andra som Python sker enhetligheten på specifikationsnivå --- i stället för ett enda verktyg finns standardiserade specifikationer som definierar hur paketering fungerar, vilket möjliggör flera konkurrerande verktyg för varje uppgift (`pip` vs [`uv`](https://docs.astral.sh/uv/), `setuptools` vs [`hatch`](https://hatch.pypa.io/) vs [`poetry`](https://python-poetry.org/)).
+Och i vissa ekosystem som LaTeX levereras distributioner som TeX Live eller MacTeX med tusentals förinstallerade paket.
 
-Introducing dependencies also introduces dependency conflicts.
-Conflicts happen when programs require incompatible versions of the same dependency.
-For example, if `tensorflow==2.3.0` requires `numpy>=1.16.0,<1.19.0` and `pandas==1.2.0`  requires `numpy>=1.16.5`, then any version satisfying `numpy>=1.16.5,<1.19.0` will be valid.
-But if another package in your project requires `numpy>=1.19`, you have a conflict with no valid version that satisfies all constraints.
+Att introducera beroenden introducerar också beroendekonflikter.
+Konflikter uppstår när program kräver inkompatibla versioner av samma beroende.
+Om till exempel `tensorflow==2.3.0` kräver `numpy>=1.16.0,<1.19.0` och `pandas==1.2.0` kräver `numpy>=1.16.5`, så är alla versioner som uppfyller `numpy>=1.16.5,<1.19.0` giltiga.
+Men om ett annat paket i projektet kräver `numpy>=1.19` har du en konflikt utan någon giltig version som uppfyller alla krav.
 
-This situation --- where multiple packages require mutually incompatible versions of shared dependencies --- is commonly referred to as _dependency hell_.
-One way to deal with conflicts is to isolate the dependencies of each program into their own _environment_.
-In Python we create a virtual environment by running:
+Denna situation --- där flera paket kräver ömsesidigt inkompatibla versioner av delade beroenden --- kallas ofta beroendekaos.
+Ett sätt att hantera konflikter är att isolera varje programs beroenden i en egen miljö.
+I Python skapar vi en virtuell miljö genom att köra:
 
 ```console
 $ which python
@@ -124,17 +126,19 @@ Package Version
 pip     24.0
 ```
 
-You can think of an environment as an entire standalone version of the language runtime with its own set of installed packages.
-This virtual environment or venv isolates the installed dependencies from the global Python installation.
-It is a good practice to have a virtual environment for each project, containing the dependencies it requires.
+Du kan tänka på en miljö som en helt fristående version av språkets körmiljö med egna installerade paket.
+Denna virtuella miljö, eller venv, isolerar installerade beroenden från den globala Python-installationen.
+Det är god praxis att ha en virtuell miljö per projekt, som innehåller de beroenden projektet kräver.
 
-> While many modern operating systems ship with installations of programming language runtimes like Python, it is unwise to modify these installations since the OS might rely on them for its own functionality. Prefer using separate environments instead.
+> Även om många moderna operativsystem levereras med installerade körmiljöer för programmeringsspråk som Python, är det klokt att inte modifiera dessa installationer eftersom OS:et kan förlita sig på dem för egen funktionalitet.
+Använd i stället separata miljöer.
 
-In some languages, the installation protocol is not defined by a tool but as a specification.
-In Python [PEP 517](https://peps.python.org/pep-0517/) defines the build system interface and [PEP 621](https://peps.python.org/pep-0621/) specifies how project metadata is stored in `pyproject.toml`.
-This has enabled developers to improve upon `pip` and produce more optimized tools like `uv`. To install `uv` it suffices to do `pip install uv`.
+I vissa språk definieras installationsprotokollet inte av ett verktyg utan som en specifikation.
+I Python definierar [PEP 517](https://peps.python.org/pep-0517/) gränssnittet för byggsystem och [PEP 621](https://peps.python.org/pep-0621/) specificerar hur projektmetadata lagras i `pyproject.toml`.
+Detta har gjort det möjligt att förbättra `pip` och ta fram mer optimerade verktyg som `uv`.
+För att installera `uv` räcker det att köra `pip install uv`.
 
-Using `uv` instead of `pip` follows the same interface but is significantly faster:
+Att använda `uv` i stället för `pip` följer samma gränssnitt men är betydligt snabbare:
 
 ```console
 $ uv pip install requests
@@ -148,9 +152,9 @@ Installed 5 packages in 8ms
  + urllib3==2.2.3
 ```
 
-> We strongly recommend using `uv pip` instead of `pip` whenever possible as it dramatically reduces the installation time.
+> Vi rekommenderar starkt att använda `uv pip` i stället för `pip` när det är möjligt eftersom installationstiden minskar dramatiskt.
 
-Beyond dependency isolation, environments also allow you to have different versions of your programming language runtime.
+Utöver beroendeisolering låter miljöer dig också ha olika versioner av språkets körmiljö.
 
 ```console
 $ uv venv --python 3.12 venv312
@@ -168,15 +172,17 @@ $ source venv311/bin/activate && python --version
 Python 3.11.10
 ```
 
-This helps when you need to test your code across multiple Python versions or when a project requires a specific version.
+Detta hjälper när du behöver testa kod mot flera Python-versioner eller när ett projekt kräver en specifik version.
 
-> In some programming languages, each project automatically gets its own environment for its dependencies rather than you creating it manually, but the principle is the same. Most languages these days also have a mechanism for managing multiple versions of the language on a single system, and then specifying which version to use for individual projects.
+> I vissa språk får varje projekt automatiskt sin egen miljö för beroenden i stället för att du skapar den manuellt, men principen är densamma.
+De flesta språk har i dag också en mekanism för att hantera flera språkversioner på samma system och sedan välja version per projekt.
 
-# Artifacts & Packaging
+# Artefakter och paketering {#artifacts--packaging}
 
-In software development we differentiate between source code and artifacts. Developers write and read source code, while artifacts are the packaged, distributable outputs produced from that source code --- ready to be installed or deployed.
-An artifact can be as simple as a file of code that we run, and as complex as an entire Virtual Machine that contains all the necessary bits and bobs of an application.
-Consider this example where we have a Python file `greet.py` in our current directory:
+I programvaruutveckling skiljer vi mellan källkod och artefakter.
+Utvecklare skriver och läser källkod, medan artefakter är paketerade, distribuerbara utdata som produceras från källkoden --- redo att installeras eller driftsättas.
+En artefakt kan vara så enkel som en kodfil som vi kör, och så komplex som en hel virtuell maskin som innehåller alla nödvändiga delar av en applikation.
+Tänk på detta exempel där vi har en Python-fil `greet.py` i nuvarande katalog:
 
 ```console
 $ cat greet.py
@@ -191,15 +197,18 @@ $ python -c "from greet import greet; print(greet('World'))"
 ModuleNotFoundError: No module named 'greet'
 ```
 
-The import fails once we move to a different directory because Python only searches for modules in specific locations (the current directory, installed packages, and paths in `PYTHONPATH`). Packaging solves this by installing the code into a known location.
+Importen misslyckas när vi byter katalog eftersom Python bara söker moduler på specifika platser (nuvarande katalog, installerade paket och sökvägar i `PYTHONPATH`).
+Paketering löser detta genom att installera koden på en känd plats.
 
-In Python, packaging a library involves producing an artifact that package installers like `pip` or `uv` can use to install the relevant files.
-Python artifacts are called _wheels_ and contain all the necessary information to install a package: the code files, metadata about the package (name, version, dependencies), and instructions for where to place files in the environment.
-Building an artifact requires that we write a project file (also often known as manifest) detailing the specifics of the project, the required dependencies, the version of the package, and other information. In Python, we use `pyproject.toml` for this purpose.
+I Python innebär paketering av ett bibliotek att producera en artefakt som paketinstallerare som `pip` eller `uv` kan använda för att installera relevanta filer.
+Python-artefakter kallas _wheels_ och innehåller all nödvändig information för att installera ett paket: kodfiler, metadata om paketet (namn, version, beroenden) och instruktioner för var filer ska placeras i miljön.
+Att bygga en artefakt kräver att vi skriver en projektfil (ofta kallad manifest) som specificerar projektets detaljer, nödvändiga beroenden, paketversion och annan information.
+I Python använder vi `pyproject.toml` för detta.
 
-> `pyproject.toml` is the modern and recommended way. While earlier packaging methods like `requirements.txt` or `setup.py` are still supported, you should prefer `pyproject.toml` whenever possible.
+> `pyproject.toml` är det moderna och rekommenderade sättet.
+Även om äldre paketeringsmetoder som `requirements.txt` eller `setup.py` fortfarande stöds bör du föredra `pyproject.toml` när det går.
 
-Here's a minimal `pyproject.toml` for a library that also provides a command-line tool:
+Här är en minimal `pyproject.toml` för ett bibliotek som också tillhandahåller ett kommandoradsverktyg:
 
 ```toml
 [project]
@@ -216,9 +225,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 ```
 
-The `typer` library is a popular Python package for creating command-line interfaces with minimal boilerplate.
+Biblioteket `typer` är ett populärt Python-paket för att skapa kommandoradsgränssnitt med minimalt upprepningsarbete.
 
-And the corresponding `greeting.py`:
+Och motsvarande `greeting.py`:
 
 ```python
 import typer
@@ -236,7 +245,7 @@ if __name__ == "__main__":
     cli()
 ```
 
-With this file, we can now build the wheel:
+Med denna fil kan vi nu bygga wheel-filen:
 
 ```console
 $ uv build
@@ -250,9 +259,9 @@ greeting-0.1.0-py3-none-any.whl
 greeting-0.1.0.tar.gz
 ```
 
-The `.whl` file is the wheel (a zip archive with a specific structure), and the `.tar.gz` is a source distribution for systems that need to build from source.
+Filen `.whl` är wheel-filen (ett zip-arkiv med en specifik struktur), och `.tar.gz` är en källdistribution för system som behöver bygga från källkod.
 
-You can inspect the contents of a wheel to see what gets packaged:
+Du kan inspektera innehållet i en wheel för att se vad som paketeras:
 
 ```console
 $ unzip -l dist/greeting-0.1.0-py3-none-any.whl
@@ -268,7 +277,7 @@ Archive:  dist/greeting-0.1.0-py3-none-any.whl
       998                     5 files
 ```
 
-Now if we were to give this wheel to someone else, they could install it by running:
+Om vi sedan ger denna wheel till någon annan kan de installera den genom att köra:
 
 ```console
 $ uv pip install ./greeting-0.1.0-py3-none-any.whl
@@ -276,45 +285,45 @@ $ greet Alice
 Hello, Alice!
 ```
 
-This would install the library we built earlier into their environment, including the `greet` cli tool.
+Detta installerar biblioteket vi byggde tidigare i deras miljö, inklusive kommandoradsverktyget `greet`.
 
-There are limitations to this approach. In particular if our library depends on platform-specific libraries, e.g. CUDA for GPU acceleration, then our artifact only works on systems with those specific libraries installed, and we may need to build separate wheels for different platforms (Linux, macOS, Windows) and architectures (x86, ARM).
+Det finns begränsningar med detta tillvägagångssätt.
+Om biblioteket beror på plattformsspecifika bibliotek, till exempel CUDA för GPU-acceleration, fungerar artefakten bara på system med dessa bibliotek installerade, och vi kan behöva bygga separata wheels för olika plattformar (Linux, macOS, Windows) och arkitekturer (x86, ARM).
 
+Vid installation av programvara finns en viktig skillnad mellan installation från källkod och installation av en förbyggd binär.
+Installation från källkod innebär att ladda ner originalkoden och kompilera den på din maskin --- detta kräver kompilator och byggverktyg, och kan ta lång tid för stora projekt.
 
-When installing software, there's an important distinction between installing from source and installing a prebuilt binary. Installing from source means downloading the original code and compiling it on your machine --- this requires having a compiler and build tools installed, and can take significant time for large projects.
+Installation av en förbyggd binär innebär att ladda ner en artefakt som redan kompilerats av någon annan --- snabbare och enklare, men binären måste matcha din plattform och arkitektur.
+Till exempel visar [ripgreps utgåvosida](https://github.com/BurntSushi/ripgrep/releases) förbyggda binärer för Linux (x86_64, ARM), macOS (Intel, Apple Silicon) och Windows.
 
-Installing a prebuilt binary means downloading an artifact that was already compiled by someone else --- faster and simpler, but the binary must match your platform and architecture.
-For example, [ripgrep's releases page](https://github.com/BurntSushi/ripgrep/releases) shows prebuilt binaries for Linux (x86_64, ARM), macOS (Intel, Apple Silicon), and Windows.
+# Utgåvor och versionering {#utgavor-och-versionering}
 
+Kod byggs kontinuerligt men släpps i diskreta steg.
+I programvaruutveckling finns en tydlig skillnad mellan utvecklings- och produktionsmiljöer.
+Kod måste bevisas fungera i en utvecklingsmiljö innan den driftsätts i produktion.
+Utgivningsprocessen omfattar många steg, inklusive testning, beroendehantering, versionering, konfiguration, driftsättning och publicering.
 
-# Releases & Versioning
+Mjukvarubibliotek är inte statiska utan utvecklas över tid med fixar och nya funktioner.
+Vi spårar denna utveckling med diskreta versionsidentifierare som motsvarar bibliotekets tillstånd vid en viss tidpunkt.
+Förändringar i ett biblioteks beteende kan vara allt från patchar som fixar icke-kritisk funktionalitet och nya funktioner som utökar funktionaliteten till ändringar som bryter bakåtkompatibilitet.
+Ändringsloggar dokumenterar vilka ändringar en version introducerar --- dokument som utvecklare använder för att kommunicera ändringar i en ny utgåva.
 
-Code is built in a continuous process but is released on a discrete basis.
-In software development there is a clear distinction between development and production environments.
-Code needs to be proven to work in a dev environment before getting _shipped_ to prod.
-The release process involves many steps, including testing, dependency management, versioning, configuration, deployment and publishing.
+Att hålla koll på pågående ändringar i varje beroende är dock opraktiskt, särskilt när vi tar hänsyn till transitiva beroenden --- alltså beroendenas beroenden.
 
+> Du kan visualisera hela beroendeträdet för projektet med `uv tree`, som visar alla paket och deras transitiva beroenden i trädformat.
 
-Software libraries are not static and evolve over time getting fixes and new features.
-We track this evolution by discrete version identifiers that correspond to the state of the library at a certain point in time.
-Changes in the behavior of a library can range from patches that fix noncritical functionality, new features that extend its functionality, to changes breaking backwards compatibility.
-Changelogs document what changes a version introduces --- these are documents that software developers use to communicate the changes associated with a new release.
+För att förenkla detta finns konventioner för versionssättning av programvara, och en av de vanligaste är [Semantic Versioning](https://semver.org/) eller SemVer.
+Under Semantic Versioning har en version formatet MAJOR.MINOR.PATCH där varje värde är ett heltal.
+Kortversionen är att en uppgradering av:
 
-However, keeping track of the ongoing changes in each and every dependency is impractical, even more so when we consider the transitive dependencies --- i.e. the dependencies of our dependencies.
+- PATCH (t.ex. 1.2.3 → 1.2.4) bör bara innehålla buggfixar och vara helt bakåtkompatibel.
+- MINOR (t.ex. 1.2.3 → 1.3.0) lägger till ny funktionalitet på ett bakåtkompatibelt sätt.
+- MAJOR (t.ex. 1.2.3 → 2.0.0) signalerar brytande ändringar som kan kräva kodmodifieringar.
 
-> You can visualize the entire dependency tree of your project with `uv tree`, which shows all packages and their transitive dependencies in a tree format.
+> Detta är en förenkling och vi uppmuntrar dig att läsa hela SemVer-specifikationen för att förstå till exempel varför en övergång från 0.1.3 till 0.2.0 kan ge brytande ändringar, eller vad 1.0.0-rc.1 betyder.
+Python-paketering stödjer semantisk versionshantering inbyggt, så när vi specificerar versionskrav för beroenden kan vi använda olika uttryck.
 
-To simplify this problem there are conventions on how to version software, and one of the most prevalent is [Semantic Versioning](https://semver.org/) or SemVer.
-Under Semantic Versioning a version has an identifier of the form MAJOR.MINOR.PATCH where each one of the values takes an integer value. The short version is that upgrading:
-
-- PATCH (e.g., 1.2.3 → 1.2.4) should only contain bug fixes and be fully backwards compatible
-- MINOR (e.g., 1.2.3 → 1.3.0) adds new functionality in a backwards-compatible way
-- MAJOR (e.g., 1.2.3 → 2.0.0) indicates breaking changes that may require code modifications
-
-> This is a simplification and we encourage reading the full SemVer specification to understand for instance why going from 0.1.3 to 0.2.0 might cause breaking changes or what 1.0.0-rc.1 means.
-Python packaging supports semantic versioning natively, so when we specify the versions of our dependencies we can use various specifiers:
-
-In the `pyproject.toml` we have different ways of constraining the ranges of compatible versions of our dependencies:
+I `pyproject.toml` har vi olika sätt att begränsa intervall av kompatibla versionsnummer för våra beroenden:
 
 ```toml
 [project]
@@ -326,22 +335,28 @@ dependencies = [
 ]
 ```
 
-Version specifiers exist across many package managers (npm, cargo, etc.) with varying exact semantics. The `~=` operator is Python's "compatible release" operator --- `~=2.1.0` means "any version that is compatible with 2.1.0", which translates to `>=2.1.0` and `<2.2.0`. This is roughly equivalent to the caret (`^`) operator in npm and cargo, which follows SemVer's notion of compatibility.
+Versionsspecifikationer finns i många pakethanterare (npm, cargo, osv.) med varierande exakta betydelser.
+Operatorn `~=` är Pythons operator för kompatibel utgåva --- `~=2.1.0` betyder "vilken version som helst kompatibel med 2.1.0", vilket motsvarar `>=2.1.0` och `<2.2.0`.
+Detta är ungefär ekvivalent med caret-operatorn (`^`) i npm och cargo, som följer SemVers kompatibilitetsbegrepp.
 
-Not all software uses semantic versioning. A common alternative is Calendar Versioning (CalVer), where versions are based on release dates rather than semantic meaning. For example, Ubuntu uses versions like `24.04` (April 2024) and `24.10` (October 2024). CalVer makes it easy to see how old a release is, though it doesn't communicate anything about compatibility.  Lastly, semantic versioning is not infallible, and sometimes maintainers inadvertently introduce breaking changes in minor or patch releases.
+All programvara använder inte semantisk versionering.
+Ett vanligt alternativ är Calendar Versioning (CalVer), där versioner baseras på utgivningsdatum i stället för semantisk betydelse.
+Ubuntu använder till exempel versioner som `24.04` (april 2024) och `24.10` (oktober 2024).
+CalVer gör det lätt att se hur gammal en utgåva är, men kommunicerar inget om kompatibilitet.
+Slutligen är semantisk versionering inte ofelbar, och förvaltare kan oavsiktligt introducera brytande ändringar i minor- eller patch-versioner.
 
+# Reproducerbarhet {#reproducibility}
 
-# Reproducibility
+I modern programvaruutveckling vilar koden du skriver ovanpå många abstraktionslager.
+Det inkluderar språkets körmiljö, tredjepartsbibliotek, operativsystemet eller till och med hårdvaran.
+Skillnader i något av dessa lager kan ändra kodens beteende eller till och med hindra den från att fungera som avsett.
+Dessutom påverkar även skillnader i underliggande hårdvara din förmåga att leverera programvara.
 
-In modern software development the code you write sits atop a significant number of layers of abstraction.
-This includes things like your programming language runtime, third party libraries, the operating system, or even the hardware itself.
-Any difference across any of these layers might change the behavior of your code or even prevent it from working as intended.
-Furthermore, even differences in the underlying hardware impact your ability to ship software.
+Att låsa ett bibliotek till en specifik version innebär att använda en exakt version i stället för ett intervall, t.ex. `requests==2.32.3` i stället för `requests>=2.0`.
 
-Pinning a library refers to specifying an exact version rather than a range, e.g. `requests==2.32.3` instead of `requests>=2.0`.
-
-Part of the job of a package manager is to consider all the constraints provided by the dependencies --- and transitive dependencies --- and then produce a valid list of versions that will satisfy all the constraints.
-The specific list of versions can then be saved to a file for reproducibility purposes; these files are referred to as _lock files_.
+En del av jobbet för en pakethanterare är att ta hänsyn till alla begränsningar från beroenden --- inklusive transitiva beroenden --- och sedan producera en giltig lista av versioner som uppfyller alla begränsningar.
+Den specifika listan av versioner kan sedan sparas i en fil för reproducerbarhet.
+Dessa filer kallas låsfiler (_lock files_).
 
 ```console
 $ uv lock
@@ -362,37 +377,44 @@ wheels = [
 ...
 ```
 
-One critical distinction when dealing with dependency versioning and reproducibility is the difference between libraries and applications/services.
-A library is intended to be imported and used by other code which might have its own dependencies, so specifying overly strict version constraints can cause conflicts with the user's other dependencies.
-In contrast, applications or services are final consumers of the software and typically expose their functionality through a user interface or an API, not through a programming interface.
-For libraries, it is good practice to specify version ranges to maximize compatibility with the wider package ecosystem. For applications, pinning exact versions ensures reproducibility --- everyone running the application uses the exact same dependencies.
+En kritisk skillnad i beroendeversionering och reproducerbarhet är skillnaden mellan bibliotek och applikationer/tjänster.
+Ett bibliotek är avsett att importeras och användas av annan kod som kan ha egna beroenden, så alltför strikta versionskrav kan orsaka konflikter med användarens andra beroenden.
+Applikationer eller tjänster är däremot slutkonsumenter av programvaran och exponerar vanligtvis funktionalitet via användargränssnitt eller API, inte via programmeringsgränssnitt.
+För bibliotek är det god praxis att ange versionsintervall för maximal kompatibilitet med det bredare paketekosystemet.
+För applikationer säkerställer låsning till exakta versioner reproducerbarhet --- alla som kör applikationen använder exakt samma beroenden.
 
+För projekt som kräver maximal reproducerbarhet kan verktyg som [Nix](https://nixos.org/) och [Bazel](https://bazel.build/) användas för hermetiska byggen.
+Det betyder att all indata --- även kompilatorer, systembibliotek och själva byggmiljön --- är låst och innehållsadresserad.
+Detta garanterar bit-för-bit-identiska utdata oavsett när eller var bygget körs.
 
-For projects requiring maximum reproducibility, tools like [Nix](https://nixos.org/) and [Bazel](https://bazel.build/) provide _hermetic_ builds --- where every input including compilers, system libraries, and even the build environment itself is pinned and content-addressed. This guarantees bit-for-bit identical outputs regardless of when or where the build runs.
+> Du kan till och med använda NixOS för att hantera hela datorinstallationen så att du enkelt kan sätta upp nya kopior av din miljö och hantera komplett konfiguration genom versionskontrollerade konfigurationsfiler.
 
-> You can even use NixOS to manage your entire computer install so that you can trivially spin up new copies of your computer setup and manage their complete configuration through version-controlled configuration files.
+En ständig spänning i programvaruutveckling är att nya programvaruversioner introducerar brytande ändringar, avsiktligt eller oavsiktligt, medan gamla versioner med tiden blir sårbara för säkerhetsproblem.
+Vi kan hantera detta med CI-pipelines (vi ser mer i föreläsningen [Kodkvalitet och kontinuerlig integration]({{ '/2026/code-quality/' | relative_url }})) som testar applikationen mot nya programvaruversioner, och med automatisering för att upptäcka när nya beroendeversioner släpps, som [Dependabot](https://github.com/dependabot).
 
-A neverending tension in software development is that new software versions introduce breakage either intentionally or unintentionally, while on the other hand, old software versions become compromised with security vulnerabilities over time.
-We can address this by using continuous integration pipelines (we'll see more in the [Code Quality and CI](/2026/code-quality/) lecture) that test our application against new software versions and having automation in place for detecting when new versions of our dependencies are released, such as [Dependabot](https://github.com/dependabot).
+Även med CI-testning uppstår problem vid versionsuppgraderingar, ofta på grund av den oundvikliga skillnaden mellan utvecklings- och produktionsmiljöer.
+I de fallen är bästa åtgärd att ha en återställningsplan, där versionsuppgraderingen återställs och en känd fungerande version driftsätts igen.
 
-Even with CI testing in place, issues still occur when upgrading software versions, often because of the inevitable mismatch between dev and prod environments.
-In those circumstances the best course of action is to have a _rollback_ plan, where the version upgrade is reverted and a known good version is redeployed instead.
+# VM:ar och containrar {#vms--containers}
 
-# VMs & Containers
+När du börjar förlita dig på mer komplexa beroenden är det sannolikt att beroendena för din kod sträcker sig utanför vad pakethanteraren kan hantera.
+En vanlig orsak är behovet av att gränssnitta mot specifika systembibliotek eller hårdvarudrivrutiner.
+I vetenskaplig beräkning och AI behöver program till exempel ofta specialiserade bibliotek och drivrutiner för att använda GPU-hårdvara.
+Många systemnivåberoenden (GPU-drivrutiner, specifika kompilatorversioner, delade bibliotek som OpenSSL) kräver fortfarande systemomfattande installation.
 
-As you start relying on more complex dependencies, it is likely that the dependencies of your code will span beyond the boundaries of what the package manager can handle.
-One common reason is having to interface with specific system libraries or hardware drivers.
-For example, in scientific computing and AI, programs often need specialized libraries and drivers to utilize GPU hardware.
-Many system-level dependencies (GPU drivers, specific compiler versions, shared libraries like OpenSSL) still require system-wide installation.
+Traditionellt löstes detta bredare beroendeproblem med virtuella maskiner (VM:ar).
+VM:ar abstraherar hela datorn och ger en helt isolerad miljö med eget dedikerat operativsystem.
+Ett modernare angreppssätt är containrar, som paketerar en applikation tillsammans med beroenden, bibliotek och filsystem, men delar värdens OS-kärna i stället för att virtualisera en hel dator.
+Containrar är lättviktigare än VM:ar eftersom de delar kärna, vilket gör dem snabbare att starta och mer effektiva att köra.
 
-Traditionally this wider dependency problem was solved with Virtual Machines (VMs).
-VMs abstract the entire computer and provide a completely isolated environment with its own dedicated operating system.
-A more modern approach is containers, which package an application along with its dependencies, libraries, and filesystem, but share the host's operating system kernel rather than virtualizing an entire computer.
-Containers are lighter weight than VMs because they share the kernel, making them faster to start and more efficient to run.
+Den mest populära containerplattformen är [Docker](https://www.docker.com/).
+Docker introducerade ett standardiserat sätt att bygga, distribuera och köra containrar.
+Under huven använder Docker containerd som körmiljö för containrar --- en industristandard som även verktyg som Kubernetes använder.
 
-The most popular container platform is [Docker](https://www.docker.com/). Docker introduced a standardized way to build, distribute, and run containers. Under the hood, Docker uses containerd as its container runtime --- an industry standard that other tools like Kubernetes also use.
-
-Running a container is straightforward. For example, to run a Python interpreter inside a container we use `docker run` (The `-it` flags make the container interactive with a terminal. When you exit, the container stops.).
+Att köra en container är enkelt.
+För att till exempel köra en Python-interpreter i en container använder vi `docker run`.
+Flaggorna `-it` gör containern interaktiv med terminalen.
+När du avslutar stoppas containern.
 
 ```console
 $ docker run -it python:3.12 python
@@ -401,9 +423,10 @@ Python 3.12.7 (main, Nov  5 2024, 02:53:25) [GCC 12.2.0] on linux
 Hello from inside a container!
 ```
 
-In practice your program might depend on the entire filesystem.
-To overcome this, we can use container images that ship the entire filesystem of the application as the artifact.
-The container images are created programmatically. With docker we specify exactly the dependencies, system libraries, and configuration of the image using a Dockerfile syntax:
+I praktiken kan ditt program bero på hela filsystemet.
+För att hantera detta kan vi använda containeravbilder som skickar med applikationens hela filsystem som artefakt.
+Containeravbilder skapas programmatiskt.
+Med Docker specificerar vi exakta beroenden, systembibliotek och avbildningskonfiguration med Dockerfile-syntax:
 
 ```dockerfile
 FROM python:3.12
@@ -417,11 +440,15 @@ WORKDIR /app
 RUN pip install .
 ```
 
-An important distinction: a Docker **image** is the packaged artifact (like a template), while a **container** is a running instance of that image. You can run multiple containers from the same image. Images are built in layers, where each instruction (`FROM`, `RUN`, `COPY`, etc) in a Dockerfile creates a new layer. Docker caches these layers, so if you change a line in your Dockerfile, only that layer and subsequent layers need to be rebuilt.
+En viktig skillnad: en Docker-**avbild** är den paketerade artefakten (som en mall), medan en **container** är en körande instans av avbilden.
+Du kan köra flera containrar från samma avbild.
+Avbilder byggs i lager, där varje instruktion (`FROM`, `RUN`, `COPY`, etc.) i en Dockerfile skapar ett nytt lager.
+Docker cachelagrar dessa lager, så om du ändrar en rad i Dockerfile behöver bara det lagret och efterföljande lager byggas om.
 
-The previous Dockerfile has several issues: it uses the full Python image instead of a slim variant, runs separate `RUN` commands creating unnecessary layers, versions are not pinned, and it doesn't clean up package manager caches, shipping unnecessary files. Other frequent mistakes include insecurely running containers as root and accidentally embedding secrets in layers.
+Föregående Dockerfile har flera problem: den använder full Python-avbild i stället för slim-variant, kör separata `RUN`-kommandon som skapar onödiga lager, versioner är inte låsta, och den rensar inte pakethanterarens cache vilket skickar med onödiga filer.
+Andra vanliga misstag inkluderar att osäkert köra containrar som superanvändare och att av misstag baka in hemligheter i lager.
 
-Here's an improved version
+Här är en förbättrad version.
 
 ```dockerfile
 FROM python:3.12-slim
@@ -434,19 +461,26 @@ RUN uv pip install --system -r uv.lock
 COPY . /app
 ```
 
-In the previous example we see that instead of installing `uv` from source, we are copying the prebuilt binary from the `ghcr.io/astral-sh/uv:latest` image. This is known as the _builder_ pattern. With this pattern we do not need to ship all the tools needed to compile our code, just the final binary that is needed to run the application (`uv` in this case).
+I föregående exempel ser vi att vi i stället för att installera `uv` från källkod kopierar den förbyggda binären från avbilden `ghcr.io/astral-sh/uv:latest`.
+Detta kallas _builder_-mönstret.
+Med detta mönster behöver vi inte skicka med alla verktyg som krävs för att kompilera koden, bara den slutliga binären som behövs för att köra applikationen (`uv` i detta fall).
 
-Docker has important limitations to be aware of. First, container images are often platform-specific --- an image built for `linux/amd64` won't run natively on `linux/arm64` (Apple Silicon Macs) without emulation, which is slow. Second, Docker containers require a Linux kernel, so on macOS and Windows, Docker actually runs a lightweight Linux VM under the hood, adding overhead. Third, Docker's isolation is weaker than VMs --- containers share the host kernel, which is a security concern in multi-tenant environments.
+Docker har viktiga begränsningar att känna till.
+För det första är containeravbilder ofta plattformsspecifika --- en avbild byggd för `linux/amd64` körs inte nativt på `linux/arm64` (Apple Silicon Macs) utan emulering, vilket är långsamt.
+För det andra kräver Docker-containrar en Linux-kärna, så på macOS och Windows kör Docker i praktiken en lättviktig Linux-VM under huven, vilket ger överkostnad.
+För det tredje är Dockers isolering svagare än VM:ars --- containrar delar värdens kärna, vilket är en säkerhetsrisk i miljöer med flera hyresgäster.
 
-> These days, more projects are also making use of nix to manage even "system-wide" libraries and applications per project through [nix flakes](https://serokell.io/blog/practical-nix-flakes).
+> Numera använder fler projekt också nix för att hantera även "systemomfattande" bibliotek och applikationer per projekt via [nix flakes](https://serokell.io/blog/practical-nix-flakes).
 
-# Configuration
+# Konfiguration {#configuration}
 
-Software is inherently configurable. In the [command line environment](/2026/command-line-environment/) lecture we saw programs receiving options via flags, environment variables or even configuration files a.k.a. dotfiles. This holds true even for more complex applications, and there are established patterns for managing configuration at scale.
-Software configuration should not be embedded in the code but be provided at runtime.
-A couple of common ones being environment variables and config files.
+Mjukvara är i grunden konfigurerbar.
+I föreläsningen om [kommandoradsmiljön]({{ '/2026/command-line-environment/' | relative_url }}) såg vi program som tar emot alternativ via flaggor, miljövariabler eller konfigurationsfiler (så kallade dotfiles).
+Detta gäller även mer komplexa applikationer, och det finns etablerade mönster för att hantera konfiguration i skala.
+Programkonfiguration bör inte vara inbakad i koden utan tillhandahållas vid körning.
+Två vanliga sätt är miljövariabler och konfigurationsfiler.
 
-Here's an example of an application that is configured via environment variables:
+Här är ett exempel på en applikation som konfigureras via miljövariabler:
 
 ```python
 import os
@@ -456,7 +490,7 @@ DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 API_KEY = os.environ["API_KEY"]  # Required - will raise if not set
 ```
 
-An application could also be configured via a configuration file (e.g., a Python program that loads a config via `yaml.load`), `config.yaml`:
+En applikation kan också konfigureras via en konfigurationsfil (t.ex. ett Python-program som laddar konfiguration via `yaml.load`), `config.yaml`:
 
 ```yaml
 database:
@@ -468,22 +502,25 @@ server:
   debug: false
 ```
 
-A good right-hand rule for thinking about configuration is that the same codebase should be deployable to different environments (development, staging, production) with only configuration changes, never code changes.
+En bra tumregel för konfiguration är att samma kodbas ska kunna driftsättas till olika miljöer (utveckling, test och produktion) med endast konfigurationsändringar, aldrig kodändringar.
 
-Among the many configuration options there is often sensitive data such as API keys.
-Secrets need to be handled with care to avoid exposing them accidentally, and must not be included in version control.
+Bland många konfigurationsalternativ finns ofta känslig data som API-nycklar.
+Hemligheter måste hanteras varsamt för att undvika oavsiktlig exponering och får inte inkluderas i versionshantering.
 
+# Tjänster och orkestrering {#services--orchestration}
 
-# Services & Orchestration
+Moderna applikationer existerar sällan isolerat.
+En typisk webbapplikation kan behöva en databas för beständig lagring, en cache för prestanda, en meddelandekö för bakgrundsjobb och olika andra stödtjänster.
+I stället för att paketera allt i en monolitisk applikation bryter moderna arkitekturer ofta ner funktionalitet i separata tjänster som kan utvecklas, driftsättas och skalas oberoende.
 
-Modern applications rarely exist in isolation. A typical web application might need a database for persistent storage, a cache for performance, a message queue for background tasks, and various other supporting services. Rather than bundling everything into a single monolithic application, modern architectures often decompose functionality into separate services that can be developed, deployed, and scaled independently.
+Som exempel, om vi avgör att applikationen kan tjäna på att använda cache, kan vi i stället för att bygga en egen lösning utnyttja etablerade lösningar som [Redis](https://redis.io/) eller [Memcached](https://memcached.org/).
+Vi skulle kunna bädda in Redis i applikationens beroenden genom att bygga den i containern, men det innebär att harmonisera alla beroenden mellan Redis och vår applikation, vilket kan vara utmanande eller omöjligt.
+I stället kan vi driftsätta varje applikation separat i sin egen container.
+Detta kallas ofta en mikrotjänstarkitektur där varje komponent körs som en oberoende tjänst som kommunicerar över nätverket, typiskt via HTTP-API:er.
 
-As an example, if we determine our application might benefit from using a cache, instead of rolling our own we can leverage existing battle tested solutions like [Redis](https://redis.io/) or [Memcached](https://memcached.org/).
-We could embed Redis in our application dependencies by building it as part of the container, but that means harmonizing all the dependencies between Redis and our application which could be challenging or even unfeasible.
-Instead what we can do is deploy each application separately in its own container.
-This is commonly referred to as a microservice architecture where each component runs as an independent service that communicates over the network, typically via HTTP APIs.
-
-[Docker Compose](https://docs.docker.com/compose/) is a tool for defining and running multi-container applications. Rather than managing containers individually, you declare all services in a single YAML file and orchestrate them together. Now our full application encompasses more than one container:
+[Docker Compose](https://docs.docker.com/compose/) är ett verktyg för att definiera och köra applikationer med flera containrar.
+I stället för att hantera containrar individuellt deklarerar du alla tjänster i en enda YAML-fil och orkestrerar dem tillsammans.
+Nu omfattar hela applikationen mer än en container:
 
 ```yaml
 # docker-compose.yml
@@ -506,10 +543,11 @@ volumes:
   redis_data:
 ```
 
-With `docker compose up`, both services start together, and the web application can connect to Redis using the hostname `cache` (Docker's internal DNS resolves service names automatically).
-Docker Compose lets us declare how we want to deploy one or more services, and handles the orchestration of starting them together, setting up networking between them, and managing shared volumes for data persistence.
+Med `docker compose up` startar båda tjänsterna tillsammans, och webapplikationen kan ansluta till Redis med värdnamnet `cache` (Dockers interna DNS slår upp tjänstnamn automatiskt).
+Docker Compose låter oss deklarera hur vi vill driftsätta en eller flera tjänster, och hanterar orkestreringen av att starta dem tillsammans, sätta upp nätverk mellan dem och hantera delade volymer för datapersistens.
 
-For production deployments, you often want your docker compose services to start automatically on boot and restart on failure. A common approach is to use systemd to manage the docker compose deployment:
+För driftsättning i produktion vill du ofta att docker compose-tjänster startar automatiskt vid uppstart och startar om vid fel.
+Ett vanligt tillvägagångssätt är att använda systemd för att hantera docker compose-driftsättning:
 
 ```ini
 # /etc/systemd/system/myapp.service
@@ -529,11 +567,13 @@ ExecStop=/usr/bin/docker compose down
 WantedBy=multi-user.target
 ```
 
-This systemd unit file ensures your application starts when the system boots (after Docker is ready), and provides standard controls like `systemctl start myapp`, `systemctl stop myapp`, and `systemctl status myapp`.
+Den här systemd-enhetsfilen säkerställer att applikationen startar när systemet startar (efter att Docker är redo), och ger standardkommandon som `systemctl start myapp`, `systemctl stop myapp` och `systemctl status myapp`.
 
-As deployment requirements grow more complex --- needing scalability across multiple machines, fault tolerance when services crash, and high availability guarantees --- organizations turn to sophisticated container orchestration platforms like Kubernetes (k8s), which can manage thousands of containers across clusters of machines. That said, Kubernetes has a steep learning curve and significant operational overhead, so it's often overkill for smaller projects.
+När driftsättningskraven blir mer komplexa --- med behov av skalning över flera maskiner, feltolerans när tjänster kraschar och hög tillgänglighet --- går organisationer över till mer avancerade containerorkestreringsplattformar som Kubernetes (k8s), som kan hantera tusentals containrar över kluster av maskiner.
+Kubernetes har dock en brant inlärningskurva och betydande driftsmässig överkostnad, så det är ofta överdrivet för mindre projekt.
 
-This multi-container setup is partly feasible because modern services communicate with each other via standardized APIs, with HTTP REST APIs. For example, whenever a program interacts with an LLM provider like OpenAI or Anthropic, under the hood it is sending an HTTP request to their servers and parsing the response:
+Denna uppsättning med flera containrar är delvis möjlig eftersom moderna tjänster kommunicerar via standardiserade API:er, särskilt REST-API:er över HTTP.
+Till exempel, när ett program interagerar med en LLM-leverantör som OpenAI eller Anthropic skickar det under huven en HTTP-begäran till deras servrar och parsar svaret:
 
 ```console
 $ curl https://api.anthropic.com/v1/messages \
@@ -544,19 +584,18 @@ $ curl https://api.anthropic.com/v1/messages \
          "messages": [{"role": "user", "content": "Explain containers vs VMs in one sentence."}]}'
 ```
 
-# Publishing
+# Publicering {#publishing}
 
-Once you have shown your code to work, you might be interested in distributing it for others to download and install.
-Distribution takes many forms and is intrinsically tied to the programming language and environments that you operate with.
+När du har visat att koden fungerar kan du vilja distribuera den så att andra kan ladda ner och installera den.
+Distribution finns i många former och är starkt kopplad till programmeringsspråket och de miljöer du arbetar med.
 
-The simplest form of distribution is uploading artifacts for people to download and install locally.
-This is still common and you can find it in places like [Ubuntu's package archive](http://archive.ubuntu.com/ubuntu/pool/main/), which is essentially an HTTP directory listing of `.deb` files.
+Den enklaste distributionsformen är att ladda upp artefakter som människor kan ladda ner och installera lokalt.
+Detta är fortfarande vanligt och kan ses på platser som [Ubuntus paketarkiv](http://archive.ubuntu.com/ubuntu/pool/main/), som i princip är en HTTP-kataloglistning med `.deb`-filer.
 
-These days, GitHub has become the de facto platform for publishing source code and artifacts.
-While the source code is often publicly available, GitHub Releases allow maintainers to attach prebuilt binaries and other artifacts to tagged versions.
+I dag har GitHub blivit den faktiska standardplattformen för att publicera källkod och artefakter.
+Även om källkoden ofta är offentligt tillgänglig låter GitHub Releases förvaltare bifoga förbyggda binärer och andra artefakter till taggade versioner.
 
-
-Package managers sometimes support installing directly from GitHub, either from source or from a pre-built wheel:
+Pakethanterare stödjer ibland installation direkt från GitHub, antingen från källkod eller från en förbyggd wheel:
 
 ```console
 # Install from source (will clone and build)
@@ -569,8 +608,10 @@ $ pip install git+https://github.com/psf/requests.git@v2.32.3
 $ pip install https://github.com/user/repo/releases/download/v1.0/package-1.0-py3-none-any.whl
 ```
 
-In fact, some languages like Go use a decentralized distribution model --- rather than a central package repository, Go modules are distributed directly from their source code repositories.
-Module paths like `github.com/gorilla/mux` indicate where the code lives, and `go get` fetches directly from there. However, most package managers like `pip`, `cargo`, or `brew` have central indexes of pre-packaged projects for ease of distribution and installation. If we run
+Vissa språk som Go använder faktiskt en decentraliserad distributionsmodell --- i stället för ett centralt paketregister distribueras Go-moduler direkt från sina källkodsförråd.
+Modulvägar som `github.com/gorilla/mux` anger var koden finns, och `go get` hämtar direkt därifrån.
+De flesta pakethanterare som `pip`, `cargo` eller `brew` har dock centrala index med förpaketerade projekt för enkel distribution och installation.
+Om vi kör
 
 ```console
 $ uv pip install requests --verbose --no-cache 2>&1 | grep -F '.whl'
@@ -579,18 +620,22 @@ DEBUG No cache entry for: https://files.pythonhosted.org/packages/1e/db/4254e3ea
 DEBUG No cache entry for: https://files.pythonhosted.org/packages/1e/db/4254e3eabe8020b458f1a747140d32277ec7a271daf1d235b70dc0b4e6e3/requests-2.32.5-py3-none-any.whl
 ```
 
-we see where we are fetching the `requests` wheel from. Notice the `py3-none-any` in the filename --- this means the wheel works with any Python 3 version, on any OS, on any architecture. For packages with compiled code, the wheel is platform-specific:
+ser vi varifrån vi hämtar `requests`-wheel-filen.
+Notera `py3-none-any` i filnamnet --- det betyder att wheel-filen fungerar med valfri Python 3-version, på valfritt OS, på valfri arkitektur.
+För paket med kompilerad kod är wheel-filen plattformsspecifik:
 
 ```console
 $ uv pip install numpy --verbose --no-cache 2>&1 | grep -F '.whl'
 DEBUG Selecting: numpy==2.2.1 [compatible] (numpy-2.2.1-cp312-cp312-macosx_14_0_arm64.whl)
 ```
 
-Here `cp312-cp312-macosx_14_0_arm64` indicates this wheel is specifically for CPython 3.12 on macOS 14+ for ARM64 (Apple Silicon). If you're on a different platform, `pip` will download a different wheel or build from source.
+Här indikerar `cp312-cp312-macosx_14_0_arm64` att denna wheel är specifik för CPython 3.12 på macOS 14+ för ARM64 (Apple Silicon).
+Om du är på en annan plattform laddar `pip` ner en annan wheel eller bygger från källkod.
 
-Conversely, for people to be able to find a package we've created, we need to publish it to one of these registries.
-In Python, the main registry is the [Python Package Index (PyPI)](https://pypi.org).
-Like with installing, there are multiple ways of publishing packages. The `uv publish` command provides a modern interface for uploading packages to PyPI:
+Omvänt behöver vi, för att andra ska kunna hitta paketet vi skapat, publicera det till något av dessa register.
+I Python är huvudregistret [Python Package Index (PyPI)](https://pypi.org).
+Precis som vid installation finns flera sätt att publicera paket.
+Kommandot `uv publish` ger ett modernt gränssnitt för att ladda upp paket till PyPI:
 
 ```console
 $ uv publish --publish-url https://test.pypi.org/legacy/
@@ -598,17 +643,22 @@ Publishing greeting-0.1.0.tar.gz
 Publishing greeting-0.1.0-py3-none-any.whl
 ```
 
-Here we are using [TestPyPI](https://test.pypi.org) --- a separate package registry intended for testing your publishing workflow without polluting the real PyPI. Once uploaded, you can install from TestPyPI:
+Här använder vi [TestPyPI](https://test.pypi.org) --- ett separat paketregister avsett för att testa publiceringsflödet utan att förorena riktiga PyPI.
+När paketet laddats upp kan du installera från TestPyPI:
 
 ```console
 $ uv pip install --index-url https://test.pypi.org/simple/ greeting
 ```
 
-A key consideration when publishing software is trust. How do users verify that the package they download actually comes from you and hasn't been tampered with? Package registries use checksums to verify integrity, and some ecosystems support package signing to provide cryptographic proof of authorship.
+En nyckelfråga vid publicering av programvara är tillit.
+Hur verifierar användare att paketet de laddar ner faktiskt kommer från dig och inte har manipulerats?
+Paketregister använder checksummor för att verifiera integritet, och vissa ekosystem stödjer paketsignering för att ge kryptografiskt bevis på upphov.
 
-Different languages have their own package registries: [crates.io](https://crates.io) for Rust, [npm](https://www.npmjs.com) for JavaScript, [RubyGems](https://rubygems.org) for Ruby, and [Docker Hub](https://hub.docker.com) for container images. Meanwhile, for private or internal packages, organizations often deploy their own package repositories (such as a private PyPI server or a private Docker registry) or use managed solutions from cloud providers.
+Olika språk har egna paketregister: [crates.io](https://crates.io) för Rust, [npm](https://www.npmjs.com) för JavaScript, [RubyGems](https://rubygems.org) för Ruby, och [Docker Hub](https://hub.docker.com) för container images.
+För privata eller interna paket sätter organisationer ofta upp egna paketförråd (som en privat PyPI-server eller ett privat Docker-register) eller använder hanterade lösningar från molnleverantörer.
 
-Deploying a web service to the internet involves additional infrastructure: domain name registration, DNS configuration to point your domain to your server, and often a reverse proxy like nginx to handle HTTPS and route traffic. For simpler use cases like documentation or static sites, [GitHub Pages](https://pages.github.com/) provides free hosting directly from a repository.
+Att driftsätta en webbtjänst till internet kräver ytterligare infrastruktur: domänregistrering, DNS-konfiguration som pekar domänen till servern, och ofta en omvänd proxy som nginx för att hantera HTTPS och dirigera trafik.
+För enklare användningsfall som dokumentation eller statiska sajter erbjuder [GitHub Pages](https://pages.github.com/) gratis webbhotell direkt från ett kodförråd.
 
 <!--
 ## Documentation
@@ -619,12 +669,19 @@ In addition to the artifact, we need to document for users the code's functional
 Tools like [Sphinx](https://www.sphinx-doc.org/) (Python) and [MkDocs](https://www.mkdocs.org/) can automatically generate browsable documentation from docstrings and markdown files, often hosted on services like [Read the Docs](https://readthedocs.org/).
 For HTTP-based APIs, the [OpenAPI specification](https://www.openapis.org/) (formerly Swagger) provides a standard format for describing API endpoints, which tools can use to generate interactive documentation and client libraries automatically. -->
 
+# Övningar
 
-# Exercises
-
-1. Save your environment with `printenv` to a file, create a venv, activate it, `printenv` to another file and `diff before.txt after.txt`. What changed in the environment? Why does the shell prefer the venv? (Hint: look at `$PATH` before and after activation.) Run `which deactivate` and reason about what the deactivate bash function is doing.
-1. Create a Python package with a `pyproject.toml` and install it in a virtual environment. Create a lockfile and inspect it.
-1. Install Docker and use it to build the Missing Semester class website locally using docker compose.
-1. Write a Dockerfile for a simple Python application. Then write a `docker-compose.yml` that runs your application alongside a Redis cache.
-1. Publish a Python package to TestPyPI (don't publish to the real PyPI unless it's worth sharing!). Then build a Docker image with said package and push it to `ghcr.io`.
-1. Make a website using [GitHub Pages](https://docs.github.com/en/pages/quickstart). Extra (non-)credit: configure it with a custom domain.
+1. Spara din miljö med `printenv` i en fil, skapa en venv, aktivera den, kör `printenv` till en annan fil och `diff before.txt after.txt`.
+   Vad ändrades i miljön?
+   Varför föredrar shell venv?
+   (Tips: titta på `$PATH` före och efter aktivering.)
+   Kör `which deactivate` och resonera kring vad bash-funktionen deactivate gör.
+1. Skapa ett Python-paket med `pyproject.toml` och installera det i en virtuell miljö.
+   Skapa en lockfile och inspektera den.
+1. Installera Docker och använd det för att bygga Missing Semester-kursens webbplats lokalt med docker compose.
+1. Skriv en Dockerfile för en enkel Python-applikation.
+   Skriv sedan en `docker-compose.yml` som kör applikationen tillsammans med en Redis-cache.
+1. Publicera ett Python-paket till TestPyPI (publicera inte till riktiga PyPI om det inte är värt att dela!).
+   Bygg sedan en Docker-avbild med paketet och pusha den till `ghcr.io`.
+1. Bygg en webbplats med [GitHub Pages](https://docs.github.com/en/pages/quickstart).
+   Extra (icke-)poäng: konfigurera den med en egen domän.

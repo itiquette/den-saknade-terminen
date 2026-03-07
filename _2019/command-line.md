@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Command-line environment"
+title: "Kommandoradsmiljön"
 presenter: Jose
 date: 2019-01-17
 order: 1
@@ -9,46 +9,51 @@ video:
   id: i0rf1gpKL1E
 ---
 
-## Aliases & Functions
+## Alias och funktioner
 
-As you can imagine it can become tiresome typing long commands that involve many flags or verbose options. Nevertheless, most shells support **aliasing**. For instance, an alias in bash has the following structure (note there is no space around the `=` sign):
+Som du kan tänka dig kan det bli tröttsamt att skriva långa kommandon med många flaggor eller utförliga alternativ.
+De flesta skal stöder dock **alias**.
+I bash har ett alias till exempel följande struktur (notera att det inte finns några mellanslag runt `=`):
 
 ```bash
 alias alias_name="command_to_alias"
 ```
 
-<!-- We can alias common flags for our commands like `alias ll=ls -ltAh`. Alias can be composed  -->
+<!-- Vi kan lägga vanliga flaggor i alias, t.ex. `alias ll=ls -ltAh`. Alias kan också byggas på varandra. -->
 
-Alias have many convenient features
+Alias har många praktiska egenskaper.
 
 ```bash
-# Alias can summarize good default flags
+# Alias kan samla bra standardflaggor
 alias ll="ls -lh"
 
-# Save a lot of typing for common commands
+# Spara mycket knappande för vanliga kommandon
 alias gc="git commit"
 
-# Alias can overwrite existing commands
+# Alias kan skriva över befintliga kommandon
 alias mv="mv -i"
 alias mkdir="mkdir -p"
 
-# Alias can be composed
+# Alias kan byggas på varandra
 alias la="ls -A"
 alias lla="la -l"
 
-# To ignore an alias run it prepended with \
+# För att ignorera ett alias, inled kommandot med \
 \ls
-# Or can be disabled using unalias
+# Eller stäng av aliaset med unalias
 unalias la
 
 ```
 <!--
-To get rid of an alias you can run `unalias alias_name` or to ignore alias when running a command you can prepend the command with a backward slash `\alias_name`. This is convenient when an alias is overwriting an existing name. -->
+För att ta bort ett alias kan du köra `unalias alias_name`. Om du tillfälligt vill ignorera ett alias när du kör ett kommando kan du skriva ett omvänt snedstreck före kommandot: `\alias_name`. Det är praktiskt när ett alias skriver över ett befintligt kommando. -->
 
 
-However in many scenarios aliases can be limiting, specially when you are trying to write chain commands together that take the same arguments. An alternative exists which is **functions** which are a midpoint between aliases and custom shell scripts.
+I många situationer kan alias däremot vara begränsande,
+särskilt när du vill skriva kedjade kommandon som tar samma argument.
+Ett alternativ är **funktioner**,
+som är en mellanväg mellan alias och egna skalskript.
 
-Here is an example function that makes a directory and move into it.
+Här är en exempel­funktion som skapar en katalog och går in i den.
 
 ```bash
 mcd () {
@@ -57,119 +62,209 @@ mcd () {
 }
 ```
 
-Alias and functions will not persist shell sessions by default. To make an alias persistent you need to include it a one the shell startup script files like `.bashrc` or `.zshrc`. My suggestion is to write them separately in a `.alias` and `source` that file from your different shell config files.
+Alias och funktioner sparas inte mellan skalsessioner som standard.
+För att göra ett alias permanent behöver du lägga till det i någon av skalets uppstartsfiler,
+som `.bashrc` eller `.zshrc`.
+Mitt förslag är att skriva dem separat i en `.aliases`-fil och sedan `source` den från dina olika skalkonfigurationsfiler.
 
-<!-- Lastly, if you decide to alias any of these tools with the "improved" version, e.g. `alias bat=cat` it is useful to know that you can tell bash to ignore aliases by doing `\cat` and ignore both aliases and functions by doing `command cat` -->
+<!-- Om du aliasar ett verktyg till en "förbättrad" variant, t.ex. `alias bat=cat`, är det bra att känna till att bash kan ignorera alias med `\cat` och ignorera både alias och funktioner med `command cat`. -->
 
-## Shells & Frameworks
+## Skal och ramverk
 
-During shell and scripting we covered the `bash` shell since it is by far the most ubiquitous shell and most systems have it as the default option. Nevertheless, it is not the only option.
+I föreläsningen om skal och skriptning täckte vi `bash`,
+eftersom det är det mest utbredda skalet och standard på de flesta system.
+Det är dock inte det enda alternativet.
 
-For example the `zsh` shell is a superset of `bash` and provides many convenient features out of the box such as:
+Till exempel är `zsh` en övermängd av `bash` och erbjuder många praktiska funktioner direkt,
+som:
 
-- Smarter globbing, `**`
-- Inline globbing/wildcard expansion
-- Spelling correction
-- Better tab completion/selection
-- Path expansion (`cd /u/lo/b` will expand as `/usr/local/bin`)
+- Smartare globbing, `**`
+- Inbyggd globbing/wildcard-expansion
+- Stavningskorrigering
+- Bättre tab-komplettering/val
+- Sökvägsexpansion (`cd /u/lo/b` expanderar till `/usr/local/bin`)
 
-Moreover many shells can be improved with **frameworks**, some popular general frameworks like [prezto](https://github.com/sorin-ionescu/prezto) or [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh), and smaller ones that focus on specific features like for example [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) or [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search). Other shells like [fish](https://fishshell.com/) include a lot of these user-friendly features by default. Some of these features include:
+Många skal kan dessutom förbättras med **ramverk**.
+Några populära allmänna ramverk är [prezto](https://github.com/sorin-ionescu/prezto) och [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh),
+och mindre ramverk fokuserar på specifika funktioner,
+till exempel [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) eller [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search).
+Andra skal, som [fish](https://fishshell.com/), har många av dessa användarvänliga funktioner som standard.
+Några sådana funktioner är:
 
-- Right prompt
-- Command syntax highlighting
-- History substring search
-- manpage based flag completions
-- Smarter autocompletion
-- Prompt themes
+- Högerprompt
+- Syntaxmarkering av kommandon
+- Delsträngssökning i historiken
+- Flaggkompletteringar baserade på man-sidor
+- Smartare autokomplettering
+- Prompt-teman
 
-One thing to note when using these frameworks is that if the code they run is not properly optimized or it is too much code, your shell can start slowing down. You can always profile it and disable the features that you do not use often or value over speed.
+En viktig sak med sådana ramverk är att skalet kan bli långsamt
+om koden inte är väloptimerad eller om det blir för mycket kod.
+Du kan alltid profilera och stänga av funktioner som du sällan använder,
+eller som du värderar lägre än snabbhet.
 
-## Terminal Emulators & Multiplexers
+## Terminalemulatorer och multiplexerare
 
-Along with customizing your shell it is worth spending some time figuring out your choice of **terminal emulator** and its settings. There are many many terminal emulators out there (here is a [comparison](https://anarc.at/blog/2018-04-12-terminal-emulators-1/)).
+Utöver att anpassa skalet är det värt att lägga tid på valet av **terminalemulator** och dess inställningar.
+Det finns väldigt många terminalemulatorer (här är en [jämförelse](https://anarc.at/blog/2018-04-12-terminal-emulators-1/)).
 
-Since you might be spending hundreds to thousands of hours in your terminal it pays off to look into its settings. Some of the aspects that you may want to modify in your terminal include:
+Eftersom du kan komma att tillbringa hundratals eller tusentals timmar i terminalen,
+lönar det sig att utforska inställningarna.
+Exempel på saker du kan vilja justera:
 
-- Font choice
-- Color Scheme
-- Keyboard shortcuts
-- Tab/Pane support
-- Scrollback configuration
-- Performance (some newer terminals like [Alacritty](https://github.com/jwilm/alacritty) offer GPU acceleration)
+- Fontval
+- Färgschema
+- Kortkommandon
+- Stöd för flikar/paneler
+- Scrollback-konfiguration
+- Prestanda (vissa nyare terminaler som [Alacritty](https://github.com/jwilm/alacritty) erbjuder GPU-acceleration)
 
-It is also worth mentioning **terminal multiplexers** like [tmux](https://github.com/tmux/tmux). `tmux` allows you to pane and tab multiple shell sessions. It also supports attaching and detaching which is a very common use-case when you are working on a remote server and want to keep you shell running without having to worry about disowning you current processes (by default when you log out your processes are terminated).  This way, with `tmux` you can jump into and out of complex terminal layouts. Similar to terminal emulators `tmux` supports heavy customization by editing the `~/.tmux.conf` file.
+Det är också värt att nämna **terminalmultiplexrar** som [tmux](https://github.com/tmux/tmux).
+`tmux` låter dig ha flera skalsessioner i paneler och flikar.
+Det stöder också attach/detach,
+vilket är ett vanligt användningsfall när du arbetar på en fjärrserver och vill hålla skalet igång utan att behöva oroa dig för att `disown` dina aktuella processer
+(som standard avslutas processer när du loggar ut).
+Med `tmux` kan du därför hoppa in och ut ur komplexa terminal-layouter.
+Precis som terminalemulatorer stöder `tmux` omfattande anpassning via filen `~/.tmux.conf`.
 
 
-## Command-line utilities
+## Kommandoradsverktyg
 
-The command line utilities that most UNIX based operating systems have by default are more than enough to do 99% of the stuff you usually need to do.
+Kommandoradsverktygen som finns som standard i de flesta UNIX-baserade operativsystem
+räcker mer än väl till 99 % av det du vanligtvis behöver göra.
 
 
-In the next few subsections I will cover alternative tools for extremely common shell operations which are more convenient to use. Some of these tools add new improved functionality to the command whereas others just focus on providing a simpler, more intuitive interface with better defaults.
+I nästa del går jag igenom alternativa verktyg för väldigt vanliga skaloperationer,
+som ofta är smidigare att använda.
+Vissa av dem tillför ny och förbättrad funktionalitet,
+medan andra främst erbjuder enklare och mer intuitiva gränssnitt med bättre standardvärden.
 
 ### `fasd` vs `cd`
 
-Even with improved path expansion and tab autocomplete, changing directories can become quite repetitive. [Fasd](https://github.com/clvv/fasd) (or [autojump](https://github.com/wting/autojump)) solves this issue by keeping track of recent and frequent folders you have been to and performing fuzzy matching.
+Även med förbättrad sökvägsexpansion och tab-komplettering kan katalogbyten bli repetitiva.
+[Fasd](https://github.com/clvv/fasd) (eller [autojump](https://github.com/wting/autojump)) löser detta
+genom att hålla reda på nyligen och ofta använda mappar och göra fuzzy matching.
 
-Thus if I have visited the path `/home/user/awesome_project/code` running `z code` will `cd` to it. If I have multiple folders called code I can disambiguate by running `z awe code` which will be closer match. Unlike autojump,  fasd also provides commands that instead of performing `cd` just expand frequent and /or recent files,folders or both.
+Om jag till exempel har besökt sökvägen `/home/user/awesome_project/code`,
+så kommer `z code` att `cd`:a dit.
+Om jag har flera mappar som heter code kan jag avgränsa med `z awe code`,
+vilket ger en närmare träff.
+Till skillnad från autojump erbjuder fasd också kommandon som,
+i stället för att köra `cd`,
+bara expanderar ofta/nyligen använda filer, mappar eller båda.
 
 
 ### `bat` vs `cat`
 
-Even though `cat` does it job perfectly, [bat](https://github.com/sharkdp/bat) improves it by providing syntax highlighting, paging, line numbers and git integration.
+Även om `cat` gör sitt jobb perfekt,
+förbättrar [bat](https://github.com/sharkdp/bat) det med syntaxmarkering,
+sidvisning,
+radnummer
+och git-integration.
 
 
 ### `exa`/`ranger` vs `ls`
 
-`ls` is a great command but some of the defaults can be annoying such as displaying the size in raw bytes. [exa](https://github.com/ogham/exa) provides better defaults
+`ls` är ett bra kommando,
+men vissa standardval kan vara irriterande,
+till exempel att storlekar visas i råa byte.
+[exa](https://github.com/ogham/exa) ger bättre standardvärden.
 
-If you are in need of navigating many folders and/or previewing many files, [ranger](https://github.com/ranger/ranger) can be much more efficient than `cd` and `cat` due to its wonderful interface. It is quite customizable and with a correct setup you can even [preview images](https://github.com/ranger/ranger/wiki/Image-Previews) in your terminal
+Om du behöver navigera många mappar och/eller förhandsvisa många filer,
+kan [ranger](https://github.com/ranger/ranger) vara mycket effektivare än `cd` och `cat` tack vare sitt gränssnitt.
+Det är ganska anpassningsbart,
+och med rätt konfiguration kan du till och med [förhandsvisa bilder](https://github.com/ranger/ranger/wiki/Image-Previews) i terminalen.
 
 ### `fd` vs `find`
 
-[fd](https://github.com/sharkdp/fd) is a simple, fast and user-friendly alternative to `find`. `find` defaults like having to use the `--name` flag (which is what you want to do 99% of the time) make it easier to use in an every day basis. It is also `git` aware and will skip files in your `.gitignore` and `.git` folder by default. It also has nice color coding by default.
+[fd](https://github.com/sharkdp/fd) är ett enkelt,
+snabbt
+och användarvänligt alternativ till `find`.
+`find` har standardbeteenden,
+till exempel att du ofta måste ange `--name` (det du vill göra 99 % av gångerna),
+som gör det mindre smidigt till vardags.
+`fd` är också `git`-medvetet
+och hoppar över filer i `.gitignore` och `.git` som standard.
+Dessutom har det bra färgkodning direkt.
 
 ### `rg/fzf` vs `grep`
 
-`grep` is a great tool but if you want to grep through many files at once, there are better tools for that purpose. [ack](https://github.com/beyondgrep/ack3), [ag](https://github.com/ggreer/the_silver_searcher) & [rg](https://github.com/BurntSushi/ripgrep) recursively search your current directory for a regex pattern while respecting your gitignore rules. They all work pretty similar but I favor `rg` due to how fast it can search my entire home directory.
+`grep` är ett utmärkt verktyg,
+men om du vill söka i många filer samtidigt finns bättre alternativ för just det.
+[ack](https://github.com/beyondgrep/ack3), [ag](https://github.com/ggreer/the_silver_searcher) och [rg](https://github.com/BurntSushi/ripgrep)
+söker rekursivt i aktuell katalog efter ett regex-mönster samtidigt som de respekterar dina gitignore-regler.
+Alla fungerar ganska likt,
+men jag föredrar `rg` för att det kan söka igenom hela min hemkatalog mycket snabbt.
 
-Similarly, it can be easy to find yourself doing `CMD | grep PATTERN` over an over again. [fzf](https://github.com/junegunn/fzf) is a command line fuzzy finder that enables you to interactively filter the output of pretty much any command.
+På samma sätt är det lätt att hamna i att skriva `CMD | grep PATTERN` om och om igen.
+[fzf](https://github.com/junegunn/fzf) är en fuzzy finder för kommandoraden
+som låter dig filtrera utdata från i princip vilket kommando som helst interaktivt.
 
 ### `rsync` vs `cp/scp`
 
-Whereas `mv` and `scp` are perfect for most scenarios, when copying/moving around large amounts of files, large files or when some of the data is already on the destination `rsync` is a huge improvement. `rsync` will skip files that have already been transferred and with the `--partial` flag it can resume from a previously interrupted copy.
+`mv` och `scp` är perfekta i många lägen,
+men när du kopierar/flyttar stora mängder filer,
+stora enskilda filer,
+eller när viss data redan finns på målet,
+är `rsync` en stor förbättring.
+`rsync` hoppar över filer som redan har överförts,
+och med `--partial` kan det återuppta en tidigare avbruten kopiering.
 
 ### `trash` vs `rm`
 
-`rm` is a dangerous command in the sense that once you delete a file there is no turning back. However, modern OS do not behave like that when you delete something in the file explorer, they just move it to the Trash folder which is cleared periodically.
+`rm` är ett farligt kommando i den meningen att när du raderar en fil finns ingen enkel väg tillbaka.
+Moderna operativsystem beter sig dock inte så i filhanteraren,
+utan flyttar i stället filer till papperskorgen,
+som töms periodiskt.
 
-Since how the trash is managed varies from OS to OS there is not a single CLI utility. In macOS there is [trash](https://hasseg.org/trash/) and in linux there is [trash-cli](https://github.com/andreafrancia/trash-cli/) among others.
+Eftersom hanteringen av papperskorg varierar mellan operativsystem finns inget enhetligt CLI-verktyg.
+I macOS finns [trash](https://hasseg.org/trash/),
+och i Linux finns bland annat [trash-cli](https://github.com/andreafrancia/trash-cli/).
 
 ### `mosh` vs `ssh`
 
-`ssh ` is a very handy tool but if you have a slow connection, the lag can become annoying and if the connection interrupts you have to reconnect. [mosh](https://mosh.org/) is a handy tool that works allows roaming, supports intermittent connectivity, and provides intelligent local echo.
+`ssh` är ett mycket praktiskt verktyg,
+men med långsam anslutning kan fördröjningen bli störande,
+och om anslutningen bryts måste du ansluta igen.
+[mosh](https://mosh.org/) är ett praktiskt verktyg som tillåter roaming,
+stödjer intermittent uppkoppling,
+och ger intelligent lokal ekohantering.
 
 ### `tldr` vs `man`
 
-You can figure out what a commands does and what options it has using `man` and the `-h`/'--help' flag most of the time. However, in some cases it can be a bit daunting navigating these if they are detailed
+Du kan oftast ta reda på vad ett kommando gör och vilka alternativ det har med `man` och flaggan `-h`/`--help`.
+I vissa fall kan det dock vara svårt att snabbt hitta rätt i detaljerad dokumentation.
 
-The [tldr](https://github.com/tldr-pages/tldr) command is a community driven documentation system that's available from the command line and gives a few simple illustrative examples of what the command does and the most common argument options.
+Kommandot [tldr](https://github.com/tldr-pages/tldr) är ett community-drivet dokumentationssystem i kommandoraden,
+som ger några enkla, illustrativa exempel på vad kommandot gör och de vanligaste argumenten.
 
 
 ### `aunpack` vs `tar/unzip/unrar`
 
-As [this xkcd](https://xkcd.com/1168/) references, it can be quite tricky to remember the options for `tar` and sometimes you need a different tool altogether such as `unrar` for .rar files.
-The [atool](https://www.nongnu.org/atool/) package provides the `aunpack` command which will figure out the correct options and always put the extracted archives in a new folder.
+Som [den här xkcd](https://xkcd.com/1168/) visar,
+kan det vara knepigt att komma ihåg alternativ för `tar`,
+och ibland behöver du helt andra verktyg,
+som `unrar` för .rar-filer.
+Paketet [atool](https://www.nongnu.org/atool/) innehåller kommandot `aunpack`,
+som listar ut rätt alternativ och alltid lägger det extraherade arkivet i en ny mapp.
 
 
-## Exercises
+## Övningar
 
-1. Run `cat .bash_history | sort | uniq -c | sort -rn | head -n 10` (or `cat .zhistory | sort | uniq -c | sort -rn | head -n 10` for zsh)  to get top 10 most used commands and consider writing shorter aliases for them
-1. Choose a terminal emulator and figure out how to change the following properties:
-    - Font choice
-    - Color scheme. How many colors does a standard scheme have? why?
-    - Scrollback history size
+1. Kör `cat .bash_history | sort | uniq -c | sort -rn | head -n 10` (eller `cat .zhistory | sort | uniq -c | sort -rn | head -n 10` för zsh)
+   för att få dina 10 mest använda kommandon,
+   och överväg att skriva kortare alias för dem.
+1. Välj en terminalemulator och ta reda på hur du ändrar följande egenskaper:
+    - Fontval
+    - Färgschema.
+      Hur många färger har ett standardschema?
+      Varför?
+    - Storlek på scrollback-historik
 
-1. Install `fasd` or some similar software and write a bash/zsh function called `v` that performs fuzzy matching on the passed arguments and opens up the top result in your editor of choice. Then, modify it so that if there are multiple matches you can select them with `fzf`.
-1. Since `fzf` is quite convenient for performing fuzzy searches and the shell history is quite prone to those kind of searches, investigate how to bind `fzf` to `^R`. You can find some info [here](https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings)
-1. What does the `--bar` option do in `ack`?
+1. Installera `fasd` eller liknande verktyg och skriv en bash/zsh-funktion `v`
+   som gör fuzzy matching på argumenten och öppnar bästa träffen i valfri editor.
+   Ändra sedan funktionen så att du kan välja med `fzf` när det finns flera träffar.
+1. Eftersom `fzf` är bekvämt för fuzzy-sökningar och skalhistorik passar bra för sådana sökningar,
+   undersök hur du binder `fzf` till `^R`.
+   Du hittar information [här](https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings).
+1. Vad gör alternativet `--bar` i `ack`?

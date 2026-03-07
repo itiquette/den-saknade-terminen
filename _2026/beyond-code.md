@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Beyond the Code"
+title: "Bortom koden"
 description: >
-  Learn about essential soft skills including documentation, open-source community norms, and AI etiquette.
+  Lär dig viktiga mjuka färdigheter, inklusive dokumentation, normer i öppen källkodsgemenskap och AI-etikett.
 thumbnail: /static/assets/thumbnails/2026/lec8.png
 date: 2026-01-22
 ready: true
@@ -11,408 +11,282 @@ video:
   id: 2DOEATfXT8k
 ---
 
-Being a good software engineer isn't just about writing code that
-works. It's about writing code that others (including future you) can
-understand, maintain, and build upon. It's about communicating
-clearly, contributing thoughtfully, and being a good citizen in the
-ecosystems you participate in—whether open source or proprietary.
+Att vara en bra programvaruingenjör handlar inte bara om att skriva kod som fungerar.
+Det handlar om att skriva kod som andra (inklusive framtida du) kan förstå, underhålla och bygga vidare på.
+Det handlar om att kommunicera tydligt, bidra genomtänkt och vara en god medborgare i de ekosystem du deltar i --- oavsett om de bygger på öppen källkod eller är proprietära.
 
-# One-way communication
+# Envägskommunikation
 
-Much of software engineering involves writing for people who lack your
-current context: teammates who join later, maintainers who inherit
-your code, or yourself in six months when you've forgotten why you
-made a particular choice. A key piece of advice for all this kind of
-writing is that your goal is to capture and convey the *why*, not just
-the *what*. The what tends to be self-explanatory, while the *why* is
-hard-earned knowledge that is easily lost to time.
+En stor del av programvaruingenjörsarbete handlar om att skriva för människor som saknar din nuvarande kontext: teamkamrater som ansluter senare, förvaltare som tar över din kod eller du själv om sex månader när du har glömt varför du gjorde ett visst val.
+Ett nyckelråd för all den typen av skrivande är att målet är att fånga och förmedla *varför*, inte bara *vad*.
+Vad-frågan brukar vara självförklarande, medan *varför* är dyrköpt kunskap som lätt går förlorad över tid.
 
-Perhaps the most common form of engineer-to-engineer communication
-(apart from the code itself) is code comments. I've personally found
-that a lot of code comments are useless. But they don't have to be! Good
-comments explain things that the code itself cannot: *why* something is
-done a particular way, not *how* it works (which is what the code
-shows). They can save hours of confusion, while bad comments add noise
-or, worse, mislead.
+Den vanligaste formen av kommunikation mellan ingenjörer (förutom själva koden) är kanske kodkommentarer.
+Jag har personligen upplevt att många kodkommentarer är värdelösa.
+Men de behöver inte vara det.
+Bra kommentarer förklarar sådant som koden själv inte kan: *varför* något görs på ett visst sätt, inte *hur* det fungerar (det visar koden).
+De kan spara timmar av förvirring, medan dåliga kommentarer tillför brus eller, ännu värre, vilseleder.
 
-Types of comments that are nearly always worthwhile:
+Typer av kommentarer som nästan alltid är värda att skriva:
 
-- **TODOs**: Mark incomplete or unpolished code, but leave enough
-  context for someone else to understand what's outstanding and why it
-  was deferred. "TODO: optimize" is useless; "TODO: this O(n²) loop is
-  fine for `n<100`, but will need indexing if we scale" is actionable.
-- **References**: Link to external sources when code implements an
-  algorithm from a paper, adapts code from elsewhere, or encodes
-  behaviour specified in documentation. Use permalinks. Note any
-  divergences from the reference.
-- **Correctness arguments**: Explain *why* non-trivial code produces
-  correct results. The code shows the steps; a comment explains why
-  those steps work.
-- **Hard-learned lessons**: If you spent 30+ minutes debugging something
-  and the fix is a non-obvious incantation, document it. Your past self
-  didn't realize it was needed; future readers won't either.
-- **Rationale for constants**: Magic numbers deserve explanation. Why
-  1492? Why 16 bits? Was it chosen randomly, derived from testing, or
-  required for correctness? Even "chosen arbitrarily" is useful
-  information.
-- **Load-bearing choices**: If correctness depends on a
-  seemingly-innocent implementation detail (e.g., "must be a BTreeSet
-  because iteration order matters below"), call it out explicitly.
-- **"Why not"s**: When you deliberately avoid the obvious approach,
-  explain why. Otherwise someone will "fix" it later and break things.
+- **TODOs**: Markera ofullständig eller opolerad kod, men lämna tillräckligt med kontext så att någon annan förstår vad som återstår och varför det sköts upp.
+  "TODO: optimera" är värdelöst.
+  "TODO: den här O(n²)-loopen är okej för `n<100`, men behöver indexering om vi skalar" är handlingsbart.
+- **Referenser**: Länka till externa källor när koden implementerar en algoritm från en artikel, anpassar kod från annat håll eller kodar beteende som specificeras i dokumentation.
+  Använd permanenta länkar.
+  Notera eventuella avvikelser från referensen.
+- **Korrekthetsargument**: Förklara *varför* icke-trivial kod ger korrekta resultat.
+  Koden visar stegen.
+  En kommentar förklarar varför stegen fungerar.
+- **Lärdomar den hårda vägen**: Om du har lagt 30+ minuter på att felsöka något och fixen är en icke-uppenbar trollformel, dokumentera den.
+  Ditt tidigare jag insåg inte att den behövdes.
+  Framtida läsare gör det inte heller.
+- **Motivering för konstanter**: Magiska tal förtjänar en förklaring.
+  Varför 1492?
+  Varför 16 bitar?
+  Valdes det slumpmässigt, härlett från testning eller krävs det för korrekthet?
+  Även "valdes godtyckligt" är nyttig information.
+- **Bärande designval**: Om korrektheten beror på en till synes oskyldig implementationsdetalj (t.ex. "måste vara en BTreeSet eftersom iterationsordningen spelar roll nedan"), säg det uttryckligen.
+- **"Varför inte"**: När du medvetet undviker den uppenbara vägen, förklara varför.
+  Annars kommer någon att "fixa" det senare och förstöra saker.
 
-READMEs (you have one, right?) are also a common first touch-point with
-other developers. A good one answers four questions immediately: What
-does this do? Why should I care? How do I use it? How do I install it?
-In that order. Structure it like a funnel: a one-liner and maybe a
-visual demo at the top so someone can decide in seconds if this solves
-their problem, then progressively add depth. Show usage before
-installation — people want to see what they're getting before committing
-to setup steps.
+README-filer (du har en, eller hur?) är också en vanlig första kontaktpunkt med andra utvecklare.
+En bra README besvarar fyra frågor direkt.
+Vad gör detta?
+Varför ska jag bry mig?
+Hur använder jag det?
+Hur installerar jag det?
+I den ordningen.
+Strukturera den som en tratt: en kort sammanfattning och kanske en visuell demonstration högst upp så att någon på sekunder kan avgöra om detta löser problemet, och bygg sedan gradvis på med djup.
+Visa användning före installation --- människor vill se vad de får innan de lägger tid på installationssteg.
 
-Commit messages are another kind of "writing for others" that is often
-neglected. They are often written as "fixed blah" or "added foo", and
-while that may be sufficient in some cases, it's easy to forget that
-they form the historical record of *why* the codebase evolved the way it
-did. When someone (including you!) runs `git blame` trying to understand
-a confusing change, good commit messages should give them answers.
+Incheckningsmeddelanden är en annan typ av "skrivande för andra" som ofta försummas.
+De skrivs ofta som "fixed blah" eller "added foo", och även om det kan räcka ibland är det lätt att glömma att de utgör den historiska dokumentationen av *varför* kodbasen utvecklades som den gjorde.
+När någon (inklusive du själv) kör `git blame` för att förstå en förvirrande ändring bör bra incheckningsmeddelanden ge svar.
 
-In general, the body should answer:
-- What problem forced this change?
-- What alternatives did you consider?
-- What are the trade-offs or implications?
-- What might be surprising about this approach?
+Generellt bör meddelandets brödtext svara på:
+- Vilket problem tvingade fram den här ändringen?
+- Vilka alternativ övervägde du?
+- Vilka avvägningar eller konsekvenser finns?
+- Vad kan vara överraskande med den här lösningen?
 
-> Obviously you should scale detail with complexity. A one-line typo fix
-> needs only a subject. A subtle race condition fix that took hours to
-> debug deserves paragraphs explaining the problem and solution.
+> Skala såklart detaljnivån med komplexiteten.
+> En enradig stavfelsfix behöver bara ett ämnesfält.
+> En subtil fix av race condition som tog timmar att felsöka förtjänar stycken som förklarar problem och lösning.
 
-For complex changes, it can be useful to follow a Problem → Solution →
-Implications structure: Start with the forcing function or limitation,
-then explain what changed and the key design decisions, and then list
-noteworthy consequences (positive and negative). That last part is
-particularly important; real engineering involves balancing concerns,
-and documenting that a trade-off was intentional prevents future
-developers from thinking you missed the problem.
+För komplexa ändringar kan det vara användbart att följa strukturen Problem → Lösning → Konsekvenser.
+Börja med begränsningen eller den tvingande faktorn.
+Förklara sedan vad som ändrades och de viktigaste designbesluten.
+Lista därefter viktiga följder (positiva och negativa).
+Den sista delen är särskilt viktig.
+Verklig ingenjörskonst handlar om att balansera målkonflikter, och att dokumentera att en avvägning var avsiktlig förhindrar att framtida utvecklare tror att du missade problemet.
 
-LLMs _can_ be helpful in writing commit messages. However, if you simply
-point one at your change and ask it to write the commit message for the
-change, the LLM will only have access to the _what_, not the _why_. And
-the resulting commit message will thus be mostly descriptive (the
-opposite of what we want!). If you used an LLM to help you make the
-change in the first place, asking the LLM to write the commit in that
-same session can be a much better option since your conversation with
-the LLM is inherently a rich source of context about the change!
-Otherwise, or in addition, a useful trick is to specifically tell the
-LLM you'd like a commit message focused on the "why" (and other nuances
-from the notes above), and then _tell it to query you for missing
-context_. Essentially, you're acting like a MCP "tool" for the coding
-agent that it can use to "read" context.
+LLM:er _kan_ vara hjälpsamma när man skriver incheckningsmeddelanden.
+Om du bara riktar en modell mot ändringen och ber den skriva incheckningsmeddelandet har LLM:en dock bara tillgång till _vad_, inte _varför_.
+Resultatet blir då mest beskrivande (motsatsen till vad vi vill ha).
+Om du använde en LLM för att hjälpa till med ändringen från början är det ofta mycket bättre att be LLM:en skriva incheckningen i samma session, eftersom konversationen i sig är en rik källa till kontext om ändringen.
+Annars, eller utöver det, är ett bra trick att uttryckligen säga att du vill ha ett incheckningsmeddelande fokuserat på "varför" (och andra nyanser enligt råden ovan), och sedan _be den fråga dig om saknad kontext_.
+I praktiken agerar du som ett MCP-"verktyg" för kodagenten, som den kan använda för att "läsa" kontext.
 
-As your changes get more complex, make sure to also break up commits
-logically (`git add -p` is your friend). Each commit should represent
-one coherent change that could be understood and reviewed independently.
-Don't mix refactoring with new features or combine unrelated bug fixes,
-as this muddies the story for which changes fixed what problem, and will
-almost certainly slow down the eventual review of your changes. It also
-gives you superpowers through `git bisect`, but that's a story for
-another time.
+När ändringarna blir mer komplexa ska du också se till att dela upp incheckningar logiskt (`git add -p` är din vän).
+Varje incheckning bör representera en sammanhängande ändring som kan förstås och granskas självständigt.
+Blanda inte refaktorering med nya funktioner och kombinera inte orelaterade felrättningar.
+Det gör historien grumlig kring vilka ändringar som löste vilket problem, och det kommer nästan säkert att bromsa den slutliga granskningen av ändringarna.
+Det ger dig också superkrafter via `git bisect`, men det är en historia för en annan gång.
 
-> One note as you start being more diligent about technical writing, and
-> using it more extensively, make sure you respect the reader. It's easy
-> to end up over-explaining once you start, but you have to resist that
-> urge lest the reader read _none_ of what you've written. Explain the
-> "why" and trust them to figure out the "how" for their situation.
+> En notering när du börjar vara mer noggrann med tekniskt skrivande och använder det mer brett är att du behöver respektera läsaren.
+> Det är lätt att överförklara när man väl har börjat, men du måste stå emot impulsen, annars läser läsaren _inget_ av det du skrivit.
+> Förklara "varför" och lita på att läsaren kan ta reda på "hur" för sin situation.
 
-# Collaboration
+# Samarbete
 
-As engineers, we may spend a large part of our job coding at our own
-keyboard, but a sizeable chunk of our time is also taken up by
-communicating with others. That time is usually split into collaboration
-and education, and the payoff from investing in getting better at both is
-significant.
+Som ingenjörer kan vi lägga en stor del av jobbet på att koda vid vårt eget tangentbord, men en betydande del av tiden går också till kommunikation med andra.
+Den tiden är oftast uppdelad i samarbete och utbildning, och vinsten av att bli bättre på båda är stor.
 
-## Contributing
+## Bidra
 
-Whether you are submitting a bug report, contributing a simple bug fix,
-or implementing a huge feature, it's worth keeping in mind that there
-are usually orders of magnitude more users than there are contributors,
-and an order of magnitude more contributors than there are maintainers.
-As a result, maintainer time is highly oversubscribed. If you want to
-increase the likelihood that your contribution goes somewhere
-productive, you have to ensure that your contributions carry a high
-signal-to-noise ratio and are worth the maintainers' time.
+Oavsett om du skickar en felrapport, bidrar med en enkel felrättning eller implementerar en stor funktion är det värt att komma ihåg att det oftast finns långt fler användare än bidragsgivare, och långt fler bidragsgivare än förvaltare.
+Som följd är förvaltarnas tid hårt belastad.
+Om du vill öka sannolikheten att ditt bidrag leder någonstans produktivt behöver du se till att bidraget har hög signal och lågt brus, och är värt förvaltarnas tid.
 
-For example, a good bug report respects the maintainer's time by
-providing everything needed to understand and reproduce the problem:
+En bra felrapport respekterar till exempel förvaltarens tid genom att ge allt som behövs för att förstå och reproducera problemet:
 
-- **Environment**: OS, version numbers, relevant configuration
-- **What you expected** vs **what actually happened**
-- **Steps to reproduce**: Be specific. "Click the button" is less useful
-  than "Click the Submit button on the /settings page while logged in as
-  an admin."
-- **What you've already tried**: This prevents duplicate suggestions and
-  shows you've done some investigation
+- **Miljö**: OS, versionsnummer, relevant konfiguration.
+- **Vad du förväntade dig** kontra **vad som faktiskt hände**.
+- **Steg för att reproducera**: Var specifik.
+  "Klicka på knappen" är mindre användbart än "Klicka på knappen Submit på sidan /settings medan du är inloggad som administratör."
+- **Vad du redan har provat**: Detta förhindrar dubbla förslag och visar att du har gjort en egen undersökning.
 
-> If you find a security vulnerability, don't post it publicly. Contact
-> the maintainers privately first and give them reasonable time to fix
-> it before disclosure. Many projects have a SECURITY.md file or
-> similar for this purpose.
+> Om du hittar en säkerhetssårbarhet ska du inte posta den publikt.
+> Kontakta förvaltarna privat först och ge dem rimlig tid att fixa den innan offentliggörande.
+> Många projekt har en `SECURITY.md` eller liknande för detta ändamål.
 
-**Make sure you search for existing issues.** Your bug or feature
-request may already be reported, and it's far better to add information
-to existing discussions rather than creating duplicates. Not to mention,
-it reduces noise for the maintainers.
+**Se till att du söker efter befintliga ärenden.**
+Din felrapport eller ändringsönskan kanske redan är rapporterad, och det är bättre att tillföra information i befintliga diskussioner än att skapa dubbletter.
+Det minskar dessutom brus för förvaltarna.
 
-Minimal reproducible examples are gold, if you can come up with one.
-They save the maintainer a huge amount of time and effort, and
-reliably reproducing the bug is often the hardest part of fixing it. Not
-to mention, the effort you put into isolating the problem often helps
-you understand it better too, and sometimes leads you to find a fix
-yourself.
+Minimala reproducerbara exempel är guld, om du kan få fram ett.
+De sparar förvaltaren enormt mycket tid och arbete, och att reproducera programfelet pålitligt är ofta den svåraste delen av att fixa det.
+Arbetet du lägger på att isolera problemet hjälper dessutom ofta dig att förstå det bättre och leder ibland till att du hittar lösningen själv.
 
-If you don't hear back right away, keep in mind that maintainers are
-often volunteers with limited time. If you're waiting for a reply from
-them, a polite follow-up after a couple weeks is fine; daily pings are
-not. Similarly, "me too" comments, or bug reports that are just a
-copy-paste of some terminal output tend to be a net-negative in terms of
-getting traction for your issue.
+Om du inte får svar direkt, kom ihåg att förvaltare ofta är volontärer med begränsad tid.
+Om du väntar på svar är en artig uppföljning efter ett par veckor okej.
+Dagliga pingar är det inte.
+På samma sätt är "jag också"-kommentarer, eller felrapporter som bara är inklistrad terminalutskrift, oftast kontraproduktiva för möjligheten att frågan får fart.
 
-If you're looking to make a code contribution, you'll also want to
-familiarize yourself with the contribution guidelines. Many projects
-have a `CONTRIBUTING.md` — follow it. You'll also usually want to start
-small; a typo fix or documentation improvement is a great first
-contribution as it helps you learn the project's processes without also
-having to go through lots of back and forth on the content.
+Om du vill bidra med kod bör du också sätta dig in i riktlinjerna för bidrag.
+Många projekt har en `CONTRIBUTING.md` --- följ den.
+Det är oftast bra att börja smått.
+En stavningsrättning eller dokumentationsförbättring är ett utmärkt första bidrag eftersom det hjälper dig att lära dig projektets processer utan att samtidigt behöva gå många vändor kring innehållet.
 
-> Check what license the project uses, as any code you contribute will
-> fall under the same license. In particular, look out for copyleft
-> licenses (like GPL), which requires derivatives to also be open source
-> and may have implications for your employer if you touch it!
-> [choosealicense.com](https://choosealicense.com/) has more useful
-> information.
+> Kontrollera vilken licens projektet använder, eftersom all kod du bidrar med hamnar under samma licens.
+> Var särskilt uppmärksam på copyleft-licenser (som GPL), som kräver att derivat också är öppen källkod och kan få konsekvenser för din arbetsgivare om du rör sådan kod.
+> [choosealicense.com](https://choosealicense.com/) har mer användbar information.
 
-When you've decided to open a pull request ("PR"), first make sure you
-isolate the change you actually want to be accepted. If your PR changes
-lots of other unrelated things at the same time, chances are the
-reviewer will send it back to you asking you to clean it up. This is
-similar to how you should break down your git commits into semantically
-related chunks.
+När du har bestämt dig för att öppna en ändringsförfrågan (PR), se först till att isolera ändringen du faktiskt vill få accepterad.
+Om din ändringsförfrågan samtidigt ändrar en massa andra orelaterade saker är chansen stor att granskaren skickar tillbaka den och ber dig städa upp.
+Det liknar hur du bör dela upp git-incheckningar i semantiskt relaterade delar.
 
-In some cases, if you have many seemingly-disparate changes but
-they're all needed to enable one feature, it may be okay to open a
-larger PR that captures all the changes. However, in this case, commit
-hygiene is particularly important so that maintainers have the option
-to review the change "commit by commit".
+I vissa fall, om du har många till synes spretiga ändringar men alla behövs för att möjliggöra en funktion, kan det vara okej att öppna en större ändringsförfrågan som fångar allt.
+I så fall är disciplin i incheckningar extra viktig så att förvaltare kan välja att granska ändringen en incheckning i taget.
 
-Next, make sure you explain the "why" behind the change well. Don't just
-describe _what_ changed — explain _why_ the change is needed and _why_
-this is a good way to address the problem. You should also proactively
-call out parts of the change that warrant special attention in the
-review, if any. Depending on `CONTRIBUTING.md` and the nature of your
-change, reviewers may also expect to see additional information like
-trade-offs you made or how to test the change.
+Se sedan till att du förklarar "varför" bakom ändringen väl.
+Beskriv inte bara _vad_ som ändrades --- förklara _varför_ ändringen behövs och _varför_ detta är ett bra sätt att lösa problemet.
+Du bör också proaktivt lyfta delar av ändringen som förtjänar särskild uppmärksamhet i granskningen, om sådana finns.
+Beroende på `CONTRIBUTING.md` och typen av ändring kan granskare också förvänta sig ytterligare information, till exempel vilka avvägningar du gjort eller hur ändringen testas.
 
-> We recommend contributing back to upstream projects rather than
-> "forking" the project, at least as a first approach. Forking (license
-> permitting) should be reserved for when the contributions you want to
-> make are out of scope for the original project. If you do fork, make
-> sure you acknowledge the original project!
+> Vi rekommenderar att bidra tillbaka till ursprungsprojektet i stället för att skapa en egen avgrening, åtminstone som första strategi.
+> Att skapa en avgrening (om licensen tillåter) bör reserveras för fall där de bidrag du vill göra ligger utanför ramarna för originalprojektet.
+> Om du skapar en avgrening, se till att du erkänner originalprojektet.
 
-AI makes it incredibly easy to generate plausible-looking code and PRs
-quickly, but this doesn't excuse you from understanding what you're
-contributing. Submitting AI-generated code you can't explain burdens
-maintainers with reviewing and potentially maintaining code that even
-its author doesn't understand. It's fine to use AI to help you
-identify issues and produce fixes/features, **so long as you still do
-the due diligence** to polish it into a worthwhile contribution, rather
-than passing that work on to the (already-overloaded) maintainers.
+AI gör det mycket enkelt att snabbt generera kod och ändringsförfrågningar som ser rimliga ut.
+Det ursäktar dig dock inte från att förstå vad du bidrar med.
+Om du skickar in AI-genererad kod som du inte kan förklara belastar du förvaltare med att granska och eventuellt underhålla kod som inte ens författaren förstår.
+Det är okej att använda AI för att hjälpa dig identifiera problem och ta fram lösningar/funktioner, **så länge du fortfarande gör ditt grundarbete** och förädlar resultatet till ett bidrag som är värt att ta in, i stället för att lämna det arbetet till (redan hårt belastade) förvaltare.
 
-Remember that for maintainers, accepting a PR means accepting long-term
-responsibility. They will be maintaining this code long after the
-contributor has moved on, and so may decline changes that are
-well-intentioned but don't fit the project's direction, add complexity
-they don't want to maintain, or where the need simply isn't sufficiently
-well-documented. It's on _you_ as the contributor to make the case for
-why accepting the contribution is worth the maintenance burden.
+Kom ihåg att när förvaltare accepterar en ändringsförfrågan accepterar de också ett långsiktigt ansvar.
+De kommer att underhålla koden långt efter att bidragsgivaren har gått vidare, och kan därför tacka nej till ändringar som är välmenande men inte passar projektets riktning, tillför komplexitet de inte vill underhålla eller där behovet helt enkelt inte är tillräckligt väl dokumenterat.
+Det är _du_ som bidragsgivare som måste argumentera för varför det är värt underhållsbördan att acceptera bidraget.
 
-> When receiving feedback on a PR, remember that your code is not you!
-> Reviewers are trying to make the code better, not criticizing you
-> personally. Ask clarifying questions if you disagree — you might learn
-> something, or maybe they will.
+> När du får återkoppling på en ändringsförfrågan, kom ihåg att din kod inte är du.
+> Granskare försöker göra koden bättre, inte kritisera dig personligen.
+> Ställ förtydligande frågor om du inte håller med.
+> Du kanske lär dig något, eller så gör de det.
 
-## Reviewing
+## Granska
 
-You might think code review is something senior developers do, but
-you'll likely be asked to review code much earlier than you expect, and
-your perspective is valuable. Fresh eyes catch things that experienced
-developers overlook, and questions from someone less familiar with the
-code often reveal assumptions that should be documented or simplified.
+Du kanske tänker att kodgranskning är något seniora utvecklare gör, men du kommer sannolikt att bli ombedd att granska kod mycket tidigare än du tror, och ditt perspektiv är värdefullt.
+Nya ögon fångar sådant erfarna utvecklare missar, och frågor från någon som är mindre bekant med koden avslöjar ofta antaganden som borde dokumenteras eller förenklas.
 
-Review is also one of the fastest ways to learn. You'll see how others
-approach problems, pick up patterns and idioms, and develop intuition
-for what makes code readable. Beyond personal growth, reviews catch bugs
-before they reach production, spread knowledge across the team, and
-improve code quality through collaboration. They are not merely
-bureaucratic overhead.
+Granskning är också ett av de snabbaste sätten att lära sig.
+Du ser hur andra angriper problem, plockar upp mönster och idiom och utvecklar intuition för vad som gör kod läsbar.
+Utöver personlig utveckling fångar kodgranskningar programfel innan de når produktion, sprider kunskap i teamet och förbättrar kodkvaliteten genom samarbete.
+De är inte bara byråkrati.
 
-Good code review is a skill you need to hone over time, but there are
-some tips that can make them much better much faster:
+Bra kodgranskning är en färdighet du behöver träna upp över tid, men det finns några tips som kan göra den betydligt bättre på kort tid:
 
-- **Review the code, not the person**:
-  "This function is confusing" vs "You wrote confusing code."
-- **Prefer actionable comments**:
-  "Can you replace these globals with a config dataclass" is an easier
-  comment to address than "Don't use globals here"
-- **Ask questions rather than making demands**:
-  "What happens if X is null here?" invites discussion better than
-  "Handle the null case."
-- **Explain the "why"**:
-  "Consider using a constant here" is less useful than "Consider using a
-  constant here so we can easily adjust the timeout based on
-  environment."
-- **Distinguish blocking issues from suggestions**:
-  Be clear about what must change versus what's a matter of preference.
-- **Acknowledge what's good**:
-  Pointing out clever solutions or clean implementations is encouraging
-  and helps the author know what to continue doing.
-- **Know when to stop**:
-  Contributors only have so much time and patience, and it's not always
-  best spent handling all the nits. Focus on the big things, and
-  consider tidying up nits yourself after the fact.
+- **Granska koden, inte personen**:
+  "Den här funktionen är svår att förstå" jämfört med "Du skrev förvirrande kod."
+- **Föredra handlingsbara kommentarer**:
+  "Kan du ersätta dessa globala variabler med en konfigurations-dataklass" är lättare att agera på än "Använd inte globala variabler här"
+- **Ställ frågor i stället för att ställa krav**:
+  "Vad händer om X är nullvärde här?" bjuder in till diskussion bättre än "Hantera fallet med nullvärde."
+- **Förklara "varför"**:
+  "Överväg att använda en konstant här" är mindre användbart än "Överväg att använda en konstant här så att vi enkelt kan justera tidsgränsen utifrån miljö."
+- **Skilj blockerande problem från förslag**:
+  Var tydlig med vad som måste ändras kontra vad som är en smakfråga.
+- **Uppmärksamma det som är bra**:
+  Att lyfta smarta lösningar eller rena implementationer är uppmuntrande och hjälper författaren att veta vad hen ska fortsätta med.
+- **Vet när du ska sluta**:
+  Bidragsgivare har begränsat med tid och tålamod, och den tiden används inte alltid bäst till att hantera alla smånitar.
+  Fokusera på de stora sakerna och överväg att städa upp småsaker själv i efterhand.
 
-> AI tools can catch certain issues, but they're not a substitute for
-> human review. They miss context, don't understand product
-> requirements, and can confidently suggest wrong things. They're worth
-> using as a first pass, but not a replacement for thoughtful human
-> review.
+> AI-verktyg kan fånga vissa problem, men de ersätter inte mänsklig granskning.
+> De missar kontext, förstår inte produktkrav och kan självsäkert föreslå fel saker.
+> De är värda att använda som första pass, men inte som ersättning för genomtänkt mänsklig granskning.
 
-# Education
+# Utbildning
 
-A lot of our non-coding time as engineers is spent either asking or
-answering questions, possibly a mixture of both; during collaboration,
-in dialogue with peers, or while trying to learn. Asking good questions
-is a skill that makes you better at learning from anyone, not just
-perfect explainers. Julia Evans has some excellent blog posts on "[How
-to ask good questions](https://jvns.ca/blog/good-questions/)" and "[How
-to get useful answers to your
-questions](https://jvns.ca/blog/2021/10/21/how-to-get-useful-answers-to-your-questions/)"
-that are worth reading.
+En stor del av vår icke-kodtid som ingenjörer går till att antingen ställa eller besvara frågor, ibland en blandning av båda, under samarbete, i dialog med kollegor eller när vi försöker lära oss.
+Att ställa bra frågor är en färdighet som gör dig bättre på att lära av vem som helst, inte bara av perfekta pedagoger.
+Julia Evans har utmärkta bloggposter om "[How to ask good questions](https://jvns.ca/blog/good-questions/)" (hur man ställer bra frågor) och "[How to get useful answers to your questions](https://jvns.ca/blog/2021/10/21/how-to-get-useful-answers-to-your-questions/)" (hur man får användbara svar på sina frågor), och de är värda att läsa.
 
-Some particularly valuable pieces of advice are:
+Några särskilt värdefulla råd är:
 
-- **State your understanding first**: Say what you think you know and
-  ask "is that right?" This helps the answerer identify your actual
-  knowledge gaps.
-- **Ask yes/no questions**: "Is X true?" prevents tangential
-  explanations and usually prompts useful elaboration anyway.
-- **Be specific**: "How do SQL joins work?" is too vague. "Does a LEFT
-  JOIN include rows where the right table has no match?" is answerable.
-- **Admit when you don't understand**: Interrupt to ask about unfamiliar
-  terms. This reflects confidence, not weakness. Similarly, if they ask
-  questions of you that you do not know the answer to, it's best to say
-  "I don't know", and possibly follow up with "but I think ..." or even
-  "but I can find out".
-- **Don't accept incomplete answers**: Keep asking follow-ups until you
-  actually understand.
-- **Do some research first**: Basic investigation helps you ask more
-  targeted questions (though casual questions among colleagues are
-  fine).
+- **Beskriv din förståelse först**: Säg vad du tror att du vet och fråga "stämmer det?".
+  Det hjälper den som svarar att identifiera dina verkliga kunskapsluckor.
+- **Ställ ja/nej-frågor**: "Är X sant?" förhindrar utsvävande förklaringar och leder ofta ändå till nyttig utveckling.
+- **Var specifik**: "Hur fungerar SQL-joins?" är för vagt.
+  "Inkluderar en LEFT JOIN rader där högra tabellen inte har någon match?" går att besvara.
+- **Säg till när du inte förstår**: Avbryt för att fråga om obekanta termer.
+  Det signalerar självförtroende, inte svaghet.
+  På samma sätt, om någon ställer frågor till dig som du inte kan svaret på, är det bäst att säga "jag vet inte", och eventuellt följa upp med "men jag tror ..." eller "men jag kan ta reda på det".
+- **Acceptera inte ofullständiga svar**: Fortsätt ställa följdfrågor tills du faktiskt förstår.
+- **Gör lite research först**: Grundläggande förarbete hjälper dig att ställa mer träffsäkra frågor (även om informella frågor mellan kollegor förstås är helt okej).
 
-Remember: well-crafted questions benefit entire communities. They
-surface hidden assumptions that others need to understand too.
+Kom ihåg att välformulerade frågor gynnar hela gemenskaper.
+De synliggör dolda antaganden som andra också behöver förstå.
 
-> Note that this advice applies just as much when communicating with
-> LLMs!
+> Observera att råden gäller lika mycket när du kommunicerar med LLM:er.
 
-# AI etiquette
+# AI-etikett
 
-With the growing use of LLMs and AI across software engineering, the
-social and professional norms around are still in flux. We already
-covered many of the tactical considerations in the [agentic coding
-lecture](/2026/agentic-coding/), but there are also "softer" parts of
-their use that are worth discussing.
+I takt med den växande användningen av LLM:er och AI inom programvaruområdet är de sociala och professionella normerna fortfarande i förändring.
+Vi har redan täckt många taktiska överväganden i [föreläsningen om agentdriven kodning]({{ '/2026/agentic-coding/' | relative_url }}), men det finns också "mjukare" delar av användningen som är värda att diskutera.
 
-The first of these is that when AI meaningfully contributed to your
-work, **disclose it**. This isn't about shame — it's about honesty,
-setting appropriate expectations, and ensuring the resulting work gets
-the appropriate level of review. It's also worthwhile to disclose which
-_parts_ you use AI for — there's a meaningful distinction between "this
-whole thing is vibecoded" and "I wrote this backup tool and used an LLM
-to style the web frontend". For example, we've used LLMs to help write
-some of these lecture notes, including proofreading, brainstorming, and
-generating first drafts of code snippets and exercises.
+Den första är att om AI bidrog meningsfullt till ditt arbete ska du **berätta det**.
+Det handlar inte om skam.
+Det handlar om ärlighet, att sätta rätt förväntningar och att säkerställa att resultatet får rätt granskningsnivå.
+Det är också värt att berätta vilka _delar_ du använder AI till.
+Det finns en betydande skillnad mellan "det här är helt vibekodat" och "jag skrev det här säkerhetskopieringsverktyget och använde en LLM för att utforma webbgränssnittet".
+Vi har till exempel använt LLM:er för att hjälpa till att skriva delar av dessa föreläsningsanteckningar, inklusive korrekturläsning, brainstorming och framtagning av första utkast till kodsnuttar och övningar.
 
-You'll also want to follow the norms of the teams and projects you're
-contributing to here. Some teams have stricter policies around the use
-of AI than others (e.g., for compliance or data residency reasons), and
-you don't want to accidentally run afoul of that. Being open about your
-use helps prevent potentially costly mistakes.
+Du behöver också följa normerna i teamen och projekten du bidrar till.
+Vissa team har striktare policyer kring användning av AI än andra (t.ex. av compliance- eller data residency-skäl), och du vill inte råka bryta mot dem.
+Öppenhet om hur du använder AI hjälper till att förebygga potentiellt kostsamma misstag.
 
-> If you're aiming to learn as part of the work you're doing, keep in
-> mind that if you have AI do all or most of the work for you can be
-> self-defeating; you're likely to learn more about prompting (and maybe
-> reviewing AI output) than the task itself. Especially when you're
-> learning, the point may be the journey, not the destination, so using
-> AI to "get the solution quickly" is an anti-goal.
+> Om ditt mål är att lära dig i arbetet, tänk på att om du låter AI göra allt eller nästan allt arbete åt dig kan det motverka syftet.
+> Du lär dig sannolikt mer om hur man skriver uppmaningar (och kanske granskning av AI-utdata) än om själva uppgiften.
+> Särskilt i lärandesituationer kan poängen vara resan, inte destinationen, så att använda AI för att "snabbt få lösningen" är ett anti-mål.
 
-A related concern comes up in interviews and other assessment
-situations. These are often intended to specifically evaluate _your_
-skills and abilities, not those of an LLM. More companies now allow you
-to use LLMs and other AI-assisted tooling in interviews as long as you
-let them observe those interactions as part of the interview (i.e., they
-are evaluating your skill in making use of those tools too!), but those
-are still in the minority. If you are unsure about whether AI assistance
-is in scope for a particular task, ask!
+En relaterad fråga uppstår i intervjuer och andra bedömningssituationer.
+De är ofta avsedda att utvärdera _dina_ färdigheter och förmågor, inte en LLM:s.
+Fler företag tillåter nu att du använder LLM:er och andra AI-assisterade verktyg i intervjuer så länge de får observera interaktionerna som del av intervjun (dvs. de bedömer även din förmåga att använda dessa verktyg), men detta är fortfarande en minoritet.
+Om du är osäker på om AI-hjälp ingår i ramarna för en viss uppgift, fråga.
 
-> It should go without saying that if an assessment situation explicitly
-> calls for no external tools, no LLMs, etc., you should not use them.
-> Trying to do so discretely without getting caught **will** come back
-> to bite you.
+> Det borde vara självklart att om en bedömningssituation uttryckligen säger inga externa verktyg, inga LLM:er och så vidare, så ska du inte använda dem.
+> Försök att göra det diskret utan att bli upptäckt **kommer** att slå tillbaka.
 
-# Exercises
+# Övningar
 
-1. Browse the source code of a well-known project (e.g.,
-   [Redis](https://github.com/redis/redis) or
-   [curl](https://github.com/curl/curl)). Find examples of some of the
-   comment types mentioned in the lecture: a useful TODO, a reference to
-   external documentation, a "why not" comment explaining an avoided
-   approach, or a hard-learned lesson. What would be lost if that
-   comment was not there?
+1. Bläddra i källkoden för ett välkänt projekt (t.ex. [Redis](https://github.com/redis/redis) eller [curl](https://github.com/curl/curl)).
+1. Hitta exempel på några av kommentarstyperna som nämns i föreläsningen: en användbar TODO, en referens till extern dokumentation, en "varför inte"-kommentar som förklarar en undviken lösning eller en hårt lärd läxa.
+1. Vad skulle gå förlorat om den kommentaren inte fanns?
 
-1. Pick an open-source project you're interested in and look at its
-   recent commit history (`git log`). Find one commit with a good
-   message that explains *why* the change was made, and one with a weak
-   message that only describes *what* changed. For the weak one, look at
-   the diff (`git show <hash>`) and try to write a better commit message
-   following the Problem → Solution → Implications structure. Notice how
-   much work is required to reassemble the necessary context after the
-   fact!
+1. Välj ett öppen källkod-projekt du är intresserad av och titta på dess senaste incheckningshistorik (`git log`).
+1. Hitta en incheckning med ett bra meddelande som förklarar *varför* ändringen gjordes, och en incheckning med ett svagt meddelande som bara beskriver *vad* som ändrades.
+1. För den svaga incheckningen, titta på diffen (`git show <hash>`) och försök skriva ett bättre incheckningsmeddelande enligt strukturen Problem → Lösning → Konsekvenser.
+1. Lägg märke till hur mycket arbete som krävs för att återskapa nödvändig kontext i efterhand.
 
-1. Compare the READMEs of three GitHub projects with 1000+ stars. Are
-   all of them equally useful? Look for things that come across mostly
-   as noise to you as a lesson for future READMEs you write yourself.
+1. Jämför README-filerna för tre GitHub-projekt med 1000+ stjärnor.
+1. Är alla lika användbara?
+1. Leta efter sådant som mest känns som brus för dig som en lärdom inför framtida README-filer du själv skriver.
 
-1. Find an open issue on a project you use (check the "good first issue"
-   or "help wanted" labels if they have it). Evaluate the issue against
-   the criteria from the lecture: does it seem like it values the
-   maintainer's time and contains all the information necessary to debug
-   it, or do you expect that the maintainer may need to go multiple
-   rounds of questions with the submitter to get to the root problem?
+1. Hitta ett öppet ärende i ett projekt du använder (kolla etiketter som "good first issue" eller "help wanted" om de finns).
+1. Utvärdera ärendet mot kriterierna från föreläsningen.
+1. Verkar det värdera förvaltarens tid och innehålla all information som behövs för felsökning, eller förväntar du dig att förvaltaren behöver flera frågerundor med den som rapporterat för att nå rotproblemet?
 
-1. Think of a bug you've encountered in software you use (or find one in
-   an issue tracker). Practice creating a minimal reproducible example:
-   strip away everything unrelated to the bug until you have the
-   smallest case that still demonstrates the problem. Write up what you
-   removed and why.
+1. Tänk på ett programfel du har stött på i programvara du använder (eller hitta ett i ett ärendehanteringssystem).
+1. Öva på att skapa ett minimalt reproducerbart exempel.
+1. Skala bort allt som inte är relaterat till programfelet tills du har minsta fallet som fortfarande demonstrerar problemet.
+1. Skriv ner vad du tog bort och varför.
 
-1. Find a merged pull request on a project you're familiar with that has
-   substantive review comments (not just "LGTM"). Read through the
-   review. Were all the comments equally productive? If you were the PR
-   author, how would you find the experience of getting all those
-   comments?
+1. Hitta en sammanslagen ändringsförfrågan (PR) i ett projekt du känner till som har substantiella granskningskommentarer (inte bara "LGTM").
+1. Läs igenom granskningen.
+1. Var alla kommentarer lika produktiva?
+1. Om du vore författaren till ändringsförfrågan, hur skulle du uppleva att få alla dessa kommentarer?
 
-1. Go to Stack Overflow and find a question in a technology you know
-   that has a highly-voted answer. Then find one that was closed or
-   heavily downvoted. Compare them against the advice from the lecture;
-   was it predictable which question would get better answers?
+1. Gå till Stack Overflow och hitta en fråga inom en teknik du kan som har ett högt uppröstat svar.
+1. Hitta sedan en fråga som stängts eller röstats ned kraftigt.
+1. Jämför dem med råden från föreläsningen.
+1. Var det förutsägbart vilken fråga som skulle få bättre svar?

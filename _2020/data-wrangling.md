@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Data Wrangling"
+title: "Datahantering"
 description: >
-  Learn how to manipulate and transform data using command-line tools like sed, awk, and regular expressions.
+  Lär dig manipulera och transformera data med kommandoradsverktyg som sed, awk och reguljära uttryck.
 thumbnail: /static/assets/thumbnails/2020/lec4.png
 date: 2020-01-16
 ready: true
@@ -12,69 +12,62 @@ video:
 special: true
 ---
 
-Have you ever wanted to take data in one format and turn it into a
-different format? Of course you have! That, in very general terms, is
-what this lecture is all about. Specifically, massaging data, whether in
-text or binary format, until you end up with exactly what you wanted.
+Har du någon gång velat ta data i ett format och göra om den till ett annat format?
+Självklart har du det.
+Det är, mycket generellt uttryckt, vad den här föreläsningen handlar om.
+Mer specifikt handlar det om att bearbeta data, oavsett om den är i text- eller binärformat, tills du får exakt det du vill ha.
 
-We've already seen some basic data wrangling in past lectures. Pretty
-much any time you use the `|` operator, you are performing some kind of
-data wrangling. Consider a command like `journalctl | grep -i intel`. It
-finds all system log entries that mention Intel (case insensitive). You
-may not think of it as wrangling data, but it is going from one format
-(your entire system log) to a format that is more useful to you (just
-the intel log entries). Most data wrangling is about knowing what tools
-you have at your disposal, and how to combine them.
+Vi har redan sett grundläggande datahantering i tidigare föreläsningar.
+Nästan varje gång du använder operatorn `|` utför du någon form av datahantering.
+Betrakta ett kommando som `journalctl | grep -i intel`.
+Det hittar alla poster i systemloggen som nämner Intel (skiftlägesokänsligt).
+Du kanske inte tänker på det som datahantering, men det går från ett format (hela systemloggen) till ett format som är mer användbart för dig (bara intel-relaterade loggrader).
+Mycket av datahantering handlar om att veta vilka verktyg du har tillgängliga, och hur du kombinerar dem.
 
-Let's start from the beginning. To wrangle data, we need two things:
-data to wrangle, and something to do with it. Logs often make for a good
-use-case, because you often want to investigate things about them, and
-reading the whole thing isn't feasible. Let's figure out who's trying to
-log into my server by looking at my server's log:
+Låt oss börja från början.
+För att hantera data behöver vi två saker: data att hantera, och något att göra med den.
+Loggar är ofta ett bra användningsfall, eftersom man ofta vill undersöka saker i dem, och att läsa allt är inte rimligt.
+Låt oss ta reda på vem som försöker logga in på min server genom att titta i serverloggen:
 
 ```bash
 ssh myserver journalctl
 ```
 
-That's far too much stuff. Let's limit it to ssh stuff:
+Det är alldeles för mycket.
+Låt oss begränsa till ssh-relaterat innehåll:
 
 ```bash
 ssh myserver journalctl | grep sshd
 ```
 
-Notice that we're using a pipe to stream a _remote_ file through `grep`
-on our local computer! `ssh` is magical, and we will talk more about it
-in the next lecture on the command-line environment. This is still way
-more stuff than we wanted though. And pretty hard to read. Let's do
-better:
+Notera att vi använder en pipe för att strömma en _fjärrfil_ genom `grep` på vår lokala dator.
+`ssh` är magiskt, och vi pratar mer om det i nästa föreläsning om kommandoradsmiljön.
+Det här är fortfarande mycket mer än vi vill ha.
+Och ganska svårt att läsa.
+Låt oss göra det bättre:
 
 ```bash
 ssh myserver 'journalctl | grep sshd | grep "Disconnected from"' | less
 ```
 
-Why the additional quoting? Well, our logs may be quite large, and it's
-wasteful to stream it all to our computer and then do the filtering.
-Instead, we can do the filtering on the remote server, and then massage
-the data locally. `less` gives us a "pager" that allows us to scroll up
-and down through the long output. To save some additional traffic while
-we debug our command-line, we can even stick the current filtered logs
-into a file so that we don't have to access the network while
-developing:
+Varför den extra citeringen?
+Våra loggar kan vara stora, och det är slösaktigt att strömma allt till vår dator och filtrera efteråt.
+I stället kan vi filtrera på fjärrservern och bearbeta datan lokalt.
+`less` ger oss en "pager" som låter oss rulla upp och ned i lång utdata.
+För att spara ytterligare trafik medan vi felsöker kommandoraden kan vi till och med lägga den filtrerade loggen i en fil, så att vi slipper nätåtkomst under utvecklingen:
 
 ```console
 $ ssh myserver 'journalctl | grep sshd | grep "Disconnected from"' > ssh.log
 $ less ssh.log
 ```
 
-There's still a lot of noise here. There are _a lot_ of ways to get rid
-of that, but let's look at one of the most powerful tools in your
-toolkit: `sed`.
+Det är fortfarande mycket brus här.
+Det finns _många_ sätt att bli av med det, men låt oss titta på ett av de kraftfullaste verktygen i verktygslådan: `sed`.
 
-`sed` is a "stream editor" that builds on top of the old `ed` editor. In
-it, you basically give short commands for how to modify the file, rather
-than manipulate its contents directly (although you can do that too).
-There are tons of commands, but one of the most common ones is `s`:
-substitution. For example, we can write:
+`sed` är en "stream editor" som bygger på den äldre redigeraren `ed`.
+I `sed` ger du i princip korta kommandon för hur filen ska ändras, i stället för att manipulera innehållet direkt (även om du kan göra det också).
+Det finns mängder av kommandon, men ett av de vanligaste är `s`: substitution.
+Vi kan till exempel skriva:
 
 ```bash
 ssh myserver journalctl
@@ -83,124 +76,114 @@ ssh myserver journalctl
  | sed 's/.*Disconnected from //'
 ```
 
-What we just wrote was a simple _regular expression_; a powerful
-construct that lets you match text against patterns. The `s` command is
-written in the form: `s/REGEX/SUBSTITUTION/`, where `REGEX` is the
-regular expression you want to search for, and `SUBSTITUTION` is the
-text you want to substitute matching text with.
+Det vi just skrev var ett enkelt _reguljärt uttryck_; en kraftfull konstruktion som låter dig matcha text mot mönster.
+Kommandot `s` skrivs i formen `s/REGEX/SUBSTITUTION/`, där `REGEX` är det reguljära uttryck du vill söka efter, och `SUBSTITUTION` är texten du vill ersätta matchningen med.
 
-(You may recognize this syntax from the "Search and replace" section of our Vim
-[lecture notes](/2020/editors/#advanced-vim)! Indeed, Vim uses a syntax for
-searching and replacing that is similar to `sed`'s substitution command.
-Learning one tool often helps you become more proficient with others.)
+(Du kanske känner igen syntaxen från avsnittet "Search and replace" i våra Vim-[föreläsningsanteckningar]({{ '/2020/editors/#advanced-vim' | relative_url }}).
+Vim använder faktiskt en sök- och ersättningssyntax som liknar `sed`-kommandot för substitution.
+Att lära sig ett verktyg hjälper ofta med andra.)
 
-## Regular expressions
+## Reguljära uttryck
 
-Regular expressions are common and useful enough that it's worthwhile to
-take some time to understand how they work. Let's start by looking at
-the one we used above: `/.*Disconnected from /`. Regular expressions are
-usually (though not always) surrounded by `/`. Most ASCII characters
-just carry their normal meaning, but some characters have "special"
-matching behavior. Exactly which characters do what vary somewhat
-between different implementations of regular expressions, which is a
-source of great frustration. Very common patterns are:
+Reguljära uttryck är så vanliga och användbara att det är värt att lägga tid på att förstå hur de fungerar.
+Låt oss börja med uttrycket vi använde ovan: `/.*Disconnected from /`.
+Reguljära uttryck omges ofta (men inte alltid) av `/`.
+De flesta ASCII-tecken har sin vanliga betydelse, men vissa tecken har "specialbeteende" vid matchning.
+Exakt vilka tecken som gör vad varierar mellan implementationer av reguljära uttryck, vilket ofta är frustrerande.
+Mycket vanliga mönster är:
 
- - `.` means "any single character" except newline
- - `*` zero or more of the preceding match
- - `+` one or more of the preceding match
- - `[abc]` any one character of `a`, `b`, and `c`
- - `(RX1|RX2)` either something that matches `RX1` or `RX2`
- - `^` the start of the line
- - `$` the end of the line
+ - `.` betyder "valfritt enskilt tecken" utom radbrytning
+ - `*` noll eller fler av föregående matchning
+ - `+` en eller fler av föregående matchning
+ - `[abc]` valfritt ett tecken av `a`, `b` och `c`
+ - `(RX1|RX2)` antingen något som matchar `RX1` eller `RX2`
+ - `^` början av raden
+ - `$` slutet av raden
 
-`sed`'s regular expressions are somewhat weird, and will require you to
-put a `\` before most of these to give them their special meaning. Or
-you can pass `-E`.
+`sed`-regex är lite märkliga och kräver ofta att du sätter `\` framför dessa för att ge dem specialbetydelse.
+Eller så kan du skicka `-E`.
 
-So, looking back at `/.*Disconnected from /`, we see that it matches
-any text that starts with any number of characters, followed by the
-literal string "Disconnected from &rdquo;. Which is what we wanted. But
-beware, regular expressions are tricky. What if someone tried to log in
-with the username "Disconnected from"? We'd have:
+Tittar vi tillbaka på `/.*Disconnected from /` ser vi att det matchar valfri text som börjar med valfritt antal tecken, följt av den bokstavliga strängen "Disconnected from &rdquo;.
+Det var vad vi ville.
+Men var försiktig: reguljära uttryck är knepiga.
+Vad händer om någon försöker logga in med användarnamnet "Disconnected from"?
+Då får vi:
 
 ```
 Jan 17 03:13:00 thesquareplanet.com sshd[2631]: Disconnected from invalid user Disconnected from 46.97.239.16 port 55920 [preauth]
 ```
 
-What would we end up with? Well, `*` and `+` are, by default, "greedy".
-They will match as much text as they can. So, in the above, we'd end up
-with just
+Vad får vi då ut?
+`*` och `+` är som standard "giriga".
+De matchar så mycket text de kan.
+I fallet ovan skulle vi alltså bara få:
 
 ```
 46.97.239.16 port 55920 [preauth]
 ```
 
-Which may not be what we wanted. In some regular expression
-implementations, you can just suffix `*` or `+` with a `?` to make them
-non-greedy, but sadly `sed` doesn't support that. We _could_ switch to
-perl's command-line mode though, which _does_ support that construct:
+Vilket kanske inte är vad vi ville.
+I vissa regeximplementationer kan du lägga till `?` efter `*` eller `+` för att göra dem icke-giriga, men tyvärr stöds det inte av `sed`.
+Vi _kan_ dock byta till perls kommandoradsläge, som _stödjer_ det:
 
 ```bash
 perl -pe 's/.*?Disconnected from //'
 ```
 
-We'll stick to `sed` for the rest of this, because it's by far the more
-common tool for these kinds of jobs. `sed` can also do other handy
-things like print lines following a given match, do multiple
-substitutions per invocation, search for things, etc. But we won't cover
-that too much here. `sed` is basically an entire topic in and of itself,
-but there are often better tools.
+Vi håller oss till `sed` i resten, eftersom det är det klart vanligaste verktyget för sådana jobb.
+`sed` kan också göra andra praktiska saker som att skriva ut rader efter en viss matchning, göra flera substitutioner per körning, söka efter saker och mer.
+Men vi går inte in så mycket på det här.
+`sed` är i princip ett helt ämne i sig, och ofta finns bättre verktyg.
 
-Okay, so we also have a suffix we'd like to get rid of. How might we do
-that? It's a little tricky to match just the text that follows the
-username, especially if the username can have spaces and such! What we
-need to do is match the _whole_ line:
+Okej, vi har också ett suffix vi vill bli av med.
+Hur kan vi göra det?
+Det är lite knepigt att matcha just texten efter användarnamnet, särskilt om användarnamnet kan innehålla blanksteg och liknande.
+Det vi behöver göra är att matcha _hela_ raden:
 
 ```bash
  | sed -E 's/.*Disconnected from (invalid |authenticating )?user .* [^ ]+ port [0-9]+( \[preauth\])?$//'
 ```
 
-Let's look at what's going on with a [regex
-debugger](https://regex101.com/r/qqbZqh/2). Okay, so the start is still
-as before. Then, we're matching any of the "user" variants (there are
-two prefixes in the logs). Then we're matching on any string of
-characters where the username is. Then we're matching on any single word
-(`[^ ]+`; any non-empty sequence of non-space characters). Then the word
-"port" followed by a sequence of digits. Then possibly the suffix
-`[preauth]`, and then the end of the line.
+Låt oss titta på vad som händer med en [regex-
+felsökare](https://regex101.com/r/qqbZqh/2).
+Starten är som tidigare.
+Sedan matchar vi någon av varianterna av "user" (det finns två prefix i loggarna).
+Därefter matchar vi en godtycklig teckensträng där användarnamnet finns.
+Sedan matchar vi ett enskilt ord (`[^ ]+`; en icke-tom sekvens av tecken som inte är blanksteg).
+Sedan ordet "port" följt av en sekvens siffror.
+Sedan eventuellt suffixet `[preauth]`, och därefter radslut.
 
-Notice that with this technique, a username of "Disconnected from"
-won't confuse us any more. Can you see why?
+Notera att ett användarnamn som "Disconnected from" inte längre förvirrar oss med den här tekniken.
+Ser du varför?
 
-There is one problem with this though, and that is that the entire log
-becomes empty. We want to _keep_ the username after all. For this, we
-can use "capture groups". Any text matched by a regex surrounded by
-parentheses is stored in a numbered capture group. These are available
-in the substitution (and in some engines, even in the pattern itself!)
-as `\1`, `\2`, `\3`, etc. So:
+Det finns dock ett problem: hela loggraden blir tom.
+Vi vill ju _behålla_ användarnamnet.
+För det kan vi använda "capture groups".
+All text som matchas av regex inom parenteser lagras i en numrerad fångstgrupp.
+Dessa finns tillgängliga i substitutionen (och i vissa motorer även i mönstret självt) som `\1`, `\2`, `\3` osv.
+Alltså:
 
 ```bash
  | sed -E 's/.*Disconnected from (invalid |authenticating )?user (.*) [^ ]+ port [0-9]+( \[preauth\])?$/\2/'
 ```
 
-As you can probably imagine, you can come up with _really_ complicated
-regular expressions. For example, here's an article on how you might
-match an [e-mail
-address](https://www.regular-expressions.info/email.html). It's [not
-easy](https://web.archive.org/web/20221223174323/http://emailregex.com/). And there's [lots of
-discussion](https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression/1917982).
-And people have [written
-tests](https://fightingforalostcause.net/content/misc/2006/compare-email-regex.php).
-And [test matrices](https://mathiasbynens.be/demo/url-regex). You can
-even write a regex for determining if a given number [is a prime
-number](https://www.noulakaz.net/2007/03/18/a-regular-expression-to-check-for-prime-numbers/).
+Som du säkert anar kan man skapa _väldigt_ komplexa reguljära uttryck.
+Till exempel finns en artikel om hur man kan matcha en [e-post-
+adress](https://www.regular-expressions.info/email.html).
+Det är [inte
+lätt](https://web.archive.org/web/20221223174323/http://emailregex.com/).
+Och det finns [mycket
+diskussion](https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression/1917982).
+Och folk har [skrivit
+tester](https://fightingforalostcause.net/content/misc/2006/compare-email-regex.php).
+Och [testmatriser](https://mathiasbynens.be/demo/url-regex).
+Du kan till och med skriva ett regex som avgör om ett tal [är ett primtal](https://www.noulakaz.net/2007/03/18/a-regular-expression-to-check-for-prime-numbers/).
 
-Regular expressions are notoriously hard to get right, but they are also
-very handy to have in your toolbox!
+Reguljära uttryck är ökända för att vara svåra att få rätt, men de är också mycket användbara att ha i verktygslådan.
 
-## Back to data wrangling
+## Tillbaka till datahantering
 
-Okay, so we now have
+Okej, så nu har vi
 
 ```bash
 ssh myserver journalctl
@@ -209,14 +192,13 @@ ssh myserver journalctl
  | sed -E 's/.*Disconnected from (invalid |authenticating )?user (.*) [^ ]+ port [0-9]+( \[preauth\])?$/\2/'
 ```
 
-`sed` can do all sorts of other interesting things, like injecting text
-(with the `i` command), explicitly printing lines (with the `p`
-command), selecting lines by index, and lots of other things. Check `man
-sed`!
+`sed` kan göra många andra intressanta saker, som att injicera text (med kommandot `i`), skriva ut rader explicit (med kommandot `p`), välja rader via index och mycket mer.
+Kolla `man sed`.
 
-Anyway. What we have now gives us a list of all the usernames that have
-attempted to log in. But this is pretty unhelpful. Let's look for common
-ones:
+Hur som helst.
+Det vi har nu ger en lista över alla användarnamn som har försökt logga in.
+Men det är ganska oanvändbart.
+Låt oss leta efter vanliga namn:
 
 ```bash
 ssh myserver journalctl
@@ -226,10 +208,9 @@ ssh myserver journalctl
  | sort | uniq -c
 ```
 
-`sort` will, well, sort its input. `uniq -c` will collapse consecutive
-lines that are the same into a single line, prefixed with a count of the
-number of occurrences. We probably want to sort that too and only keep
-the most common usernames:
+`sort` sorterar, ja, sin indata.
+`uniq -c` slår ihop intilliggande lika rader till en enda rad med ett antal före som visar antal förekomster.
+Vi vill sannolikt också sortera detta och bara behålla de vanligaste användarnamnen:
 
 ```bash
 ssh myserver journalctl
@@ -240,17 +221,15 @@ ssh myserver journalctl
  | sort -nk1,1 | tail -n10
 ```
 
-`sort -n` will sort in numeric (instead of lexicographic) order. `-k1,1`
-means "sort by only the first whitespace-separated column". The `,n`
-part says "sort until the `n`th field, where the default is the end of
-the line. In this _particular_ example, sorting by the whole line
-wouldn't matter, but we're here to learn!
+`sort -n` sorterar numeriskt (i stället för lexikografiskt).
+`-k1,1` betyder "sortera enbart på första blankteckensseparerade kolumnen".
+Delen `,n` betyder "sortera till och med det `n`:te fältet, där standard är radslut".
+I just _detta_ exempel spelar sortering på hela raden ingen roll, men vi är här för att lära oss.
 
-If we wanted the _least_ common ones, we could use `head` instead of
-`tail`. There's also `sort -r`, which sorts in reverse order.
+Om vi ville ha de _minst_ vanliga kunde vi använda `head` i stället för `tail`.
+Det finns också `sort -r`, som sorterar i omvänd ordning.
 
-Okay, so that's pretty cool, but what if we'd like to extract only the usernames
-as a comma-separated list instead of one per line, perhaps for a config file?
+Okej, detta är ganska coolt, men vad om vi vill extrahera bara användarnamnen som en kommaseparerad lista i stället för en per rad, kanske för en konfigurationsfil?
 
 ```bash
 ssh myserver journalctl
@@ -262,45 +241,37 @@ ssh myserver journalctl
  | awk '{print $2}' | paste -sd,
 ```
 
-If you're using macOS: note that the command as shown won't work with the BSD
-`paste` shipped with macOS. See [exercise 4 from the shell tools
-lecture](/2020/shell-tools/#exercises) for more on the difference between BSD
-and GNU coreutils and instructions for how to install GNU coreutils on macOS.
+Om du använder macOS: notera att kommandot som visas inte fungerar med BSD-`paste` som följer med macOS.
+Se [övning 4 i föreläsningen om skalverktyg]({{ '/2020/shell-tools/#exercises' | relative_url }}) för mer om skillnaden mellan BSD och GNU coreutils samt hur du installerar GNU coreutils på macOS.
 
-Let's start with `paste`: it lets you combine lines (`-s`) by a given
-single-character delimiter (`-d`; `,` in this case). But what's this `awk` business?
+Låt oss börja med `paste`: det låter dig slå ihop rader (`-s`) med en given avgränsare på ett tecken (`-d`; här `,`).
+Men vad är grejen med `awk`?
 
-## awk -- another editor
+## awk -- ännu en redigerare
 
-`awk` is a programming language that just happens to be really good at
-processing text streams. There is _a lot_ to say about `awk` if you were
-to learn it properly, but as with many other things here, we'll just go
-through the basics.
+`awk` är ett programmeringsspråk som råkar vara väldigt bra på att bearbeta textströmmar.
+Det finns _mycket_ att säga om `awk` om man vill lära sig det ordentligt, men som med mycket annat här går vi igenom grunderna.
 
-First, what does `{print $2}` do? Well, `awk` programs take the form of
-an optional pattern plus a block saying what to do if the pattern
-matches a given line. The default pattern (which we used above) matches
-all lines. Inside the block, `$0` is set to the entire line's contents,
-and `$1` through `$n` are set to the `n`th _field_ of that line, when
-separated by the `awk` field separator (whitespace by default, change
-with `-F`). In this case, we're saying that, for every line, print the
-contents of the second field, which happens to be the username!
+Först: vad gör `{print $2}`?
+`awk`-program har formen av ett valfritt mönster plus ett block som anger vad som ska göras om mönstret matchar en viss rad.
+Standardmönstret (som vi använde ovan) matchar alla rader.
+Inuti blocket sätts `$0` till hela radens innehåll, och `$1` till `$n` sätts till radens `n`:te _fält_, separerat av `awk`s fältseparator (blanktecken som standard, ändra med `-F`).
+I detta fall säger vi alltså: för varje rad, skriv ut innehållet i andra fältet, vilket råkar vara användarnamnet.
 
-Let's see if we can do something fancier. Let's compute the number of
-single-use usernames that start with `c` and end with `e`:
+Låt oss se om vi kan göra något mer avancerat.
+Låt oss beräkna antalet engångsanvändarnamn som börjar med `c` och slutar med `e`:
 
 ```bash
  | awk '$1 == 1 && $2 ~ /^c[^ ]*e$/ { print $2 }' | wc -l
 ```
 
-There's a lot to unpack here. First, notice that we now have a pattern
-(the stuff that goes before `{...}`). The pattern says that the first
-field of the line should be equal to 1 (that's the count from `uniq
--c`), and that the second field should match the given regular
-expression. And the block just says to print the username. We then count
-the number of lines in the output with `wc -l`.
+Det finns mycket att packa upp här.
+Först, notera att vi nu har ett mönster (delen före `{...}`).
+Mönstret säger att radens första fält ska vara lika med 1 (antalet från `uniq -c`) och att det andra fältet ska matcha det givna reguljära uttrycket.
+Blocket säger bara att skriva ut användarnamnet.
+Därefter räknar vi antalet rader i utdata med `wc -l`.
 
-However, `awk` is a programming language, remember?
+Men `awk` är ju ett programmeringsspråk, kom ihåg?
 
 ```awk
 BEGIN { rows = 0 }
@@ -308,33 +279,28 @@ $1 == 1 && $2 ~ /^c[^ ]*e$/ { rows += $1 }
 END { print rows }
 ```
 
-`BEGIN` is a pattern that matches the start of the input (and `END`
-matches the end). Now, the per-line block just adds the count from the
-first field (although it'll always be 1 in this case), and then we print
-it out at the end. In fact, we _could_ get rid of `grep` and `sed`
-entirely, because `awk` [can do it
-all](https://web.archive.org/web/20251210045942/https://backreference.org/2010/02/10/idiomatic-awk/), but we'll
-leave that as an exercise to the reader.
+`BEGIN` är ett mönster som matchar början av indata (och `END` matchar slutet).
+Nu adderar blocket per rad bara antalet från första fältet (även om det alltid blir 1 i just detta fall), och sedan skriver vi ut det i slutet.
+Faktum är att vi _skulle_ kunna ta bort både `grep` och `sed` helt, eftersom `awk` [kan göra
+allt](https://web.archive.org/web/20251210045942/https://backreference.org/2010/02/10/idiomatic-awk/), men vi lämnar det som övning till läsaren.
 
-## Analyzing data
+## Analysera data
 
-You can do math directly in your shell using `bc`, a calculator that can read
-from STDIN! For example, add the numbers on each line together by concatenating
-them together, delimited by `+`:
+Du kan göra matematik direkt i skalet med `bc`, en kalkylator som kan läsa från STDIN.
+Till exempel kan du addera talen på varje rad genom att slå samman dem med `+` mellan:
 
 ```bash
  | paste -sd+ | bc -l
 ```
 
-Or produce more elaborate expressions:
+Eller skapa mer avancerade uttryck:
 
 ```bash
 echo "2*($(data | paste -sd+))" | bc -l
 ```
 
-You can get stats in a variety of ways.
-[`st`](https://github.com/nferraz/st) is pretty neat, but if you already
-have [R](https://www.r-project.org/):
+Du kan få statistik på olika sätt.
+[`st`](https://github.com/nferraz/st) är rätt trevligt, men om du redan har [R](https://www.r-project.org/):
 
 ```bash
 ssh myserver journalctl
@@ -345,13 +311,10 @@ ssh myserver journalctl
  | awk '{print $1}' | R --no-echo -e 'x <- scan(file="stdin", quiet=TRUE); summary(x)'
 ```
 
-R is another (weird) programming language that's great at data analysis
-and [plotting](https://ggplot2.tidyverse.org/). We won't go into too
-much detail, but suffice to say that `summary` prints summary statistics
-for a vector, and we created a vector containing the input stream of
-numbers, so R gives us the statistics we wanted!
+R är ännu ett (märkligt) programmeringsspråk som är mycket bra för dataanalys och [plotting](https://ggplot2.tidyverse.org/).
+Vi går inte in i detalj här, men det räcker att säga att `summary` skriver ut sammanfattande statistik för en vektor, och att vi skapade en vektor med indataflödet av tal, så R ger oss statistiken vi ville ha.
 
-If you just want some simple plotting, `gnuplot` is your friend:
+Om du bara vill ha enklare diagram är `gnuplot` din vän:
 
 ```bash
 ssh myserver journalctl
@@ -363,28 +326,21 @@ ssh myserver journalctl
  | gnuplot -p -e 'set boxwidth 0.5; plot "-" using 1:xtic(2) with boxes'
 ```
 
-## Data wrangling to make arguments
+## Datahantering för att skapa argument
 
-Sometimes you want to do data wrangling to find things to install or
-remove based on some longer list. The data wrangling we've talked about
-so far + `xargs` can be a powerful combo.
+Ibland vill du använda datahantering för att hitta saker att installera eller ta bort utifrån en längre lista.
+Datahanteringen vi har pratat om + `xargs` kan vara en mycket kraftfull kombination.
 
-For example, as seen in lecture, I can use the following command to uninstall
-old nightly builds of Rust from my system by extracting the old build names
-using data wrangling tools and then passing them via `xargs` to the
-uninstaller:
+Som i föreläsningen kan jag till exempel använda följande kommando för att avinstallera gamla nightly-builds av Rust från mitt system genom att extrahera gamla buildnamn med datahanteringsverktyg och sedan skicka dem via `xargs` till avinstalleraren:
 
 ```bash
 rustup toolchain list | grep nightly | grep -vE "nightly-x86" | sed 's/-x86.*//' | xargs rustup toolchain uninstall
 ```
 
-## Wrangling binary data
+## Hantera binärdata
 
-So far, we have mostly talked about wrangling textual data, but pipes
-are just as useful for binary data. For example, we can use ffmpeg to
-capture an image from our camera, convert it to grayscale, compress it,
-send it to a remote machine over SSH, decompress it there, make a copy,
-and then display it.
+Hittills har vi mest pratat om hantering av textdata, men rör är lika användbara för binärdata.
+Vi kan till exempel använda ffmpeg för att ta en bild från kameran, konvertera den till gråskala, komprimera den, skicka den till en fjärrmaskin via SSH, dekomprimera den där, göra en kopia och sedan visa den.
 
 ```bash
 ffmpeg -loglevel panic -i /dev/video0 -frames 1 -f image2 -
@@ -393,57 +349,47 @@ ffmpeg -loglevel panic -i /dev/video0 -frames 1 -f image2 -
  | ssh mymachine 'gzip -d | tee copy.jpg | env DISPLAY=:0 feh -'
 ```
 
-# Exercises
+# Övningar
 
-1. Take this [short interactive regex tutorial](https://regexone.com/).
-2. Find the number of words (in `/usr/share/dict/words`) that contain at
-   least three `a`s and don't have a `'s` ending. What are the three
-   most common last two letters of those words? `sed`'s `y` command, or
-   the `tr` program, may help you with case insensitivity. How many
-   of those two-letter combinations are there? And for a challenge:
-   which combinations do not occur?
-3. To do in-place substitution it is quite tempting to do something like
-   `sed s/REGEX/SUBSTITUTION/ input.txt > input.txt`. However this is a
-   bad idea, why? Is this particular to `sed`? Use `man sed` to find out
-   how to accomplish this.
-4. Find your average, median, and max system boot time over the last ten
-   boots. Use `journalctl` on Linux and `log show` on macOS, and look
-   for log timestamps near the beginning and end of each boot. On Linux,
-   they may look something like:
+1. Gör den här [korta interaktiva regexhandledningen](https://regexone.com/).
+2. Hitta antalet ord (i `/usr/share/dict/words`) som innehåller minst tre `a` och inte slutar på `'s`.
+   Vilka är de tre vanligaste sista två bokstäverna i dessa ord?
+   `sed`-kommandot `y`, eller programmet `tr`, kan hjälpa med skiftlägesokänslighet.
+   Hur många sådana tvåbokstavskombinationer finns det?
+   Och som utmaning: vilka kombinationer förekommer inte?
+3. För att göra in-place-substitution är det frestande att göra något som `sed s/REGEX/SUBSTITUTION/ input.txt > input.txt`.
+   Men detta är en dålig idé, varför?
+   Gäller detta specifikt för `sed`?
+   Använd `man sed` för att ta reda på hur man gör detta korrekt.
+4. Hitta medelvärde, median och max för systemets uppstartstid över de senaste tio uppstarterna.
+   Använd `journalctl` i Linux och `log show` i macOS, och leta efter tidsstämplar nära början och slutet av varje uppstart.
+   I Linux kan de se ut ungefär så här:
    ```
    Logs begin at ...
    ```
-   and
+   och
    ```
    systemd[577]: Startup finished in ...
    ```
-   On macOS, [look
-   for](https://eclecticlight.co/2018/03/21/macos-unified-log-3-finding-your-way/):
+   I macOS, [leta
+   efter](https://eclecticlight.co/2018/03/21/macos-unified-log-3-finding-your-way/):
    ```
    === system boot:
    ```
-   and
+   och
    ```
    Previous shutdown cause: 5
    ```
-5. Look for boot messages that are _not_ shared between your past three
-   reboots (see `journalctl`'s `-b` flag). Break this task down into
-   multiple steps. First, find a way to get just the logs from the past
-   three boots. There may be an applicable flag on the tool you use to
-   extract the boot logs, or you can use `sed '0,/STRING/d'` to remove
-   all lines previous to one that matches `STRING`. Next, remove any
-   parts of the line that _always_ varies (like the timestamp). Then,
-   de-duplicate the input lines and keep a count of each one (`uniq` is
-   your friend). And finally, eliminate any line whose count is 3 (since
-   it _was_ shared among all the boots).
-6. Find an online data set like [this
-   one](https://commons.wikimedia.org/wiki/Data:Wikipedia_statistics/data.tab), [this
-   one](https://ucr.fbi.gov/crime-in-the-u.s/2016/crime-in-the-u.s.-2016/topic-pages/tables/table-1),
-   or maybe one [from
-   here](https://www.springboard.com/blog/data-science/free-public-data-sets-data-science-project/).
-   Fetch it using `curl` and extract out just two columns of numerical
-   data. If you're fetching HTML data,
-   [`pup`](https://github.com/EricChiang/pup) might be helpful. For JSON
-   data, try [`jq`](https://stedolan.github.io/jq/). Find the min and
-   max of one column in a single command, and the difference of the sum
-   of each column in another.
+5. Leta efter uppstartsmeddelanden som _inte_ delas mellan dina tre senaste omstarter (se `journalctl`-flaggan `-b`).
+   Dela upp uppgiften i flera steg.
+   Hitta först ett sätt att få ut bara loggarna från de tre senaste uppstarterna.
+   Det kan finnas en lämplig flagga i verktyget du använder för att extrahera uppstartsloggarna, eller så kan du använda `sed '0,/STRING/d'` för att ta bort alla rader före en rad som matchar `STRING`.
+   Ta sedan bort delar av raden som _alltid_ varierar (som tidsstämpeln).
+   Avdubbla därefter indata och behåll antal för varje rad (`uniq` är din vän).
+   Och till sist, eliminera alla rader vars antal är 3 (eftersom de _delades_ av alla uppstarter).
+6. Hitta en datamängd på nätet, som [den här](https://commons.wikimedia.org/wiki/Data:Wikipedia_statistics/data.tab), [den här](https://ucr.fbi.gov/crime-in-the-u.s/2016/crime-in-the-u.s.-2016/topic-pages/tables/table-1),
+   eller kanske en [härifrån](https://www.springboard.com/blog/data-science/free-public-data-sets-data-science-project/).
+   Hämta den med `curl` och extrahera bara två kolumner med numeriska data.
+   Om du hämtar HTML-data kan [`pup`](https://github.com/EricChiang/pup) vara hjälpsamt.
+   För JSON-data, prova [`jq`](https://stedolan.github.io/jq/).
+   Hitta min och max i en kolumn i ett enda kommando, och skillnaden mellan summorna av respektive kolumn i ett annat.

@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Program Introspection"
+title: "Programintrospektion"
 presenter: Anish
 date: 2019-01-29
 order: 1
@@ -9,77 +9,83 @@ video:
   id: 74MhV-7hYzg
 ---
 
-# Debugging
+# Felsökning (debugging)
 
-When printf-debugging isn't good enough: use a debugger.
+När printf-felsökning inte räcker:
+använd en felsökare.
 
-Debuggers let you interact with the execution of a program, letting you do
-things like:
+Debuggers låter dig interagera med körningen av ett program,
+så att du kan göra saker som:
 
-- halt execution of the program when it reaches a certain line
-- single-step through the program
-- inspect values of variables
-- many more advanced features
+- stoppa programkörning när den når en viss rad
+- stega programmet rad för rad
+- inspektera variabelvärden
+- många fler avancerade funktioner
 
 ## GDB/LLDB
 
-[GDB](https://www.gnu.org/software/gdb/) and [LLDB](https://lldb.llvm.org/).
-Supports many C-like languages.
+[GDB](https://www.gnu.org/software/gdb/) och [LLDB](https://lldb.llvm.org/).
+Stödjer många C-liknande språk.
 
-Let's look at [example.c](/2019/files/example.c). Compile with debug flags:
+Låt oss titta på [example.c]({{ '/2019/files/example.c' | relative_url }}).
+Kompilera med debug-flaggor:
 `gcc -g -o example example.c`.
 
-Open GDB:
+Öppna GDB:
 
 `gdb example`
 
-Some commands:
+Några kommandon:
 
 - `run`
-- `b {name of function}` - set a breakpoint
-- `b {file}:{line}` - set a breakpoint
-- `c` - continue
-- `step` / `next` / `finish` - step in / step over / step out
-- `p {variable}` - print value of variable
-- `watch {expression}` - set a watchpoint that triggers when the value of the expression changes
-- `rwatch {expression}` - set a watchpoint that triggers when the value is read
+- `b {name of function}` - sätt en brytpunkt
+- `b {file}:{line}` - sätt en brytpunkt
+- `c` - fortsätt
+- `step` / `next` / `finish` - stega in / stega över / stega ut
+- `p {variable}` - skriv ut variabelvärde
+- `watch {expression}` - sätt en bevakningspunkt som triggar när uttryckets värde ändras
+- `rwatch {expression}` - sätt en bevakningspunkt som triggar när värdet läses
 - `layout`
 
 ## PDB
 
-[PDB](https://docs.python.org/3/library/pdb.html) is the Python debugger.
+[PDB](https://docs.python.org/3/library/pdb.html) är Pythons felsökare.
 
-Insert `import pdb; pdb.set_trace()` where you want to drop into PDB, basically
-a hybrid of a debugger (like GDB) and a Python shell.
+Infoga `import pdb; pdb.set_trace()` där du vill hoppa in i PDB.
+Det är i praktiken en hybrid av felsökare (som GDB) och Python-skal.
 
-## Web browser Developer Tools
+## Utvecklarverktyg i webbläsaren
 
-Another example of a debugger, this time with a graphical interface.
+Ytterligare ett exempel på en felsökare,
+denna gång med grafiskt gränssnitt.
 
 # strace
 
-Observe system calls a program makes: `strace {program}`.
+Observera systemanrop som ett program gör: `strace {program}`.
 
-# Profiling
+# Profilering
 
-Types of profiling: CPU, memory, etc.
+Typer av profilering:
+CPU,
+minne,
+osv.
 
-Simplest profiler: `time`.
+Enklaste profileraren: `time`.
 
 ## Go
 
-Run test code with CPU profiler: `go test -cpuprofile=cpu.out`
+Kör testkod med CPU-profilerare: `go test -cpuprofile=cpu.out`
 
-Analyze profile: `go tool pprof -web cpu.out`
+Analysera profil: `go tool pprof -web cpu.out`
 
-Run test code with Memory profiler: `go test -memprofile=mem.out`
+Kör testkod med minnesprofilerare: `go test -memprofile=mem.out`
 
-Analyze profile: `go tool pprof -web mem.out`
+Analysera profil: `go tool pprof -web mem.out`
 
 ## Perf
 
-Basic performance stats: `perf stat {command}`
+Grundläggande prestandastatistik: `perf stat {command}`
 
-Run a program with the profiler: `perf record {command}`
+Kör ett program med profileraren: `perf record {command}`
 
-Analyze profile: `perf report`
+Analysera profil: `perf report`

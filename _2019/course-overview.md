@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Course Overview"
+title: "Kursöversikt"
 presenter: Anish
 date: 2019-01-15
 order: 1
@@ -11,28 +11,33 @@ video:
 
 # Motivation
 
-This class is about [hacker](https://en.wikipedia.org/wiki/Hacker_culture)
-tools, not [hacker](https://en.wikipedia.org/wiki/Security_hacker) tools.
+Den här kursen handlar om verktyg i [hackerkulturen](https://en.wikipedia.org/wiki/Hacker_culture),
+inte verktyg för [säkerhetshackning](https://en.wikipedia.org/wiki/Security_hacker).
 
-MIT classes do not cover any of this content in detail. It's hugely beneficial
-to be proficient with your tools: it'll save you a lot of time (and the payoff
-time is very short).
+MIT-kurser går sällan igenom det här innehållet i detalj.
+Det är mycket värdefullt att vara skicklig med sina verktyg.
+Det sparar mycket tid, och det lönar sig snabbt.
 
-We want to teach you about new tools, how to make the most of your tools, how
-to customize your tools, and how to extend your tools.
+Vi vill lära dig nya verktyg,
+hur du får ut maximalt av dina verktyg,
+hur du anpassar dem,
+och hur du bygger ut dem.
 
-# Class structure
+# Kursupplägg
 
-We have 6 lectures covering a [variety of topics](/2019/). We have lecture
-notes online, but there will be a lot of content covered in class (e.g. in the
-form of demos) that may not be in the notes. We will be recording lectures.
+Vi har sex föreläsningar som täcker [en bredd av ämnen]({{ '/2019/' | relative_url }}).
+Vi har föreläsningsanteckningar online,
+men mycket innehåll som tas upp i klassrummet (till exempel demonstrationer) finns kanske inte i anteckningarna.
+Vi spelar in föreläsningarna.
 
-Each class is split into two 50-minute lectures with a 10-minute break in
-between. Lectures are mostly live demonstrations followed by hands-on
-exercises. We might have a short amount of time at the end of each class to get
-started on the exercises in an office-hours-style setting.
+Varje kurstillfälle är uppdelat i två föreläsningspass på 50 minuter,
+med en 10-minuters paus emellan.
+Föreläsningarna består främst av direkta demonstrationer,
+följt av praktiska övningar.
+Vi brukar också få en kort stund i slutet av varje tillfälle för att börja med övningarna i ett upplägg som liknar handledningstid.
 
-To make the most of the class, you should go through all the exercises on your
-own. We'll inspire you to learn more about your tools, and we'll show you
-what's possible and cover some of the basics in detail, but we can't teach you
-everything in the time we have.
+För att få ut mest av kursen bör du göra alla övningar på egen hand.
+Vi kommer att inspirera dig att lära dig mer om dina verktyg,
+visa vad som är möjligt,
+och gå igenom vissa grunder i detalj,
+men vi kan inte lära ut allt under den tid vi har.

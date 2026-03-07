@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Web and Browsers"
+title: "Webben och webbläsare"
 presenter: Jose
 date: 2019-01-31
 order: 1
@@ -10,65 +10,86 @@ video:
 special: true
 ---
 
-Apart from the terminal, the web browser is a tool you will find yourself spending significant amounts of time into. Thus it is worth learning how to use it efficiently and
+Utöver terminalen är webbläsaren ett verktyg du kommer att tillbringa mycket tid i.
+Därför är det värt att lära sig använda den effektivt.
 
-## Shortcuts
+## Kortkommandon
 
-Clicking around in your browser is often not the fastest option, getting familiar with common shortcuts can really pay off in the long run.
+Att klicka runt i webbläsaren är ofta inte snabbast.
+Att bli bekant med vanliga kortkommandon lönar sig på sikt.
 
-- `Middle Button Click` in a link opens it in a new tab
-- `Ctrl+T` Opens a new tab
-- `Ctrl+Shift+T` Reopens a recently closed tab
-- `Ctrl+L` selects the contents of the search bar
-- `Ctrl+F` to search within a webpage. If you do this often, you may benefit from an extension that supports regular expressions in searches.
-
-
-## Search operators
-
-Web search engines like Google or DuckDuckGo provide search operators to enable more elaborate web searches:
-
-- `"bar foo"` enforces an exact match of bar foo
-- `foo site:bar.com` searches for foo within bar.com
-- `foo -bar ` excludes the terms containing bar from the search
-- `foobar filetype:pdf` Searches for files of that extension
-- `(foo|bar)` searches for matches that have foo OR bar
-
-More through lists are available for popular engines like [Google](https://ahrefs.com/blog/google-advanced-search-operators/) and [DuckDuckGo](https://duck.co/help/results/syntax)
+- `Middle Button Click` på en länk öppnar den i en ny flik
+- `Ctrl+T` öppnar en ny flik
+- `Ctrl+Shift+T` öppnar nyligen stängd flik igen
+- `Ctrl+L` markerar innehållet i adressfältet
+- `Ctrl+F` söker på en webbsida.
+Om du gör detta ofta kan du ha nytta av ett tillägg som stödjer reguljära uttryck i sökning.
 
 
-## Searchbar
+## Sökoperatorer
 
-The searchbar is a powerful tool too. Most browsers can infer search engines from websites and will store them. By editing the keyword argument
+Sökmotorer på webben, som Google eller DuckDuckGo, erbjuder sökoperatorer för mer avancerade sökningar:
 
-- In Google Chrome they are in [chrome://settings/searchEngines](chrome://settings/searchEngines)
-- In Firefox they are in [about:preferences#search](about:preferences#search)
+- `"bar foo"` tvingar exakt matchning av bar foo
+- `foo site:bar.com` söker efter foo inom bar.com
+- `foo -bar ` utesluter träffar som innehåller bar
+- `foobar filetype:pdf` söker efter filer med den filändelsen
+- `(foo|bar)` söker efter träffar med foo ELLER bar
 
-For example you can make so that `y SOME SEARCH TERMS` to directly search in youtube.
-
-Moreover, if you own a domain you can setup subdomain forwards using your registrar. For instance I have mapped `https://ht.josejg.com` to this course website. That way I can just type `ht.` and the searchbar will autocomplete. Another good feature of this setup is that unlike bookmarks they will work in every browser.
-
-## Privacy extensions
-
-Nowadays surfing the web can get quite annoying due to ads and invasive due to trackers. Moreover a good adblocker not only blocks most ad content but it will also block sketchy and malicious websites since they will be included in the common blacklists. They will also reduce page load times sometimes by reducing the amount of requests performed. A couple of recommendations are:
-
-- **uBlock origin** ([Chrome](https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/)): block ads and trackers based on predefined rules. You should also consider taking a look at the enabled blacklists in settings since you can enable more based on your region or browsing habits. You can even install filters from [around the web](https://github.com/gorhill/uBlock/wiki/Filter-lists-from-around-the-web)
-
-- **[Privacy Badger](https://privacybadger.org/)**: detects and blocks trackers automatically. For example when you go from website to website ad companies track which sites you visit and build a profile of you
-
-- **[HTTPS everywhere](https://www.eff.org/https-everywhere)** is a wonderful extension that redirects to HTTPS version of a website automatically, if available.
-
-You can find about more addons of this kind [here](https://www.privacytools.io/privacy-browser-addons/)
-
-## Style customization
-
-Web browsers are just another piece of software running in _your machine_ and thus you usually have the last say about what they should display or how they should behave. An example of this are custom styles. Browsers determine how to render the style of a  webpage using Cascading Style Sheets often abbreviated as CSS.
-
-You can access the source code of a website by inspecting it and changing its contents and styles temporarily (this is also a reason why you should never trust webpage screenshots).
-
-If you want to permanently tell your browser to override the style settings for a webpage you will need to use an extension. Our recommendation is **[Stylus](https://github.com/openstyles/stylus)** ([Firefox](https://addons.mozilla.org/en-US/firefox/addon/styl-us/), [Chrome](https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne?hl=en)).
+Mer utförliga listor finns för populära motorer som [Google](https://ahrefs.com/blog/google-advanced-search-operators/) och [DuckDuckGo](https://duck.co/help/results/syntax).
 
 
-For example, we can write the following style for the class website
+## Adressfältet
+
+Adressfältet är också ett kraftfullt verktyg.
+De flesta webbläsare kan härleda sökmotorer från webbplatser och lagrar dem.
+Genom att redigera nyckelordsargumentet:
+
+- I Google Chrome finns de på [chrome://settings/searchEngines](chrome://settings/searchEngines)
+- I Firefox finns de på [about:preferences#search](about:preferences#search)
+
+Till exempel kan du göra så att `y SOME SEARCH TERMS` söker direkt på YouTube.
+
+Om du äger en domän kan du dessutom sätta upp vidarebefordran av subdomäner hos din registrar.
+Jag har till exempel pekat `https://ht.josejg.com` till kurswebbplatsen.
+Då kan jag bara skriva `ht.` så autokompletterar adressfältet.
+En annan fördel med upplägget är att det, till skillnad från bokmärken, fungerar i alla webbläsare.
+
+## Integritetstillägg
+
+Numera kan webbsurfning bli ganska störig på grund av annonser och påträngande spårning.
+En bra annonsblockerare blockerar inte bara annonsinnehåll,
+utan kan också blockera suspekta och skadliga webbplatser eftersom de ofta finns i vanliga blocklistor.
+Ibland förbättras även laddningstider eftersom färre förfrågningar skickas.
+Några rekommendationer:
+
+- **uBlock origin** ([Chrome](https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/)): blockerar annonser och spårare utifrån fördefinierade regler.
+Du bör också titta på aktiverade blocklistor i inställningarna,
+eftersom du kan slå på fler beroende på region eller surfvanor.
+Du kan till och med installera filter från [olika källor på webben](https://github.com/gorhill/uBlock/wiki/Filter-lists-from-around-the-web).
+
+- **[Privacy Badger](https://privacybadger.org/)**: upptäcker och blockerar spårare automatiskt.
+När du går mellan olika webbplatser kan annonsbolag till exempel spåra vad du besöker och bygga en profil av dig.
+
+- **[HTTPS everywhere](https://www.eff.org/https-everywhere)** är ett utmärkt tillägg som automatiskt omdirigerar till HTTPS-versionen av en webbplats om den finns.
+
+Du hittar fler tillägg av den här typen [här](https://www.privacytools.io/privacy-browser-addons/).
+
+## Stilanpassning
+
+Webbläsare är bara ännu en programvara som kör på _din maskin_,
+så du har i regel sista ordet om vad de ska visa och hur de ska bete sig.
+Ett exempel är anpassade stilar.
+Webbläsare avgör hur en webbsidas stil renderas med Cascading Style Sheets, oftast förkortat CSS.
+
+Du kan komma åt en webbplats källkod genom att inspektera den och ändra innehåll och stilar tillfälligt.
+(Det är också en anledning till att du aldrig bör lita blint på skärmbilder av webbsidor.)
+
+Om du permanent vill att webbläsaren ska skriva över stilinställningar för en webbplats behöver du ett tillägg.
+Vår rekommendation är **[Stylus](https://github.com/openstyles/stylus)** ([Firefox](https://addons.mozilla.org/en-US/firefox/addon/styl-us/), [Chrome](https://chrome.google.com/webstore/detail/stylus/clngdbkpkpeebahjckkjfobafhncgmne?hl=en)).
+
+
+Vi kan till exempel skriva följande stil för kurswebbplatsen.
 
 
 ```css
@@ -86,14 +107,18 @@ a:link {
 }
 ```
 
-Moreover, Stylus can find styles written by other users and published in [userstyles.org](https://userstyles.org/). Most common websites have one or several dark theme stylesheets for instance. FYI, you should not use Stylish since it was shown to leak user data, more [here](https://arstechnica.com/information-technology/2018/07/stylish-extension-with-2m-downloads-banished-for-tracking-every-site-visit/)
+Stylus kan dessutom hitta stilar skrivna av andra användare och publicerade på [userstyles.org](https://userstyles.org/).
+Många vanliga webbplatser har till exempel en eller flera mörka teman.
+Använd däremot inte Stylish,
+eftersom tillägget visat sig läcka användardata.
+Läs mer [här](https://arstechnica.com/information-technology/2018/07/stylish-extension-with-2m-downloads-banished-for-tracking-every-site-visit/).
 
 
-## Functionality Customization
+## Anpassa funktionalitet
 
-In the same way that you can modify the style, you can also modify the behaviour of a website by writing custom javascript and them sourcing it using a web browser extension such as [Tampermonkey](https://tampermonkey.net/)
+På samma sätt som du kan ändra stil kan du också ändra beteendet hos en webbplats genom att skriva egen JavaScript och ladda den via ett webbläsartillägg som [Tampermonkey](https://tampermonkey.net/).
 
-For example the following script enables vim-like navigation using the J and K keys.
+Följande skript aktiverar till exempel vim-liknande navigering med tangenterna J och K.
 
 ```js
 // ==UserScript==
@@ -122,14 +147,28 @@ For example the following script enables vim-like navigation using the J and K k
 })();
 ```
 
-There are also script repositories such as [OpenUserJS](https://openuserjs.org/) and [Greasy Fork](https://greasyfork.org/en). However, be warned, installing user scripts from others can be very dangerous since they can pretty much do anything such as steal your credit card numbers. Never install a script unless you read the whole thing yourself, understand what it does, and are absolutely sure that you know it isn't doing anything suspicious. Never install a script that contains minified or obfuscated code that you can't read!
+Det finns också skriptarkiv som [OpenUserJS](https://openuserjs.org/) och [Greasy Fork](https://greasyfork.org/en).
+Men var försiktig:
+att installera användarskript från andra kan vara mycket farligt,
+eftersom de i princip kan göra vad som helst, till exempel stjäla dina kortuppgifter.
+Installera aldrig ett skript om du inte läst hela själv,
+förstått vad det gör,
+och är helt säker på att det inte gör något misstänkt.
+Installera aldrig skript med minifierad eller obfuskerad kod som du inte kan läsa.
 
-## Web APIs
+## Webb-API:er
 
-It has become more and more common for webservices to offer an application interface aka web API so you can interact with the services making web requests.
-A more in depth introduction to the topic can be found [here](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Introduction). There are [many public APIs](https://github.com/toddmotto/public-apis). Web APIs can be useful for very many reasons:
+Det har blivit allt vanligare att webbtjänster erbjuder ett applikationsgränssnitt, alltså ett webb-API,
+så att du kan interagera med tjänsten via webbförfrågningar.
+En mer djupgående introduktion finns [här](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Introduction).
+Det finns [många publika API:er](https://github.com/toddmotto/public-apis).
+Webb-API:er kan vara användbara av många skäl:
 
-- **Retrieval**. Web APIs can quite easily provide you information such as maps, weather or what your public ip address. For instance `curl ipinfo.io` will return a JSON object with some details about your public ip, region, location, &c. With proper parsing these tools can be integrated even with command line tools. The following bash functions talks to Googles autocompletion API and returns the first ten matches.
+- **Hämtning**.
+Webb-API:er kan enkelt ge dig information som kartor, väder eller din publika IP-adress.
+Till exempel returnerar `curl ipinfo.io` ett JSON-objekt med detaljer om publik IP, region, plats, osv.
+Med korrekt parsning kan sådana verktyg integreras även med kommandoradsverktyg.
+Följande bash-funktion pratar med Googles API för autokomplettering och returnerar de tio första träffarna.
 
 ```bash
 function c() {
@@ -141,18 +180,28 @@ function c() {
 }
 ```
 
-- **Interaction**. Web API endpoints can also be used to trigger actions. These usually require some sort of authentication token that you can obtain through the service. For example performing the following
-`curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' "https://hooks.slack.com/services/$SLACK_TOKEN"` will send a `Hello, World!` message in a channel.
+- **Interaktion**.
+API-endpoints kan också användas för att trigga handlingar.
+Det kräver vanligtvis någon form av autentiseringstoken som du får via tjänsten.
+Till exempel skickar följande
+`curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' "https://hooks.slack.com/services/$SLACK_TOKEN"`
+ett `Hello, World!`-meddelande i en kanal.
 
-- **Piping**. Since some services with web APIs are rather popular, common web API "gluing" has already been implemented and is provided with server included. This is the case for services like [If This Then That](https://ifttt.com/) and [Zapier](https://zapier.com/)
+- **Kopplingar**.
+Eftersom vissa tjänster med webb-API:er är populära finns vanlig API-"ihopkoppling" redan implementerad och tillhandahålls som tjänst.
+Det gäller tjänster som [If This Then That](https://ifttt.com/) och [Zapier](https://zapier.com/).
 
 
-## Web Automation
+## Webbautomatisering
 
-Sometimes web APIs are not enough. If only reading is needed you can use a html parser like `pup` or use a library, for example python has BeautifulSoup. However if interactivity or javascript execution is required those solutions fall short. WebDriver
+Ibland räcker webb-API:er inte till.
+Om du bara behöver läsa innehåll kan du använda en HTML-parser som `pup` eller ett bibliotek,
+till exempel BeautifulSoup i Python.
+Men om interaktivitet eller JavaScript-körning krävs räcker de lösningarna inte.
+Då är WebDriver relevant.
 
 
-For example, the following script will save the specified url using the wayback machine simulating the interaction of typing the website.
+Följande skript sparar till exempel angiven URL i Wayback Machine genom att simulera interaktionen att skriva in webbplatsen.
 
 ```python
 from selenium.webdriver import Firefox
@@ -175,12 +224,16 @@ snapshot_wayback(driver, url)
 ```
 
 
-## Exercises
+## Övningar
 
-1. Edit a keyword search engine that you use often in your web browser
-1. Install the mentioned extensions. Look into how uBlock Origin/Privacy Badger can be disabled for a website. What differences do you see? Try doing it in a website with plenty of ads like YouTube.
-1. Install Stylus and write a custom style for the class website using the CSS provided. Here are some common programming characters `=   ==   ===   >=   =>   ++   /=   ~=`. What happens to them when changing the font to Fira Code? If you want to know more search for programming font ligatures.
-1. Find a web api to get the weather in your city/area.
-1. Use a WebDriver software like [Selenium](https://www.selenium.dev/documentation/) to automate some repetitive manual task that you perform often with your browser.
-
-
+1. Redigera en nyckelordsbaserad sökmotor som du använder ofta i webbläsaren.
+1. Installera de nämnda tilläggen.
+Undersök hur uBlock Origin/Privacy Badger kan inaktiveras för en webbplats.
+Vilka skillnader ser du?
+Testa på en webbplats med mycket annonser, som YouTube.
+1. Installera Stylus och skriv en egen stil för kurswebbplatsen med den CSS som ges.
+Här är några vanliga programmeringstecken: `=   ==   ===   >=   =>   ++   /=   ~=`.
+Vad händer med dem när du byter typsnitt till Fira Code?
+Om du vill veta mer, sök på typsnittsligaturer för programmering.
+1. Hitta ett webb-API för väder i din stad eller region.
+1. Använd en WebDriver-programvara som [Selenium](https://www.selenium.dev/documentation/) för att automatisera en repetitiv manuell uppgift du ofta gör i webbläsaren.

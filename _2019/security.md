@@ -1,31 +1,33 @@
 ---
 layout: lecture
-title: "Security and Privacy"
+title: "Säkerhet och integritet"
 presenter: Jon
 date: 2019-01-31
 order: 2
 video:
   aspect: 56.25
   id: OBx_c-i-M8s
-special: true
 ---
 
-The world is a scary place, and everyone's out to get you.
+Världen kan vara en skrämmande plats, och alla verkar vara ute efter dig.
 
-Okay, maybe not, but that doesn't mean you want to flaunt all your
-secrets. Security (and privacy) is generally all about raising the bar
-for attackers. Find out what your threat model is, and then design your
-security mechanisms around that! If the threat model is the NSA or
-Mossad, you're _probably_ going to have a bad time.
+Okej, kanske inte riktigt så.
+Men det betyder inte att du vill skylta med alla dina hemligheter.
+Säkerhet (och integritet) handlar i allmänhet om att höja ribban för angripare.
+Ta reda på vilken hotmodell du har,
+och utforma sedan dina skydd utifrån den.
+Om hotmodellen är NSA eller Mossad kommer du _sannolikt_ få det svårt.
 
-There are _many_ ways to make your technical persona more secure. We'll
-touch on a lot of high-level things here, but this is a process, and
-educating yourself is one of the best things you can do. So:
+Det finns _många_ sätt att göra din digitala närvaro säkrare.
+Vi tar upp en rad övergripande saker här,
+men detta är en process,
+och att utbilda dig själv är en av de bästa investeringarna du kan göra.
+Så:
 
-## Follow the Right People
+## Följ rätt personer
 
-One of the best ways to improve your security know-how is to follow
-other people who are vocal about security. Some suggestions:
+Ett av de bästa sätten att förbättra ditt säkerhetskunnande är att följa personer som är aktiva i säkerhetsfrågor.
+Några förslag:
 
  - [@TroyHunt](https://twitter.com/TroyHunt)
  - [@SwiftOnSecurity](https://twitter.com/SwiftOnSecurity)
@@ -35,179 +37,192 @@ other people who are vocal about security. Some suggestions:
  - [@mattblaze](https://twitter.com/mattblaze)
  - [@moxie](https://twitter.com/moxie)
 
-See also [this
-list](https://heimdalsecurity.com/blog/best-twitter-cybersec-accounts/)
-for more suggestions.
+Se också [den här
+listan](https://heimdalsecurity.com/blog/best-twitter-cybersec-accounts/)
+för fler förslag.
 
-## General Security Advice
+## Allmänna säkerhetsråd
 
-Tech Solidarity has a pretty great list of [do's and don'ts for
-journalists](https://web.archive.org/web/20221123204419/https://techsolidarity.org/resources/basic_security.htm)
-that has a lot of sane advice, and is decently up-to-date. [@thegrugq](https://medium.com/@thegrugq)
-also has a good blog post on [travel security
-advice](https://medium.com/@thegrugq/stop-fabricating-travel-security-advice-35259bf0e869)
-that's worth reading. We'll repeat much of the advice from those sources
-here, plus some more. Also, get a [USB data
-blocker](https://www.amazon.com/dp/B00QRRZ2QM/), because [USB is
-scary](https://www.bleepingcomputer.com/news/security/heres-a-list-of-29-different-types-of-usb-attacks/).
+Tech Solidarity har en mycket bra lista med [do's and don'ts för
+journalister](https://web.archive.org/web/20221123204419/https://techsolidarity.org/resources/basic_security.htm)
+som innehåller mycket sunt råd och är ganska uppdaterad.
+[@thegrugq](https://medium.com/@thegrugq) har också ett bra blogginlägg om [säkerhet vid resor](https://medium.com/@thegrugq/stop-fabricating-travel-security-advice-35259bf0e869)
+som är värt att läsa.
+Vi upprepar mycket av råden därifrån här, plus en del till.
+Skaffa också en [USB-data
+blockerare](https://www.amazon.com/dp/B00QRRZ2QM/), eftersom [USB kan vara
+läskigt](https://www.bleepingcomputer.com/news/security/heres-a-list-of-29-different-types-of-usb-attacks/).
 
-## Authentication
+## Autentisering
 
-The very first thing you should do, if you haven't already, is download
-a password manager. Some good ones are:
+Det första du bör göra, om du inte redan gjort det, är att skaffa en lösenordshanterare.
+Några bra alternativ är:
 
  - [1password](https://1password.com/)
  - [KeePass](https://keepass.info/)
  - [BitWarden](https://bitwarden.com/)
  - [`pass`](https://git.zx2c4.com/password-store/about/)
 
-If you're particularly paranoid, use one that encrypts the passwords
-locally on your computer, as opposed to storing them in plain-text at
-the server. Use it to generate passwords
-for all the web sites you care about right now. Then, switch on
-two-factor authentication, ideally with a
-[FIDO/U2F](https://fidoalliance.org/) dongle (a
-[YubiKey](https://www.yubico.com/quiz/) for example, which has [20% off
-for students](https://www.yubico.com/why-yubico/for-education/)). TOTP
-(like Google Authenticator or Duo) will also work in a pinch, but
-[doesn't protect against
-phishing](https://twitter.com/taviso/status/1082015009348104192). SMS is
-pretty much useless unless your threat model only includes random
-strangers picking up your password in transit.
+Om du är extra försiktig,
+använd en som krypterar lösenorden lokalt på din dator,
+i stället för att lagra dem i klartext på servern.
+Använd den för att generera lösenord
+till alla webbplatser du bryr dig om redan nu.
+Slå sedan på tvåfaktorsautentisering,
+helst med en
+[FIDO/U2F](https://fidoalliance.org/)-dongel (till exempel en
+[YubiKey](https://www.yubico.com/quiz/), som har [20% rabatt för studenter](https://www.yubico.com/why-yubico/for-education/)).
+TOTP (som Google Authenticator eller Duo) fungerar också i nödfall,
+men [skyddar inte mot
+phishing](https://twitter.com/taviso/status/1082015009348104192).
+SMS är i stort sett värdelöst,
+om inte din hotmodell enbart består av slumpmässiga främlingar som snappar upp lösenord i transit.
 
-Also, a note about paper keys. Often, services will give you a "backup
-key" that you can use as a second factor if you lose your real second
-factor (btw, always keep a backup dongle somewhere safe!). While you
-_can_ stick those in your password managers, that means that should
-someone get access to your password manager, you're totally hosed (but
-maybe you're okay with that thread model). If you are truly paranoid,
-print out these paper keys, never store them digitally, and place them
-in a safe in the real world.
+En notering om pappersnycklar:
+tjänster ger dig ofta en "reservnyckel" som kan användas som andra faktor om du tappar din riktiga.
+(Ha alltid en reservdongel på en säker plats.)
+Du _kan_ lägga dessa nycklar i lösenordshanteraren,
+men då är du helt körd om någon får tillgång till den
+(om du inte accepterar den hotmodellen).
+Om du är riktigt paranoid,
+skriv ut pappersnycklarna,
+lagra dem aldrig digitalt,
+och lägg dem i ett fysiskt kassaskåp.
 
-## Private Communication
+## Privat kommunikation
 
-Use [Signal](https://www.signal.org/) ([setup
-instructions](https://medium.com/@mshelton/signal-for-beginners-c6b44f76a1f0).
-[Wire](https://wire.com/en/) is [fine
-too](https://www.securemessagingapps.com/); WhatsApp is okay; [don't use
-Telegram](https://twitter.com/bascule/status/897187286554628096)).
-Desktop messengers are pretty broken (partially due to usually relying
-on Electron, which is a huge trust stack).
+Använd [Signal](https://www.signal.org/) ([installationsguide](https://medium.com/@mshelton/signal-for-beginners-c6b44f76a1f0)).
+[Wire](https://wire.com/en/) är [också okej](https://www.securemessagingapps.com/).
+WhatsApp är okej.
+[Använd inte Telegram](https://twitter.com/bascule/status/897187286554628096).
+Skrivbordsmeddelandeprogram är ganska trasiga
+(delvis eftersom de ofta bygger på Electron, vilket ger en stor tillitsyta).
 
-E-mail is particularly problematic, even if PGP signed. It's not
-generally forward-secure, and the key-distribution problem is pretty
-severe. [keybase.io](https://keybase.io/) helps, and is useful for a
-number of other reasons. Also, PGP keys are generally handled on desktop
-computers, which is one of the least secure computing environments.
-Relatedly, consider getting a Chromebook, or just work on a tablet with
-a keyboard.
+E-post är särskilt problematiskt, även med PGP-signering.
+Det är normalt inte forward-secure,
+och nyckeldistributionsproblemet är betydande.
+[keybase.io](https://keybase.io/) hjälper,
+och är användbart av flera andra skäl.
+PGP-nycklar hanteras dessutom oftast på skrivbordsdatorer,
+vilket är en av de minst säkra datormiljöerna.
+I samma anda kan du överväga en Chromebook,
+eller att arbeta på en surfplatta med tangentbord.
 
-## File Security
+## Filsäkerhet
 
-File security is hard, and operates on many level. What is it you're
-trying to secure against?
+Filsäkerhet är svårt och sker på många nivåer.
+Vad är det egentligen du försöker skydda dig mot?
 
 [![$5 wrench](https://imgs.xkcd.com/comics/security.png)](https://xkcd.com/538/)
 
- - Offline attacks (someone steals your laptop while it's off): turn on
-   full disk encryption. ([cryptsetup +
+ - Offline-attacker (någon stjäl din laptop när den är avstängd): slå på
+   full diskkryptering. ([cryptsetup +
    LUKS](https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_a_non-root_file_system)
-   on Linux,
+   på Linux,
    [BitLocker](https://fossbytes.com/enable-full-disk-encryption-windows-10/)
-   on Windows, [FileVault](https://support.apple.com/en-us/HT204837) on
-   macOS. Note that this won't help if the attacker _also_ has you and
-   really wants your secrets.
- - Online attacks (someone has your laptop and it's on): use file
-   encryption. There are two primary mechanisms for doing so
-    - Encrypted filesystems: stacked filesystem encryption software encrypts files individually rather than having encrypted block devices. You can "mount" these filesystems by providing the decryption key, and then browse the files inside it freely. When you unmount it, those files are all unavailable.  Modern solutions include [gocryptfs](https://github.com/rfjakob/gocryptfs) and [eCryptFS](https://www.ecryptfs.org/). More detailed comparisons can be found [here](https://nuetzlich.net/gocryptfs/comparison/) and [here](https://wiki.archlinux.org/index.php/disk_encryption#Comparison_table)
-    - Encrypted files: encrypt individual files with symmetric
-      encryption (see `gpg -c`) and a secret key. Or, like `pass`, also
-      encrypt the key with your public key so only you can read it back
-      later with your private key. Exact encryption settings matter a
-      lot!
+   på Windows, [FileVault](https://support.apple.com/en-us/HT204837) på
+   macOS.
+   Observera att detta inte hjälper om angriparen _också_ har dig och verkligen vill åt dina hemligheter.
+ - Online-attacker (någon har din laptop och den är igång): använd filkryptering.
+   Det finns två huvudsakliga mekanismer:
+    - Krypterade filsystem: lagerbaserad filsystemskryptering krypterar filer individuellt i stället för krypterade blockenheter.
+      Du kan "montera" dessa filsystem med dekrypteringsnyckeln och sedan bläddra fritt i filerna.
+      När du avmonterar dem blir filerna otillgängliga.
+      Moderna lösningar är [gocryptfs](https://github.com/rfjakob/gocryptfs) och [eCryptFS](https://www.ecryptfs.org/).
+      Mer detaljerade jämförelser finns [här](https://nuetzlich.net/gocryptfs/comparison/) och [här](https://wiki.archlinux.org/index.php/disk_encryption#Comparison_table).
+    - Krypterade filer: kryptera enskilda filer med symmetrisk
+      kryptering (se `gpg -c`) och en hemlig nyckel.
+      Eller, som `pass`, kryptera också nyckeln med din publika nyckel så att bara du kan läsa tillbaka den med din privata nyckel.
+      Exakta krypteringsinställningar spelar stor roll.
  - [Plausible
    deniability](https://en.wikipedia.org/wiki/Plausible_deniability)
-   (what seems to be the problem officer?): usually lower performance,
-   and easier to lose data. Hard to actually prove that it provides
+   ("vad verkar vara problemet, konstapeln?"):
+   vanligtvis sämre prestanda,
+   och lättare att tappa data.
+   Svårt att faktiskt bevisa att det ger
    [deniable
-   encryption](https://en.wikipedia.org/wiki/Deniable_encryption)! See
-   the [discussion
-   here](https://security.stackexchange.com/questions/135846/is-plausible-deniability-actually-feasible-for-encrypted-volumes-disks),
-   and then consider whether you may want to try
-   [VeraCrypt](https://www.veracrypt.fr/en/Home.html) (the maintained
-   fork of good ol' TrueCrypt).
- - Encrypted backups: use [Tarsnap](https://www.tarsnap.com/) or [Borgbase](https://www.borgbase.com/)
-    - Think about whether an attacker can delete your backups if they
-      get a hold of your laptop!
+   encryption](https://en.wikipedia.org/wiki/Deniable_encryption).
+   Se [diskussionen
+   här](https://security.stackexchange.com/questions/135846/is-plausible-deniability-actually-feasible-for-encrypted-volumes-disks),
+   och överväg sedan om du vill prova
+    [VeraCrypt](https://www.veracrypt.fr/en/Home.html) (den underhållna forken av gamla goda TrueCrypt).
+ - Krypterade säkerhetskopior: använd [Tarsnap](https://www.tarsnap.com/) eller [Borgbase](https://www.borgbase.com/)
+    - Tänk på om en angripare kan radera dina säkerhetskopior om de
+      får tag i din laptop.
 
-## Internet Security & Privacy
+## Internetsäkerhet och integritet
 
-The internet is a _very_ scary place. Open WiFi networks
-[are](https://www.troyhunt.com/the-beginners-guide-to-breaking-website/)
-[scary](https://www.troyhunt.com/talking-with-scott-hanselman-on/). Make
-sure you delete them afterwards, otherwise your phone will happily
-announce and re-connect to something with the same name later!
+Internet är en _mycket_ skrämmande plats.
+Öppna WiFi-nätverk
+[är](https://www.troyhunt.com/the-beginners-guide-to-breaking-website/)
+[skrämmande](https://www.troyhunt.com/talking-with-scott-hanselman-on/).
+Se till att du tar bort dem efteråt,
+annars kommer telefonen glatt annonsera och återansluta till något med samma namn senare.
 
-If you're ever on a network you don't trust, a VPN _may_ be worthwhile,
-but keep in mind that you're trusting the VPN provider _a lot_. Do you
-really trust them more than your ISP? If you truly want a VPN, use a
-provider you're sure you trust, and you should probably pay for it. Or
-set up [WireGuard](https://www.wireguard.com/) for yourself -- it's
-[excellent](https://web.archive.org/web/20210526211307/https://latacora.micro.blog/there-will-be/)!
+Om du någon gång är på ett nätverk du inte litar på kan VPN _möjligen_ vara värt det,
+men tänk på att du då litar _väldigt mycket_ på VPN-leverantören.
+Litar du verkligen mer på dem än på din internetleverantör?
+Om du verkligen vill ha VPN,
+använd en leverantör du är säker på att du litar på,
+och du bör sannolikt betala för tjänsten.
+Eller sätt upp [WireGuard](https://www.wireguard.com/) själv -- det är
+[utmärkt](https://web.archive.org/web/20210526211307/https://latacora.micro.blog/there-will-be/).
 
-There are also secure configuration settings for a lot of internet-enabled
-applications at [cipherlist.eu](https://cipherlist.eu/). If you're particularly
-privacy-oriented, [privacytools.io](https://privacytools.io) is also a good
-resource.
+Det finns också säkra konfigurationsinställningar för många internetanslutna program på [cipherlist.eu](https://cipherlist.eu/).
+Om du är särskilt integritetsinriktad är [privacytools.io](https://privacytools.io) också en bra resurs.
 
-Some of you may wonder about [Tor](https://www.torproject.org/). Keep in
-mind that Tor is _not_ particularly resistant to powerful global
-attackers, and is weak against traffic analysis attacks. It may be
-useful for hiding traffic on a small scale, but won't really buy you all
-that much in terms of privacy. You're better off using more secure
-services in the first place (Signal, TLS + certificate pinning, etc.).
+Vissa undrar säkert över [Tor](https://www.torproject.org/).
+Kom ihåg att Tor _inte_ är särskilt motståndskraftigt mot kraftfulla globala angripare,
+och är svagt mot trafikanalysattacker.
+Det kan vara användbart för att dölja trafik i liten skala,
+men ger inte så mycket integritetsvinst totalt sett.
+Du är bättre hjälpt av att använda säkrare tjänster från början
+(Signal, TLS + certifikatspinning, osv.).
 
-## Web Security
+## Webbsäkerhet
 
-So, you want to go on the Web too?
-Jeez, you're really pushing your luck here.
+Så, du vill ut på webben också?
+Du testar verkligen gränserna här.
 
-Install [HTTPS Everywhere](https://www.eff.org/https-everywhere).
-SSL/TLS is
-[critical](https://www.troyhunt.com/ssl-is-not-about-encryption/), and
-it's _not_ just about encryption, but also about being able to verify
-that you're talking to the right service in the first place! If you run
-your own web server, [test it](https://www.ssllabs.com/ssltest/index.html). TLS configuration
-[can get hairy](https://wiki.mozilla.org/Security/Server_Side_TLS).
-HTTPS Everywhere will do its very best to never navigate you to HTTP
-sites when there's an alternative. That doesn't save you, but it helps.
-If you're truly paranoid, blacklist any SSL/TLS CAs that you don't
-absolutely need.
+Installera [HTTPS Everywhere](https://www.eff.org/https-everywhere).
+SSL/TLS är
+[kritiskt](https://www.troyhunt.com/ssl-is-not-about-encryption/), och
+det handlar _inte_ bara om kryptering,
+utan också om att kunna verifiera att du faktiskt pratar med rätt tjänst.
+Om du kör
+en egen webbserver, [testa den](https://www.ssllabs.com/ssltest/index.html). TLS-konfiguration
+[kan bli stökig](https://wiki.mozilla.org/Security/Server_Side_TLS).
+HTTPS Everywhere gör sitt bästa för att aldrig navigera dig till HTTP-sidor när det finns ett alternativ.
+Det räddar dig inte helt, men det hjälper.
+Om du är riktigt paranoid,
+svartlista SSL/TLS-CA:er du absolut inte behöver.
 
-Install [uBlock Origin](https://github.com/gorhill/uBlock). It is a
-[wide-spectrum
-blocker](https://github.com/gorhill/uBlock/wiki/Blocking-mode) that
-doesn't just stop ads, but all sorts of third-party communication a page
-may try to do. And inline scripts and such. If you're willing to spend
-some time on configuration to make things work, go to [medium
+Installera [uBlock Origin](https://github.com/gorhill/uBlock).
+Det är en [bredspektrumblockerare](https://github.com/gorhill/uBlock/wiki/Blocking-mode)
+som inte bara stoppar annonser,
+utan även olika typer av tredjepartskommunikation som sidor försöker göra.
+Och inline-skript och liknande.
+Om du är villig att lägga tid på konfiguration,
+gå till [medium
 mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-medium-mode)
-or even [hard
+eller till och med [hard
 mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-hard-mode).
-Those _will_ make some sites not work until you've fiddled with the
-settings enough, but will also significantly improve your online
-security.
+De lägena _kommer_ göra att vissa webbplatser inte fungerar förrän du justerat inställningarna,
+men de förbättrar också din säkerhet online avsevärt.
 
-If you're using Firefox, enable [Multi-Account
-Containers](https://support.mozilla.org/en-US/kb/containers). Create
-separate containers for social networks, banking, shopping, etc. Firefox
-will keep the cookies and other state for each of the containers totally
-separate, so sites you visit in one container can't snoop on sensitive
-data from the others. In Google Chrome, you can use [Chrome
-Profiles](https://support.google.com/chrome/answer/2364824) to achieve
-similar results.
+Om du använder Firefox,
+aktivera [Multi-Account
+Containers](https://support.mozilla.org/en-US/kb/containers).
+Skapa separata containrar för sociala nätverk, bank, shopping osv.
+Firefox håller cookies och annat tillstånd helt separerat mellan containrar,
+så att webbplatser i en container inte kan snoka i känslig data från andra.
+I Google Chrome kan du använda [Chrome
+Profiles](https://support.google.com/chrome/answer/2364824) för liknande resultat.
 
-## Exercises
+Övningar
 
-1. Encrypt a file using PGP
-1. Use veracrypt to create a simple encrypted volume
-1. Enable 2FA for your most data sensitive accounts i.e. GMail, Dropbox, Github, &c
+TODO
+
+1. Kryptera en fil med PGP.
+1. Använd VeraCrypt för att skapa en enkel krypterad volym.
+1. Aktivera 2FA för dina mest datakänsliga konton, t.ex. GMail, Dropbox, GitHub, osv.

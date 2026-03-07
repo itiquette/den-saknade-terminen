@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Package Management and Dependency Management"
+title: "Pakethantering och beroendehantering"
 presenter: Anish
 date: 2019-01-29
 order: 2
@@ -9,30 +9,30 @@ video:
   id: tgvt473T8xA
 ---
 
-Software usually builds on (a collection of) other software, which necessitates
-dependency management.
+Programvara bygger oftast på (en samling av) annan programvara,
+vilket gör beroendehantering nödvändigt.
 
-Package/dependency management programs are language-specific, but many share
-common ideas.
+Program för paket-/beroendehantering är språkspecifika,
+men många delar samma grundidéer.
 
-# Package repositories
+# Paketförråd
 
-Packages are hosted in _package repositories_. There are different repositories
-for different languages (and sometimes multiple for a particular language),
-such as [PyPI](https://pypi.org/) for Python, [RubyGems](https://rubygems.org/)
-for Ruby, and [crates.io](https://crates.io/) for Rust. They generally store
-software (source code and sometimes pre-compiled binaries for specific
-platforms) for all versions of a package.
+Paket lagras i _paketförråd_.
+Det finns olika förråd för olika språk (och ibland flera för samma språk),
+till exempel [PyPI](https://pypi.org/) för Python, [RubyGems](https://rubygems.org/) för Ruby,
+och [crates.io](https://crates.io/) för Rust.
+De lagrar normalt programvara (källkod och ibland förkompilerade binärer för specifika plattformar)
+för alla versioner av ett paket.
 
-# Semantic versioning
+# Semantisk versionshantering
 
-Software evolves over time, and we need a way to refer to software versions.
-Some simple ways could be to refer to software by a sequence number or a commit
-hash, but we can do better in terms of communicating more information: using
-version numbers.
+Programvara utvecklas över tid,
+och vi behöver ett sätt att referera till versioner.
+Enkla sätt är till exempel löpnummer eller commit-hash,
+men vi kan kommunicera mer information med versionsnummer.
 
-There are many approaches; one popular one is [Semantic
-Versioning](https://semver.org/):
+Det finns många angreppssätt.
+Ett populärt är [Semantic Versioning](https://semver.org/):
 
 ```
 x.y.z
@@ -42,69 +42,64 @@ x.y.z
 +----- major
 ```
 
-Increment **major** version when you make incompatible API changes.
+Öka **major** när du gör icke bakåtkompatibla API-ändringar.
 
-Increment **minor** version when you add functionality in a backward-compatible manner.
+Öka **minor** när du lägger till funktionalitet bakåtkompatibelt.
 
-Increment **patch** when you make backward-compatible bug fixes.
+Öka **patch** när du gör bakåtkompatibla buggfixar.
 
-For example, if you depend on a feature introduced in `v1.2.0` of some
-software, then you can install `v1.x.y` for any minor version `x >= 2` and any
-patch version `y`. You need to install major version `1` (because `2` can
-introduce backward-incompatible changes), and you need to install a minor
-version `>= 2` (because you depend on a feature introduced in that minor
-version). You can use any newer minor version or patch version because
-they should not introduce any backward-incompatible changes.
+Om du till exempel beror på en funktion som introducerades i `v1.2.0` av en viss programvara,
+kan du installera `v1.x.y` för alla minor-versioner `x >= 2` och alla patch-versioner `y`.
+Du behöver major-version `1` (eftersom `2` kan introducera icke bakåtkompatibla ändringar),
+och du behöver en minor-version `>= 2` (eftersom din funktion kom i den minor-versionen).
+Du kan använda valfri nyare minor- eller patch-version,
+eftersom de inte bör introducera icke bakåtkompatibla ändringar.
 
-# Lock files
+# Låsfiler
 
-In addition to specifying versions, it can be nice to enforce that the
-_contents_ of the dependency have not changed to prevent tampering. Some tools
-use _lock files_ to specify cryptographic hashes of dependencies (along with
-versions) that are checked on package install.
+Utöver att ange versioner kan det vara bra att säkerställa att
+_innehållet_ i beroenden inte har ändrats, för att motverka manipulering.
+Vissa verktyg använder _låsfiler_ för att ange kryptografiska hashvärden för beroenden (tillsammans med versioner),
+som verifieras vid paketinstallation.
 
-# Specifying versions
+# Ange versioner
 
-Tools often let you specify versions in multiple ways, such as:
+Verktyg låter dig ofta ange versioner på flera sätt, till exempel:
 
-- exact version, e.g. `2.3.12`
-- minimum major version, e.g. `>= 2`
-- specific major version and minimum patch version, e.g. `>= 2.3, <3.0`
+- exakt version, t.ex. `2.3.12`
+- minsta major-version, t.ex. `>= 2`
+- specifik major-version och minsta patch-version, t.ex. `>= 2.3, <3.0`
 
-Specifying an exact version can be advantageous to avoid different behaviors
-based on installed dependencies (this shouldn't happen if all dependencies
-faithfully follow semver, but sometimes people make mistakes). Specifying a
-minimum requirement has the advantage of allowing bug fixes to be installed
-(e.g. patch upgrades).
+Att ange en exakt version kan vara fördelaktigt för att undvika olika beteenden
+beroende på installerade beroenden (detta borde inte hända om alla följer semver,
+men misstag sker).
+Att ange ett minimikrav har fördelen att buggfixar kan installeras
+(t.ex. patch-uppgraderingar).
 
-# Dependency resolution
+# Beroendelösning
 
-Package managers use various dependency resolution algorithms to satisfy
-dependency requirements. This often gets challenging with complex dependencies
-(e.g. a package can be indirectly depended on by multiple top-level
-dependencies, and different versions could be required). Different package
-managers have different levels of sophistication in their dependency
-resolution, but it's something to be aware of: you may need to understand this
-if you are debugging dependencies.
+Pakethanterare använder olika algoritmer för beroendelösning för att uppfylla beroendekrav.
+Det blir ofta svårt vid komplexa beroenden
+(t.ex. att ett paket beror indirekt via flera toppnivåberoenden som kräver olika versioner).
+Olika pakethanterare har olika grad av sofistikation i beroendelösningen,
+men det är något du bör känna till:
+du kan behöva förstå detta när du felsöker beroenden.
 
-# Virtual environments
+# Virtuella miljöer
 
-If you're developing multiple software projects, they may depend on different
-versions of a particular piece of software. Sometimes, your build tool will
-handle this naturally (e.g. by building a static binary).
+Om du utvecklar flera programvaruprojekt kan de bero på olika versioner av samma programvara.
+Ibland hanterar byggverktyget detta naturligt (t.ex. genom att bygga en statisk binär).
 
-For other build tools and programming languages, one approach is handling this
-with virtual environments (e.g. with the
-[virtualenv](https://docs.python-guide.org/dev/virtualenvs/) tool for Python).
-Instead of installing dependencies system-wide, you can install dependencies
-per-project in a virtual environment, and _activate_ the virtual environment
-that you want to use when you're working on a specific project.
+För andra byggverktyg och språk är en väg att hantera detta med virtuella miljöer
+(t.ex. med
+[virtualenv](https://docs.python-guide.org/dev/virtualenvs/) för Python).
+I stället för att installera beroenden systembrett kan du installera dem per projekt i en virtuell miljö,
+och _aktivera_ den miljö du vill använda när du arbetar med ett visst projekt.
 
-# Vendoring
+# Vendoring (incheckade beroenden)
 
-Another very different approach to dependency management is _vendoring_.
-Instead of using a dependency manager or build tool to fetch software, you copy
-the entire source code for a dependency into your software's repository. This
-has the advantage that you're always building against the same version of the
-dependency and you don't need to rely on a package repository, but it is more
-effort to upgrade dependencies.
+En annan, mycket annorlunda, metod för beroendehantering är _vendoring_ (att checka in beroenden).
+I stället för att använda en beroendehanterare eller ett byggverktyg för att hämta programvara,
+kopierar du in hela källkoden för ett beroende i projektets kodförråd.
+Fördelen är att du alltid bygger mot samma beroendeversion och inte behöver lita på ett paketförråd,
+men det kräver mer arbete att uppgradera beroenden.

@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Backups"
+title: "Säkerhetskopiering"
 presenter: Jose
 date: 2019-01-24
 order: 2
@@ -10,94 +10,156 @@ video:
 special: true
 ---
 
-There are two types of people:
+Det finns två sorters människor:
 
-- Those who do backups
-- Those who will do backups
+- De som säkerhetskopierar
+- De som kommer att säkerhetskopiera
 
-Any data you own that you haven't backed up is data that could be gone at any moment, forever. Here we will cover some good backup basics and the pitfalls of some approaches.
+All data du äger som du inte har säkerhetskopierat kan försvinna när som helst, för alltid.
+Här går vi igenom goda grunder för säkerhetskopiering och fallgropar i vissa upplägg.
 
-## 3-2-1 Rule
+## 3-2-1-regeln
 
-The [3-2-1 rule](https://www.us-cert.gov/sites/default/files/publications/data_backup_options.pdf) is a general recommended strategy for backing up your data. It state that you should have:
+[3-2-1-regeln](https://www.us-cert.gov/sites/default/files/publications/data_backup_options.pdf) är en allmänt rekommenderad strategi för säkerhetskopiering av data.
+Den säger att du bör ha:
 
-- at least **3 copies** of your data
-- **2** copies in **different mediums**
-- **1** of the copies being **offsite**
+- minst **3 kopior** av dina data
+- **2** kopior på **olika medier**
+- **1** av kopiorna **på annan plats**
 
-The main idea behind this recommendation is not to put all your eggs in one basket. Having 2 different devices/disks ensures that a single hardware failure doesn't take away all your data. Similarly, if you store your only backup at home and the house burns down or gets robbed you'll lose everything! That's what the offsite copy is there for. Onsite backups give you availability and speed, offsite give you the resiliency should a disaster happen.
+Grundtanken bakom rekommendationen är att inte lägga alla ägg i samma korg.
+Att ha två olika enheter/diskar gör att ett enskilt hårdvarufel inte tar all din data.
+På samma sätt, om din enda säkerhetskopia finns hemma och huset brinner ner eller blir rånat, förlorar du allt.
+Det är därför kopian utanför hemmet finns.
+Lokala säkerhetskopior ger tillgänglighet och hastighet, medan kopior på annan plats ger motståndskraft om en katastrof inträffar.
 
-## Testing your backups
+## Testa dina säkerhetskopior
 
-A common pitfall when performing backups is blindly trusting whatever the system says it's doing and not verifying that the data can be properly recovered. Toy Story 2 was almost lost and their backups were not working, [luck](https://www.youtube.com/watch?v=8dhp_20j0Ys) ended up saving them.
+En vanlig fallgrop vid säkerhetskopiering är att blint lita på vad systemet säger att det gör, utan att verifiera att data faktiskt går att återställa.
+Toy Story 2 var nära att gå förlorad eftersom deras säkerhetskopior inte fungerade,
+och [tur](https://www.youtube.com/watch?v=8dhp_20j0Ys) räddade dem till slut.
 
-## Versioning
+## Versionshantering
 
-You should understand that [RAID](https://en.wikipedia.org/wiki/RAID) is not a backup, and in general **mirroring is not a backup solution**. Simply syncing your files somewhere will not help in several scenarios, such as:
+Det är viktigt att förstå att [RAID](https://en.wikipedia.org/wiki/RAID) inte är en säkerhetskopia,
+och i allmänhet är **spegling ingen säkerhetskopieringslösning**.
+Att bara synkronisera filer någonstans hjälper inte i flera scenarier, till exempel:
 
-- Data corruption
-- Malicious software
-- Deleting files by mistake
+- Datakorruption
+- Skadlig programvara
+- Filer som raderas av misstag
 
-If the changes on your data propagate to the backup then you won't be able to recover in these scenarios. Note that this is the case for a lot of cloud storage solutions like Dropbox, Google Drive, One Drive, &c. Some of them do keep deleted data around for short amounts of time but usually the interface to recover is not something you want to be using to recover large amounts of files.
+Om ändringarna i dina data förs vidare till säkerhetskopian kan du inte återställa i dessa scenarier.
+Detta gäller många molnlagringstjänster som Dropbox, Google Drive, One Drive, osv.
+Vissa behåller raderad data en kort tid,
+men gränssnittet för återställning är oftast inte något du vill använda för stora mängder filer.
 
-A proper backup system should be versioned in order to prevent this failure mode. By providing different snapshots in time one can easily navigate them to restore whatever was lost. The most widely known software of this kind is macOS Time Machine.
+Ett ordentligt säkerhetskopieringssystem bör vara versionshanterat för att undvika detta felmönster.
+Med olika ögonblicksbilder över tid kan du enkelt gå tillbaka och återställa det som gått förlorat.
+Den mest kända programvaran av den typen är macOS Time Machine.
 
-## Deduplication
+## Deduplicering
 
-However, making several copies of your data might be extremely costly in terms of disk space. Nevertheless, from one version to the next, most data will be identical and needs not be transferred again. This is where [data deduplication](https://en.wikipedia.org/wiki/Data_deduplication) comes into play, by keeping track of what has already been stored one can do **incremental backups** where only the changes from one version to the next need to be stored. This significantly reduces the amount of space needed for backups beyond the first copy.
+Att göra flera kopior av data kan dock bli mycket dyrt i diskutrymme.
+Samtidigt är de flesta data identiska mellan versioner och behöver inte överföras igen.
+Här kommer [datadeduplicering](https://en.wikipedia.org/wiki/Data_deduplication) in.
+Genom att hålla reda på vad som redan lagrats kan man göra **inkrementella säkerhetskopior**, där bara ändringarna mellan två versioner behöver sparas.
+Det minskar utrymmesbehovet kraftigt efter den första kopian.
 
-## Encryption
+## Kryptering
 
-Since we might be backing up to untrusted third parties like cloud providers it is worth considering that if you backup your data is copied *as is* then it could potentially be looked by unwanted agents. Documents like your taxes are sensitive information that should not be backed up in plain format. To prevent this, many backup solutions offer **client side encryption** where data is encrypted before being sent to the server. That way the server cannot read the data it is storing but you can decrypt it with your secret key.
+Eftersom vi kan säkerhetskopiera till otillförlitliga tredje parter, som molnleverantörer, bör du tänka på att data som kopieras *som den är* i princip kan läsas av obehöriga.
+Dokument som deklarationsuppgifter är känslig information och bör inte säkerhetskopieras i klartext.
+För att förebygga detta erbjuder många lösningar **kryptering på klientsidan**, där data krypteras innan den skickas till servern.
+På så sätt kan servern inte läsa det den lagrar, medan du kan dekryptera med din hemliga nyckel.
 
-As a side note, if your disk (or home partition) is not encrypted, then anyone that get hold of your computer can manage to override the user access controls and read your data. Modern hardware supports fast and efficient read and writes of encrypted data so you might want to consider enabling **full disk encryption**.
-
-
-## Append only
-
-The properties reviewed so far focus on hardware failure or user mistakes but fail to address what happens if a malicious agent wanted to delete your data. Namely, say someone hacks into your system, are they able to wipe all your copies of the data you care about? If you worry about that scenario then you need some sort of append only backup solution. In general, this means having a server that will allow you to send new data but will refuse to delete existing data. Usually users have two keys, an append only key that supports  creating new backups and a full access key that also allows for deleting old backups that are no longer needed. The latter one is stored offline.
-
-Note that this is a quite challenging scenario since you need the ability to make changes whilst still preventing a malicious user from deleting your data. Existing commercial solutions include [Tarsnap](https://www.tarsnap.com/) and [Borgbase](https://www.borgbase.com/).
-
-
-## Additional considerations
-
-Some other things you may want to look into are:
-
-- **Periodic backups**: outdated backups can become pretty useless. Making backups regularly should be a consideration for your system
-- **Bootable backups**: some programs allow you to clone your entire disk. That way you have an image that contains an entire copy of your system you can boot directly from.
-- **Differential backup strategies**, you may not necessarily care the same about all your data. You can define different backup policies for different types of data.
-- **Append only backups** an additional consideration is to enforce append only operations to your backup repositories in order to prevent malicious agents to delete them if they get hold of your machine.
-
-
-## Webservices
-
-Not all the data that you use lives on your hard disk. If you use **webservices**, then it might be the case that some data you care about, such as Google Docs presentations or Spotify playlists, is stored online. Another easy example that is easy to forget is email accounts with web access, such as Gmail. Figuring out a backup solution in these cases is somewhat trickier. However, there are many services that allow you to download your data, either directly or via an API. Tools such as [gmvault](https://github.com/gaubert/gmvault) for Gmail are available to download the email files to your computer.
-
-
-## Webpages
-
-Similarly, some high quality content can be found online in the form of webpages. If said content is static one can easily back it up by just saving the website and all of its attachments. Another alternative is the [Wayback Machine](https://archive.org/web/), a massive digital archive of the World Wide Web managed by the [Internet Archive](https://archive.org/), a non profit organization focused on the preservation of all sorts of media. The Wayback Machine allows you to capture and archive webpages being able to later retrieve all the snapshots that have been archived for that website. If you find it useful, consider [donating](https://archive.org/donate/) to the project.
+Som en sidonotering:
+om din disk (eller hempartition) inte är krypterad kan den som får fysisk tillgång till datorn ofta kringgå användarbehörigheter och läsa dina data.
+Modern hårdvara hanterar krypterad läsning och skrivning snabbt och effektivt,
+så du bör överväga att aktivera **full diskkryptering**.
 
 
-## Resources
+## Endast append
 
-Some good backup programs and services we have used and can honestly recommend:
+Egenskaperna ovan fokuserar på hårdvarufel och användarmisstag,
+men tar inte fullt höjd för vad som händer om en angripare vill radera dina data.
+Om någon tar sig in i ditt system, kan de då radera alla kopior av det du bryr dig om?
+Om du oroar dig för det scenariot behöver du någon form av säkerhetskopiering med endast append.
+I praktiken betyder det en server som låter dig lägga till ny data,
+men vägrar radera befintlig data.
+Vanligen har användare två nycklar:
+en append-nyckel som kan skapa nya säkerhetskopior,
+och en nyckel med full åtkomst som även kan radera gamla kopior som inte längre behövs.
+Den senare förvaras offline.
 
-- [Tarsnap](https://www.tarsnap.com/) - deduplicated, encrypted online backup service for the truly paranoid.
-- [Borg Backup](https://borgbackup.readthedocs.io) - deduplicated backup program that supports compression and authenticated encryption. If you need a cloud provider [BorgBase](https://www.borgbase.com/) is one popular option.
-- [rsync](https://rsync.samba.org/) is a utility that provides fast incremental file transfer. It is not a full backup solution.
-- [rclone](https://rclone.org/) like rsync but for cloud storage providers such as Amazon S3, Dropbox, Google Drive, rsync.net, &c. Supports client side encryption of remote folders.
+Observera att detta är ett ganska svårt scenario,
+eftersom du behöver kunna göra ändringar samtidigt som du förhindrar att en angripare raderar dina data.
+Befintliga kommersiella lösningar inkluderar [Tarsnap](https://www.tarsnap.com/) och [Borgbase](https://www.borgbase.com/).
 
-## Exercises
 
-1. Consider how you are (not) backing up your data and look into fixing/improving that.
+## Ytterligare överväganden
 
-1. Figure out how to backup your email accounts
+Några andra saker du kan vilja titta på är:
 
-1. Choose a webservice you use often (Spotify, Google Music, etc.) and figure out what options for backing up your data are. Often people have already made tools (such as [youtube-dl](https://ytdl-org.github.io/youtube-dl/)) solutions based on available APIs.
+- **Periodiska säkerhetskopior**: föråldrade säkerhetskopior blir snabbt ganska värdelösa.
+Regelbunden säkerhetskopiering bör ingå i din systemstrategi.
+- **Startbara säkerhetskopior**: vissa program kan klona hela disken.
+Då får du en avbild som innehåller en full kopia av systemet som du kan starta direkt från.
+- **Differentierade säkerhetskopieringsstrategier**: all data är inte lika viktig.
+Du kan definiera olika säkerhetspolicys för olika typer av data.
+- **Säkerhetskopior med endast append**: en extra åtgärd är att tvinga append-only-operationer i dina backup-arkiv,
+så att angripare inte kan radera dem om de får kontroll över din maskin.
 
-1. Think of a website you have visited repeatedly over the years and look it up in [archive.org](https://archive.org/web/), how many versions does it have?
 
-1. One way to efficiently implement deduplication is to use hardlinks. Whereas symbolic link (also called a soft link or a symlink) is a file that points to another file or folder, a hardlink is a exact copy of the pointer (it uses the same inode and points to the same place in the disk). Thus if the original file is removed a symlink stops working whereas a hard link doesn't. However, hardlinks only work for files. Try using the command `ln` to create hard links and compare them to symlinks created with `ln -s`. (In macOS you will need to install the gnu coreutils or the hln package).
+## Webbtjänster
+
+All data du använder finns inte på din hårddisk.
+Om du använder **webbtjänster** kan data du bryr dig om, som Google Docs-presentationer eller Spotify-spellistor, ligga online.
+Ett annat lättglömt exempel är e-postkonton med webbåtkomst, som Gmail.
+Att hitta en säkerhetskopieringslösning i de fallen är lite svårare.
+Men många tjänster låter dig ladda ner dina data, antingen direkt eller via API.
+Verktyg som [gmvault](https://github.com/gaubert/gmvault) för Gmail finns för att ladda ner e-postfiler till din dator.
+
+
+## Webbsidor
+
+På samma sätt finns mycket högkvalitativt innehåll online i form av webbsidor.
+Om innehållet är statiskt kan du enkelt säkerhetskopiera det genom att spara sidan och alla dess bilagor.
+Ett annat alternativ är [Wayback Machine](https://archive.org/web/),
+ett enormt digitalt arkiv över webben som drivs av [Internet Archive](https://archive.org/),
+en ideell organisation med fokus på att bevara olika typer av media.
+Wayback Machine låter dig fånga och arkivera webbsidor och senare hämta alla ögonblicksbilder som arkiverats för den webbplatsen.
+Om du tycker tjänsten är värdefull kan du överväga att [donera](https://archive.org/donate/) till projektet.
+
+
+## Resurser
+
+Några bra backup-program och tjänster som vi har använt och uppriktigt kan rekommendera:
+
+- [Tarsnap](https://www.tarsnap.com/) - deduplicerad, krypterad säkerhetskopieringstjänst online för den verkligt paranoida.
+- [Borg Backup](https://borgbackup.readthedocs.io) - deduplicerat backup-program med stöd för komprimering och autentiserad kryptering.
+Om du behöver en molnleverantör är [BorgBase](https://www.borgbase.com/) ett populärt alternativ.
+- [rsync](https://rsync.samba.org/) är ett verktyg för snabb inkrementell filöverföring.
+Det är inte en fullständig säkerhetskopieringslösning.
+- [rclone](https://rclone.org/) är som rsync men för molnlagringsleverantörer som Amazon S3, Dropbox, Google Drive, rsync.net, osv.
+Stödjer kryptering på klientsidan av fjärrmappar.
+
+## Övningar
+
+1. Fundera på hur du (inte) säkerhetskopierar dina data i dag och förbättra upplägget.
+
+1. Ta reda på hur du säkerhetskopierar dina e-postkonton.
+
+1. Välj en webbtjänst du använder ofta (Spotify, Google Music, osv.) och ta reda på vilka möjligheter som finns för att säkerhetskopiera dina data.
+Ofta har andra redan byggt verktyg (som [youtube-dl](https://ytdl-org.github.io/youtube-dl/)) utifrån tillgängliga API:er.
+
+1. Tänk på en webbplats du återkommit till genom åren och slå upp den i [archive.org](https://archive.org/web/).
+Hur många versioner finns det?
+
+1. Ett sätt att effektivt implementera deduplicering är att använda hårda länkar.
+En symbolisk länk (kallas också mjuk länk eller symlink) är en fil som pekar på en annan fil eller mapp,
+medan en hård länk är en exakt kopia av pekaren (den använder samma inode och pekar på samma plats på disken).
+Om originalfilen tas bort slutar därför en symlink att fungera, medan en hård länk fortsätter fungera.
+Hårda länkar fungerar dock bara för filer.
+Prova kommandot `ln` för att skapa hårda länkar och jämför med symlänkar skapade med `ln -s`.
+(I macOS behöver du installera GNU coreutils eller paketet hln.)

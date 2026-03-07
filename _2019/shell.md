@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Shell and Scripting"
+title: "Skal och skriptning"
 presenter: Jon
 date: 2019-01-15
 order: 3
@@ -9,276 +9,327 @@ video:
   id: dbDRfmH5uSI
 ---
 
-The shell is an efficient, textual interface to your computer.
+Skalet är ett effektivt, textbaserat gränssnitt till din dator.
 
-The shell prompt: what greets you when you open a terminal.
-Lets you run programs and commands; common ones are:
+Skalprompten är det som möter dig när du öppnar en terminal.
+Den låter dig köra program och kommandon.
+Vanliga kommandon är:
 
- - `cd` to change directory
- - `ls` to list files and directories
- - `mv` and `cp` to move and copy files
+ - `cd` för att byta katalog
+ - `ls` för att lista filer och kataloger
+ - `mv` och `cp` för att flytta och kopiera filer
 
-But the shell lets you do _so_ much more; you can invoke any program on
-your computer, and command-line tools exist for doing pretty much
-anything you may want to do. And they're often more efficient than their
-graphical counterparts. We'll go through a bunch of those in this class.
+Men skalet låter dig göra _så_ mycket mer.
+Du kan anropa vilket program som helst på datorn,
+och det finns kommandoradsverktyg för i princip allt du kan vilja göra.
+De är ofta effektivare än grafiska motsvarigheter.
+Vi går igenom många av dem i den här kursen.
 
-The shell provides an interactive programming language ("scripting").
-There are many shells:
+Skalet erbjuder också ett interaktivt programmeringsspråk ("skriptning").
+Det finns många skal:
 
- - You've probably used `sh` or `bash`.
- - Also shells that match languages: `csh`.
- - Or "better" shells: `fish`, `zsh`, `ksh`.
+ - Du har troligen använt `sh` eller `bash`.
+ - Det finns också skal som följer språk, som `csh`.
+ - Eller "bättre" skal som `fish`, `zsh` och `ksh`.
 
-In this class we'll focus on the ubiquitous `sh` and `bash`, but feel
-free to play around with others. I like `fish`.
+I den här kursen fokuserar vi på de allmänt förekommande `sh` och `bash`,
+men prova gärna andra.
+Jag gillar `fish`.
 
-Shell programming is a *very* useful tool in your toolbox.
-Can either write programs directly at the prompt, or into a file.
-`#!/bin/sh` + `chmod +x` to make shell executable.
+Skalprogrammering är ett *mycket* användbart verktyg i din verktygslåda.
+Du kan antingen skriva program direkt i prompten,
+eller i en fil.
+`#!/bin/sh` + `chmod +x` gör ett skalskript körbart.
 
-## Working with the shell
+## Arbeta med skalet
 
-Run a command a bunch of times:
+Kör ett kommando flera gånger:
 
 ```bash
 for i in $(seq 1 5); do echo hello; done
 ```
 
-There's a lot to unpack:
+Det finns mycket att packa upp här:
 
  - `for x in list; do BODY; done`
-   - `;` terminates a command -- equivalent to newline
-   - split `list`, assign each to `x`, and run body
-   - splitting is "whitespace splitting", which we'll get back to
-   - no curly braces in shell, so `do` + `done`
+   - `;` avslutar ett kommando, motsvarar radbrytning
+   - delar upp `list`, tilldelar varje element till `x`, och kör body
+   - uppdelningen är "whitespace splitting", som vi återkommer till
+   - skalet använder inte klammerparenteser här, därför `do` + `done`
  - `$(seq 1 5)`
-   - run the program `seq` with arguments `1` and `5`
-   - substitute entire `$()` with the output of that program
-   - equivalent to
+   - kör programmet `seq` med argumenten `1` och `5`
+   - ersätter hela `$()` med programmets utdata
+   - motsvarar
      ```bash
      for i in 1 2 3 4 5
      ```
  - `echo hello`
-   - everything in a shell script is a command
-   - in this case, run the `echo` command, which prints its arguments
-     with the argument `hello`.
-   - all commands are searched for in `$PATH` (colon-separated)
+   - allt i ett skalskript är ett kommando
+   - här kör vi kommandot `echo`, som skriver ut sina argument
+     med argumentet `hello`.
+   - alla kommandon söks i `$PATH` (kolonseparerad)
 
-We have variables:
+Vi har variabler:
 ```bash
 for f in $(ls); do echo $f; done
 ```
 
-Will print each file name in the current directory.
-Can also set variables using `=` (no space!):
+Det skriver ut varje filnamn i aktuell katalog.
+Du kan också sätta variabler med `=` (ingen blanktecken):
 
 ```bash
 foo=bar
 echo $foo
 ```
 
-There are a bunch of "special" variables too:
+Det finns också en mängd "specialvariabler":
 
- - `$1` to `$9`: arguments to the script
- - `$0` name of the script itself
- - `$#` number of arguments
- - `$$` process ID of current shell
+ - `$1` till `$9`: argument till skriptet
+ - `$0`: namnet på själva skriptet
+ - `$#`: antal argument
+ - `$$`: process-ID för nuvarande skal
 
-To only print directories
+För att bara skriva ut kataloger:
 
 ```bash
 for f in $(ls); do if test -d $f; then echo dir $f; fi; done
 ```
 
-More to unpack here:
+Här finns mer att packa upp:
 
  - `if CONDITION; then BODY; fi`
-   - `CONDITION` is a command; if it returns with exit status 0
-     (success), then `BODY` is run.
-   - can also hook in an `else` or `elif`
-   - again, no curly braces, so `then` + `fi`
- - `test` is another program that provides various checks and
-   comparisons, and exits with 0 if they're true (`$?`)
-   - `man COMMAND` is your friend: `man test`
-   - can also be invoked with `[` + `]`: `[ -d $f ]`
-     - take a look at `man test` and `which "["`
+   - `CONDITION` är ett kommando.
+     Om det avslutas med statuskod 0 (lyckat), körs `BODY`.
+   - du kan också använda `else` eller `elif`
+   - återigen inga klammerparenteser, därför `then` + `fi`
+ - `test` är ett annat program som erbjuder olika kontroller och jämförelser,
+   och avslutas med 0 om villkoret är sant (`$?`)
+   - `man COMMAND` är din vän: `man test`
+   - kan också anropas med `[` + `]`: `[ -d $f ]`
+     - se `man test` och `which "["`
 
-But wait! This is wrong! What if a file is called "My Documents"?
+Men vänta.
+Det här är fel.
+Vad händer om en fil heter "My Documents"?
 
- - `for f in $(ls)` expands to `for f in My Documents`
- - first do the test on `My`, then on `Documents`
- - not what we wanted!
- - biggest source of bugs in shell scripts
+ - `for f in $(ls)` expanderar till `for f in My Documents`
+ - först körs testet på `My`, sedan på `Documents`
+ - inte alls vad vi ville
+ - det här är en av de största felkällorna i skalskript
 
-## Argument splitting
+## Argumentsplittring
 
-Bash splits arguments by whitespace; not always what you want!
+Bash delar argument på blanktecken,
+vilket inte alltid är det du vill.
 
- - need to use quoting to handle spaces in arguments
-   `for f in "My Documents"` would work correctly
- - same problem somewhere else -- do you see where?
-   `test -d $f`: if `$f` contains whitespace, `test` will error!
- - `echo` happens to be okay, because split + join by space
-   but what if a filename contains a newline?! turns into space!
- - quote all use of variables that you don't want split
- - but how do we fix our script above?
-   what do you think `for f in "$(ls)"` does?
+ - du behöver citattecken för att hantera mellanslag i argument
+   `for f in "My Documents"` skulle fungera korrekt
+ - samma problem finns någon annanstans, ser du var?
+   `test -d $f`: om `$f` innehåller blanktecken får `test` fel
+ - `echo` råkar vara okej,
+   eftersom split + join med mellanslag
+ - men vad händer om ett filnamn innehåller radbrytning?
+   då blir det ett blanksteg
+ - citera alla variabler som du inte vill ska splittras
+ - men hur fixar vi skriptet ovan?
+   vad tror du att `for f in "$(ls)"` gör?
 
-Globbing is the answer!
+Globbing är svaret.
 
- - bash knows how to look for files using patterns:
-   - `*` any string of characters
-   - `?` any single character
-   - `{a,b,c}` any of these characters
- - `for f in *`: all files in this directory
- - when globbing, each matching file becomes its own argument
-   - still need to make sure to quote when _using_: `test -d "$f"`
- - can make advanced patterns:
-   - `for f in a*`: all files starting with `a` in the current directory
-   - `for f in foo/*.txt`: all `.txt` files in `foo`
+ - bash kan hitta filer med mönster:
+   - `*` vilken teckensträng som helst
+   - `?` ett godtyckligt enskilt tecken
+   - `{a,b,c}` något av dessa tecken
+ - `for f in *`: alla filer i den här katalogen
+ - vid globbing blir varje matchad fil ett eget argument
+   - du måste fortfarande citera vid _användning_: `test -d "$f"`
+ - du kan skapa avancerade mönster:
+   - `for f in a*`: alla filer i aktuell katalog som börjar på `a`
+   - `for f in foo/*.txt`: alla `.txt`-filer i `foo`
    - `for f in foo/*/p??.txt`
-     all three-letter text files starting with p in subdirs of `foo`
+     alla textfiler på tre bokstäver som börjar på p i underkataloger till `foo`
 
-Whitespace issues don't stop there:
+Problem med blanktecken slutar inte där:
 
- - `if [ $foo = "bar" ]; then` -- see the issue?
- - what if `$foo` is empty? arguments to `[` are `=` and `bar`...
- - _can_ work around this with `[ x$foo = "xbar" ]`, but bleh
- - instead, use `[[`: bash built-in comparator that has special parsing
-   - also allows `&&` instead of `-a`, `||` over `-o`, etc.
+ - `if [ $foo = "bar" ]; then` -- ser du problemet?
+ - vad händer om `$foo` är tom?
+   argumenten till `[` blir `=` och `bar`...
+ - det _går_ att kringgå med `[ x$foo = "xbar" ]`, men usch
+ - använd i stället `[[`:
+   bash-inbyggd jämförare med särskild parsning
+   - den tillåter också `&&` i stället för `-a`, `||` i stället för `-o`, osv.
 
 <!-- TODO: arrays? $@. ${array[@]} vs "${array[@]}". -->
 
-## Composability
+## Komponerbarhet
 
-Shell is powerful in part because of composability. Can chain multiple
-programs together rather than have one program that does everything.
+Skalet är kraftfullt delvis tack vare komponerbarhet.
+Du kan kedja flera program i stället för att ha ett enda program som gör allt.
 
-The key character is `|` (pipe).
+Nyckeltecknet är `|` (pipe).
 
- - `a | b` means run both `a` and `b`
-   send all output of `a` as input to `b`
-   print the output of `b`
+ - `a | b` betyder att både `a` och `b` körs
+   och att all utdata från `a` skickas som indata till `b`
+   och att utdata från `b` skrivs ut
 
-All programs you launch ("processes") have three "streams":
+Alla program du startar ("processer") har tre "strömmar":
 
- - `STDIN`: when the program reads input, it comes from here
- - `STDOUT`: when the program prints something, it goes here
- - `STDERR`: a 2nd output the program can choose to use
- - by default, `STDIN` is your keyboard, `STDOUT` and `STDERR` are both
-   your terminal. but you can change that!
-   - `a | b` makes `STDOUT` of `a` `STDIN` of `b`.
-   - also have:
-     - `a > foo` (`STDOUT` of `a` goes to the file `foo`)
-     - `a 2> foo` (`STDERR` of `a` goes to the file `foo`)
-     - `a < foo` (`STDIN` of `a` is read from the file `foo`)
-     - hint: `tail -f` will print a file as it's being written
- - why is this useful? lets you manipulate output of a program!
-   - `ls | grep foo`: all files that contain the word `foo`
-   - `ps | grep foo`: all processes that contain the word `foo`
+ - `STDIN`: när programmet läser indata kommer den härifrån
+ - `STDOUT`: när programmet skriver ut något går det hit
+ - `STDERR`: en andra utström som programmet kan välja att använda
+ - som standard är `STDIN` ditt tangentbord,
+   och `STDOUT` och `STDERR` går båda till terminalen.
+   Men det kan du ändra.
+   - `a | b` kopplar `STDOUT` för `a` till `STDIN` för `b`.
+   - du har också:
+     - `a > foo` (`STDOUT` från `a` går till filen `foo`)
+     - `a 2> foo` (`STDERR` från `a` går till filen `foo`)
+     - `a < foo` (`STDIN` till `a` läses från filen `foo`)
+     - tips: `tail -f` skriver ut en fil medan den skrivs
+ - varför är detta användbart?
+   för att du kan bearbeta ett programs utdata.
+   - `ls | grep foo`: alla filer som innehåller ordet `foo`
+   - `ps | grep foo`: alla processer som innehåller ordet `foo`
    - `journalctl | grep -i intel | tail -n5`:
-     last 5 system log messages with the word intel (case insensitive)
+     de senaste 5 systemloggraderna med ordet intel (skiftlägesokänsligt)
    - `who | sendmail -t me@example.com`
-     send the list of logged-in users to `me@example.com`
-   - forms the basis for much data-wrangling, as we'll cover later
+     skicka listan över inloggade användare till `me@example.com`
+   - detta är grunden för mycket datahantering,
+     som vi tar upp senare
 
-Bash also provides a number of other ways to compose programs.
+Bash har också flera andra sätt att komponera program.
 
-You can group commands with `(a; b) | tac`: run `a`, then `b`, and send
-all their output to `tac`, which prints its input in reverse order.
+Du kan gruppera kommandon med `(a; b) | tac`.
+Det kör `a`, sedan `b`, och skickar all deras utdata till `tac`,
+som skriver ut indata i omvänd ordning.
 
-A lesser-known, but super useful one is _process substitution_.
-`b <(a)` will run `a`, generate a temporary file-name for its output
-stream, and pass that file-name to `b`. For example:
+Ett mindre känt men mycket användbart sätt är _process substitution_.
+`b <(a)` kör `a`,
+skapar ett temporärt filnamn för dess utström,
+och skickar det filnamnet till `b`.
+Till exempel:
 
 ```bash
 diff <(journalctl -b -1 | head -n20) <(journalctl -b -2 | head -n20)
 ```
-will show you the difference between the first 20 lines of the last boot
-log and the one before that.
+visar skillnaden mellan de första 20 raderna i senaste bootloggen och bootloggen före den.
 
 <!-- TODO: exit codes? -->
 
-## Job and process control
+## Jobb- och processkontroll
 
-What if you want to run longer-term things in the background?
+Vad gör du om du vill köra långvariga saker i bakgrunden?
 
- - the `&` suffix runs a program "in the background"
-   - it will give you back your prompt immediately
-   - handy if you want to run two programs at the same time
-     like a server and client: `server & client`
-   - note that the running program still has your terminal as `STDOUT`!
-     try: `server > server.log & client`
- - see all such processes with `jobs`
-   - notice that it shows "Running"
- - bring it to the foreground with `fg %JOB` (no argument is latest)
- - if you want to background the current program: `^Z` + `bg` (Here `^Z` means pressing `Ctrl+Z`)
-   - `^Z` stops the current process and makes it a "job"
-   - `bg` runs the last job in the background (as if you did `&`)
- - background jobs are still tied to your current session, and exit if
-   you log out. `disown` lets you sever that connection. or use `nohup`.
- - `$!` is pid of last background process
+ - suffixet `&` kör ett program "i bakgrunden"
+   - du får tillbaka prompten direkt
+   - praktiskt om du vill köra två program samtidigt,
+     som server och klient: `server & client`
+   - notera att programmet fortfarande har din terminal som `STDOUT`
+     prova: `server > server.log & client`
+ - se alla sådana processer med `jobs`
+   - notera att det står "Running"
+ - ta tillbaka ett jobb i förgrunden med `fg %JOB` (utan argument = senaste)
+ - om du vill bakgrundssätta aktuellt program: `^Z` + `bg` (`^Z` betyder `Ctrl+Z`)
+   - `^Z` stoppar aktuell process och gör den till ett "jobb"
+   - `bg` kör senaste jobbet i bakgrunden (som om du hade skrivit `&`)
+ - bakgrundsjobb är fortfarande knutna till din nuvarande session,
+   och avslutas när du loggar ut.
+   `disown` låter dig bryta den kopplingen.
+   Eller använd `nohup`.
+ - `$!` är pid för senaste bakgrundsprocessen
 
 <!-- TODO: process output control (^S and ^Q)? -->
 
-What about other stuff running on your computer?
+Vad gäller annan processaktivitet på datorn?
 
- - `ps` is your friend: lists running processes
-   - `ps -A`: print processes from all users (also `ps ax`)
-   - `ps` has *many* arguments: see `man ps`
- - `pgrep`: find processes by searching (like `ps -A | grep`)
-   - `pgrep -af`: search and display with arguments
- - `kill`: send a _signal_ to a process by ID (`pkill` by search + `-f`)
-   - signals tell a process to "do something"
-   - most common: `SIGKILL` (`-9` or `-KILL`): tell it to exit *now*
-     equivalent to `^\`
-   - also `SIGTERM` (`-15` or `-TERM`): tell it to exit gracefully
-     equivalent to `^C`
+ - `ps` är din vän: listar körande processer
+   - `ps -A`: skriv ut processer från alla användare (också `ps ax`)
+   - `ps` har *många* argument: se `man ps`
+ - `pgrep`: hitta processer via sökning (som `ps -A | grep`)
+   - `pgrep -af`: sök och visa med argument
+ - `kill`: skicka en _signal_ till en process via ID (`pkill` söker + `-f`)
+   - signaler säger åt en process att "göra något"
+   - vanligast: `SIGKILL` (`-9` eller `-KILL`): säg åt den att avsluta *nu*
+     motsvarar `^\`
+   - även `SIGTERM` (`-15` eller `-TERM`): be den avsluta kontrollerat
+     motsvarar `^C`
 
 
-## Flags
+## Flaggor
 
-Most command line utilities take parameters using **flags**. Flags usually come in short form (`-h`) and long form (`--help`). Usually running `CMD -h` or `man CMD` will give you a list of the flags the program takes.
-Short flags can usually be combined, running `rm -r -f` is equivalent to running `rm -rf` or `rm -fr`.
-Some common flags are a de facto standard and you will seem them in many applications:
+De flesta kommandoradsverktyg tar parametrar via **flaggor**.
+Flaggor finns oftast i kort form (`-h`) och lång form (`--help`).
+Vanligen ger `CMD -h` eller `man CMD` en lista över flaggor som programmet stöder.
+Korta flaggor kan oftast kombineras,
+så `rm -r -f` är samma som `rm -rf` eller `rm -fr`.
+Vissa vanliga flaggor är i praktiken en standard,
+och du ser dem i många program:
 
-* `-a` commonly refers to all files (i.e. also including those that start with a period)
-* `-f` usually refers to forcing something, like `rm -f`
-* `-h` displays the help for most commands
-* `-v` usually enables a verbose output
-* `-V` usually prints the version of the command
+* `-a` syftar ofta på alla filer (inklusive de som börjar med punkt)
+* `-f` syftar ofta på att tvinga något, som i `rm -f`
+* `-h` visar hjälp för de flesta kommandon
+* `-v` slår ofta på utförlig utdata
+* `-V` skriver oftast ut kommandots version
 
-Also, a double dash `--` is used in built-in commands and many other commands to signify the end of command options, after which only positional parameters are accepted. So if you have a file called `-v` (which you can) and want to grep it `grep pattern -- -v` will work whereas `grep pattern -v` won't. In fact, one way to create such file is to do `touch -- -v`.
+Ett dubbelt bindestreck `--` används också i inbyggda kommandon och många andra kommandon
+för att markera slutet på kommandoalternativ,
+varefter endast positionsargument accepteras.
+Om du därför har en fil som heter `-v` (det går) och vill köra `grep` på den,
+fungerar `grep pattern -- -v` medan `grep pattern -v` inte gör det.
+Ett sätt att skapa en sådan fil är faktiskt `touch -- -v`.
 
-## Exercises
+## Övningar
 
-1. If you are completely new to the shell you may want to read a more comprehensive guide about it such as [BashGuide](https://mywiki.wooledge.org/BashGuide). If you want a more in-depth introduction [The Linux Command Line](https://linuxcommand.org/tlcl.php) is a good resource.
+1. Om du är helt ny i skalet kan du läsa en mer heltäckande guide,
+   till exempel [BashGuide](https://mywiki.wooledge.org/BashGuide).
+   Om du vill ha en djupare introduktion är [The Linux Command Line](https://linuxcommand.org/tlcl.php) en bra resurs.
 
 1. **PATH, which, type**
 
-    We briefly discussed that the `PATH` environment variable is used to locate the programs that you run through the command line. Let's explore that a little further
-    - Run `echo $PATH` (or `echo $PATH | tr -s ':' '\n'` for pretty printing) and examine its contents, what locations are listed?
-    - The command `which` locates a program in the user PATH. Try running `which` for common commands like `echo`, `ls` or `mv`. Note that `which` is a bit limited since it does not understand shell aliases. Try running `type` and `command -v` for those same commands. How is the output different?
-    - Run `PATH=` and try running the previous commands again, some work and some don't, can you figure out why?
+    Vi pratade kort om att miljövariabeln `PATH` används för att hitta programmen
+    du kör från kommandoraden.
+    Låt oss utforska det lite mer.
+    - Kör `echo $PATH` (eller `echo $PATH | tr -s ':' '\n'` för snyggare utskrift) och granska innehållet.
+      Vilka sökvägar listas?
+    - Kommandot `which` letar upp ett program i användarens PATH.
+      Prova `which` för vanliga kommandon som `echo`, `ls` eller `mv`.
+      Notera att `which` är lite begränsat eftersom det inte förstår skalalias.
+      Testa `type` och `command -v` för samma kommandon.
+      Hur skiljer sig utdata?
+    - Kör `PATH=` och testa de tidigare kommandona igen.
+      Vissa fungerar och vissa inte.
+      Kan du lista ut varför?
 
-1. **Special Variables**
-    - What does the variable `~` expands as? What about `.`? And `..`?
-    - What does the variable `$?` do?
-    - What does the variable `$_` do?
-    - What does the variable `!!` expand to? What about `!!*`? And `!l`?
-    - Look for documentation for these options and familiarize yourself with them
+1. **Specialvariabler**
+    - Till vad expanderar `~`?
+      Vad sägs om `.`?
+      Och `..`?
+    - Vad gör variabeln `$?`?
+    - Vad gör variabeln `$_`?
+    - Till vad expanderar `!!`?
+      Och `!!*`?
+      Och `!l`?
+    - Leta upp dokumentation för dessa och bekanta dig med dem
 
 1. **xargs**
 
-    Sometimes piping doesn't quite work because the command being piped into does not expect the newline separated format. For example `file` command tells you properties of the file.
+    Ibland fungerar piping inte riktigt,
+    eftersom kommandot som tar emot data inte förväntar sig ett radseparerat format.
+    Till exempel visar kommandot `file` egenskaper för en fil.
 
-    Try running `ls | file` and `ls | xargs file`. What is `xargs` doing?
+    Kör `ls | file` och `ls | xargs file`.
+    Vad gör `xargs`?
 
 
 1. **Shebang**
 
-    When you write a script you can specify to your shell what interpreter should be used to interpret the script by using a [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line. Write a script called `hello` with the following contentsmake  it executable with `chmod +x hello`. Then execute it with `./hello`. Then remove the first line and execute it again? How is the shell using that first line?
+    När du skriver ett skript kan du ange vilket program som ska tolka skriptet,
+    via en [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix))-rad.
+    Skriv ett skript som heter `hello` med innehållet nedan,
+    gör det körbart med `chmod +x hello`,
+    och kör det sedan med `./hello`.
+    Ta därefter bort första raden och kör igen.
+    Hur använder skalet den första raden?
 
 
     ```bash
@@ -287,12 +338,16 @@ Also, a double dash `--` is used in built-in commands and many other commands to
       print("Hello World!")
     ```
 
-    You will often see programs that have a shebang that looks like `#! usr/bin/env bash`. This is a more portable solution with it own set of [advantages and disadvantages](https://unix.stackexchange.com/questions/29608/why-is-it-better-to-use-usr-bin-env-name-instead-of-path-to-name-as-my). How is `env` different from `which`? What environment variable does `env` use to decide what program to run?
+    Du kommer ofta att se program med en shebang som ser ut så här: `#! usr/bin/env bash`.
+    Det är en mer portabel lösning med egna [för- och nackdelar](https://unix.stackexchange.com/questions/29608/why-is-it-better-to-use-usr-bin-env-name-instead-of-path-to-name-as-my).
+    Hur skiljer sig `env` från `which`?
+    Vilken miljövariabel använder `env` för att avgöra vilket program som ska köras?
 
 
 1. **Pipes, process substitution, subshell**
 
-    Create a script called `slow_seq.sh` with the following contents and do `chmod +x slow_seq.sh` to make it executable.
+    Skapa ett skript som heter `slow_seq.sh` med innehållet nedan,
+    och kör `chmod +x slow_seq.sh` för att göra det körbart.
 
     ```bash
       #! /usr/bin/env bash
@@ -303,20 +358,33 @@ Also, a double dash `--` is used in built-in commands and many other commands to
       done
     ```
 
-    There is a way in which pipes (and process substitution) differ from using subshell execution, i.e. `$()`. Run the following commands and observe the differences:
+    Pipes (och process substitution) skiljer sig från att använda subshell-körning,
+    alltså `$()`.
+    Kör följande kommandon och observera skillnaderna:
 
     - `./slow_seq.sh | grep -P "[3-6]"`
     - `grep -P "[3-6]" <(./slow_seq.sh)`
     - `echo $(./slow_seq.sh) | grep -P "[3-6]"`
 
 
-1. **Misc**
-    - Try running `touch {a,b}{a,b}` then `ls` what did appear?
-    - Sometimes you want to keep STDIN and still pipe it to a file. Try running `echo HELLO | tee hello.txt`
-    - Try running `cat hello.txt > hello.txt ` what do you expect to happen? What does happen?
-    - Run `echo HELLO > hello.txt` and then run `echo WORLD >> hello.txt`. What are the contents of `hello.txt`? How is `>` different from `>>`?
-    - Run `printf "\e[38;5;81mfoo\e[0m\n"`. How was the output different? If you want to know more, search for ANSI color escape sequences.
-    - Run `touch a.txt` then run `^txt^log` what did bash do for you? In the same vein, run `fc`. What does it do?
+1. **Övrigt**
+    - Kör `touch {a,b}{a,b}` och sedan `ls`.
+      Vad dök upp?
+    - Ibland vill du behålla STDIN och samtidigt skriva till fil.
+      Kör `echo HELLO | tee hello.txt`.
+    - Kör `cat hello.txt > hello.txt`.
+      Vad tror du händer?
+      Vad händer faktiskt?
+    - Kör `echo HELLO > hello.txt` och sedan `echo WORLD >> hello.txt`.
+      Vad innehåller `hello.txt`?
+      Hur skiljer sig `>` från `>>`?
+    - Kör `printf "\e[38;5;81mfoo\e[0m\n"`.
+      Hur blev utdata annorlunda?
+      Om du vill veta mer, sök på ANSI color escape sequences.
+    - Kör `touch a.txt` och sedan `^txt^log`.
+      Vad gjorde bash åt dig?
+      Kör i samma anda `fc`.
+      Vad gör det?
 
 {% comment %}
 
@@ -328,12 +396,16 @@ TODO
 
 {% endcomment %}
 
-1. **Keyboard shortcuts**
+1. **Kortkommandon**
 
-    As with any application you use frequently is worth familiarising yourself with its keyboard shortcuts. Type the following ones and try figuring out what they do and in what scenarios it might be convenient knowing about them. For some of them it might be easier searching online about what they do. (remember that `^X` means pressing `Ctrl+X`)
+    Precis som med alla program du använder ofta är det värt att lära sig kortkommandon.
+    Skriv in följande och försök förstå vad de gör,
+    och i vilka situationer de är praktiska.
+    För vissa kan det vara enklast att söka online.
+    (Kom ihåg att `^X` betyder `Ctrl+X`.)
 
     - `^A`, `^E`
     - `^R`
     - `^L`
-    - `^C`, `^\` and  `^D`
-    - `^U` and `^Y`
+    - `^C`, `^\` och `^D`
+    - `^U` och `^Y`

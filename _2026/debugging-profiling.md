@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Debugging and Profiling"
+title: "Felsökning och profilering"
 description: >
-  Learn how to debug programs using logging and debuggers, and how to profile code for performance.
+  Lär dig hur du felsöker program med loggning och felsökningsverktyg, och hur du profilerar kod för prestanda.
 thumbnail: /static/assets/thumbnails/2026/lec4.png
 date: 2026-01-15
 ready: true
@@ -12,249 +12,294 @@ video:
   id: 8VYT9TcUmKs
 ---
 
-A golden rule in programming is that code does not do what you expect it to do, but what you tell it to do. Bridging that gap can sometimes be a quite difficult feat. In this lecture we are going to cover useful techniques for dealing with buggy and resource hungry code: debugging and profiling.
+En gyllene regel inom programmering är att kod inte gör det du förväntar dig att den ska göra, utan det du säger åt den att göra.
+Att överbrygga den luckan kan ibland vara ganska svårt.
+I den här föreläsningen går vi igenom användbara tekniker för att hantera felaktig och resurshungrig kod: felsökning och profilering.
 
-# Debugging
+# Felsökning (debugging)
 
-## Printf Debugging and Logging
+## Printf-felsökning och loggning
 
 > "The most effective debugging tool is still careful thought, coupled with judiciously placed print statements" — Brian Kernighan, _Unix for Beginners_.
 
-A first approach to debug a program is to add print statements around where you have detected the problem, and keep iterating until you have extracted enough information to understand what is responsible for the issue.
+Ett första sätt att felsöka ett program är att lägga till utskriftssatser kring där du upptäckt problemet, och fortsätta iterera tills du extraherat tillräcklig information för att förstå vad som orsakar felet.
 
-A second approach is to use logging in your program, instead of ad hoc print statements. Logging is essentially "printing with more care", and is usually done through a logging framework that includes built-in support for things like:
+Ett andra sätt är att använda loggning i ditt program, i stället för ad hoc-utskriftssatser.
+Loggning är i princip "utskrift med mer omsorg", och görs vanligtvis med ett loggningsramverk som har inbyggt stöd för saker som:
 
-- the ability to direct the logs (or subsets of the logs) to other output locations;
-- setting severity levels (such as INFO, DEBUG, WARN, ERROR, etc.) and allow you to filter the output according to those; and
-- support for structured logging of data related to the log entries, which can then be extracted more easily after the fact.
+- möjligheten att styra loggarna (eller delmängder av loggarna) till andra utmatningsplatser,
+- att sätta allvarlighetsnivåer (som INFO, DEBUG, WARN, ERROR, etc.) och filtrera utdata utifrån dessa,
+- stöd för strukturerad loggning av data kopplad till loggposter, som sedan kan extraheras enklare i efterhand.
 
-Logging statements you'll also usually proactively put in while
-programming so that the data you need to debug may already be there!
-And indeed, once you've found and fixed a problem using print
-statements, it's often worthwhile to convert those prints into proper
-log statements before removing them. This way, if similar bugs occur
-in the future, you'll already have the diagnostic information you need
-without modifying the code.
+Loggsatser lägger du också ofta in proaktivt medan du programmerar så att datan du behöver för att felsöka redan kan finnas där.
+Och när du väl hittat och rättat ett problem med utskriftssatser är det ofta värt att konvertera dessa utskrifter till riktiga loggsatser innan du tar bort dem.
+På så sätt har du redan den diagnostiska information du behöver om liknande programfel uppstår i framtiden, utan att behöva ändra koden.
 
-> **Third-party logs**: Many programs support the `-v` or `--verbose` flag to print more information when they run. This can be useful for discovering why a given command fails. Some even allow repeating the flag for more details. When debugging issues with services (databases, web servers, etc.), check their logs—often in `/var/log/` on Linux. Use `journalctl -u <service>` to view logs for systemd services. For third-party libraries, check if they support debug logging via environment variables or configuration.
+> **Loggar från tredjepart**: Många program stödjer flaggan `-v` eller `--verbose` för att skriva ut mer information när de körs.
+Det kan vara användbart för att upptäcka varför ett visst kommando misslyckas.
+Vissa tillåter till och med att flaggan upprepas för mer detaljer.
+När du felsöker problem med tjänster (databaser, webbservrar, etc.), kontrollera deras loggar, ofta i `/var/log/` på Linux.
+Använd `journalctl -u <service>` för att visa loggar för systemd-tjänster.
+För tredjepartsbibliotek, kontrollera om de stödjer felsökningsloggning via miljövariabler eller konfiguration.
 
-## Debuggers
+## Felsökare
 
-Print debugging works well when you know what to print and can easily modify and re-run your code. Debuggers become valuable when you're not sure what information you need, when the bug only manifests in hard-to-reproduce conditions, or when modifying and restarting the program is expensive (long startup times, complex state to recreate, etc.).
+Printf-felsökning fungerar bra när du vet vad du ska skriva ut och enkelt kan modifiera och köra om koden.
+Felsökare blir värdefulla när du inte vet vilken information du behöver, när programfelet bara visar sig under svårreproducerade förhållanden, eller när det är dyrt att modifiera och starta om programmet (långa uppstartstider, komplext tillstånd att återskapa, etc.).
 
-Debuggers are programs that let you interact with the execution of a program as it happens, allowing you to:
+Felsökare är program som låter dig interagera med programmets körning medan den sker, och låter dig:
 
-- Halt execution when it reaches a certain line.
-- Step through one instruction at a time.
-- Inspect values of variables after a crash.
-- Conditionally halt execution when a given condition is met.
-- And many more advanced features.
+- Stoppa körningen när den når en viss rad.
+- Stega en instruktion i taget.
+- Inspektera variabelvärden efter en krasch.
+- Villkorligt stoppa körningen när ett visst villkor uppfylls.
+- Och många fler avancerade funktioner.
 
-Most programming languages support (or come with) some form of debugger. The most versatile are **general-purpose debuggers** like [`gdb`](https://www.gnu.org/software/gdb/) (GNU Debugger) and [`lldb`](https://lldb.llvm.org/) (LLVM Debugger), which can debug any native binary. Many languages also have **language-specific debuggers** that integrate more tightly with the runtime (like Python's pdb or Java's jdb).
+De flesta programmeringsspråk stödjer (eller kommer med) någon form av felsökare.
+De mest mångsidiga är **allmänna felsökare** som [`gdb`](https://www.gnu.org/software/gdb/) (GNU Debugger) och [`lldb`](https://lldb.llvm.org/) (LLVM Debugger), som kan felsöka vilken nativ binär som helst.
+Många språk har också **språkspecifika felsökare** som integrerar tätare med körmiljön (som Pythons pdb eller Javas jdb).
 
-`gdb` is the de-facto standard debugger for C, C++, Rust, and other compiled languages. It lets you probe pretty much any process and get its current machine state: registers, stack, program counter, and more.
+`gdb` är den faktiska standardfelsökaren för C, C++, Rust och andra kompilerade språk.
+Den låter dig undersöka i princip vilken process som helst och se dess aktuella maskintillstånd: register, stack, programräknare och mer.
 
-Some useful GDB commands:
+Några användbara GDB-kommandon:
 
-- `run` - Start the program
-- `b {function}` or `b {file}:{line}` - Set a breakpoint
-- `c` - Continue execution
-- `step` / `next` / `finish` - Step in / step over / step out
-- `p {variable}` - Print value of variable
-- `bt` - Show backtrace (call stack)
-- `watch {expression}` - Break when the value changes
+- `run` - Starta programmet
+- `b {function}` eller `b {file}:{line}` - Sätt en brytpunkt
+- `c` - Fortsätt körning
+- `step` / `next` / `finish` - Stega in / stega över / stega ut
+- `p {variable}` - Skriv ut värdet på variabel
+- `bt` - Visa backtrace (anropsstack)
+- `watch {expression}` - Bryt när värdet ändras
 
-> Consider using GDB's TUI mode (`gdb -tui` or press `Ctrl-x a` inside GDB) for a split-screen view showing source code alongside the command prompt.
+> Överväg att använda GDB:s TUI-läge (`gdb -tui` eller tryck `Ctrl-x a` i GDB) för delad skärm med källkod bredvid kommandoprompten.
 
-### Record-Replay Debugging
+### Inspelnings-/uppspelningsfelsökning
 
-Some of the most frustrating bugs are _Heisenbugs_: bugs that seem to disappear or change behavior when you try to observe them. Race conditions, timing-dependent bugs, and issues that only appear under certain system conditions fall into this category. Traditional debugging is often useless here because running the program again produces different behavior (e.g., print statements may slow down the code sufficiently that the race no longer happens).
+Några av de mest frustrerande programfelen är så kallade _Heisenfel_ (_Heisenbugs_): programfel som verkar försvinna eller ändra beteende när du försöker observera dem.
+Race conditions, tidsberoende programfel och problem som bara dyker upp under vissa systemförhållanden tillhör den här kategorin.
+Traditionell felsökning är ofta värdelös här eftersom nästa körning ger annat beteende (t.ex. kan utskriftssatser sakta ner koden så mycket att racet inte längre händer).
 
-**Record-replay debugging** solves this by recording a program's execution and allowing you to replay it deterministically as many times as you need. Even better, you can _reverse_ through the execution to find exactly where things went wrong.
+**Inspelnings-/uppspelningsfelsökning** (record-replay) löser detta genom att spela in ett programs körning och låta dig spela upp den deterministiskt så många gånger du behöver.
+Ännu bättre är att du kan gå _baklänges_ i körningen för att hitta exakt var något gick fel.
 
-[rr](https://rr-project.org/) is a powerful tool for Linux that records program execution and allows deterministic replay with full debugging capabilities. It works with GDB, so you already know the interface.
+[rr](https://rr-project.org/) är ett kraftfullt verktyg för Linux som spelar in programkörning och tillåter deterministisk uppspelning med fulla felsökningsmöjligheter.
+Det fungerar med GDB, så du kan redan gränssnittet.
 
-Basic usage:
+Grundläggande användning:
 
 ```bash
-# Record a program execution
+# Spela in en programkörning
 rr record ./my_program
 
-# Replay the recording (opens GDB)
+# Spela upp inspelningen (öppnar GDB)
 rr replay
 ```
 
-The magic happens during replay. Because the execution is deterministic, you can use **reverse debugging** commands:
+Magin sker under uppspelning.
+Eftersom körningen är deterministisk kan du använda kommandon för **omvänd felsökning** (reverse debugging):
 
-- `reverse-continue` (`rc`) - Run backwards until hitting a breakpoint
-- `reverse-step` (`rs`) - Step backwards one line
-- `reverse-next` (`rn`) - Step backwards, skipping function calls
-- `reverse-finish` - Run backwards until entering the current function
+- `reverse-continue` (`rc`) - Kör baklänges tills en brytpunkt nås
+- `reverse-step` (`rs`) - Stega baklänges en rad
+- `reverse-next` (`rn`) - Stega baklänges och hoppa över funktionsanrop
+- `reverse-finish` - Kör baklänges tills du går in i aktuell funktion
 
-This is incredibly powerful for debugging. Say you have a crash—instead of guessing where the bug is and setting breakpoints, you can:
+Detta är otroligt kraftfullt för felsökning.
+Säg att du har en krasch, i stället för att gissa var programfelet är och sätta brytpunkter kan du:
 
-1. Run to the crash
-2. Inspect the corrupted state
-3. Set a watchpoint on the corrupted variable
-4. `reverse-continue` to find exactly where it was corrupted
+1. Köra till kraschen.
+2. Inspektera det korrupta tillståndet.
+3. Sätta en watchpoint på den korrupta variabeln.
+4. Köra `reverse-continue` för att hitta exakt var den blev korrupt.
 
-**When to use rr:**
-- Flaky tests that fail intermittently
-- Race conditions and threading bugs
-- Crashes that are hard to reproduce
-- Any bug where you wish you could "go back in time"
+**När du ska använda rr:**
+- Flaky tester som fallerar intermittent.
+- Race conditions och trådningsfel.
+- Krascher som är svåra att reproducera.
+- Alla programfel där du önskar att du kunde "gå tillbaka i tiden".
 
-> Note: rr only works on Linux and requires hardware performance counters. It doesn't work in VMs that don't expose these counters, such as on most AWS EC2 instances, and it doesn't support GPU access. For macOS, check out [Warpspeed](https://warpspeed.dev/).
+> Obs: rr fungerar bara på Linux och kräver hårdvaruprestandaräknare.
+Det fungerar inte i VM:ar som inte exponerar dessa räknare, till exempel på de flesta AWS EC2-instanser, och stödjer inte GPU-åtkomst.
+För macOS, kolla in [Warpspeed](https://warpspeed.dev/).
 
-> **rr and concurrency**: Because rr records execution deterministically, it serializes thread scheduling. This means some race conditions may not manifest under rr if they depend on specific timing. rr is still useful for debugging races—once you capture a failing run, you can replay it reliably—but you may need multiple recording attempts to catch an intermittent bug. For bugs that don't involve concurrency, rr shines brightest: you can always reproduce the exact execution and use reverse debugging to hunt down corruption.
+> **rr och samtidighet**: Eftersom rr spelar in körningen deterministiskt serialiserar det trådschemaläggning.
+Det innebär att vissa race conditions kanske inte visar sig under rr om de beror på specifik timing.
+rr är fortfarande användbart för att felsöka race-problem, när du väl fångat en felande körning kan du spela upp den tillförlitligt, men du kan behöva flera inspelningsförsök för att fånga ett intermittent programfel.
+För programfel utan samtidighet glänser rr mest: du kan alltid reproducera exakt körning och använda omvänd felsökning för att jaga ner korruption.
 
-## System Call Tracing
+## Spårning av systemanrop
 
-Sometimes you need to understand how your program interacts with the operating system. Programs make [system calls](https://en.wikipedia.org/wiki/System_call) to request services from the kernel—opening files, allocating memory, creating processes, and more. Tracing these calls can reveal why a program is hanging, what files it's trying to access, or where it's spending time waiting.
+Ibland behöver du förstå hur programmet interagerar med operativsystemet.
+Program gör [systemanrop](https://en.wikipedia.org/wiki/System_call) för att begära tjänster från kärnan, öppna filer, allokera minne, skapa processer och mer.
+Att spåra dessa anrop kan avslöja varför ett program hänger sig, vilka filer det försöker komma åt eller var det spenderar tid på att vänta.
 
-### strace (Linux) and dtruss (macOS)
+### strace (Linux) och dtruss (macOS)
 
-[`strace`](https://www.man7.org/linux/man-pages/man1/strace.1.html) lets you observe every system call a program makes:
+[`strace`](https://www.man7.org/linux/man-pages/man1/strace.1.html) låter dig observera varje systemanrop ett program gör:
 
 ```bash
-# Trace all system calls
+# Spåra alla systemanrop
 strace ./my_program
 
-# Trace only file-related calls
+# Spåra bara filrelaterade anrop
 strace -e trace=file ./my_program
 
-# Follow child processes (important for programs that start other programs)
+# Följ barnprocesser (viktigt för program som startar andra program)
 strace -f ./my_program
 
-# Trace a running process
+# Spåra en redan körande process
 strace -p <PID>
 
-# Show timing information
+# Visa tidsinformation
 strace -T ./my_program
 ```
 
-> On macOS and BSD, use [`dtruss`](https://www.manpagez.com/man/1/dtruss/) (which wraps `dtrace`) for similar functionality:
+> På macOS och BSD, använd [`dtruss`](https://www.manpagez.com/man/1/dtruss/) (som kapslar `dtrace`) för liknande funktionalitet.
 
-> For deeper dives into `strace`, check out Julia Evans' excellent [strace zine](https://jvns.ca/strace-zine-unfolded.pdf).
+> För djupdykningar i `strace`, kolla Julia Evans utmärkta [strace-zine](https://jvns.ca/strace-zine-unfolded.pdf).
 
-### bpftrace and eBPF
+### bpftrace och eBPF
 
-[eBPF](https://ebpf.io/) (extended Berkeley Packet Filter) is a powerful Linux technology that allows running sandboxed programs in the kernel. [`bpftrace`](https://github.com/iovisor/bpftrace) provides a high-level syntax for writing eBPF programs. These are arbitrary programs running in the kernel, and thus have huge expressive power (though also a somewhat clumsy awk-like syntax). The most common use-case for them is to investigate what system calls are being invoked, including aggregations (like counts or latency statistics) or introspecting (or even filtering on) system call arguments.
+[eBPF](https://ebpf.io/) (extended Berkeley Packet Filter) är en kraftfull Linux-teknik som låter sandboxade program köras i kärnan.
+[`bpftrace`](https://github.com/iovisor/bpftrace) ger en högnivåsyntax för att skriva eBPF-program.
+Detta är godtyckliga program som körs i kärnan och har därför stor uttryckskraft (men också en något klumpig awk-liknande syntax).
+Det vanligaste användningsfallet är att undersöka vilka systemanrop som anropas, inklusive aggregeringar (som antal eller latensstatistik) eller introspektion (eller till och med filtrering på) systemanropsargument.
 
 ```bash
-# Trace file opens system-wide (prints immediately)
+# Spåra filöppningar i hela systemet (skrivs ut direkt)
 sudo bpftrace -e 'tracepoint:syscalls:sys_enter_openat { printf("%s %s\n", comm, str(args->filename)); }'
 
-# Count system calls by name (prints summary on Ctrl-C)
+# Räkna systemanrop per namn (skriver ut sammanfattning med Ctrl-C)
 sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* { @[probe] = count(); }'
 ```
 
-However, you can also write eBPF programs directly in C using a toolchain like [`bcc`](https://github.com/iovisor/bcc), which also ships with [many handy tools](https://www.brendangregg.com/blog/2015-09-22/bcc-linux-4.3-tracing.html) like `biosnoop` for printing latency distributions for disk operations or `opensnoop` for printing all open files.
+Du kan också skriva eBPF-program direkt i C med en verktygskedja som [`bcc`](https://github.com/iovisor/bcc), som också levereras med [många praktiska verktyg](https://www.brendangregg.com/blog/2015-09-22/bcc-linux-4.3-tracing.html) som `biosnoop` för att skriva ut latensfördelningar för diskoperationer eller `opensnoop` för att skriva ut alla öppnade filer.
 
-Where `strace` is useful because it's easy to "just get up and running", `bpftrace` is what you should reach for when you need lower overhead, want to trace through kernel functions, need to do any kind of aggregation, etc. Note that `bpftrace` has to run as `root` though, and that it generally monitors the entire kernel, not just a particular process. To target a specific program, you can filter by command name or PID:
+Där `strace` är användbart eftersom det är lätt att "bara komma igång", är `bpftrace` verktyget du ska ta till när du behöver lägre överkostnad, vill spåra genom kärnfunktioner eller behöver någon form av aggregering.
+Notera att `bpftrace` måste köras som `root`, och att det i allmänhet övervakar hela kärnan, inte bara en viss process.
+För att rikta in dig på ett specifikt program kan du filtrera på kommandonamn eller PID:
 
 ```bash
-# Filter by command name (prints summary on Ctrl-C)
+# Filtrera på kommandonamn (skriver ut sammanfattning med Ctrl-C)
 sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* /comm == "bash"/ { @[probe] = count(); }'
 
-# Trace a specific command from startup using -c (cpid = child PID)
+# Spåra ett specifikt kommando från start med -c (cpid = barnets PID)
 sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* /pid == cpid/ { @[probe] = count(); }' -c 'ls -la'
 ```
 
-The `-c` flag runs the specified command and sets `cpid` to its PID, which is useful for tracing a program from the moment it starts. When the traced command exits, bpftrace prints the aggregated results.
+Flaggan `-c` kör det angivna kommandot och sätter `cpid` till dess PID, vilket är användbart för att spåra ett program från det ögonblick det startar.
+När det spårade kommandot avslutas skriver bpftrace ut de aggregerade resultaten.
 
-### Network Debugging
+### Nätverksfelsökning
 
-For network issues, [`tcpdump`](https://www.man7.org/linux/man-pages/man1/tcpdump.1.html) and [Wireshark](https://www.wireshark.org/) let you capture and analyze network packets:
+För nätverksproblem låter [`tcpdump`](https://www.man7.org/linux/man-pages/man1/tcpdump.1.html) och [Wireshark](https://www.wireshark.org/) dig fånga och analysera nätverkspaket:
 
 ```bash
-# Capture packets on port 80
+# Fånga paket på port 80
 sudo tcpdump -i any port 80
 
-# Capture and save to file for Wireshark analysis
+# Fånga och spara till fil för analys i Wireshark
 sudo tcpdump -i any -w capture.pcap
 ```
 
-For HTTPS traffic, the encryption makes tcpdump less useful. Tools like [mitmproxy](https://mitmproxy.org/) can act as an intercepting proxy to inspect encrypted traffic. Browser developer tools (Network tab) are often the easiest way to debug HTTPS requests from web applications—they show decrypted request/response data, headers, and timing.
+För HTTPS-trafik gör krypteringen tcpdump mindre användbart.
+Verktyg som [mitmproxy](https://mitmproxy.org/) kan agera avlyssnande proxy för att inspektera krypterad trafik.
+Webbläsarens utvecklarverktyg (Network-fliken) är ofta enklaste sättet att felsöka HTTPS-förfrågningar från webbapplikationer, de visar dekrypterad data för begäran och svar, headers och tidsmätning.
 
-## Memory Debugging
+## Minnesfelsökning
 
-Memory bugs—buffer overflows, use-after-free, memory leaks—are among the most dangerous and difficult to debug. They often don't crash immediately but corrupt memory in ways that cause problems much later.
+Minnesfel, buffertöverskridningar, use-after-free, minnesläckor, är bland de farligaste och svåraste att felsöka.
+De kraschar ofta inte direkt utan korruptar minne på sätt som orsakar problem långt senare.
 
 ### Sanitizers
 
-One approach to finding memory bugs is to use **sanitizers**, which are compiler features that instrument your code to detect errors at runtime. For example, the widely used **AddressSanitizer (ASan)** detects:
-- Buffer overflows (stack, heap, and global)
-- Use-after-free
-- Use-after-return
-- Memory leaks
+Ett sätt att hitta minnesfel är att använda **sanitizers**, vilket är kompilatorfunktioner som instrumenterar koden för att upptäcka fel vid körning.
+Den mycket använda **AddressSanitizer (ASan)** upptäcker till exempel:
+- Buffertöverskridningar (stack, heap och globalt).
+- Use-after-free.
+- Use-after-return.
+- Minnesläckor.
 
 ```bash
-# Compile with AddressSanitizer
+# Kompilera med AddressSanitizer
 gcc -fsanitize=address -g program.c -o program
 ./program
 ```
 
-There are a variety of useful sanitizers:
+Det finns flera användbara sanitizers:
 
-- **ThreadSanitizer (TSan)**: Detects data races in multithreaded code (`-fsanitize=thread`)
-- **MemorySanitizer (MSan)**: Detects reads of uninitialized memory (`-fsanitize=memory`)
-- **UndefinedBehaviorSanitizer (UBSan)**: Detects undefined behavior like integer overflow (`-fsanitize=undefined`)
+- **ThreadSanitizer (TSan)**: Upptäcker datarace i multitrådad kod (`-fsanitize=thread`)
+- **MemorySanitizer (MSan)**: Upptäcker läsningar av oinitierat minne (`-fsanitize=memory`)
+- **UndefinedBehaviorSanitizer (UBSan)**: Upptäcker odefinierat beteende som heltalsöverspill (`-fsanitize=undefined`)
 
-Sanitizers require recompilation but are fast enough to use in CI pipelines and during regular development.
+Sanitizers kräver omkompilering men är tillräckligt snabba för CI-pipelines och vanlig utveckling.
 
-### Valgrind: When You Can't Recompile
+### Valgrind: när du inte kan omkompilera
 
-[Valgrind](https://valgrind.org/) instead runs your program in something akin to a virtual machine to detect memory errors. It's slower than sanitizers but doesn't require recompilation:
+[Valgrind](https://valgrind.org/) kör i stället programmet i något som liknar en virtuell maskin för att upptäcka minnesfel.
+Det är långsammare än sanitizers men kräver ingen omkompilering:
 
 ```bash
 valgrind --leak-check=full ./my_program
 ```
 
-Use Valgrind when:
-- You don't have source code
-- You can't recompile (third-party libraries)
-- You need specific tools not available as sanitizers
+Använd Valgrind när:
+- Du inte har källkoden.
+- Du inte kan omkompilera (tredjepartsbibliotek).
+- Du behöver specifika verktyg som inte finns som sanitizers.
 
-Valgrind is actually a really powerful controlled execution environment, and we'll see more of it later when we get to profiling!
+Valgrind är faktiskt en mycket kraftfull kontrollerad körmiljö, och vi kommer se mer av den senare när vi kommer till profilering.
 
-## AI for Debugging
+## AI för felsökning
 
-Large language models have become surprisingly useful debugging assistants. They excel at certain debugging tasks that complement traditional tools.
+Stora språkmodeller har blivit förvånansvärt användbara felsökningsassistenter.
+De är särskilt bra på vissa felsökningsuppgifter som kompletterar traditionella verktyg.
 
-**Where LLMs shine:**
+**Där LLM:er glänser:**
 
-- **Explaining cryptic error messages**: Compiler errors, especially from C++ templates or Rust's borrow checker, can be notoriously cryptic. LLMs can translate them into plain English and suggest fixes.
+- **Förklara kryptiska felmeddelanden**: Kompilatorfel, särskilt från C++-templates eller Rusts borrow checker, kan vara notoriskt kryptiska.
+  LLM:er kan översätta dem till vanlig svenska/engelska och föreslå fixar.
 
-- **Traversing language and abstraction boundaries**: If you're debugging a problem that spans multiple languages (say, a bug in a C library that manifests through a Python binding), LLMs can help navigate the different layers. They're particularly good at understanding FFI boundaries, build system issues, and cross-language debugging (e.g., my program errors, but I believe it is because of a bug in one of my dependencies).
+- **Navigera språk- och abstraktionsgränser**: Om du felsöker ett problem som spänner över flera språk (säg ett programfel i ett C-bibliotek som visar sig via en Python-binding), kan LLM:er hjälpa dig navigera lagren.
+  De är särskilt bra på att förstå FFI-gränser, problem i byggsystem och felsökning över språkgränser (t.ex. mitt program ger fel, men jag tror det beror på ett programfel i ett av mina beroenden).
 
-- **Correlating symptoms with root causes**: "My program works fine but uses 10x more memory than expected" is the kind of vague symptom that LLMs can help investigate, suggesting likely causes and what to look for.
+- **Koppla symptom till grundorsak**: "Mitt program fungerar men använder 10 gånger mer minne än väntat" är typen av diffust symptom som LLM:er kan hjälpa att undersöka genom att föreslå troliga orsaker och vad du ska titta efter.
 
-- **Analyzing crash dumps and stack traces**: Paste a stack trace and ask what might have caused it.
+- **Analysera kraschdumpar och stackspår**: Klistra in ett stackspår och fråga vad som kan ha orsakat det.
 
-> **Note on debug symbols**: For meaningful stack traces and debugging, ensure your binaries (and any linked libraries) are compiled with debug symbols (`-g` flag). Debug information is typically stored in DWARF format. Additionally, compiling with frame pointers (`-fno-omit-frame-pointer`) makes stack traces more reliable, especially for profiling tools. Without these, stack traces may show only memory addresses or be incomplete. This matters more for natively compiled programs (C++, Rust) than Python or Java.
+> **Obs om debugsymboler**: För meningsfulla stackspår och felsökning, se till att dina binärer (och länkade bibliotek) kompileras med debugsymboler (flaggan `-g`).
+Felsökningsinformation lagras typiskt i DWARF-format.
+Dessutom gör kompilering med frame pointers (`-fno-omit-frame-pointer`) stackspår mer tillförlitliga, särskilt för profileringsverktyg.
+Utan detta kan stackspår bara visa minnesadresser eller vara ofullständiga.
+Detta spelar större roll för nativt kompilerade program (C++, Rust) än för Python eller Java.
 
-**Limitations to keep in mind:**
-- LLMs can hallucinate plausible-sounding but wrong explanations
-- They may suggest fixes that mask the bug rather than fix it
-- Always verify suggestions with actual debugging tools
-- They work best as a complement to, not replacement for, understanding your code
+**Begränsningar att ha i åtanke:**
+- LLM:er kan hallucinera rimligt klingande men felaktiga förklaringar.
+- De kan föreslå fixar som maskerar programfelet i stället för att lösa det.
+- Verifiera alltid förslag med riktiga felsökningsverktyg.
+- De fungerar bäst som ett komplement till, inte en ersättning för, förståelse av din kod.
 
-> This is distinct from the [general AI coding capabilities](/2026/development-environment/#ai-powered-development) covered in the Development Environment lecture. Here we're specifically talking about using LLMs as a debugging aid.
+> Detta skiljer sig från de [generella AI-kodningsförmågorna]({{ '/2026/development-environment/#ai-powered-development' | relative_url }}) som tas upp i föreläsningen om utvecklingsmiljö.
+Här pratar vi specifikt om att använda LLM:er som ett hjälpmedel vid felsökning.
 
-# Profiling
+# Profilering
 
-Even if your code functionally behaves as you would expect, that might not be good enough if it takes all your CPU or memory in the process. Algorithms classes often teach big _O_ notation but not how to find hot spots in your programs. Since [premature optimization is the root of all evil](https://wiki.c2.com/?PrematureOptimization), you should learn about profilers and monitoring tools. They will help you understand which parts of your program are taking most of the time and/or resources so you can focus on optimizing those parts.
+Även om koden funktionellt beter sig som förväntat kanske det inte räcker om den samtidigt slukar all CPU eller allt minne.
+Algoritmkurser lär ofta ut big _O_-notation men inte hur man hittar flaskhalsar i program.
+Eftersom [premature optimization is the root of all evil](https://wiki.c2.com/?PrematureOptimization) bör du lära dig om profileringsverktyg och övervakningsverktyg.
+De hjälper dig förstå vilka delar av programmet som tar mest tid och/eller resurser så att du kan fokusera optimering där den spelar roll.
 
 ## Timing
 
-The simplest way to measure performance is to time things. In many scenarios it can be enough to just print the time it took your code between two points.
+Det enklaste sättet att mäta prestanda är att mäta tid.
+I många scenarier räcker det att bara skriva ut tiden som koden tog mellan två punkter.
 
-However, wall clock time can be misleading since your computer might be running other processes at the same time or waiting for events to happen. The `time` command distinguishes between _Real_, _User_, and _Sys_ time:
+Men wall clock-tid kan vara missvisande eftersom datorn kan köra andra processer samtidigt eller vänta på händelser.
+Kommandot `time` skiljer mellan _Real_, _User_ och _Sys_ tid:
 
-- **Real** - Wall clock time from start to finish, including time spent waiting
-- **User** - Time spent in the CPU running user code
-- **Sys** - Time spent in the CPU running kernel code
+- **Real** - Väggklocktid från start till slut, inklusive väntetid.
+- **User** - Tid som CPU:n spenderar på användarkod.
+- **Sys** - Tid som CPU:n spenderar på kärnkod.
 
 ```bash
 $ time curl https://missing.csail.mit.edu &> /dev/null
@@ -263,58 +308,72 @@ user	0m0.079s
 sys	    0m0.028s
 ```
 
-Here the request took nearly 300 milliseconds (real time) but only 107ms of CPU time (user + sys). The rest was waiting for the network.
+Här tog förfrågan nästan 300 millisekunder (real tid) men bara 107 ms CPU-tid (user + sys).
+Resten var väntan på nätverket.
 
-## Resource Monitoring
+## Resursövervakning
 
-Sometimes the first step towards analyzing the performance of your program is to understand what its actual resource consumption is. Programs often run slowly when they are resource constrained.
+Ibland är första steget i att analysera programmets prestanda att förstå faktisk resursförbrukning.
+Program kör ofta långsamt när de är resursbegränsade.
 
-- **General Monitoring**: [`htop`](https://htop.dev/) is an improved version of `top` that presents various statistics for currently running processes. Useful keybinds: `<F6>` to sort processes, `t` to show tree hierarchy, `h` to toggle threads. There's also [`btop`](https://github.com/aristocratos/btop) which monitors _way_ more things.
+- **Allmän övervakning**: [`htop`](https://htop.dev/) är en förbättrad version av `top` som visar olika statistik för processer som körs.
+  Användbara kortkommandon: `<F6>` för att sortera processer, `t` för att visa trädhierarki, `h` för att växla trådar.
+  Det finns också [`btop`](https://github.com/aristocratos/btop) som övervakar _mycket_ mer.
 
-- **I/O Operations**: [`iotop`](https://www.man7.org/linux/man-pages/man8/iotop.8.html) displays live I/O usage information.
+- **I/O-operationer**: [`iotop`](https://www.man7.org/linux/man-pages/man8/iotop.8.html) visar live-information om I/O-användning.
 
-- **Memory Usage**: [`free`](https://www.man7.org/linux/man-pages/man1/free.1.html) displays total free and used memory.
+- **Minnesanvändning**: [`free`](https://www.man7.org/linux/man-pages/man1/free.1.html) visar totalt ledigt och använt minne.
 
-- **Open Files**: [`lsof`](https://www.man7.org/linux/man-pages/man8/lsof.8.html) lists file information about files opened by processes. Useful for checking which process has opened a specific file.
+- **Öppna filer**: [`lsof`](https://www.man7.org/linux/man-pages/man8/lsof.8.html) listar filinformation om filer öppnade av processer.
+  Användbart för att se vilken process som öppnat en specifik fil.
 
-- **Network Connections**: [`ss`](https://www.man7.org/linux/man-pages/man8/ss.8.html) lets you monitor network connections. A common use case is figuring out what process is using a given port: `ss -tlnp | grep :8080`.
+- **Nätverksanslutningar**: [`ss`](https://www.man7.org/linux/man-pages/man8/ss.8.html) låter dig övervaka nätverksanslutningar.
+  Ett vanligt användningsfall är att ta reda på vilken process som använder en viss port: `ss -tlnp | grep :8080`.
 
-- **Network Usage**: [`nethogs`](https://github.com/raboof/nethogs) and [`iftop`](https://pdw.ex-parrot.com/iftop/) are good interactive CLI tools for monitoring network usage per process.
+- **Nätverksanvändning**: [`nethogs`](https://github.com/raboof/nethogs) och [`iftop`](https://pdw.ex-parrot.com/iftop/) är bra interaktiva CLI-verktyg för att övervaka nätverksanvändning per process.
 
-## Visualizing Performance Data
+## Visualisering av prestandadata
 
-Humans spot patterns in graphs much faster than in tables of numbers. When analyzing performance, plotting your data often reveals trends, spikes, and anomalies that would be invisible in raw numbers.
+Människor ser mönster i grafer mycket snabbare än i tabeller med siffror.
+När du analyserar prestanda avslöjar plottning ofta trender, toppar och avvikelser som är osynliga i rådata.
 
-**Making data plottable**: When adding print or log statements for debugging, consider formatting the output so it can be easily graphed later. A simple timestamp and value in CSV format (`1705012345,42.5`) is much easier to plot than a prose sentence. JSON-structured logs can also be parsed and plotted with minimal effort. In other words, log your data [in a tidy way](https://vita.had.co.nz/papers/tidy-data.pdf).
+**Gör data plottbar**: När du lägger till utskrifts- eller loggsatser för felsökning, överväg att formatera utdata så att den enkelt kan plottas senare.
+En enkel tidsstämpel och ett värde i CSV-format (`1705012345,42.5`) är mycket enklare att plotta än en fullständig mening.
+JSON-strukturerade loggar kan också parsas och plottas med minimal ansträngning.
+Med andra ord, logga din data [på ett välstrukturerat sätt](https://vita.had.co.nz/papers/tidy-data.pdf).
 
-**Quick plotting with gnuplot**: For simple command-line plotting, [`gnuplot`](http://www.gnuplot.info/) can generate graphs directly from data files:
+**Snabb plottning med gnuplot**: För enkel kommandoradsplottning kan [`gnuplot`](http://www.gnuplot.info/) skapa grafer direkt från datafiler:
 
 ```bash
-# Plot a simple CSV with timestamp,value
+# Plotta en enkel CSV med tidsstämpel,värde
 gnuplot -e "set datafile separator ','; plot 'latency.csv' using 1:2 with lines"
 ```
 
-**Iterative exploration with matplotlib and ggplot2**: For deeper analysis, Python's [`matplotlib`](https://matplotlib.org/) and R's [`ggplot2`](https://ggplot2.tidyverse.org/) enable iterative exploration. Unlike one-off plotting, these tools let you quickly slice and transform data to investigate hypotheses. ggplot2's facet plots are particularly powerful—you can split a single dataset across multiple subplots by category (e.g., faceting request latency by endpoint or time-of-day) to tease out patterns that would otherwise be hidden.
+**Iterativ utforskning med matplotlib och ggplot2**: För djupare analys möjliggör Pythons [`matplotlib`](https://matplotlib.org/) och R:s [`ggplot2`](https://ggplot2.tidyverse.org/) iterativ utforskning.
+Till skillnad från engångsplottning låter dessa verktyg dig snabbt skära och transformera data för att undersöka hypoteser.
+ggplot2:s facet-plottar är särskilt kraftfulla, du kan dela ett dataset över flera subplotar per kategori (t.ex. latens per endpoint eller tid på dygnet) för att få fram mönster som annars skulle döljas.
 
-**Example use cases:**
-- Plotting request latency over time reveals periodic slowdowns (garbage collection, cron jobs, traffic patterns) that raw percentiles obscure
-- Visualizing insert times for a growing data structure can expose algorithmic complexity issues—a plot of vector insertions will show characteristic spikes when the backing array doubles in size
-- Faceting metrics by different dimensions (request type, user cohort, server) often reveals that a "system-wide" problem is actually isolated to one category
+**Exempel på användningsfall:**
+- Att plotta request-latens över tid avslöjar periodiska fördröjningar (garbage collection, cron-jobb, trafikmönster) som råa percentiler döljer.
+- Att visualisera insertion-tider för en växande datastruktur kan exponera algoritmisk komplexitet, en graf över vector-insertions visar typiska toppar när den underliggande arrayen dubblas.
+- Att facetta metriker över olika dimensioner (request-typ, användarkohort, server) avslöjar ofta att ett "systemomfattande" problem i själva verket är isolerat till en kategori.
 
-## CPU Profilers
+## CPU-profilerare
 
-Most of the time when people refer to _profilers_ they mean _CPU profilers_. There are two main types:
+Oftast när folk säger _profilerare_ menar de _CPU-profilerare_.
+Det finns två huvudtyper:
 
-- **Tracing profilers** keep a record of every function call your program makes
-- **Sampling profilers** probe your program periodically (commonly every millisecond) and record the program's stack
+- **Spårningsprofilerare** behåller en logg över varje funktionsanrop programmet gör.
+- **Samplingsprofilerare** provar programmet periodiskt (vanligen varje millisekund) och spelar in programmets stack.
 
-Sampling profilers have lower overhead and are generally preferred for production use.
+Samplingprofilering har lägre överkostnad och är generellt att föredra i produktion.
 
-### perf: the sampling profiler
+### perf: samplingsprofileraren
 
-[`perf`](https://www.man7.org/linux/man-pages/man1/perf.1.html) is the standard Linux profiler. It can profile any program without recompilation:
+[`perf`](https://www.man7.org/linux/man-pages/man1/perf.1.html) är standardprofileraren på Linux.
+Den kan profilera vilket program som helst utan omkompilering:
 
-`perf stat` gives you a quick overview of where time is spent:
+`perf stat` ger en snabb överblick över var tiden spenderas:
 
 ```bash
 $ perf stat ./slow_program
@@ -331,61 +390,66 @@ $ perf stat ./slow_program
        12,345,678      branch-misses             #    1.00% of all branches
 ```
 
-Profiler output for real world programs will contain large amounts of information. Humans are visual creatures and are quite terrible at reading large amounts of numbers. [Flame graphs](https://www.brendangregg.com/flamegraphs.html) are a visualization that makes profiling data much easier to understand.
+Profiler-utdata för verkliga program innehåller ofta stora mängder information.
+Människor är visuella och ganska dåliga på att läsa stora mängder siffror.
+[Flamdiagram (flame graph)](https://www.brendangregg.com/flamegraphs.html) är en visualisering som gör profileringsdata mycket enklare att förstå.
 
-A flame graph displays a hierarchy of function calls across the Y axis and time taken proportional to the X axis. They're interactive—you can click to zoom into specific parts of the program.
+Ett flamdiagram visar en hierarki av funktionsanrop längs Y-axeln och tidsåtgång proportionellt mot X-axeln.
+De är interaktiva, du kan klicka för att zooma in i specifika delar av programmet.
 
 [![FlameGraph](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)
 
-To generate a flame graph from `perf` data:
+För att generera ett flamdiagram från `perf`-data:
 
 ```bash
-# Record profile
+# Spela in profilering
 perf record -g ./my_program
 
-# Generate flame graph (requires flamegraph scripts)
+# Generera flamdiagram (kräver flamegraph-skript)
 perf script | stackcollapse-perf.pl | flamegraph.pl > flamegraph.svg
 ```
 
-> Consider using [Speedscope](https://www.speedscope.app/) for an interactive web-based flame graph viewer, or [Perfetto](https://perfetto.dev/) for comprehensive system-level analysis.
+> Överväg att använda [Speedscope](https://www.speedscope.app/) för en interaktiv webbaserad flamdiagramvisare, eller [Perfetto](https://perfetto.dev/) för omfattande systemnivåanalys.
 
-### Valgrind's Callgrind: the tracing profiler
+### Valgrinds Callgrind: spårningsprofilerare
 
-[`callgrind`](https://valgrind.org/docs/manual/cl-manual.html) is a profiling tool that records the call history and instruction counts of your program. Unlike sampling profilers, it provides exact call counts and can show the relationship between callers and callees:
+[`callgrind`](https://valgrind.org/docs/manual/cl-manual.html) är ett profileringsverktyg som spelar in anropshistorik och instruktionsantal för programmet.
+Till skillnad från samplingsprofilerare ger den exakta anropsantal och kan visa relationen mellan anropande och anropade funktioner:
 
 ```bash
-# Run with callgrind
+# Kör med callgrind
 valgrind --tool=callgrind ./my_program
 
-# Analyze with callgrind_annotate (text) or kcachegrind (GUI)
+# Analysera med callgrind_annotate (text) eller kcachegrind (GUI)
 callgrind_annotate callgrind.out.<pid>
 kcachegrind callgrind.out.<pid>
 ```
 
-Callgrind is slower than sampling profilers but provides precise call counts and can optionally simulate cache behavior (with `--cache-sim=yes`) if you need that information.
+Callgrind är långsammare än samplingsprofilerare men ger exakta anropsantal och kan valfritt simulera cache-beteende (med `--cache-sim=yes`) om du behöver den informationen.
 
-> If you're using a particular language, there may be more specialized profilers. For example, Python has [`cProfile`](https://docs.python.org/3/library/profile.html) and [`py-spy`](https://github.com/benfred/py-spy), Go has [`go tool pprof`](https://pkg.go.dev/cmd/pprof), and Rust has [`cargo-flamegraph`](https://github.com/flamegraph-rs/flamegraph) (which actually works for any compiled program!).
+> Om du använder ett särskilt språk kan det finnas mer specialiserade profilerare.
+Till exempel har Python [`cProfile`](https://docs.python.org/3/library/profile.html) och [`py-spy`](https://github.com/benfred/py-spy), Go har [`go tool pprof`](https://pkg.go.dev/cmd/pprof), och Rust har [`cargo-flamegraph`](https://github.com/flamegraph-rs/flamegraph) (som faktiskt fungerar för alla kompilerade program!).
 
-## Memory Profilers
+## Minnesprofilerare
 
-Memory profilers help you understand how your program uses memory over time and find memory leaks.
+Minnesprofilerare hjälper dig förstå hur programmet använder minne över tid och hitta minnesläckor.
 
-### Valgrind's Massif
+### Valgrinds Massif
 
-[`massif`](https://valgrind.org/docs/manual/ms-manual.html) profiles heap memory usage:
+[`massif`](https://valgrind.org/docs/manual/ms-manual.html) profilerar heap-minnesanvändning:
 
 ```bash
 valgrind --tool=massif ./my_program
 ms_print massif.out.<pid>
 ```
 
-This shows you heap usage over time, helping identify memory leaks and excessive allocation.
+Detta visar heap-användning över tid och hjälper dig identifiera minnesläckor och överdriven allokering.
 
-> For Python, [`memory-profiler`](https://pypi.org/project/memory-profiler/) provides line-by-line memory usage information.
+> För Python ger [`memory-profiler`](https://pypi.org/project/memory-profiler/) rad-för-rad-information om minnesanvändning.
 
 ## Benchmarking
 
-When you need to compare the performance of different implementations or tools, [`hyperfine`](https://github.com/sharkdp/hyperfine) is excellent for benchmarking command-line programs:
+När du behöver jämföra prestanda mellan olika implementationer eller verktyg är [`hyperfine`](https://github.com/sharkdp/hyperfine) utmärkt för att benchmarka kommandoradsprogram:
 
 ```bash
 $ hyperfine --warmup 3 'fd -e jpg' 'find . -iname "*.jpg"'
@@ -402,13 +466,15 @@ Summary
    21.89 ± 2.33 times faster than 'find . -iname "*.jpg"'
 ```
 
-> For web development, browser developer tools include excellent profilers. See the [Firefox Profiler](https://profiler.firefox.com/docs/) and [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/rendering-tools) documentation.
+> För webbutveckling har webbläsarens utvecklarverktyg utmärkta profilerare.
+Se dokumentationen för [Firefox Profiler](https://profiler.firefox.com/docs/) och [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/rendering-tools).
 
-# Exercises
+# Övningar
 
-## Debugging
+## Felsökning
 
-1. **Debug a sorting algorithm**: The following pseudocode implements merge sort but contains a bug. Implement it in a language of your choice, then use a debugger (gdb, lldb, pdb, or your IDE's debugger) to find and fix the bug.
+1. **Felsök en sorteringsalgoritm**: Följande pseudokod implementerar merge sort men innehåller ett programfel.
+   Implementera den i ett språk du väljer, och använd sedan en felsökare (`gdb`, `lldb`, `pdb` eller din IDE:s felsökare) för att hitta och åtgärda programfelet.
 
    ```
    function merge_sort(arr):
@@ -433,9 +499,11 @@ Summary
        return result
    ```
 
-   Test vector: `merge_sort([3, 1, 4, 1, 5, 9, 2, 6])` should return `[1, 1, 2, 3, 4, 5, 6, 9]`. Use breakpoints and step through the merge function to find where the incorrect element is being selected.
+   Testvektor: `merge_sort([3, 1, 4, 1, 5, 9, 2, 6])` ska returnera `[1, 1, 2, 3, 4, 5, 6, 9]`.
+   Använd brytpunkter och stega genom merge-funktionen för att hitta var felaktigt element väljs.
 
-1. Install [`rr`](https://rr-project.org/) and use reverse debugging to find a corruption bug. Save this program as `corruption.c`:
+1. Installera [`rr`](https://rr-project.org/) och använd omvänd felsökning (reverse debugging) för att hitta ett korruptionsfel.
+   Spara detta program som `corruption.c`:
 
    ```c
    #include <stdio.h>
@@ -486,9 +554,13 @@ Summary
    }
    ```
 
-   Compile with `gcc -g corruption.c -o corruption` and run it. Student 1's ID gets corrupted, but the corruption happens in a function that only touches student 0. Use `rr record ./corruption` and `rr replay` to find the culprit. Set a watchpoint on `students[1].id` and use `reverse-continue` after the corruption to find exactly which line of code overwrote it.
+   Kompilera med `gcc -g corruption.c -o corruption` och kör programmet.
+   Student 1:s ID blir korrupt, men korruptionen händer i en funktion som bara rör student 0.
+   Använd `rr record ./corruption` och `rr replay` för att hitta boven.
+   Sätt en watchpoint på `students[1].id` och använd `reverse-continue` efter korruptionen för att hitta exakt vilken kodrad som skrev över värdet.
 
-1. Debug a memory error with AddressSanitizer. Save this as `uaf.c`:
+1. Felsök ett minnesfel med AddressSanitizer.
+   Spara detta som `uaf.c`:
 
    ```c
    #include <stdlib.h>
@@ -509,17 +581,28 @@ Summary
    }
    ```
 
-   First compile and run without sanitizers: `gcc uaf.c -o uaf && ./uaf`. It may appear to work. Now compile with AddressSanitizer: `gcc -fsanitize=address -g uaf.c -o uaf && ./uaf`. Read the error report. What bug does ASan find? Fix the issue it identifies.
+   Kompilera och kör först utan sanitizers: `gcc uaf.c -o uaf && ./uaf`.
+   Det kan verka fungera.
+   Kompilera nu med AddressSanitizer: `gcc -fsanitize=address -g uaf.c -o uaf && ./uaf`.
+   Läs felrapporten.
+   Vilket programfel hittar ASan?
+   Fixa problemet den identifierar.
 
-1. Use `strace` (Linux) or `dtruss` (macOS) to trace the system calls made by a command like `ls -l`. What system calls is it making? Try tracing a more complex program and see what files it opens.
+1. Använd `strace` (Linux) eller `dtruss` (macOS) för att spåra systemanropen som görs av ett kommando som `ls -l`.
+   Vilka systemanrop görs?
+   Prova att spåra ett mer komplext program och se vilka filer det öppnar.
 
-1. Use an LLM to help debug a cryptic error message. Try copying a compiler error (especially from C++ templates or Rust) and asking for an explanation and fix. Try putting some of the output from `strace` or the address sanitizer into it.
+1. Använd en LLM för att hjälpa till att felsöka ett kryptiskt felmeddelande.
+   Prova att kopiera ett kompilatorfel (särskilt från C++-templates eller Rust) och be om förklaring och fix.
+   Prova att klistra in delar av utdata från `strace` eller AddressSanitizer.
 
-## Profiling
+## Profilering
 
-1. Use `perf stat` to get basic performance statistics for a program of your choice. What do the different counters mean?
+1. Använd `perf stat` för att få grundläggande prestandastatistik för ett valfritt program.
+   Vad betyder de olika räknarna?
 
-1. Profile with `perf record`. Save this as `slow.c`:
+1. Profilera med `perf record`.
+   Spara detta som `slow.c`:
 
    ```c
    #include <math.h>
@@ -545,10 +628,17 @@ Summary
    }
    ```
 
-   Compile with debug symbols: `gcc -g -O2 slow.c -o slow -lm`. Run `perf record -g ./slow`, then `perf report` to see where time is spent. Try generating a flame graph using the flamegraph scripts.
+   Kompilera med debugsymboler: `gcc -g -O2 slow.c -o slow -lm`.
+   Kör `perf record -g ./slow`, sedan `perf report` för att se var tid spenderas.
+   Prova att generera ett flamdiagram med flamegraph-skripten.
 
-1. Use `hyperfine` to benchmark two different implementations of the same task (e.g., `find` vs `fd`, `grep` vs `ripgrep`, or two versions of your own code).
+1. Använd `hyperfine` för att benchmarka två olika implementationer av samma uppgift (t.ex. `find` vs `fd`, `grep` vs `ripgrep`, eller två versioner av din egen kod).
 
-1. Use `htop` to monitor your system while running a resource-intensive program. Try using `taskset` to limit which CPUs a process can use: `taskset --cpu-list 0,2 stress -c 3`. Why doesn't `stress` use three CPUs?
+1. Använd `htop` för att övervaka systemet medan du kör ett resursintensivt program.
+   Prova att använda `taskset` för att begränsa vilka CPU:er en process kan använda: `taskset --cpu-list 0,2 stress -c 3`.
+   Varför använder inte `stress` tre CPU:er?
 
-1. A common issue is that a port you want to listen on is already taken by another process. Learn how to discover that process: First execute `python -m http.server 4444` to start a minimal web server on port 4444. On a separate terminal run `ss -tlnp | grep 4444` to find the process. Terminate it with `kill <PID>`.
+1. Ett vanligt problem är att en port du vill lyssna på redan används av en annan process.
+   Lär dig hitta den processen: kör först `python -m http.server 4444` för att starta en minimal webbserver på port 4444.
+   Kör i en separat terminal `ss -tlnp | grep 4444` för att hitta processen.
+   Avsluta den med `kill <PID>`.

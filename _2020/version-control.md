@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Version Control (Git)"
+title: "Versionshantering (Git)"
 description: >
-  Learn Git's data model and how to use Git for version control and collaboration.
+  Lär dig Gits datamodell och hur du använder Git för versionshantering och samarbete.
 thumbnail: /static/assets/thumbnails/2020/lec6.png
 date: 2020-01-22
 ready: true
@@ -11,61 +11,49 @@ video:
   id: 2sjqTHE0zok
 ---
 
-Version control systems (VCSs) are tools used to track changes to source code
-(or other collections of files and folders). As the name implies, these tools
-help maintain a history of changes; furthermore, they facilitate collaboration.
-VCSs track changes to a folder and its contents in a series of snapshots, where
-each snapshot encapsulates the entire state of files/folders within a top-level
-directory. VCSs also maintain metadata like who created each snapshot, messages
-associated with each snapshot, and so on.
+Versionshanteringssystem (VCS:er) är verktyg som används för att spåra ändringar i källkod (eller andra samlingar av filer och mappar).
+Som namnet antyder hjälper dessa verktyg till att bevara en historik över ändringar.
+Dessutom underlättar de samarbete.
+VCS:er spårar ändringar i en mapp och dess innehåll som en serie ögonblicksbilder (_snapshots_), där varje ögonblicksbild kapslar in hela tillståndet för filer och mappar inom en toppnivåkatalog.
+VCS:er lagrar också metadata som vem som skapade varje ögonblicksbild, meddelanden kopplade till den och så vidare.
 
-Why is version control useful? Even when you're working by yourself, it can let
-you look at old snapshots of a project, keep a log of why certain changes were
-made, work on parallel branches of development, and much more. When working
-with others, it's an invaluable tool for seeing what other people have changed,
-as well as resolving conflicts in concurrent development.
+Varför är versionshantering användbart?
+Även när du arbetar själv kan det hjälpa dig att titta på gamla ögonblicksbilder av ett projekt, föra logg över varför vissa ändringar gjordes, arbeta på parallella utvecklingsgrenar och mycket mer.
+När du arbetar med andra är det ett ovärderligt verktyg för att se vad andra har ändrat, och för att lösa konflikter i samtidig utveckling.
 
-Modern VCSs also let you easily (and often automatically) answer questions
-like:
+Moderna VCS:er låter dig också enkelt (och ofta automatiskt) svara på frågor som:
 
-- Who wrote this module?
-- When was this particular line of this particular file edited? By whom? Why
-  was it edited?
-- Over the last 1000 revisions, when/why did a particular unit test stop
-working?
+- Vem skrev den här modulen?
+- När redigerades den här specifika raden i den här specifika filen?
+  Av vem?
+  Varför redigerades den?
+- Under de senaste 1000 revisionerna, när/varför slutade ett visst enhetstest att fungera?
 
-While other VCSs exist, **Git** is the de facto standard for version control.
-This [XKCD comic](https://xkcd.com/1597/) captures Git's reputation:
+Även om det finns andra VCS:er är **Git** i praktiken standarden för versionshantering.
+Den här [XKCD-serien](https://xkcd.com/1597/) fångar Gits rykte:
 
 ![xkcd 1597](https://imgs.xkcd.com/comics/git.png)
 
-Because Git's interface is a leaky abstraction, learning Git top-down (starting
-with its interface / command-line interface) can lead to a lot of confusion.
-It's possible to memorize a handful of commands and think of them as magic
-incantations, and follow the approach in the comic above whenever anything goes
-wrong.
+Eftersom Gits gränssnitt är en läckande abstraktion kan det bli förvirrande att lära sig Git uppifrån och ner (med start i kommandoraden).
+Det går att memorera en handfull kommandon och behandla dem som magiska trollformler, och följa tillvägagångssättet i serien ovan när något går fel.
 
-While Git admittedly has an ugly interface, its underlying design and ideas are
-beautiful. While an ugly interface has to be _memorized_, a beautiful design
-can be _understood_. For this reason, we give a bottom-up explanation of Git,
-starting with its data model and later covering the command-line interface.
-Once the data model is understood, the commands can be better understood in
-terms of how they manipulate the underlying data model.
+Även om Git onekligen har ett fult gränssnitt är den underliggande designen och idéerna vackra.
+Ett fult gränssnitt måste _memoreras_, men en vacker design kan _förstås_.
+Därför ger vi en förklaring nerifrån och upp av Git, med start i datamodellen och därefter kommandoraden.
+När datamodellen väl är förstådd blir kommandona lättare att förstå i termer av hur de manipulerar den underliggande datamodellen.
 
-# Git's data model
+# Gits datamodell
 
-There are many ad-hoc approaches you could take to version control. Git has a
-well-thought-out model that enables all the nice features of version control,
-like maintaining history, supporting branches, and enabling collaboration.
+Det finns många ad hoc-sätt att närma sig versionshantering.
+Git har en välgenomtänkt modell som möjliggör alla fina funktioner i versionshantering, som att bevara historik, stödja grenar och möjliggöra samarbete.
 
-## Snapshots
+## Ögonblicksbilder {#snapshots}
 
-Git models the history of a collection of files and folders within some
-top-level directory as a series of snapshots. In Git terminology, a file is
-called a "blob", and it's just a bunch of bytes. A directory is called a
-"tree", and it maps names to blobs or trees (so directories can contain other
-directories). A snapshot is the top-level tree that is being tracked. For
-example, we might have a tree as follows:
+Git modellerar historiken för en samling filer och mappar inom någon toppnivåkatalog som en serie ögonblicksbilder.
+I Git-terminologi kallas en fil en "blob", och den är bara en hög med byte.
+En katalog representeras av ett trädobjekt (`tree`), som mappar namn till blobbar eller andra trädobjekt (så kataloger kan innehålla andra kataloger).
+En ögonblicksbild är det toppnivåträdobjekt (`tree`) som spåras.
+Till exempel kan vi ha ett träd enligt följande:
 
 ```
 <root> (tree)
@@ -77,24 +65,22 @@ example, we might have a tree as follows:
 +- baz.txt (blob, contents = "git is wonderful")
 ```
 
-The top-level tree contains two elements, a tree "foo" (that itself contains
-one element, a blob "bar.txt"), and a blob "baz.txt".
+Toppnivåträdet innehåller två element, ett trädobjekt `foo` (som i sin tur innehåller ett element, en blob `bar.txt`) och en blob `baz.txt`.
 
-## Modeling history: relating snapshots
+## Modellera historik: relatera ögonblicksbilder
 
-How should a version control system relate snapshots? One simple model would be
-to have a linear history. A history would be a list of snapshots in time-order.
-For many reasons, Git doesn't use a simple model like this.
+Hur ska ett versionshanteringssystem relatera ögonblicksbilder?
+En enkel modell vore att ha en linjär historik.
+En historik vore då en lista av ögonblicksbilder i tidsordning.
+Av flera skäl använder Git inte en så enkel modell.
 
-In Git, a history is a directed acyclic graph (DAG) of snapshots. That may
-sound like a fancy math word, but don't be intimidated. All this means is that
-each snapshot in Git refers to a set of "parents", the snapshots that preceded
-it. It's a set of parents rather than a single parent (as would be the case in
-a linear history) because a snapshot might descend from multiple parents, for
-example, due to combining (merging) two parallel branches of development.
+I Git är historik en riktad acyklisk graf (DAG) av ögonblicksbilder.
+Det kan låta som ett fint matematikord, men låt dig inte avskräckas.
+Allt det betyder är att varje ögonblicksbild i Git refererar till en uppsättning "föräldrar", ögonblicksbilderna som kom före den.
+Det är en uppsättning föräldrar i stället för en enda förälder (som i en linjär historik), eftersom en ögonblicksbild kan härstamma från flera föräldrar, till exempel genom att slå samman två parallella utvecklingsgrenar.
 
-Git calls these snapshots "commit"s. Visualizing a commit history might look
-something like this:
+Git kallar dessa ögonblicksbilder för incheckningar.
+En visualisering av en incheckningshistorik kan se ut ungefär så här:
 
 ```
 o <-- o <-- o <-- o
@@ -103,14 +89,11 @@ o <-- o <-- o <-- o
               --- o <-- o
 ```
 
-In the ASCII art above, the `o`s correspond to individual commits (snapshots).
-The arrows point to the parent of each commit (it's a "comes before" relation,
-not "comes after"). After the third commit, the history branches into two
-separate branches. This might correspond to, for example, two separate features
-being developed in parallel, independently from each other. In the future,
-these branches may be merged to create a new snapshot that incorporates both of
-the features, producing a new history that looks like this, with the newly
-created merge commit shown in bold:
+I ASCII-bilden ovan motsvarar `o`:na individuella incheckningar (ögonblicksbilder).
+Pilarna pekar på föräldern till varje incheckning (det är en "kommer före"-relation, inte "kommer efter").
+Efter den tredje incheckningen delar historiken upp sig i två separata grenar.
+Detta kan till exempel motsvara två separata funktioner som utvecklas parallellt, oberoende av varandra.
+I framtiden kan dessa grenar slås samman för att skapa en ny ögonblicksbild som innehåller båda funktionerna, och ge en ny historik som ser ut så här, med den nyskapade incheckningen för sammanslagningen i fetstil:
 
 <pre class="highlight">
 <code>
@@ -121,14 +104,13 @@ o <-- o <-- o <-- o <---- <strong>o</strong>
 </code>
 </pre>
 
-Commits in Git are immutable. This doesn't mean that mistakes can't be
-corrected, however; it's just that "edits" to the commit history are actually
-creating entirely new commits, and references (see below) are updated to point
-to the new ones.
+Incheckningar i Git är oföränderliga.
+Det betyder dock inte att misstag inte kan rättas.
+Det betyder bara att "redigeringar" av incheckningshistoriken i själva verket skapar helt nya incheckningar, och referenser (se nedan) uppdateras för att peka på de nya.
 
-## Data model, as pseudocode
+## Datamodell, som pseudokod
 
-It may be instructive to see Git's data model written down in pseudocode:
+Det kan vara lärorikt att se Gits datamodell nedskriven i pseudokod:
 
 ```
 // a file is a bunch of bytes
@@ -146,18 +128,17 @@ type commit = struct {
 }
 ```
 
-It's a clean, simple model of history.
+Det är en ren och enkel historikmodell.
 
-## Objects and content-addressing
+## Objekt och innehållsadressering
 
-An "object" is a blob, tree, or commit:
+Ett "object" är en blob, tree eller commit:
 
 ```
 type object = blob | tree | commit
 ```
 
-In Git data store, all objects are content-addressed by their [SHA-1
-hash](https://en.wikipedia.org/wiki/SHA-1).
+I Gits datalager är alla objekt innehållsadresserade med sin [SHA-1-hash](https://en.wikipedia.org/wiki/SHA-1).
 
 ```
 objects = map<string, object>
@@ -170,38 +151,33 @@ def load(id):
     return objects[id]
 ```
 
-Blobs, trees, and commits are unified in this way: they are all objects. When
-they reference other objects, they don't actually _contain_ them in their
-on-disk representation, but have a reference to them by their hash.
+Blobbar, trädobjekt (`tree`) och incheckningar förenas på detta sätt.
+De är alla objekt.
+När de refererar till andra objekt _innehåller_ de dem inte i sin representation på disk, utan har en referens till dem via deras hash.
 
-For example, the tree for the example directory structure [above](#snapshots)
-(visualized using `git cat-file -p 698281bc680d1995c5f4caaf3359721a5a58d48d`),
-looks like this:
+Till exempel ser trädobjektet (`tree`) för exempelkatalogstrukturen [ovan](#snapshots) (visualiserat med `git cat-file -p 698281bc680d1995c5f4caaf3359721a5a58d48d`) ut så här:
 
 ```
 100644 blob 4448adbf7ecd394f42ae135bbeed9676e894af85    baz.txt
 040000 tree c68d233a33c5c06e0340e4c224f0afca87c8ce87    foo
 ```
 
-The tree itself contains pointers to its contents, `baz.txt` (a blob) and `foo`
-(a tree). If we look at the contents addressed by the hash corresponding to
-baz.txt with `git cat-file -p 4448adbf7ecd394f42ae135bbeed9676e894af85`, we get
-the following:
+Trädobjektet innehåller pekare till sitt innehåll, `baz.txt` (en blob) och `foo` (ett trädobjekt).
+Om vi tittar på innehållet som adresseras av hashen som motsvarar `baz.txt` med `git cat-file -p 4448adbf7ecd394f42ae135bbeed9676e894af85`, får vi följande:
 
 ```
 git is wonderful
 ```
 
-## References
+## Referenser
 
-Now, all snapshots can be identified by their SHA-1 hashes. That's inconvenient,
-because humans aren't good at remembering strings of 40 hexadecimal characters.
+Nu kan alla ögonblicksbilder identifieras med sina SHA-1-hashar.
+Det är opraktiskt, eftersom människor inte är bra på att minnas strängar med 40 hexadecimala tecken.
 
-Git's solution to this problem is human-readable names for SHA-1 hashes, called
-"references". References are pointers to commits. Unlike objects, which are
-immutable, references are mutable (can be updated to point to a new commit).
-For example, the `master` reference usually points to the latest commit in the
-main branch of development.
+Gits lösning på det här problemet är referenser: lättlästa namn som pekar på SHA-1-hashar.
+Referenser är pekare till incheckningar.
+Till skillnad från objekt, som är oföränderliga, är referenser föränderliga (de kan uppdateras för att peka på en ny incheckning).
+Till exempel pekar referensen `master` vanligtvis på den senaste incheckningen i huvudgrenen för utveckling.
 
 ```
 references = map<string, string>
@@ -219,62 +195,46 @@ def load_reference(name_or_id):
         return load(name_or_id)
 ```
 
-With this, Git can use human-readable names like "master" to refer to a
-particular snapshot in the history, instead of a long hexadecimal string.
+Med detta kan Git använda namn som "master" för att referera till en viss ögonblicksbild i historiken, i stället för en lång hexadecimal sträng.
 
-One detail is that we often want a notion of "where we currently are" in the
-history, so that when we take a new snapshot, we know what it is relative to
-(how we set the `parents` field of the commit). In Git, that "where we
-currently are" is a special reference called "HEAD".
+En detalj är att vi ofta vill ha en uppfattning om "var vi befinner oss just nu" i historiken, så att vi när vi tar en ny ögonblicksbild vet vad den är relativ till (hur vi sätter fältet `parents` i incheckningen).
+I Git är detta "var vi befinner oss" en särskild referens som kallas "HEAD".
 
-## Repositories
+## Kodförråd
 
-Finally, we can define what (roughly) is a Git _repository_: it is the data
-`objects` and `references`.
+Till sist kan vi definiera vad ett Git-kodförråd (ungefär) är.
+Det är datan `objects` och `references`.
 
-On disk, all Git stores are objects and references: that's all there is to Git's
-data model. All `git` commands map to some manipulation of the commit DAG by
-adding objects and adding/updating references.
+På disk är allt Git lagrar objekt och referenser.
+Det är hela Gits datamodell.
+Alla `git`-kommandon motsvarar någon manipulation av DAG:en för incheckningar genom att lägga till objekt och lägga till/uppdatera referenser.
 
-Whenever you're typing in any command, think about what manipulation the
-command is making to the underlying graph data structure. Conversely, if you're
-trying to make a particular kind of change to the commit DAG, e.g. "discard
-uncommitted changes and make the 'master' ref point to commit `5d83f9e`", there's
-probably a command to do it (e.g. in this case, `git checkout master; git reset
---hard 5d83f9e`).
+Varje gång du skriver ett kommando, tänk på vilken manipulation kommandot gör i den underliggande grafdatastrukturen.
+Omvänt, om du försöker göra en viss förändring i DAG:en för incheckningar, t.ex. "kasta bort icke-incheckade ändringar och låt refen 'master' peka på incheckningen `5d83f9e`", finns det sannolikt ett kommando för det (t.ex. i detta fall `git checkout master; git reset --hard 5d83f9e`).
 
-# Staging area
+# Mellanlager
 
-This is another concept that's orthogonal to the data model, but it's a part of
-the interface to create commits.
+Det här är ett annat koncept som ligger vid sidan av datamodellen, men som ändå är en del av gränssnittet för att skapa incheckningar.
 
-One way you might imagine implementing snapshotting as described above is to have
-a "create snapshot" command that creates a new snapshot based on the _current
-state_ of the working directory. Some version control tools work like this, but
-not Git. We want clean snapshots, and it might not always be ideal to make a
-snapshot from the current state. For example, imagine a scenario where you've
-implemented two separate features, and you want to create two separate commits,
-where the first introduces the first feature, and the next introduces the
-second feature. Or imagine a scenario where you have debugging print statements
-added all over your code, along with a bugfix; you want to commit the bugfix
-while discarding all the print statements.
+Ett sätt att förstå upplägget ovan är att tänka sig ett kommando som skapar ögonblicksbilder utifrån _nuvarande tillstånd_ i arbetskatalogen.
+Vissa versionshanteringsverktyg fungerar så, men inte Git.
+Vi vill ha rena ögonblicksbilder, och det är inte alltid optimalt att skapa en ögonblicksbild från det nuvarande tillståndet.
+Tänk dig till exempel ett scenario där du implementerat två separata funktioner och vill skapa två separata incheckningar, där den första introducerar den första funktionen och nästa introducerar den andra funktionen.
+Eller tänk dig ett scenario där du lagt till felsökningsutskrifter över hela koden tillsammans med en felrättning.
+Du vill göra en incheckning med felrättningen samtidigt som du kastar bort alla utskriftssatser.
 
-Git accommodates such scenarios by allowing you to specify which modifications
-should be included in the next snapshot through a mechanism called the "staging
-area".
+Git hanterar sådana scenarier genom att låta dig specificera vilka modifieringar som ska ingå i nästa ögonblicksbild via en mekanism som kallas indexet (staging area), alltså en köyta för vad som ska checkas in.
 
-# Git command-line interface
+# Git-kommandoradsgränssnitt
 
-To avoid duplicating information, we're not going to explain the commands below
-in detail. See the highly recommended [Pro Git](https://git-scm.com/book/en/v2)
-for more information, or watch the lecture video.
+För att undvika att duplicera information kommer vi inte förklara kommandona nedan i detalj i dessa föreläsningsanteckningar.
+Se den varmt rekommenderade [Pro Git](https://git-scm.com/book/en/v2) för mer information, eller titta på föreläsningsvideon.
 
-## Basics
+## Grunder
 
 {% comment %}
 
-The `git init` command initializes a new Git repository, with repository
-metadata being stored in the `.git` directory:
+Kommandot `git init` initierar ett nytt Git-kodförråd, där metadata för kodförrådet lagras i katalogen `.git`:
 
 ```console
 $ mkdir myproject
@@ -289,8 +249,9 @@ No commits yet
 nothing to commit (create/copy files and use "git add" to track)
 ```
 
-How do we interpret this output? "No commits yet" basically means our version
-history is empty. Let's fix that.
+Hur ska vi tolka den här utdata?
+"No commits yet" betyder i princip att versionshistoriken är tom.
+Låt oss ändra på det.
 
 ```console
 $ echo "hello, git" > hello.txt
@@ -311,20 +272,15 @@ $ git commit -m 'Initial commit'
  create mode 100644 hello.txt
 ```
 
-With this, we've `git add`ed a file to the staging area, and then `git
-commit`ed that change, adding a simple commit message "Initial commit". If we
-didn't specify a `-m` option, Git would open our text editor to allow us type a
-commit message.
+Här har vi lagt till en fil i indexet med `git add`, och sedan gjort en incheckning med `git commit` med det enkla meddelandet "Initial commit".
+Om vi inte anger flaggan `-m` öppnar Git vår textredigerare så att vi kan skriva ett incheckningsmeddelande.
 
-Now that we have a non-empty version history, we can visualize the history.
-Visualizing the history as a DAG can be especially helpful in understanding the
-current status of the repo and connecting it with your understanding of the Git
-data model.
+Nu när vi har en icke-tom historik kan vi visualisera den.
+Att visualisera historiken som en DAG kan vara särskilt hjälpsamt för att förstå kodförrådets nuvarande tillstånd och koppla det till datamodellen i Git.
 
-The `git log` command visualizes history. By default, it shows a flattened
-version, which hides the graph structure. If you use a command like `git log
---all --graph --decorate`, it will show you the full version history of the
-repository, visualized in graph form.
+Kommandot `git log` visualiserar historiken.
+Som standard visar det en tillplattad variant som döljer grafstrukturen.
+Om du använder ett kommando som `git log --all --graph --decorate` får du hela versionshistoriken visualiserad som en graf.
 
 ```console
 $ git log --all --graph --decorate
@@ -335,9 +291,8 @@ $ git log --all --graph --decorate
       Initial commit
 ```
 
-This doesn't look all that graph-like, because it only contains a single node.
-Let's make some more changes, author a new commit, and visualize the history
-once more.
+Det här ser inte särskilt grafiskt ut eftersom det bara innehåller en nod.
+Låt oss göra fler ändringar, skapa en ny incheckning och visualisera historiken igen.
 
 ```console
 $ echo "another line" >> hello.txt
@@ -363,7 +318,7 @@ $ git commit -m 'Add a line'
  1 file changed, 1 insertion(+)
 ```
 
-Now, if we visualize the history again, we'll see some of the graph structure:
+Om vi nu visualiserar historiken igen ser vi mer av grafstrukturen:
 
 ```
 * commit 35f60a825be0106036dd2fbc7657598eb7b04c67 (HEAD -> master)
@@ -379,13 +334,12 @@ Now, if we visualize the history again, we'll see some of the graph structure:
       Initial commit
 ```
 
-Also, note that it shows the current HEAD, along with the current branch
-(master).
+Notera också att den visar aktuell HEAD tillsammans med aktuell gren (`master`).
 
-We can look at old versions using the `git checkout` command.
+Vi kan titta på gamla versioner med kommandot `git checkout`.
 
 ```console
-$ git checkout 4515d17  # previous commit hash; yours will be different
+$ git checkout 4515d17  # tidigare incheckningshash; din blir annorlunda
 Note: checking out '4515d17'.
 
 You are in 'detached HEAD' state. You can look around, make experimental
@@ -408,8 +362,7 @@ hello, git
 another line
 ```
 
-Git can show you how files have evolved (differences, or diffs) using the `git
-diff` command:
+Git kan visa hur filer utvecklats (skillnader, eller diffs) med kommandot `git diff`:
 
 ```console
 $ git diff 4515d17 hello.txt
@@ -424,152 +377,120 @@ index 94bab17..f0013b2 100644
 
 {% endcomment %}
 
-- `git help <command>`: get help for a git command
-- `git init`: creates a new git repo, with data stored in the `.git` directory
-- `git status`: tells you what's going on
-- `git add <filename>`: adds files to staging area
-- `git commit`: creates a new commit
-    - Write [good commit messages](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)!
-    - Even more reasons to write [good commit messages](https://chris.beams.io/posts/git-commit/)!
-- `git log`: shows a flattened log of history
-- `git log --all --graph --decorate`: visualizes history as a DAG
-- `git diff <filename>`: show changes you made relative to the staging area
-- `git diff <revision> <filename>`: shows differences in a file between snapshots
-- `git checkout <revision>`: updates HEAD (and current branch if checking out a branch)
+- `git help <command>`: få hjälp för ett git-kommando
+- `git init`: skapar ett nytt git-kodförråd, med data lagrad i katalogen `.git`
+- `git status`: berättar vad som pågår
+- `git add <filename>`: lägger till filer i indexet
+- `git commit`: skapar en ny incheckning
+    - Skriv [bra incheckningsmeddelanden](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)!
+    - Ännu fler skäl att skriva [bra incheckningsmeddelanden](https://chris.beams.io/posts/git-commit/)!
+- `git log`: visar en tillplattad historiklogg
+- `git log --all --graph --decorate`: visualiserar historiken som en DAG
+- `git diff <filename>`: visa ändringar du gjort relativt till indexet
+- `git diff <revision> <filename>`: visar skillnader i en fil mellan ögonblicksbilder
+- `git checkout <revision>`: uppdaterar HEAD (och aktuell gren om du checkar ut en gren)
 
-## Branching and merging
+## Grenar och sammanslagning
 
 {% comment %}
 
-Branching allows you to "fork" version history. It can be helpful for working
-on independent features or bug fixes in parallel. The `git branch` command can
-be used to create new branches; `git checkout -b <branch name>` creates and
-branch and checks it out.
+Grenar låter dig "gaffla" versionshistoriken.
+Det kan vara användbart för att arbeta på oberoende funktioner eller felrättningar parallellt.
+Kommandot `git branch` kan användas för att skapa nya grenar.
+`git checkout -b <branch name>` skapar en gren och checkar ut den.
 
-Merging is the opposite of branching: it allows you to combine forked version
-histories, e.g. merging a feature branch back into master. The `git merge`
-command is used for merging.
+Sammanslagning är motsatsen till att dela upp historiken i grenar.
+Det låter dig kombinera versionshistoriker från olika grenar, t.ex. slå samman en funktionsgren tillbaka in i master.
+Kommandot `git merge` används för sammanslagning.
 
 {% endcomment %}
 
-- `git branch`: shows branches
-- `git branch <name>`: creates a branch
-- `git checkout -b <name>`: creates a branch and switches to it
-    - same as `git branch <name>; git checkout <name>`
-- `git merge <revision>`: merges into current branch
-- `git mergetool`: use a fancy tool to help resolve merge conflicts
-- `git rebase`: rebase set of patches onto a new base
+- `git branch`: visar grenar
+- `git branch <name>`: skapar en gren
+- `git checkout -b <name>`: skapar en gren och växlar till den
+    - samma som `git branch <name>; git checkout <name>`
+- `git merge <revision>`: slår samman med aktuell gren
+- `git mergetool`: använd ett avancerat verktyg för att hjälpa till att lösa sammanslagningskonflikter
+- `git rebase`: basera om en uppsättning patchar på en ny bas
 
-## Remotes
+## Fjärrförråd
 
-- `git remote`: list remotes
-- `git remote add <name> <url>`: add a remote
-- `git push <remote> <local branch>:<remote branch>`: send objects to remote, and update remote reference
-- `git branch --set-upstream-to=<remote>/<remote branch>`: set up correspondence between local and remote branch
-- `git fetch`: retrieve objects/references from a remote
-- `git pull`: same as `git fetch; git merge`
-- `git clone`: download repository from remote
+- `git remote`: lista fjärrförråd
+- `git remote add <name> <url>`: lägg till ett fjärrförråd
+- `git push <remote> <local branch>:<remote branch>`: skicka objekt till fjärrförråd och uppdatera fjärrreferens
+- `git branch --set-upstream-to=<remote>/<remote branch>`: sätt upp koppling mellan lokal och fjärrgren
+- `git fetch`: hämta objekt/referenser från ett fjärrförråd
+- `git pull`: samma som `git fetch; git merge`
+- `git clone`: klona kodförråd från fjärrförråd
 
-## Undo
+## Ångra
 
-- `git commit --amend`: edit a commit's contents/message
-- `git reset HEAD <file>`: unstage a file
-- `git checkout -- <file>`: discard changes
+- `git commit --amend`: redigera en inchecknings innehåll eller meddelande
+- `git reset HEAD <file>`: avstaga en fil
+- `git checkout -- <file>`: kasta bort ändringar
 
-# Advanced Git
+# Avancerad Git
 
-- `git config`: Git is [highly customizable](https://git-scm.com/docs/git-config)
-- `git clone --depth=1`: shallow clone, without entire version history
-- `git add -p`: interactive staging
-- `git rebase -i`: interactive rebasing
-- `git blame`: show who last edited which line
-- `git stash`: temporarily remove modifications to working directory
-- `git bisect`: binary search history (e.g. for regressions)
-- `.gitignore`: [specify](https://git-scm.com/docs/gitignore) intentionally untracked files to ignore
+- `git config`: Git är [mycket anpassningsbart](https://git-scm.com/docs/git-config)
+- `git clone --depth=1`: ytlig klon, utan hela versionshistoriken
+- `git add -p`: interaktiv mellanlagring
+- `git rebase -i`: interaktiv ombasering
+- `git blame`: visa vem som senast redigerade vilken rad
+- `git stash`: ta tillfälligt bort modifieringar i arbetskatalogen
+- `git bisect`: binärsök i historiken (t.ex. efter regressioner)
+- `.gitignore`: [specificera](https://git-scm.com/docs/gitignore) avsiktligt ospårade filer som ska ignoreras
 
-# Miscellaneous
+# Övrigt
 
-- **GUIs**: there are many [GUI clients](https://git-scm.com/downloads/guis)
-out there for Git. We personally don't use them and use the command-line
-interface instead.
-- **Shell integration**: it's super handy to have a Git status as part of your
-shell prompt ([zsh](https://github.com/olivierverdier/zsh-git-prompt),
-[bash](https://github.com/magicmonty/bash-git-prompt)). Often included in
-frameworks like [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh).
-- **Editor integration**: similarly to the above, handy integrations with many
-features. [fugitive.vim](https://github.com/tpope/vim-fugitive) is the standard
-one for Vim.
-- **Workflows**: we taught you the data model, plus some basic commands; we
-didn't tell you what practices to follow when working on big projects (and
-there are [many](https://nvie.com/posts/a-successful-git-branching-model/)
-[different](https://www.endoflineblog.com/gitflow-considered-harmful)
-[approaches](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)).
-- **GitHub**: Git is not GitHub. GitHub has a specific way of contributing code
-to other projects, called [pull
-requests](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests).
-- **Other Git providers**: GitHub is not special: there are many Git repository
-hosts, like [GitLab](https://about.gitlab.com/) and
-[BitBucket](https://bitbucket.org/).
+- **Grafiska gränssnitt**: det finns många [GUI-klienter](https://git-scm.com/downloads/guis) för Git.
+  Vi använder dem inte personligen utan föredrar kommandoraden.
+- **Skalintegration**: det är väldigt praktiskt att ha Git-status som en del av skalprompten ([zsh](https://github.com/olivierverdier/zsh-git-prompt), [bash](https://github.com/magicmonty/bash-git-prompt)).
+  Detta ingår ofta i ramverk som [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh).
+- **Redigerarintegration**: liknande ovan, praktiska integrationer med många funktioner.
+  [fugitive.vim](https://github.com/tpope/vim-fugitive) är standardalternativet för Vim.
+- **Arbetsflöden**: vi lärde ut datamodellen plus några grundläggande kommandon.
+  Vi berättade inte vilka arbetssätt du ska följa i stora projekt (och det finns [många](https://nvie.com/posts/a-successful-git-branching-model/) [olika](https://www.endoflineblog.com/gitflow-considered-harmful) [angreppssätt](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow)).
+- **GitHub**: Git är inte GitHub.
+  GitHub har ett specifikt sätt att bidra kod till andra projekt, kallat [ändringsförfrågningar (PR:er)](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests).
+- **Andra Git-leverantörer**: GitHub är inte unikt.
+  Det finns många värdar för Git-kodförråd, som [GitLab](https://about.gitlab.com/) och [BitBucket](https://bitbucket.org/).
 
-# Resources
+# Resurser
 
-- [Pro Git](https://git-scm.com/book/en/v2) is **highly recommended reading**.
-Going through Chapters 1--5 should teach you most of what you need to use Git
-proficiently, now that you understand the data model. The later chapters have
-some interesting, advanced material.
-- [Oh Shit, Git!?!](https://ohshitgit.com/) is a short guide on how to recover
-from some common Git mistakes.
-- [Git for Computer
-Scientists](https://eagain.net/articles/git-for-computer-scientists/) is a
-short explanation of Git's data model, with less pseudocode and more fancy
-diagrams than these lecture notes.
-- [Git from the Bottom Up](https://jwiegley.github.io/git-from-the-bottom-up/)
-is a detailed explanation of Git's implementation details beyond just the data
-model, for the curious.
-- [How to explain git in simple
-words](https://smusamashah.github.io/blog/2017/10/14/explain-git-in-simple-words)
-- [Learn Git Branching](https://learngitbranching.js.org/) is a browser-based
-game that teaches you Git.
+- [Pro Git](https://git-scm.com/book/en/v2) är **starkt rekommenderad läsning**.
+  Att gå igenom kapitel 1--5 bör lära dig det mesta du behöver för att använda Git skickligt, nu när du förstår datamodellen.
+  De senare kapitlen har intressant, avancerat material.
+- [Oh Shit, Git!?!](https://ohshitgit.com/) är en kort guide för hur man återhämtar sig från vanliga Git-misstag.
+- [Git for Computer Scientists](https://eagain.net/articles/git-for-computer-scientists/) är en kort förklaring av Gits datamodell, med mindre pseudokod och fler avancerade diagram än dessa föreläsningsanteckningar.
+- [Git from the Bottom Up](https://jwiegley.github.io/git-from-the-bottom-up/) är en detaljerad förklaring av Gits implementationsdetaljer bortom datamodellen, för den nyfikne.
+- [How to explain git in simple words](https://smusamashah.github.io/blog/2017/10/14/explain-git-in-simple-words) (hur man förklarar Git med enkla ord)
+- [Learn Git Branching](https://learngitbranching.js.org/) är ett webbläsarbaserat spel som lär dig Git.
 
-# Exercises
+# Övningar
 
-1. If you don't have any past experience with Git, either try reading the first
-   couple chapters of [Pro Git](https://git-scm.com/book/en/v2) or go through a
-   tutorial like [Learn Git Branching](https://learngitbranching.js.org/). As
-   you're working through it, relate Git commands to the data model.
-1. Clone the [repository for the
-class website](https://github.com/missing-semester/missing-semester).
-    1. Explore the version history by visualizing it as a graph.
-    1. Who was the last person to modify `README.md`? (Hint: use `git log` with
-       an argument).
-    1. What was the commit message associated with the last modification to the
-       `collections:` line of `_config.yml`? (Hint: use `git blame` and `git
-       show`).
-1. One common mistake when learning Git is to commit large files that should
-   not be managed by Git or adding sensitive information. Try adding a file to
-   a repository, making some commits and then deleting that file from history
-   (you may want to look at
-   [this](https://help.github.com/articles/removing-sensitive-data-from-a-repository/)).
-1. Clone some repository from GitHub, and modify one of its existing files.
-   What happens when you do `git stash`? What do you see when running `git log
-   --all --oneline`? Run `git stash pop` to undo what you did with `git stash`.
-   In what scenario might this be useful?
-1. Like many command line tools, Git provides a configuration file (or dotfile)
-   called `~/.gitconfig`. Create an alias in `~/.gitconfig` so that when you
-   run `git graph`, you get the output of `git log --all --graph --decorate
-   --oneline`. You can do this by directly
-   [editing](https://git-scm.com/docs/git-config#Documentation/git-config.txt-alias)
-   the `~/.gitconfig` file, or you can use the `git config` command to add the
-   alias. Information about git aliases can be found
-   [here](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases).
-1. You can define global ignore patterns in` ~/.gitignore_global` after running
-   `git config --global core.excludesfile ~/.gitignore_global`. This sets the
-   location of the global ignore file that Git will use, but you still need to
-   manually create the file at that path. Set up your global gitignore file to
-   ignore OS-specific or editor-specific temporary files, like `.DS_Store`.
-1. Fork the [repository for the class
-   website](https://github.com/missing-semester/missing-semester), find a typo
-   or some other improvement you can make, and submit a pull request on GitHub
-   (you may want to look at [this](https://github.com/firstcontributions/first-contributions)).
-   Please only submit PRs that are useful (don't spam us, please!). If you
-   can't find an improvement to make, you can skip this exercise.
+1. Om du inte har tidigare erfarenhet av Git, prova antingen att läsa de första kapitlen av [Pro Git](https://git-scm.com/book/en/v2) eller gå igenom en handledning som [Learn Git Branching](https://learngitbranching.js.org/).
+   När du arbetar igenom den, koppla Git-kommandon till datamodellen.
+1. Klona [kodförrådet för kursens webbplats](https://github.com/missing-semester/missing-semester).
+    1. Utforska versionshistoriken genom att visualisera den som en graf.
+    1. Vem var den senaste personen som modifierade `README.md`?
+       (Tips: använd `git log` med ett argument).
+    1. Vilket incheckningsmeddelande hörde till den senaste modifieringen av raden `collections:` i `_config.yml`?
+       (Tips: använd `git blame` och `git show`).
+1. Ett vanligt misstag när man lär sig Git är att göra incheckningar med stora filer som inte borde hanteras av Git eller att lägga till känslig information.
+   Prova att lägga till en fil i ett kodförråd, göra några incheckningar och sedan ta bort filen från historiken.
+   Du kanske vill titta på [detta](https://help.github.com/articles/removing-sensitive-data-from-a-repository/).
+1. Klona ett valfritt kodförråd från GitHub och modifiera en av dess befintliga filer.
+   Vad händer när du kör `git stash`?
+   Vad ser du när du kör `git log --all --oneline`?
+   Kör `git stash pop` för att ångra det du gjorde med `git stash`.
+   I vilket scenario kan detta vara användbart?
+1. Liksom många kommandoradsverktyg tillhandahåller Git en konfigurationsfil (eller dotfil) kallad `~/.gitconfig`.
+   Skapa ett alias i `~/.gitconfig` så att när du kör `git graph` får du utdata från `git log --all --graph --decorate --oneline`.
+   Du kan göra detta genom att direkt [redigera](https://git-scm.com/docs/git-config#Documentation/git-config.txt-alias) filen `~/.gitconfig`, eller använda kommandot `git config` för att lägga till aliaset.
+   Information om git-alias finns [här](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases).
+1. Du kan definiera globala ignore-mönster i `~/.gitignore_global` efter att ha kört `git config --global core.excludesfile ~/.gitignore_global`.
+   Detta anger var den globala ignore-filen ligger, men du måste fortfarande skapa filen manuellt på den sökvägen.
+   Sätt upp din globala gitignore-fil så att den ignorerar OS-specifika eller redigerarspecifika temporära filer, som `.DS_Store`.
+1. Skapa en avgrening av [kodförrådet för kursens webbplats](https://github.com/missing-semester/missing-semester), hitta ett stavfel eller någon annan förbättring du kan göra, och skicka en ändringsförfrågan (PR) på GitHub (du kanske vill titta på [detta](https://github.com/firstcontributions/first-contributions)).
+   Skicka bara ändringsförfrågningar som är användbara (spamma oss inte, tack!).
+   Om du inte hittar någon förbättring att göra kan du hoppa över den här övningen.

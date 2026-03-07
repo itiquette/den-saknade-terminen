@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Editors (Vim)"
+title: "Redigerare (Vim)"
 description: >
-  Learn how to use Vim, a powerful text editor designed for efficient code editing.
+  Lär dig använda Vim, en kraftfull textredigerare för effektiv kodredigering.
 thumbnail: /static/assets/thumbnails/2020/lec3.png
 date: 2020-01-15
 ready: true
@@ -11,227 +11,190 @@ video:
   id: a6Q8Na575qc
 ---
 
-Writing English words and writing code are very different activities. When
-programming, you spend more time switching files, reading, navigating, and
-editing code compared to writing a long stream. It makes sense that there are
-different types of programs for writing English words versus code (e.g.
-Microsoft Word versus Visual Studio Code).
+Att skriva engelska ord och att skriva kod är två väldigt olika aktiviteter.
+När du programmerar lägger du mer tid på att byta filer, läsa, navigera och redigera kod än på att skriva långa sammanhängande textstycken.
+Det är rimligt att det finns olika typer av program för att skriva engelska ord respektive kod (t.ex. Microsoft Word jämfört med Visual Studio Code).
 
-As programmers, we spend most of our time editing code, so it's worth investing
-time mastering an editor that fits your needs. Here's how you learn a new
-editor:
+Som programmerare tillbringar vi största delen av tiden med att redigera kod, så det är värt att investera tid i att behärska en redigerare som passar dina behov.
+Så här lär du dig en ny redigerare:
 
-- Start with a tutorial (i.e. this lecture, plus resources that we point out)
-- Stick with using the editor for all your text editing needs (even if it slows
-you down initially)
-- Look things up as you go: if it seems like there should be a better way to do
-something, there probably is
+- Börja med en handledning (dvs. den här föreläsningen plus resurserna vi hänvisar till)
+- Håll fast vid att använda redigeraren för all textredigering (även om det gör dig långsammare i början)
+- Slå upp saker längs vägen: om det känns som att det borde finnas ett bättre sätt att göra något finns det förmodligen det
 
-If you follow the above method, fully committing to using the new program for
-all text editing purposes, the timeline for learning a sophisticated text
-editor looks like this. In an hour or two, you'll learn basic editor functions
-such as opening and editing files, save/quit, and navigating buffers. Once
-you're 20 hours in, you should be as fast as you were with your old editor.
-After that, the benefits start: you will have enough knowledge and muscle
-memory that using the new editor saves you time. Modern text editors are fancy
-and powerful tools, so the learning never stops: you'll get even faster as you
-learn more.
+Om du följer metoden ovan och verkligen förbinder dig till att använda det nya programmet för all textredigering brukar inlärningskurvan för en avancerad textredigerare se ut ungefär så här.
+På en eller två timmar lär du dig grundfunktioner som att öppna och redigera filer, spara/avsluta och navigera mellan buffertar.
+Efter ungefär 20 timmar bör du vara lika snabb som du var i din gamla redigerare.
+Efter det kommer vinsterna: du har tillräcklig kunskap och muskelminne för att den nya redigeraren faktiskt sparar tid.
+Moderna textredigerare är avancerade och kraftfulla verktyg, så lärandet tar aldrig slut: du blir ännu snabbare ju mer du lär dig.
 
-# Which editor to learn?
+# Vilken redigerare ska man lära sig?
 
-Programmers have [strong opinions](https://en.wikipedia.org/wiki/Editor_war)
-about their text editors.
+Programmerare har [starka åsikter](https://en.wikipedia.org/wiki/Editor_war) om sina textredigerare.
 
-Which editors are popular today? See this [Stack Overflow
-survey](https://insights.stackoverflow.com/survey/2019/#development-environments-and-tools)
-(there may be some bias because Stack Overflow users may not be representative
-of programmers as a whole). [Visual Studio
-Code](https://code.visualstudio.com/) is the most popular editor.
-[Vim](https://www.vim.org/) is the most popular command-line-based editor.
+Vilka redigerare är populära i dag?
+Se den här [Stack Overflow-
+undersökningen](https://insights.stackoverflow.com/survey/2019/#development-environments-and-tools)
+(det kan finnas viss snedvridning eftersom Stack Overflow-användare kanske inte är representativa för programmerare i stort).
+[Visual Studio
+Code](https://code.visualstudio.com/) är den mest populära redigeraren.
+[Vim](https://www.vim.org/) är den mest populära kommandoradsbaserade redigeraren.
 
 ## Vim
 
-All the instructors of this class use Vim as their editor. Vim has a rich
-history; it originated from the Vi editor (1976), and it's still being
-developed today. Vim has some really neat ideas behind it, and for this reason,
-lots of tools support a Vim emulation mode (for example, 1.4 million people
-have installed [Vim emulation for VS code](https://github.com/VSCodeVim/Vim)).
-Vim is probably worth learning even if you finally end up switching to some
-other text editor.
+Alla lärare i den här kursen använder Vim som redigerare.
+Vim har en rik historia; den härstammar från redigeraren Vi (1976) och utvecklas fortfarande i dag.
+Vim bygger på flera riktigt smarta idéer, och därför stöder många verktyg ett Vim-emuleringsläge (till exempel har 1,4 miljoner personer installerat [Vim-emulering för VS code](https://github.com/VSCodeVim/Vim)).
+Vim är sannolikt värt att lära sig även om du i slutänden byter till en annan textredigerare.
 
-It's not possible to teach all of Vim's functionality in 50 minutes, so we're
-going to focus on explaining the philosophy of Vim, teaching you the basics,
-showing you some of the more advanced functionality, and giving you the
-resources to master the tool.
+Det går inte att lära ut all funktionalitet i Vim på 50 minuter, så vi fokuserar på att förklara filosofin bakom Vim, lära ut grunderna, visa mer avancerade funktioner och ge resurser för att bemästra verktyget.
 
-# Philosophy of Vim
+# Vims filosofi
 
-When programming, you spend most of your time reading/editing, not writing. For
-this reason, Vim is a _modal_ editor: it has different modes for inserting text
-vs manipulating text. Vim is programmable (with Vimscript and also other
-languages like Python), and Vim's interface itself is a programming language:
-keystrokes (with mnemonic names) are commands, and these commands are
-composable. Vim avoids the use of the mouse, because it's too slow; Vim even
-avoids using the arrow keys because it requires too much movement.
+När du programmerar lägger du största delen av tiden på att läsa och redigera, inte skriva.
+Därför är Vim en _modal_ redigerare: den har olika lägen för att skriva in text respektive manipulera text.
+Vim är programmerbar (med Vimscript och även andra språk som Python), och själva gränssnittet i Vim är ett programmeringsspråk: tangenttryckningar (med minnesvänliga namn) är kommandon, och kommandona är komponerbara.
+Vim undviker musen eftersom den är för långsam; Vim undviker till och med piltangenterna eftersom de kräver för mycket handrörelse.
 
-The end result is an editor that can match the speed at which you think.
+Slutresultatet är en redigerare som kan matcha hastigheten i ditt tänkande.
 
-# Modal editing
+# Modal redigering
 
-Vim's design is based on the idea that a lot of programmer time is spent
-reading, navigating, and making small edits, as opposed to writing long streams
-of text. For this reason, Vim has multiple operating modes.
+Vims design bygger på idén att en stor del av programmerartiden går till att läsa, navigera och göra små redigeringar, snarare än att skriva långa textströmmar.
+Därför har Vim flera arbetslägen.
 
-- **Normal**: for moving around a file and making edits
-- **Insert**: for inserting text
-- **Replace**: for replacing text
-- **Visual** (plain, line, or block): for selecting blocks of text
-- **Command-line**: for running a command
+- **Normal**: för att röra dig i en fil och göra redigeringar
+- **Insert**: för att skriva in text
+- **Replace**: för att ersätta text
+- **Visual** (vanligt, rad eller block): för att markera textblock
+- **Command-line**: för att köra ett kommando
 
-Keystrokes have different meanings in different operating modes. For example,
-the letter `x` in Insert mode will just insert a literal character 'x', but in
-Normal mode, it will delete the character under the cursor, and in Visual mode,
-it will delete the selection.
+Tangenttryckningar har olika betydelse i olika lägen.
+Till exempel kommer bokstaven `x` i Insert-läge bara att skriva in tecknet "x", men i Normal-läge tar den bort tecknet under markören, och i Visual-läge tar den bort markeringen.
 
-In its default configuration, Vim shows the current mode in the bottom left.
-The initial/default mode is Normal mode. You'll generally spend most of your
-time between Normal mode and Insert mode.
+I standardkonfigurationen visar Vim aktuellt läge nere till vänster.
+Start-/standardläget är Normal-läge.
+Du kommer i allmänhet att tillbringa mest tid mellan Normal-läge och Insert-läge.
 
-You change modes by pressing `<ESC>` (the escape key) to switch from any mode
-back to Normal mode. From Normal mode, enter Insert mode with `i`, Replace mode
-with `R`, Visual mode with `v`, Visual Line mode with `V`, Visual Block mode
-with `<C-v>` (Ctrl-V, sometimes also written `^V`), and Command-line mode with
-`:`.
+Du byter läge genom att trycka `<ESC>` (escape) för att gå från vilket läge som helst tillbaka till Normal-läge.
+Från Normal-läge går du till Insert med `i`, Replace med `R`, Visual med `v`, Visual Line med `V`, Visual Block med `<C-v>` (Ctrl-V, ibland också skrivet `^V`) och Command-line med `:`.
 
-You use the `<ESC>` key a lot when using Vim: consider remapping Caps Lock to
-Escape ([macOS
-instructions](https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_macOS))
-or create an [alternative
-mapping](https://vim.fandom.com/wiki/Avoid_the_escape_key#Mappings) for `<ESC>`
-with a simple key sequence.
+Du använder tangenten `<ESC>` mycket när du använder Vim: överväg att mappa om Caps Lock till Escape ([macOS-
+instruktioner](https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_macOS))
+eller skapa en [alternativ
+mappning](https://vim.fandom.com/wiki/Avoid_the_escape_key#Mappings) för `<ESC>` med en enkel tangentsekvens.
 
-# Basics
+# Grunder
 
-## Inserting text
+## Skriva in text
 
-From Normal mode, press `i` to enter Insert mode. Now, Vim behaves like any
-other text editor, until you press `<ESC>` to return to Normal mode. This,
-along with the basics explained above, are all you need to start editing files
-using Vim (though not particularly efficiently, if you're spending all your
-time editing from Insert mode).
+Från Normal-läge trycker du `i` för att gå till Insert-läge.
+Nu beter sig Vim som vilken annan textredigerare som helst tills du trycker `<ESC>` för att återgå till Normal-läge.
+Detta, tillsammans med grunderna ovan, är allt du behöver för att börja redigera filer i Vim (dock inte särskilt effektivt om du gör all redigering från Insert-läge).
 
-## Buffers, tabs, and windows
+## Buffertar, flikar och fönster
 
-Vim maintains a set of open files, called "buffers". A Vim session has a number
-of tabs, each of which has a number of windows (split panes). Each window shows
-a single buffer. Unlike other programs you are familiar with, like web
-browsers, there is not a 1-to-1 correspondence between buffers and windows;
-windows are merely views. A given buffer may be open in _multiple_ windows,
-even within the same tab. This can be quite handy, for example, to view two
-different parts of a file at the same time.
+Vim håller en uppsättning öppna filer som kallas "buffertar".
+En Vim-session har ett antal flikar, där varje flik har ett antal fönster (delade paneler).
+Varje fönster visar en enda buffert.
+Till skillnad från andra program du känner till, som webbläsare, finns ingen 1-till-1-koppling mellan buffertar och fönster; fönster är bara vyer.
+En given buffert kan vara öppen i _flera_ fönster, även inom samma flik.
+Det kan vara mycket praktiskt, till exempel för att se två olika delar av samma fil samtidigt.
 
-By default, Vim opens with a single tab, which contains a single window.
+Som standard öppnar Vim med en enda flik som innehåller ett enda fönster.
 
-## Command-line
+## Kommandorad
 
-Command mode can be entered by typing `:` in Normal mode. Your cursor will jump
-to the command line at the bottom of the screen upon pressing `:`. This mode
-has many functionalities, including opening, saving, and closing files, and
-[quitting Vim](https://twitter.com/iamdevloper/status/435555976687923200).
+Kommandoläget nås genom att skriva `:` i Normal-läge.
+Markören hoppar då till kommandoraden längst ned på skärmen.
+Detta läge har många funktioner, bland annat att öppna, spara och stänga filer samt [avsluta Vim](https://twitter.com/iamdevloper/status/435555976687923200).
 
-- `:q` quit (close window)
-- `:w` save ("write")
-- `:wq` save and quit
-- `:e {name of file}` open file for editing
-- `:ls` show open buffers
-- `:help {topic}` open help
-    - `:help :w` opens help for the `:w` command
-    - `:help w` opens help for the `w` movement
+- `:q` avsluta (stäng fönster)
+- `:w` spara ("write")
+- `:wq` spara och avsluta
+- `:e {name of file}` öppna fil för redigering
+- `:ls` visa öppna buffertar
+- `:help {topic}` öppna hjälp
+    - `:help :w` öppnar hjälp för kommandot `:w`
+    - `:help w` öppnar hjälp för rörelsen `w`
 
-# Vim's interface is a programming language
+# Vims gränssnitt är ett programmeringsspråk
 
-The most important idea in Vim is that Vim's interface itself is a programming
-language. Keystrokes (with mnemonic names) are commands, and these commands
-_compose_. This enables efficient movement and edits, especially once the
-commands become muscle memory.
+Den viktigaste idén i Vim är att Vims gränssnitt i sig är ett programmeringsspråk.
+Tangenttryckningar (med minnesvänliga namn) är kommandon, och kommandona _komponeras_.
+Detta möjliggör effektiv navigering och redigering, särskilt när kommandona sitter i muskelminnet.
 
-## Movement
+## Rörelse
 
-You should spend most of your time in Normal mode, using movement commands to
-navigate the buffer. Movements in Vim are also called "nouns", because they
-refer to chunks of text.
+Du bör tillbringa största delen av tiden i Normal-läge och använda rörelsekommandon för att navigera i bufferten.
+Rörelser i Vim kallas också "substantiv", eftersom de syftar på textenheter.
 
-- Basic movement: `hjkl` (left, down, up, right)
-- Words: `w` (next word), `b` (beginning of word), `e` (end of word)
-- Lines: `0` (beginning of line), `^` (first non-blank character), `$` (end of line)
-- Screen: `H` (top of screen), `M` (middle of screen), `L` (bottom of screen)
-- Scroll: `Ctrl-u` (up), `Ctrl-d` (down)
-- File: `gg` (beginning of file), `G` (end of file)
-- Line numbers: `:{number}<CR>` or `{number}G` (line {number})
-- Misc: `%` (corresponding item)
-- Find: `f{character}`, `t{character}`, `F{character}`, `T{character}`
-    - find/to forward/backward {character} on the current line
-    - `,` / `;` for navigating matches
-- Search: `/{regex}`, `n` / `N` for navigating matches
+- Grundrörelse: `hjkl` (vänster, ned, upp, höger)
+- Ord: `w` (nästa ord), `b` (början av ord), `e` (slutet av ord)
+- Rader: `0` (början av rad), `^` (första icke-blanktecken), `$` (slutet av rad)
+- Skärm: `H` (överkant), `M` (mitten), `L` (underkant)
+- Rulla: `Ctrl-u` (upp), `Ctrl-d` (ned)
+- Fil: `gg` (början av fil), `G` (slutet av fil)
+- Radnummer: `:{number}<CR>` eller `{number}G` (rad {number})
+- Övrigt: `%` (motsvarande objekt)
+- Hitta: `f{character}`, `t{character}`, `F{character}`, `T{character}`
+    - find/to framåt/bakåt {character} på aktuell rad
+    - `,` / `;` för att navigera mellan träffar
+- Sök: `/{regex}`, `n` / `N` för att navigera mellan träffar
 
-## Selection
+## Markering
 
-Visual modes:
+Visual-lägen:
 
 - Visual: `v`
 - Visual Line: `V`
 - Visual Block: `Ctrl-v`
 
-Can use movement keys to make selection.
+Du kan använda rörelsetangenter för att göra markering.
 
-## Edits
+## Redigeringar
 
-Everything that you used to do with the mouse, you now do with the keyboard
-using editing commands that compose with movement commands. Here's where Vim's
-interface starts to look like a programming language. Vim's editing commands
-are also called "verbs", because verbs act on nouns.
+Allt du tidigare gjorde med musen gör du nu med tangentbordet, med redigeringskommandon som kan kombineras med rörelsekommandon.
+Det är här Vims gränssnitt börjar likna ett programmeringsspråk.
+Vims redigeringskommandon kallas också "verb", eftersom verb agerar på substantiv.
 
-- `i` enter Insert mode
-    - but for manipulating/deleting text, want to use something more than
-    backspace
-- `o` / `O` insert line below / above
-- `d{motion}` delete {motion}
-    - e.g. `dw` is delete word, `d$` is delete to end of line, `d0` is delete
-    to beginning of line
-- `c{motion}` change {motion}
-    - e.g. `cw` is change word
-    - like `d{motion}` followed by `i`
-- `x` delete character (equal to `dl`)
-- `s` substitute character (equal to `cl`)
-- Visual mode + manipulation
-    - select text, `d` to delete it or `c` to change it
-- `u` to undo, `<C-r>` to redo
-- `y` to copy / "yank" (some other commands like `d` also copy)
-- `p` to paste
-- Lots more to learn: e.g. `~` flips the case of a character
+- `i` gå till Insert-läge
+    - men för att manipulera/ta bort text vill du använda något mer än backspace
+- `o` / `O` infoga rad under / över
+- `d{motion}` ta bort {motion}
+    - t.ex. `dw` är ta bort ord, `d$` är ta bort till radslut, `d0` är ta bort till radbörjan
+- `c{motion}` ändra {motion}
+    - t.ex. `cw` är ändra ord
+    - som `d{motion}` följt av `i`
+- `x` ta bort tecken (motsvarar `dl`)
+- `s` ersätt tecken (motsvarar `cl`)
+- Visual-läge + manipulation
+    - markera text, `d` för att ta bort eller `c` för att ändra
+- `u` för ångra, `<C-r>` för göra om
+- `y` för kopiera / "yank" (vissa andra kommandon som `d` kopierar också)
+- `p` för klistra in
+- Mycket mer att lära: t.ex. `~` växlar versal/gemen för ett tecken
 
-## Counts
+## Antal
 
-You can combine nouns and verbs with a count, which will perform a given action
-a number of times.
+Du kan kombinera substantiv och verb med ett antal, vilket gör att en åtgärd utförs flera gånger.
 
-- `3w` move 3 words forward
-- `5j` move 5 lines down
-- `7dw` delete 7 words
+- `3w` flytta 3 ord framåt
+- `5j` flytta 5 rader nedåt
+- `7dw` ta bort 7 ord
 
-## Modifiers
+## Modifierare
 
-You can use modifiers to change the meaning of a noun. Some modifiers are `i`,
-which means "inner" or "inside", and `a`, which means "around".
+Du kan använda modifierare för att ändra innebörden av ett substantiv.
+Några modifierare är `i`, som betyder "inner" eller "inside", och `a`, som betyder "around".
 
-- `ci(` change the contents inside the current pair of parentheses
-- `ci[` change the contents inside the current pair of square brackets
-- `da'` delete a single-quoted string, including the surrounding single quotes
+- `ci(` ändra innehållet inuti det aktuella parentesparet
+- `ci[` ändra innehållet inuti det aktuella hakparentesparet
+- `da'` ta bort en enkelciterad sträng inklusive omgivande enkla citationstecken
 
 # Demo
 
-Here is a broken [fizz buzz](https://en.wikipedia.org/wiki/Fizz_buzz)
-implementation:
+Här är en trasig implementation av [fizz buzz](https://en.wikipedia.org/wiki/Fizz_buzz):
 
 ```python
 def fizz_buzz(limit):
@@ -247,13 +210,13 @@ def main():
     fizz_buzz(10)
 ```
 
-We will fix the following issues:
+Vi kommer att rätta följande problem:
 
-- Main is never called
-- Starts at 0 instead of 1
-- Prints "fizz" and "buzz" on separate lines for multiples of 15
-- Prints "fizz" for multiples of 5
-- Uses a hard-coded argument of 10 instead of taking a command-line argument
+- Main anropas aldrig
+- Startar på 0 i stället för 1
+- Skriver "fizz" och "buzz" på separata rader för multiplar av 15
+- Skriver "fizz" för multiplar av 5
+- Använder hårdkodat argument 10 i stället för att ta ett kommandoradsargument
 
 {% comment %}
 - main is never called
@@ -280,188 +243,172 @@ We will fix the following issues:
   - `ci(` to "int(sys.argv[1])"
 {% endcomment %}
 
-See the lecture video for the demonstration. Compare how the above changes are
-made using Vim to how you might make the same edits using another program.
-Notice how very few keystrokes are required in Vim, allowing you to edit at the
-speed you think.
+Se föreläsningsvideon för demonstrationen.
+Jämför hur ändringarna ovan görs med Vim med hur du hade gjort samma redigeringar i ett annat program.
+Notera hur få tangenttryckningar som krävs i Vim, vilket låter dig redigera i den hastighet du tänker.
 
-# Customizing Vim
+# Anpassa Vim
 
-Vim is customized through a plain-text configuration file in `~/.vimrc`
-(containing Vimscript commands). There are probably lots of basic settings that
-you want to turn on.
+Vim anpassas via en textbaserad konfigurationsfil i `~/.vimrc`
+(som innehåller Vimscript-kommandon).
+Det finns sannolikt många grundinställningar som du vill slå på.
 
-We are providing a well-documented basic config that you can use as a starting
-point. We recommend using this because it fixes some of Vim's quirky default
-behavior. **Download our config [here](/2020/files/vimrc) and save it to
-`~/.vimrc`.**
+Vi tillhandahåller en väl dokumenterad grundkonfiguration som du kan använda som startpunkt.
+Vi rekommenderar att du använder den eftersom den rättar till en del av Vims udda standardbeteende.
+**Ladda ner vår konfiguration [här]({{ '/2020/files/vimrc' | relative_url }}) och spara den som `~/.vimrc`.**
 
-Vim is heavily customizable, and it's worth spending time exploring
-customization options. You can look at people's dotfiles on GitHub for
-inspiration, for example, your instructors' Vim configs
+Vim är mycket anpassningsbart, och det är värt att lägga tid på att utforska anpassningsmöjligheter.
+Du kan titta på andras dotfiles på GitHub för inspiration, till exempel lärarnas Vim-konfigurationer
 ([Anish](https://github.com/anishathalye/dotfiles/blob/master/vimrc),
-[Jon](https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.lua) (uses [neovim](https://neovim.io/)),
-[Jose](https://github.com/JJGO/dotfiles/blob/master/vim/.vimrc)). There are
-lots of good blog posts on this topic too. Try not to copy-and-paste people's
-full configuration, but read it, understand it, and take what you need.
+[Jon](https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.lua) (använder [neovim](https://neovim.io/)),
+[Jose](https://github.com/JJGO/dotfiles/blob/master/vim/.vimrc)).
+Det finns också många bra blogginlägg om ämnet.
+Försök att inte kopiera och klistra in någons fulla konfiguration, utan läs den, förstå den och plocka det du behöver.
 
-# Extending Vim
+# Utöka Vim
 
-There are tons of plugins for extending Vim. Contrary to outdated advice that
-you might find on the internet, you do _not_ need to use a plugin manager for
-Vim (since Vim 8.0). Instead, you can use the built-in package management
-system. Simply create the directory `~/.vim/pack/vendor/start/`, and put
-plugins in there (e.g. via `git clone`).
+Det finns massor av insticksmoduler för att utöka Vim.
+I motsats till föråldrade råd du kan hitta på internet behöver du _inte_ använda en hanterare för insticksmoduler i Vim (sedan Vim 8.0).
+I stället kan du använda det inbyggda pakethanteringssystemet.
+Skapa helt enkelt katalogen `~/.vim/pack/vendor/start/` och lägg insticksmoduler där (t.ex. via `git clone`).
 
-Here are some of our favorite plugins:
+Här är några av våra favoritinsticksmoduler:
 
-- [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim): fuzzy file finder
-- [ack.vim](https://github.com/mileszs/ack.vim): code search
-- [nerdtree](https://github.com/scrooloose/nerdtree): file explorer
-- [vim-easymotion](https://github.com/easymotion/vim-easymotion): magic motions
+- [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim): fuzzy filsökare
+- [ack.vim](https://github.com/mileszs/ack.vim): kodsökning
+- [nerdtree](https://github.com/scrooloose/nerdtree): filutforskare
+- [vim-easymotion](https://github.com/easymotion/vim-easymotion): magiska rörelser
 
-We're trying to avoid giving an overwhelmingly long list of plugins here. You
-can check out the instructors' dotfiles
+Vi försöker undvika att ge en överväldigande lång lista med insticksmoduler här.
+Du kan titta i lärarnas dotfiles
 ([Anish](https://github.com/anishathalye/dotfiles),
 [Jon](https://github.com/jonhoo/configs),
-[Jose](https://github.com/JJGO/dotfiles)) to see what other plugins we use.
-Check out [Vim Awesome](https://vimawesome.com/) for more awesome Vim plugins.
-There are also tons of blog posts on this topic: just search for "best Vim
-plugins".
+[Jose](https://github.com/JJGO/dotfiles)) för att se vilka andra insticksmoduler vi använder.
+Kolla också in [Vim Awesome](https://vimawesome.com/) för fler bra Vim-insticksmoduler.
+Det finns även mängder av blogginlägg om ämnet: sök till exempel på `Vim-insticksmoduler`.
 
-# Vim-mode in other programs
+# Vim-läge i andra program
 
-Many tools support Vim emulation. The quality varies from good to great;
-depending on the tool, it may not support the fancier Vim features, but most
-cover the basics pretty well.
+Många verktyg stöder Vim-emulering.
+Kvaliteten varierar från bra till mycket bra; beroende på verktyg kanske de inte stöder de mer avancerade Vim-funktionerna, men de flesta täcker grunderna väl.
 
-## Shell
+## Skal
 
-If you're a Bash user, use `set -o vi`. If you use Zsh, `bindkey -v`. For Fish,
-`fish_vi_key_bindings`. Additionally, no matter what shell you use, you can
-`export EDITOR=vim`. This is the environment variable used to decide which
-editor is launched when a program wants to start an editor. For example, `git`
-will use this editor for commit messages.
+Om du använder Bash, använd `set -o vi`.
+Om du använder Zsh, `bindkey -v`.
+För Fish, `fish_vi_key_bindings`.
+Dessutom kan du, oavsett skal, sätta `export EDITOR=vim`.
+Detta är miljövariabeln som används för att avgöra vilken redigerare som startas när ett program vill öppna en redigerare.
+Till exempel använder `git` denna redigerare för incheckningsmeddelanden.
 
 ## Readline
 
-Many programs use the [GNU
-Readline](https://tiswww.case.edu/php/chet/readline/rltop.html) library for
-their command-line interface. Readline supports (basic) Vim emulation too,
-which can be enabled by adding the following line to the `~/.inputrc` file:
+Många program använder biblioteket [GNU
+Readline](https://tiswww.case.edu/php/chet/readline/rltop.html) för sitt kommandoradsgränssnitt.
+Readline stöder också (grundläggande) Vim-emulering, som kan aktiveras genom att lägga till följande rad i filen `~/.inputrc`:
 
 ```
 set editing-mode vi
 ```
 
-With this setting, for example, the Python REPL will support Vim bindings.
+Med den här inställningen får till exempel Python-REPL stöd för Vim-bindningar.
 
-## Others
+## Övriga
 
-There are even vim keybinding extensions for web
-[browsers](https://vim.fandom.com/wiki/Vim_key_bindings_for_web_browsers) - some
-popular ones are
+Det finns till och med vim-tangentbindningstillägg för webbläsare
+[browsers](https://vim.fandom.com/wiki/Vim_key_bindings_for_web_browsers) - några populära är
 [Vimium](https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb?hl=en)
-for Google Chrome and [Tridactyl](https://github.com/tridactyl/tridactyl) for
-Firefox. You can even get Vim bindings in [Jupyter
+för Google Chrome och [Tridactyl](https://github.com/tridactyl/tridactyl) för Firefox.
+Du kan till och med få Vim-bindningar i [Jupyter
 notebooks](https://github.com/jupyterlab-contrib/jupyterlab-vim).
-Here is a [long list](https://reversed.top/2016-08-13/big-list-of-vim-like-software) of software with vim-like keybindings.
+Här är en [lång lista](https://reversed.top/2016-08-13/big-list-of-vim-like-software) över program med vim-liknande tangentbindningar.
 
-# Advanced Vim
+<span id="advanced-vim"></span>
+# Avancerad Vim
 
-Here are a few examples to show you the power of the editor. We can't teach you
-all of these kinds of things, but you'll learn them as you go. A good
-heuristic: whenever you're using your editor and you think "there must be a
-better way of doing this", there probably is: look it up online.
+Här är några exempel som visar kraften i redigeraren.
+Vi kan inte lära ut alla sådana saker, men du lär dig dem längs vägen.
+En bra tumregel: varje gång du använder redigeraren och tänker "det måste finnas ett bättre sätt att göra det här" så finns det förmodligen det; slå upp det på nätet.
 
-## Search and replace
+## Sök och ersätt
 
-`:s` (substitute) command ([documentation](https://vim.fandom.com/wiki/Search_and_replace)).
+Kommandot `:s` (substitute) ([dokumentation](https://vim.fandom.com/wiki/Search_and_replace)).
 
 - `%s/foo/bar/g`
-    - replace foo with bar globally in file
+    - ersätt foo med bar globalt i filen
 - `%s/\[.*\](\(.*\))/\1/g`
-    - replace named Markdown links with plain URLs
+    - ersätt namngivna Markdown-länkar med rena URL:er
 
-## Multiple windows
+## Flera fönster
 
-- `:sp` / `:vsp` to split windows
-- Can have multiple views of the same buffer.
+- `:sp` / `:vsp` för att dela fönster
+- Kan ha flera vyer av samma buffert.
 
-## Macros
+<span id="macros"></span>
+## Makron
 
-- `q{character}` to start recording a macro in register `{character}`
-- `q` to stop recording
-- `@{character}` replays the macro
-- Macro execution stops on error
-- `{number}@{character}` executes a macro {number} times
-- Macros can be recursive
-    - first clear the macro with `q{character}q`
-    - record the macro, with `@{character}` to invoke the macro recursively
-    (will be a no-op until recording is complete)
-- Example: convert xml to json ([file](/2020/files/example-data.xml))
-    - Array of objects with keys "name" / "email"
-    - Use a Python program?
-    - Use sed / regexes
+- `q{character}` för att börja spela in ett makro i register `{character}`
+- `q` för att stoppa inspelningen
+- `@{character}` spelar upp makrot
+- Makrouppspelning stoppar vid fel
+- `{number}@{character}` kör ett makro {number} gånger
+- Makron kan vara rekursiva
+    - rensa först makrot med `q{character}q`
+    - spela in makrot med `@{character}` för att anropa makrot rekursivt
+    (det blir en no-op tills inspelningen är klar)
+- Exempel: konvertera xml till json ([fil]({{ '/2020/files/example-data.xml' | relative_url }}))
+    - Array av objekt med nycklarna "name" / "email"
+    - Använd ett Python-program?
+    - Använd sed / regex
         - `g/people/d`
         - `%s/<person>/{/g`
         - `%s/<name>\(.*\)<\/name>/"name": "\1",/g`
         - ...
-    - Vim commands / macros
-        - `Gdd`, `ggdd` delete first and last lines
-        - Macro to format a single element (register `e`)
-            - Go to line with `<name>`
+    - Vim-kommandon / makron
+        - `Gdd`, `ggdd` tar bort första och sista raden
+        - Makro för att formatera ett enskilt element (register `e`)
+            - Gå till raden med `<name>`
             - `qe^r"f>s": "<ESC>f<C"<ESC>q`
-        - Macro to format a person
-            - Go to line with `<person>`
+        - Makro för att formatera en person
+            - Gå till raden med `<person>`
             - `qpS{<ESC>j@eA,<ESC>j@ejS},<ESC>q`
-        - Macro to format a person and go to the next person
-            - Go to line with `<person>`
+        - Makro för att formatera en person och gå till nästa person
+            - Gå till raden med `<person>`
             - `qq@pjq`
-        - Execute macro until end of file
+        - Kör makrot till filslut
             - `999@q`
-        - Manually remove last `,` and add `[` and `]` delimiters
+        - Ta manuellt bort sista `,` och lägg till avgränsarna `[` och `]`
 
-# Resources
+# Resurser
 
-- `vimtutor` is a tutorial that comes installed with Vim - if Vim is installed, you should be able to run `vimtutor` from your shell
-- [Vim Adventures](https://vim-adventures.com/) is a game to learn Vim
+- `vimtutor` är en handledning som följer med Vim - om Vim är installerat bör du kunna köra `vimtutor` från skalet
+- [Vim Adventures](https://vim-adventures.com/) är ett spel för att lära sig Vim
 - [Vim Tips Wiki](https://vim.fandom.com/wiki/Vim_Tips_Wiki)
-- [Vim Advent Calendar](https://vimways.org/2019/) has various Vim tips
-- [Vim Golf](https://www.vimgolf.com/) is [code golf](https://en.wikipedia.org/wiki/Code_golf), but where the programming language is Vim's UI
+- [Vim Advent Calendar](https://vimways.org/2019/) har olika Vim-tips
+- [Vim Golf](https://www.vimgolf.com/) är [code golf](https://en.wikipedia.org/wiki/Code_golf), men där programmeringsspråket är Vims UI
 - [Vi/Vim Stack Exchange](https://vi.stackexchange.com/)
 - [Vim Screencasts](http://vimcasts.org/)
-- [Practical Vim](https://pragprog.com/titles/dnvim2/) (book)
+- [Practical Vim](https://pragprog.com/titles/dnvim2/) (bok)
 
-# Exercises
+# Övningar
 
-1. Complete `vimtutor`. Note: it looks best in a
-   [80x24](https://en.wikipedia.org/wiki/VT100) (80 columns by 24 lines)
-   terminal window.
-1. Download our [basic vimrc](/2020/files/vimrc) and save it to `~/.vimrc`. Read
-   through the well-commented file (using Vim!), and observe how Vim looks and
-   behaves slightly differently with the new config.
-1. Install and configure a plugin:
+1. Slutför `vimtutor`. Obs: den ser bäst ut i ett
+   [80x24](https://en.wikipedia.org/wiki/VT100) (80 kolumner och 24 rader)
+   terminalfönster.
+1. Ladda ner vår [grundläggande vimrc]({{ '/2020/files/vimrc' | relative_url }}) och spara den som `~/.vimrc`. Läs igenom den välkommenterade filen (med Vim!) och observera hur Vim ser ut och beter sig något annorlunda med den nya konfigurationen.
+1. Installera och konfigurera en insticksmodul:
    [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim).
-   1. Create the plugins directory with `mkdir -p ~/.vim/pack/vendor/start`
-   1. Download the plugin: `cd ~/.vim/pack/vendor/start; git clone
+   1. Skapa katalogen för insticksmoduler med `mkdir -p ~/.vim/pack/vendor/start`
+   1. Ladda ner insticksmodulen: `cd ~/.vim/pack/vendor/start; git clone
       https://github.com/ctrlpvim/ctrlp.vim`
-   1. Read the
-      [documentation](https://github.com/ctrlpvim/ctrlp.vim/blob/master/readme.md)
-      for the plugin. Try using CtrlP to locate a file by navigating to a
-      project directory, opening Vim, and using the Vim command-line to start
-      `:CtrlP`.
-    1. Customize CtrlP by adding
-       [configuration](https://github.com/ctrlpvim/ctrlp.vim/blob/master/readme.md#basic-options)
-       to your `~/.vimrc` to open CtrlP by pressing Ctrl-P.
-1. To practice using Vim, re-do the [Demo](#demo) from lecture on your own
-   machine.
-1. Use Vim for _all_ your text editing for the next month. Whenever something
-   seems inefficient, or when you think "there must be a better way", try
-   Googling it, there probably is. If you get stuck, come to office hours or
-   send us an email.
-1. Configure your other tools to use Vim bindings (see instructions above).
-1. Further customize your `~/.vimrc` and install more plugins.
-1. (Advanced) Convert XML to JSON ([example file](/2020/files/example-data.xml))
-   using Vim macros. Try to do this on your own, but you can look at the
-   [macros](#macros) section above if you get stuck.
+   1. Läs
+      [dokumentationen](https://github.com/ctrlpvim/ctrlp.vim/blob/master/readme.md)
+      för insticksmodulen. Prova att använda CtrlP för att hitta en fil genom att gå till en projektkatalog, öppna Vim och använda Vim-kommandoraden för att starta `:CtrlP`.
+    1. Anpassa CtrlP genom att lägga till
+       [konfiguration](https://github.com/ctrlpvim/ctrlp.vim/blob/master/readme.md#basic-options)
+       i din `~/.vimrc` så att CtrlP öppnas med Ctrl-P.
+1. För att öva Vim, gör om [Demo](#demo) från föreläsningen på din egen maskin.
+1. Använd Vim för _all_ textredigering under nästa månad. När något känns ineffektivt, eller när du tänker "det måste finnas ett bättre sätt", prova att googla - det finns förmodligen ett. Om du fastnar, kom till mottagningstid eller e-posta oss.
+1. Konfigurera dina andra verktyg att använda Vim-bindningar (se instruktionerna ovan).
+1. Anpassa din `~/.vimrc` vidare och installera fler insticksmoduler.
+1. (Avancerad) Konvertera XML till JSON ([exempelfil]({{ '/2020/files/example-data.xml' | relative_url }})) med Vim-makron. Försök göra detta själv, men du kan titta i avsnittet [makron](#makron) ovan om du fastnar.

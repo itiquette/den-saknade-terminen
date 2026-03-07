@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Development Environment and Tools"
+title: "Utvecklingsmiljö och verktyg"
 description: >
-  Learn about IDEs, Vim, language servers, and AI-powered development tools.
+  Lär dig om IDE:er, Vim, språkservrar och AI-drivna utvecklingsverktyg.
 thumbnail: /static/assets/thumbnails/2026/lec3.png
 date: 2026-01-14
 ready: true
@@ -11,121 +11,150 @@ video:
   id: QnM1nVzrkx8
 ---
 
-A _development environment_ is a set of tools for developing software. At the heart of a development environment is text editing functionality, along with accompanying features such as syntax highlighting, type checking, code formatting, and autocomplete. _Integrated development environments_ (IDEs) such as [VS Code][vs-code] bring together all of this functionality into a single application. Terminal-based development workflows combine tools such as [tmux](https://github.com/tmux/tmux) (a terminal multiplexer), [Vim](https://www.vim.org/) (a text editor), [Zsh](https://www.zsh.org/) (a shell), and language-specific command-line tools, such as [Ruff](https://docs.astral.sh/ruff/) (a Python linter and code formatter) and [Mypy](https://mypy-lang.org/) (a Python type checker).
+En _utvecklingsmiljö_ är en uppsättning verktyg för att utveckla programvara.
+Kärnan i en utvecklingsmiljö är textredigering, tillsammans med funktioner som syntaxmarkering, typkontroll, kodformatering och autokomplettering.
+_Integrerade utvecklingsmiljöer_ (IDE:er) som [VS Code][vs-code] samlar all denna funktionalitet i en enda applikation.
+Terminalbaserade arbetsflöden för utveckling kombinerar verktyg som [tmux](https://github.com/tmux/tmux) (en terminalmultiplexer), [Vim](https://www.vim.org/) (en textredigerare), [Zsh](https://www.zsh.org/) (ett skal) och språkspecifika kommandoradsverktyg, som [Ruff](https://docs.astral.sh/ruff/) (en Python-linter och kodformatterare) och [Mypy](https://mypy-lang.org/) (en typkontroll för Python).
 
-IDEs and terminal-based workflows each have their strengths and weaknesses. For example, graphical IDEs can be easier to learn, and today's IDEs generally have better out-of-the-box AI integrations like AI autocomplete; on the other hand, terminal-based workflows are lightweight, and they may be your only option in environments where you don't have a GUI or can't install software. We recommend you develop basic familiarity with both and develop mastery of at least one. If you don't already have a preferred IDE, we recommend starting with [VS Code][vs-code].
+IDE:er och terminalbaserade arbetsflöden har båda sina styrkor och svagheter.
+Grafiska IDE:er kan till exempel vara lättare att lära sig, och dagens IDE:er har i allmänhet bättre AI-integration direkt ur lådan, som AI-autokomplettering.
+Terminalbaserade arbetsflöden är å andra sidan lätta och kan vara ditt enda alternativ i miljöer där du inte har ett GUI eller inte kan installera programvara.
+Vi rekommenderar att du skaffar grundläggande vana vid båda och uppnår god behärskning av minst ett av dem.
+Om du inte redan har en föredragen IDE rekommenderar vi att börja med [VS Code][vs-code].
 
-In this lecture, we'll cover:
+I den här föreläsningen går vi igenom:
 
-- [Text editing and Vim](#text-editing-and-vim)
-- [Code intelligence and language servers](#code-intelligence-and-language-servers)
-- [AI-powered development](#ai-powered-development)
-- [Extensions and other IDE functionality](#extensions-and-other-ide-functionality)
+- [Textredigering och Vim](#textredigering-och-vim)
+- [Kodintelligens och språkservrar](#kodintelligens-och-språkservrar)
+- [AI-driven utveckling](#ai-driven-utveckling)
+- [Tillägg och annan IDE-funktionalitet](#tillägg-och-annan-ide-funktionalitet)
 
 [vs-code]: https://code.visualstudio.com/
 
-# Text editing and Vim
+# Textredigering och Vim
 
-When programming, you spend most of your time navigating through code, reading snippets of code, and making edits to code, rather than writing long streams or reading files top-to-bottom. [Vim] is a text editor that is optimized for this distribution of tasks.
+När du programmerar lägger du mest tid på att navigera i kod, läsa kodsnuttar och göra ändringar i kod, snarare än att skriva långa obrutna textstycken eller läsa filer uppifrån och ner.
+[Vim] är en textredigerare som är optimerad för just den här fördelningen av uppgifter.
 
-**The philosophy of Vim.** Vim has a beautiful idea as its foundation: its interface is itself a programming language, designed for navigating and editing text. Keystrokes (with mnemonic names) are commands, and these commands are composable. Vim avoids the use of the mouse, because it's too slow; Vim even avoids use of the arrow keys because it requires too much movement. The result: an editor that feels like a brain-computer interface and matches the speed at which you think.
+**Vims filosofi.** Vim bygger på en vacker idé: gränssnittet är i sig ett programmeringsspråk, utformat för att navigera och redigera text.
+Tangenttryckningar (med minnesvänliga namn) är kommandon, och dessa kommandon går att komponera.
+Vim undviker musen eftersom den är för långsam.
+Vim undviker till och med piltangenterna eftersom de kräver för mycket rörelse.
+Resultatet är en redigerare som känns som ett hjärn-datorgränssnitt och matchar hastigheten i ditt tänkande.
 
-**Vim support in other software.** You don't have to use [Vim] itself to benefit from the ideas at its core. Many programs that involve any kind of text editing support "Vim mode", either as built-in functionality or as a plugin. For example, VS Code has the [VSCodeVim](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim) plugin, Zsh has [built-in support](https://zsh.sourceforge.io/Guide/zshguide04.html) for Vim emulation, and even Claude Code has [built-in support](https://code.claude.com/docs/en/interactive-mode#vim-editor-mode) for Vim editor mode. Chances are that any tool you use that involves text editing supports Vim mode in one way or another.
+**Vim-stöd i annan programvara.** Du behöver inte använda [Vim] självt för att dra nytta av idéerna i dess kärna.
+Många program som innehåller textredigering har ett "Vim-läge", antingen inbyggt eller som insticksmodul.
+VS Code har till exempel insticksmodulen [VSCodeVim](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim), Zsh har [inbyggt stöd](https://zsh.sourceforge.io/Guide/zshguide04.html) för Vim-emulering, och till och med Claude Code har [inbyggt stöd](https://code.claude.com/docs/en/interactive-mode#vim-editor-mode) för Vim-redigerarläge.
+Chansen är stor att de verktyg du använder för textredigering stöder Vim-läge på något sätt.
 
-## Modal editing
+## Modalt redigerande
 
-Vim is a _modal editor_: it has different operating modes for different classes of tasks.
+Vim är en _modal redigerare_: den har olika arbetslägen för olika typer av uppgifter.
 
-- **Normal**: for moving around a file and making edits
-- **Insert**: for inserting text
-- **Replace**: for replacing text
-- **Visual** (plain, line, or block): for selecting blocks of text
-- **Command-line**: for running a command
+- **Normal**: för att flytta runt i en fil och göra ändringar
+- **Insert**: för att infoga text
+- **Replace**: för att ersätta text
+- **Visual** (vanligt, rad eller block): för att markera textblock
+- **Command-line**: för att köra ett kommando
 
-Keystrokes have different meanings in different operating modes. For example, the letter `x` in Insert mode will just insert a literal character "x", but in Normal mode, it will delete the character under the cursor, and in Visual mode, it will delete the selection.
+Tangenttryckningar betyder olika saker i olika lägen.
+Bokstaven `x` i Insert-läge skriver till exempel bara in tecknet "x", men i Normal-läge raderar den tecknet under markören, och i Visual-läge raderar den markeringen.
 
-In its default configuration, Vim shows the current mode in the bottom left. The initial/default mode is Normal mode. You'll generally spend most of your time between Normal mode and Insert mode.
+I standardkonfigurationen visar Vim aktuellt läge längst ned till vänster.
+Start-/standardläget är Normal-läge.
+Du kommer oftast att växla mellan Normal-läge och Insert-läge.
 
-You change modes by pressing `<ESC>` (the escape key) to switch from any mode back to Normal mode. From Normal mode, enter Insert mode with `i`, Replace mode with `R`, Visual mode with `v`, Visual Line mode with `V`, Visual Block mode with `<C-v>` (Ctrl-V, sometimes also written `^V`), and Command-line mode with `:`.
+Du byter läge genom att trycka `<ESC>` (escape-tangenten) för att gå tillbaka till Normal-läge från vilket läge som helst.
+Från Normal-läge går du till Insert med `i`, Replace med `R`, Visual med `v`, Visual Line med `V`, Visual Block med `<C-v>` (Ctrl-V, ibland skrivet `^V`) och Command-line med `:`.
 
-You use the `<ESC>` key a lot when using Vim: consider remapping Caps Lock to Escape ([macOS instructions](https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_macOS)) or create an [alternative mapping](https://vim.fandom.com/wiki/Avoid_the_escape_key#Mappings) for `<ESC>` with a simple key sequence.
+Du använder `<ESC>` mycket i Vim.
+Överväg att mappa om Caps Lock till Escape ([instruktioner för macOS](https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_macOS)) eller skapa en [alternativ mappning](https://vim.fandom.com/wiki/Avoid_the_escape_key#Mappings) för `<ESC>` med en enkel tangentsekvens.
 
-## Basics: inserting text
+## Grunderna: infoga text
 
-From Normal mode, press `i` to enter Insert mode. Now, Vim behaves like any other text editor, until you press `<ESC>` to return to Normal mode. This, along with the basics explained above, are all you need to start editing files using Vim (though not particularly efficiently, if you're spending all your time editing from Insert mode).
+Tryck `i` från Normal-läge för att gå till Insert-läge.
+Nu fungerar Vim som vilken annan textredigerare som helst, tills du trycker `<ESC>` för att gå tillbaka till Normal-läge.
+Detta, tillsammans med grunderna ovan, räcker för att börja redigera filer med Vim.
+Det är dock inte särskilt effektivt om du tillbringar all tid i Insert-läge.
 
-## Vim's interface is a programming language
+## Vims gränssnitt är ett programmeringsspråk
 
-Vim's interface is a programming language. Keystrokes (with mnemonic names) are commands, and these commands _compose_. This enables efficient movement and edits, especially once the commands become muscle memory, just like typing becomes super efficient once you've learned your keyboard layout.
+Vims gränssnitt är ett programmeringsspråk.
+Tangenttryckningar (med minnesvänliga namn) är kommandon, och dessa kommandon _komponeras_.
+Det möjliggör effektiv förflyttning och redigering, särskilt när kommandona sitter i muskelminnet, ungefär som att skrivande blir snabbt när du lärt dig tangentbordslayouten.
 
-### Movement
+### Rörelse
 
-You should spend most of your time in Normal mode, using movement commands to navigate the file. Movements in Vim are also called "nouns", because they refer to chunks of text.
+Du bör tillbringa merparten av tiden i Normal-läge och använda rörelsekommandon för att navigera i filen.
+Rörelser i Vim kallas också "substantiv", eftersom de syftar på textstycken.
 
-- Basic movement: `hjkl` (left, down, up, right)
-- Words: `w` (next word), `b` (beginning of word), `e` (end of word)
-- Lines: `0` (beginning of line), `^` (first non-blank character), `$` (end of line)
-- Screen: `H` (top of screen), `M` (middle of screen), `L` (bottom of screen)
-- Scroll: `Ctrl-u` (up), `Ctrl-d` (down)
-- File: `gg` (beginning of file), `G` (end of file)
-- Line numbers: `:{number}<CR>` or `{number}G` (line {number})
-    - `<CR>` refers to the carriage return / enter key
-- Misc: `%` (matching item, like parenthesis or brace)
-- Find: `f{character}`, `t{character}`, `F{character}`, `T{character}`
-    - find/to forward/backward {character} on the current line
-    - `,` / `;` for navigating matches
-- Search: `/{regex}`, `n` / `N` for navigating matches
+- Grundrörelser: `hjkl` (vänster, ner, upp, höger)
+- Ord: `w` (nästa ord), `b` (början av ord), `e` (slutet av ord)
+- Rader: `0` (början av rad), `^` (första icke-blanktecken), `$` (slutet av rad)
+- Skärm: `H` (överst på skärmen), `M` (mitt på skärmen), `L` (nederst på skärmen)
+- Scroll: `Ctrl-u` (upp), `Ctrl-d` (ner)
+- Fil: `gg` (början av fil), `G` (slutet av fil)
+- Radnummer: `:{number}<CR>` eller `{number}G` (rad {number})
+    - `<CR>` syftar på carriage return / enter-tangenten
+- Övrigt: `%` (matchande tecken, som parentes eller klammer)
+- Sök tecken: `f{character}`, `t{character}`, `F{character}`, `T{character}`
+    - find/to framåt/bakåt efter {character} på aktuell rad
+    - `,` / `;` för att hoppa mellan träffar
+- Sökning: `/{regex}`, `n` / `N` för att navigera mellan träffar
 
-### Selection
+### Markering
 
-Visual modes:
+Visual-lägen:
 
 - Visual: `v`
 - Visual Line: `V`
 - Visual Block: `Ctrl-v`
 
-Can use movement keys to make selection.
+Du kan använda rörelsetangenterna för att göra en markering.
 
-### Edits
+### Redigeringar
 
-Everything that you used to do with the mouse, you now do with the keyboard using editing commands that compose with movement commands. Here's where Vim's interface starts to look like a programming language. Vim's editing commands are also called "verbs", because verbs act on nouns.
+Allt du brukade göra med musen gör du nu med tangentbordet via redigeringskommandon som komponerar med rörelsekommandon.
+Här börjar Vims gränssnitt verkligen likna ett programmeringsspråk.
+Vims redigeringskommandon kallas också "verb", eftersom verb agerar på substantiv.
 
-- `i` enter Insert mode
-    - but for manipulating/deleting text, want to use something more than backspace
-- `o` / `O` insert line below / above
-- `d{motion}` delete {motion}
-    - e.g. `dw` is delete word, `d$` is delete to end of line, `d0` is delete to beginning of line
-- `c{motion}` change {motion}
-    - e.g. `cw` is change word
-    - like `d{motion}` followed by `i`
-- `x` delete character (equivalent to `dl`)
-- `s` substitute character (equivalent to `cl`)
-- Visual mode + manipulation
-    - select text, `d` to delete it or `c` to change it
-- `u` to undo, `<C-r>` to redo
-- `y` to copy / "yank" (some other commands like `d` also copy)
-- `p` to paste
-- Lots more to learn: for example, `~` flips the case of a character, and `J` joins together lines
+- `i` gå till Insert-läge
+    - men för textmanipulation/radering vill du använda något bättre än backsteg
+- `o` / `O` infoga rad under / över
+- `d{motion}` radera {motion}
+    - t.ex. `dw` är radera ord, `d$` är radera till radslut, `d0` är radera till radbörjan
+- `c{motion}` ändra {motion}
+    - t.ex. `cw` är ändra ord
+    - motsvarar `d{motion}` följt av `i`
+- `x` radera tecken (motsvarar `dl`)
+- `s` ersätt tecken (motsvarar `cl`)
+- Visual-läge + redigering
+    - markera text, `d` för att radera eller `c` för att ändra
+- `u` för ångra, `<C-r>` för gör om
+- `y` för kopiera / "yanka" (vissa andra kommandon som `d` kopierar också)
+- `p` för klistra in
+- Mycket mer att lära: till exempel växlar `~` skiftläge på ett tecken, och `J` fogar samman rader
 
-### Counts
+### Antal
 
-You can combine nouns and verbs with a count, which will perform a given action a number of times.
+Du kan kombinera substantiv och verb med ett antal, vilket utför en åtgärd ett visst antal gånger.
 
-- `3w` move 3 words forward
-- `5j` move 5 lines down
-- `7dw` delete 7 words
+- `3w` flytta 3 ord framåt
+- `5j` flytta 5 rader nedåt
+- `7dw` radera 7 ord
 
-### Modifiers
+### Modifierare
 
-You can use modifiers to change the meaning of a noun. Some modifiers are `i`, which means "inner" or "inside", and `a`, which means "around".
+Du kan använda modifierare för att ändra betydelsen av ett substantiv.
+Två vanliga modifierare är `i`, som betyder "inner" eller "inside", och `a`, som betyder "around".
 
-- `ci(` change the contents inside the current pair of parentheses
-- `ci[` change the contents inside the current pair of square brackets
-- `da'` delete a single-quoted string, including the surrounding single quotes
+- `ci(` ändra innehållet innanför aktuellt parentespar
+- `ci[` ändra innehållet innanför aktuellt hakparentespar
+- `da'` radera en enkelciterad sträng, inklusive omgivande enkla citationstecken
 
-## Putting it all together
+## Sätt ihop allt
 
-Here is a broken [fizz buzz](https://en.wikipedia.org/wiki/Fizz_buzz) implementation:
+Här är en trasig implementation av [fizz buzz](https://en.wikipedia.org/wiki/Fizz_buzz):
 
 ```python
 def fizz_buzz(limit):
@@ -142,73 +171,89 @@ def main():
     fizz_buzz(20)
 ```
 
-We use the following sequence of commands to fix the issues, beginning in Normal mode:
+Vi använder följande kommandosekvens för att rätta felen, med start i Normal-läge:
 
-- Main is never called
-    - `G` to jump to the end of the file
-    - `o` to **o**pen a new line below
-    - Type in `if __name__ == "__main__": main()`
-        - If your editor has Python language support, it might do some auto-indentation for you in Insert mode
-    - `<ESC>` to go back to Normal mode
-- Starts at 0 instead of 1
-    - `/` followed by `range` and `<CR>` to search for "range"
-    - `ww` to move forward two **w**ords (you could also use `2w`, but in practice, for small counts it's common to repeat the key instead of using the count functionality)
-    - `i` to switch to **i**nsert mode, and add `1,`
-    - `<ESC>` to go back to Normal mode
-    - `e` to jump to the **e**nd of the next word
-    - `a` to start **a**ppending text, and add `+ 1`
-    - `<ESC>` to go back to Normal mode
-- Prints "fizz" for multiples of 5
-    - `:6<CR>` to go to line 6
-    - `ci"` to **c**hange **i**nside the '**"**', change to `"buzz"`
-    - `<ESC>` to go back to Normal mode
+- Main anropas aldrig
+    - `G` för att hoppa till slutet av filen
+    - `o` för att **o**ppna en ny rad under
+    - skriv `if __name__ == "__main__": main()`
+        - om redigeraren har Python-stöd kan den autoindenta i Insert-läge
+    - `<ESC>` för att gå tillbaka till Normal-läge
+- Börjar på 0 i stället för 1
+    - `/` följt av `range` och `<CR>` för att söka efter "range"
+    - `ww` för att flytta två **w**ord framåt (du kan också använda `2w`, men i praktiken är det vanligt att upprepa tangenten vid små antal)
+    - `i` för att gå till **i**nsert-läge och lägg till `1,`
+    - `<ESC>` för att gå tillbaka till Normal-läge
+    - `e` för att hoppa till **e**nd of word för nästa ord
+    - `a` för att börja **a**ppendera text, och lägg till `+ 1`
+    - `<ESC>` för att gå tillbaka till Normal-läge
+- Skriver "fizz" för multiplar av 5
+    - `:6<CR>` för att gå till rad 6
+    - `ci"` för att **c**hange **i**nside `"`, ändra till `"buzz"`
+    - `<ESC>` för att gå tillbaka till Normal-läge
 
-## Learning Vim
+## Lära sig Vim
 
-The best way to learn Vim is to learn the fundamentals (what we've covered so far) and then just enable Vim mode in all your software and start using it in practice. Avoid the temptation to use the mouse or the arrow keys; in some editors, you can unbind the arrow keys to force yourself to build good habits.
+Det bästa sättet att lära sig Vim är att lära sig grunderna (det vi gått igenom hittills) och sedan aktivera Vim-läge i all din programvara och börja använda det i praktiken.
+Undvik frestelsen att använda musen eller piltangenterna.
+I vissa redigerare kan du avbinda piltangenterna för att tvinga fram bättre vanor.
 
-### Additional resources
+### Ytterligare resurser
 
-- The [Vim lecture](/2020/editors/) from the previous iteration of this class --- we have covered Vim in more depth there
-- `vimtutor` is a tutorial that comes installed with Vim --- if Vim is installed, you should be able to run `vimtutor` from your shell
-- [Vim Adventures](https://vim-adventures.com/) is a game to learn Vim
+- [Vim-föreläsningen]({{ '/2020/editors/' | relative_url }}) från en tidigare iteration av kursen --- där går vi djupare i Vim
+- `vimtutor` är en handledning som följer med Vim --- om Vim är installerat bör du kunna köra `vimtutor` från skalet
+- [Vim Adventures](https://vim-adventures.com/) är ett spel för att lära sig Vim
 - [Vim Tips Wiki](https://vim.fandom.com/wiki/Vim_Tips_Wiki)
-- [Vim Advent Calendar](https://vimways.org/2019/) has various Vim tips
-- [VimGolf](https://www.vimgolf.com/) is [code golf](https://en.wikipedia.org/wiki/Code_golf), but where the programming language is Vim's UI
+- [Vim Advent Calendar](https://vimways.org/2019/) har olika Vim-tips
+- [VimGolf](https://www.vimgolf.com/) är [code golf](https://en.wikipedia.org/wiki/Code_golf), men där programmeringsspråket är Vims UI
 - [Vi/Vim Stack Exchange](https://vi.stackexchange.com/)
 - [Vim Screencasts](http://vimcasts.org/)
-- [Practical Vim](https://pragprog.com/titles/dnvim2/) (book)
+- [Practical Vim](https://pragprog.com/titles/dnvim2/) (bok)
 
 [Vim]: https://www.vim.org/
 
-# Code intelligence and language servers
+<span id="code-intelligence-and-language-servers"></span>
+# Kodintelligens och språkservrar
 
-IDEs generally offer language-specific support that requires semantic understanding of the code through IDE extensions that connect to _language servers_ that implement [Language Server Protocol](https://microsoft.github.io/language-server-protocol/). For example, the [Python extension for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python) relies on [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), and the [Go extension for VS Code](https://marketplace.visualstudio.com/items?itemName=golang.go) relies on the first-party [gopls](https://go.dev/gopls/). By installing the extension and language server for the languages you work with, you can enable many language-specific features in your IDE, such as:
+IDE:er erbjuder vanligtvis språkspecifikt stöd som kräver semantisk förståelse av koden, via IDE-tillägg som ansluter till _språkservrar_ som implementerar [Language Server Protocol](https://microsoft.github.io/language-server-protocol/).
+[Python-tillägget för VS Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python) förlitar sig till exempel på [Pylance](https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance), och [Go-tillägget för VS Code](https://marketplace.visualstudio.com/items?itemName=golang.go) förlitar sig på förstapartsverktyget [gopls](https://go.dev/gopls/).
+Genom att installera tillägg och språkserver för de språk du arbetar med kan du aktivera många språkspecifika funktioner i din IDE, till exempel:
 
-- **Code completion.** Better autocomplete and autosuggest, such as being able to see an object's fields and methods after typing `object.`.
-- **Inline documentation.** Seeing documentation on hover and autosuggest.
-- **Jump-to-definition.** Jumping from a use site to the definition, such as being able to go from a field reference `object.field` to the definition of the field.
-- **Find references.** The inverse of the above, find all sites where a particular item such as a field or type is referenced.
-- **Help with imports.** Organizing imports, removing unused imports, flagging missing imports.
-- **Code quality.** These tools can be used standalone, but this functionality is often provided by language servers as well. Code formatting auto-indents and auto-formats code, and type checkers and linters find errors in your code, as you type. We will cover this class of functionality in greater depth in the [lecture on code quality](/2026/code-quality/).
+- **Kodkomplettering.** Bättre autokomplettering och förslag, som att kunna se ett objekts fält och metoder efter att du skrivit `object.`.
+- **Inline-dokumentation.** Se dokumentation vid hover och i förslag.
+- **Hoppa till definition.** Hoppa från ett användningsställe till definitionen, som att gå från fältreferensen `object.field` till fältets definition.
+- **Hitta referenser.** Motsatsen till ovan, hitta alla ställen där ett visst objekt, till exempel ett fält eller en typ, refereras.
+- **Hjälp med importer.** Organisera importer, ta bort oanvända importer, flagga saknade importer.
+- **Kodkvalitet.** Dessa verktyg kan användas fristående, men funktionaliteten tillhandahålls ofta av språkservrar också.
+Kodformatering autoindenterar och autoformatterar kod, och typkontroller och linters hittar fel i koden medan du skriver.
+Vi går djupare i den här klassen av funktionalitet i [föreläsningen om kodkvalitet]({{ '/2026/code-quality/' | relative_url }}).
 
-## Configuring language servers
+## Konfigurera språkservrar
 
-For some languages, all you need to do is install the extension and language server, and you'll be all set. For others, to get the maximum benefit from the language server, you need to tell the IDE about your environment. For example, pointing VS Code to your [Python environment](https://code.visualstudio.com/docs/python/environments) will enable the language server to see your installed packages. Environments are covered in more depth in our [lecture on packaging and shipping code](/2026/shipping-code/).
+För vissa språk räcker det att installera tillägget och språkservern.
+För andra språk behöver du tala om för IDE:n hur din miljö ser ut för att få maximal nytta av språkservern.
+Att koppla VS Code till din [Python-miljö](https://code.visualstudio.com/docs/python/environments) gör till exempel att språkservern kan se dina installerade paket.
+Miljöer behandlas mer ingående i [föreläsningen om paketering och leverans av kod]({{ '/2026/shipping-code/' | relative_url }}).
 
-Depending on the language, there might be some settings you can configure for your language server. For example, using the Python support in VS Code, you can disable static type checking for projects that don't make use of Python's optional type annotations.
+Beroende på språk kan det finnas inställningar att konfigurera för språkservern.
+Med Python-stöd i VS Code kan du till exempel stänga av statisk typkontroll för projekt som inte använder Pythons valfria typannoteringar.
 
-# AI-powered development
+<span id="ai-powered-development"></span>
+# AI-driven utveckling
 
-Since the introduction of [GitHub Copilot][github-copilot] using OpenAI's [Codex model](https://openai.com/index/openai-codex/) in mid 2021, [LLMs](https://en.wikipedia.org/wiki/Large_language_model) have become widely adopted in software engineering. There are three main form factors in use right now: autocomplete, inline chat, and coding agents.
+Sedan [GitHub Copilot][github-copilot] med OpenAI:s [Codex-modell](https://openai.com/index/openai-codex/) introducerades i mitten av 2021 har [LLM:er](https://en.wikipedia.org/wiki/Large_language_model) blivit brett använda inom programvaruutveckling.
+Det finns just nu tre huvudsakliga format: autokomplettering, inbäddad chatt och kodagenter.
 
 [github-copilot]: https://github.com/features/copilot/ai-code-editor
 
-## Autocomplete
+## Autokomplettering
 
-AI-powered autocomplete has the same form factor as traditional autocomplete in your IDE, suggesting completions at your cursor position as you type. Sometimes, it's used as a passive feature that "just works". Beyond that, AI autocomplete is generally [prompted](https://en.wikipedia.org/wiki/Prompt_engineering) using code comments.
+AI-driven autokomplettering har samma form som traditionell autokomplettering i din IDE och föreslår kompletteringar vid markörens position medan du skriver.
+Ibland används den passivt så att den "bara fungerar".
+Utöver det styrs AI-autokomplettering vanligtvis med kodkommentarer.
 
-For example, let's write a script to download the contents of these lecture notes and extract all the links. We can start with:
+Låt oss till exempel skriva ett skript som laddar ner innehållet i de här föreläsningsanteckningarna och extraherar alla länkar.
+Vi kan börja med:
 
 ```python
 import requests
@@ -216,34 +261,35 @@ import requests
 def download_contents(url: str) -> str:
 ```
 
-The model will autocomplete the body of the function:
+Modellen autokompletterar funktionens kropp:
 
 ```python
     response = requests.get(url)
     return response.text
 ```
 
-We can further guide completions using comments. For example, if we start writing a function to extract all Markdown links, but it doesn't have a particularly descriptive name:
+Vi kan styra kompletteringar ytterligare med kommentarer.
+Om vi till exempel börjar skriva en funktion som ska extrahera alla Markdown-länkar, men funktionen inte har ett särskilt beskrivande namn:
 
 ```python
 def extract(contents: str) -> list[str]:
 ```
 
-The model will autocomplete something like this:
+kommer modellen att autokomplettera något i stil med detta:
 
 ```python
     lines = contents.splitlines()
     return [line for line in lines if line.strip()]
 ```
 
-We can guide the completion through code comments:
+Vi kan styra kompletteringen med kodkommentarer:
 
 ```python
 def extract(content: str) -> list[str]:
     # extract all Markdown links from the content
 ```
 
-This time, the model gives a better completion:
+Den här gången ger modellen en bättre komplettering:
 
 ```python
     import re
@@ -251,27 +297,31 @@ This time, the model gives a better completion:
     return re.findall(pattern, content)
 ```
 
-Here, we see one downside of this AI coding tool: it can only provide completions at the cursor. In this case, it would be better practice to put the `import re` at the module level, rather than inside the function.
+Här ser vi en nackdel med det här AI-kodverktyget: det kan bara ge kompletteringar vid markören.
+I det här fallet hade det varit bättre att lägga `import re` på modulnivå i stället för inuti funktionen.
 
-The example above used a poorly-named function to demonstrate how code completion can be steered using comments; in practice, you'd want to write code with functions named more descriptively, like `extract_links`, and you'd want to write docstrings (and based on this, the model should generate a completion analogous to the one above).
+Exemplet ovan använde ett dåligt funktionsnamn för att visa hur kodkomplettering kan styras med kommentarer.
+I praktiken vill du skriva kod med mer beskrivande funktionsnamn, som `extract_links`, och du vill skriva docstrings.
+Baserat på det bör modellen ge en liknande komplettering som ovan.
 
-For demonstration purposes, we can complete the script:
+För demonstrationssyfte kan vi färdigställa skriptet:
 
 ```python
 print(extract(download_contents("https://raw.githubusercontent.com/missing-semester/missing-semester/refs/heads/master/_2026/development-environment.md")))
 ```
 
-## Inline chat
+## Inbäddad chatt
 
-Inline chat lets you select a line or block and then directly prompt the AI model to propose an edit. In this interaction mode, the model can make changes to existing code (which differs from autocomplete, which only completes code beyond the cursor).
+Med inbäddad chatt kan du markera en rad eller ett block och sedan be AI-modellen att direkt föreslå en ändring.
+I detta interaktionsläge kan modellen ändra befintlig kod, vilket skiljer sig från autokomplettering som bara kompletterar kod bortom markören.
 
-Continuing the example from above, suppose we decided not to use the third-party `requests` library. We could select the relevant three lines of code, invoke inline chat, and say something like:
+Om vi fortsätter på exemplet ovan och bestämmer oss för att inte använda tredjepartsbiblioteket `requests`, kan vi markera de relevanta tre kodraderna, öppna inbäddad chatt och skriva något i stil med:
 
 ```
 use built-in libraries instead
 ```
 
-The model proposes:
+Modellen föreslår:
 
 ```python
 from urllib.request import urlopen
@@ -281,25 +331,38 @@ def download_contents(url: str) -> str:
         return response.read().decode('utf-8')
 ```
 
-## Coding agents
+## Kodagenter
 
-Coding agents are covered in depth in the [Agentic Coding](/2026/agentic-coding/) lecture.
+Kodagenter behandlas mer ingående i föreläsningen om [agentdriven kodning]({{ '/2026/agentic-coding/' | relative_url }}).
 
-## Recommended software
+## Rekommenderad programvara
 
-Some popular AI IDEs are [VS Code][vs-code] with the [GitHub Copilot][github-copilot] extension and [Cursor](https://cursor.com/). GitHub Copilot is currently available [for free for students](https://github.com/education/students), teachers, and maintainers of popular open source projects. This is a rapidly evolving space. Many of the leading products have roughly equivalent functionality.
+Några populära AI-IDE:er är [VS Code][vs-code] med tillägget [GitHub Copilot][github-copilot] och [Cursor](https://cursor.com/).
+GitHub Copilot finns just nu [gratis för studenter](https://github.com/education/students), lärare och förvaltare av populära öppen källkod-projekt.
+Det här området utvecklas snabbt.
+Många av de ledande produkterna har ungefär likvärdig funktionalitet.
 
-# Extensions and other IDE functionality
+# Tillägg och annan IDE-funktionalitet
 
-IDEs are powerful tools, made even more powerful by _extensions_. We can't cover all of these features in a single lecture, but here we provide some pointers to a couple popular extensions. We encourage you to explore this space on your own; there are many lists of popular IDE extensions available online, such as [Vim Awesome](https://vimawesome.com/) for Vim plugins and [VS Code extensions sorted by popularity](https://marketplace.visualstudio.com/search?target=VSCode&category=All%20categories&sortBy=Installs).
+IDE:er är kraftfulla verktyg, och blir ännu kraftfullare med _tillägg_.
+Vi kan inte täcka allt i en enda föreläsning, men här ger vi några ingångar till populära tillägg.
+Vi uppmuntrar dig att utforska området själv.
+Det finns många listor över populära IDE-tillägg på nätet, till exempel [Vim Awesome](https://vimawesome.com/) för Vim-insticksmoduler och [VS Code-tillägg sorterade efter popularitet](https://marketplace.visualstudio.com/search?target=VSCode&category=All%20categories&sortBy=Installs).
 
-- [Development containers](https://containers.dev/): supported by popular IDEs (e.g., [supported by VS Code](https://code.visualstudio.com/docs/devcontainers/containers)), dev containers let you use a container to run development tools. This can be helpful for portability or isolation. The [lecture on packaging and shipping code](/2026/shipping-code/) covers containers in more depth.
-- Remote development: do development on a remote machine using SSH (e.g., with the [Remote SSH plugin for VS Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)). This can be handy, for example, if you want to develop and run code on a beefy GPU machine in the cloud.
-- Collaborative editing: edit the same file, Google Docs style (e.g., with the [Live Share plugin for VS Code](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare)).
+- [Utvecklingscontainrar](https://containers.dev/): stöds av populära IDE:er (t.ex. [stöds av VS Code](https://code.visualstudio.com/docs/devcontainers/containers)), och låter dig använda en container för att köra utvecklingsverktyg.
+Detta kan vara hjälpsamt för portabilitet eller isolering.
+[Föreläsningen om paketering och leverans av kod]({{ '/2026/shipping-code/' | relative_url }}) går djupare på containrar.
+- Fjärrutveckling: utveckla på en fjärrmaskin via SSH (t.ex. med [Remote SSH-insticksmodulen för VS Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)).
+Det kan vara praktiskt om du till exempel vill utveckla och köra kod på en kraftig GPU-maskin i molnet.
+- Samarbetsredigering: redigera samma fil i Google Docs-stil (t.ex. med [Live Share-insticksmodulen för VS Code](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare)).
 
-# Exercises
+# Övningar
 
-1. Enable Vim mode in all the software you use that supports it, such as your editor and your shell, and use Vim mode for all your text editing for the next month. Whenever something seems inefficient, or when you think "there must be a better way", try Googling it, there probably is a better way.
-1. Complete a challenge from [VimGolf](https://www.vimgolf.com/).
-1. Configure an IDE extension and language server for a project that you're working on. Ensure that all the expected functionality, such as jump-to-definition for library dependencies, works as expected. If you don't have code that you can use for this exercise, you can use some open-source project from GitHub (such as [this one](https://github.com/spf13/cobra)).
-1. Browse a list of IDE extensions and install one that seems useful to you.
+1. Aktivera Vim-läge i all programvara du använder som stöder det, till exempel redigeraren och skalet, och använd Vim-läge för all textredigering den kommande månaden.
+När något känns ineffektivt, eller när du tänker "det måste finnas ett bättre sätt", prova att googla.
+Det finns sannolikt ett bättre sätt.
+1. Genomför en utmaning från [VimGolf](https://www.vimgolf.com/).
+1. Konfigurera ett IDE-tillägg och en språkserver för ett projekt du arbetar med.
+Säkerställ att förväntad funktionalitet, till exempel hoppa till definition även för biblioteksberoenden, fungerar som den ska.
+Om du inte har kod att använda till övningen kan du ta ett öppen källkod-projekt från GitHub (som [det här](https://github.com/spf13/cobra)).
+1. Bläddra i en lista över IDE-tillägg och installera ett som verkar användbart för dig.

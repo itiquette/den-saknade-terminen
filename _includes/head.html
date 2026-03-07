@@ -2,12 +2,12 @@
   <meta charset="utf-8">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/assets/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/static/assets/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/static/assets/apple-touch-icon.png' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/static/assets/favicon-32x32.png' | relative_url }}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ '/static/assets/favicon-16x16.png' | relative_url }}">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="og:url" content="{{ page.url | prepend: site.url }}">
+  <meta name="og:url" content="{{ page.url | absolute_url }}">
   <meta property="og:site_name" content="{{ site.title }}">
 
   {% if page.description %}
@@ -30,8 +30,8 @@
   {% else %}
     {% assign thumbnail = site.thumbnail %}
   {% endif %}
-  <meta name="twitter:image" content="{{ thumbnail | prepend: site.url }}">
-  <meta property="og:image" content="{{ thumbnail | prepend: site.url }}">
+  <meta name="twitter:image" content="{{ thumbnail | absolute_url }}">
+  <meta property="og:image" content="{{ thumbnail | absolute_url }}">
 
   <title>
     {% if page.title %}
@@ -45,9 +45,9 @@
     {% endif %}
   </title>
 
-  <link rel="stylesheet" href="/static/css/main.css">
-  <link rel="stylesheet" href="/static/css/syntax.css">
-  <script defer src="/static/js/sidenotes.js"></script>
+  <link rel="stylesheet" href="{{ '/static/css/main.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/static/css/syntax.css' | relative_url }}">
+  <script defer src="{{ '/static/js/sidenotes.js' | relative_url }}"></script>
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900,200italic,300italic,400italic,600italic,700italic,900italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:200,300,400,500,600,700,900&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 

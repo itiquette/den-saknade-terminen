@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Virtual Machines and Containers"
+title: "Virtuella maskiner och containrar"
 presenter: Anish, Jon
 date: 2019-01-15
 order: 2
@@ -9,125 +9,140 @@ video:
   id: LJ9ki5zq6Ik
 ---
 
-# Virtual Machines
+# Virtuella maskiner
 
-Virtual machines are simulated computers. You can configure a guest virtual
-machine with some operating system and configuration and use it without
-affecting your host environment.
+Virtuella maskiner är simulerade datorer.
+Du kan konfigurera en gästmaskin med ett operativsystem och valfri konfiguration,
+och använda den utan att påverka värdmiljön.
 
-For this class, you can use VMs to experiment with operating systems, software,
-and configurations without risk: you won't affect your primary development
-environment.
+I den här kursen kan du använda VM:ar för att experimentera med operativsystem,
+programvara och konfigurationer utan risk.
+Du påverkar inte din primära utvecklingsmiljö.
 
-In general, VMs have lots of uses. They are commonly used for running software
-that only runs on a certain operating system (e.g. using a Windows VM on Linux
-to run Windows-specific software). They are often used for experimenting with
-potentially malicious software.
+Generellt har VM:ar många användningsområden.
+De används ofta för att köra program som bara fungerar på ett visst operativsystem
+(t.ex. en Windows-VM på Linux för Windows-specifik programvara).
+De används också ofta för att experimentera med potentiellt skadlig programvara.
 
-## Useful features
+## Användbara egenskaper
 
-- **Isolation**: hypervisors do a pretty good job of isolating the guest from
-the host, so you can use VMs to run buggy or untrusted software reasonably
-safely.
+- **Isolering**: hypervisorer gör oftast ett bra jobb med att isolera gästen från
+värden,
+så du kan köra buggig eller otillförlitlig programvara i VM relativt säkert.
 
-- **Snapshots**: you can take "snapshots" of your virtual machine, capturing
-the entire machine state (disk, memory, etc.), make changes to your machine,
-and then restore to an earlier state. This is useful for testing out
-potentially destructive actions, among other things.
+- **Ögonblicksbilder**: du kan ta "snapshots" av din virtuella maskin,
+som fångar hela maskintillståndet (disk, minne osv),
+göra ändringar,
+och sedan återställa till ett tidigare läge.
+Det är användbart för att testa potentiellt destruktiva åtgärder, bland annat.
 
-## Disadvantages
+## Nackdelar
 
-Virtual machines are generally slower than running on bare metal, so they may
-be unsuitable for certain applications.
+Virtuella maskiner är generellt långsammare än att köra direkt på hårdvaran,
+så de kan vara olämpliga för vissa tillämpningar.
 
-## Setup
+## Konfiguration
 
-- **Resources**: shared with host machine; be aware of this when allocating
-physical resources.
+- **Resurser**: delas med värdmaskinen.
+Tänk på detta när du allokerar fysiska resurser.
 
-- **Networking**: many options, default NAT should work fine for most use
-cases.
+- **Nätverk**: många alternativ.
+Standard-NAT fungerar bra i de flesta fall.
 
-- **Guest addons**: many hypervisors can install software in the guest to
-enable nicer integration with host system. You should use this if you can.
+- **Gästtillägg**: många hypervisorer kan installera programvara i gästen för
+bättre integration med värdsystemet.
+Använd detta om du kan.
 
-## Resources
+## Resurser
 
-- Hypervisors
-    - [VirtualBox](https://www.virtualbox.org/) (open-source)
-    - [Virt-manager](https://virt-manager.org/) (open-source, manages KVM virtual machines and LXC containers)
-    - [VMWare](https://www.vmware.com/) (commercial, available from IS&T [for
-    MIT students](https://ist.mit.edu/vmware-fusion))
+- Hypervisorer
+    - [VirtualBox](https://www.virtualbox.org/) (öppen källkod)
+    - [Virt-manager](https://virt-manager.org/) (öppen källkod, hanterar KVM-virtuella maskiner och LXC-containrar)
+    - [VMWare](https://www.vmware.com/) (kommersiellt, tillgängligt från IS&T [för
+    MIT-studenter](https://ist.mit.edu/vmware-fusion))
 
-If you are already familiar with popular hypervisors/VMs you may want to learn more about how to do this from a command line friendly way. One option is the [libvirt](https://wiki.libvirt.org/page/UbuntuKVMWalkthrough) toolkit which allows you to manage multiple different virtualization providers/hypervisors.
+Om du redan är bekant med populära hypervisorer/VM:ar kan du vilja lära dig ett mer kommandoradsvänligt arbetssätt.
+Ett alternativ är verktygssviten [libvirt](https://wiki.libvirt.org/page/UbuntuKVMWalkthrough),
+som låter dig hantera flera olika virtualiseringsleverantörer/hypervisorer.
 
-## Exercises
+## Övningar
 
-1. Download and install a hypervisor.
+1. Ladda ner och installera en hypervisor.
 
-1. Create a new virtual machine and install a Linux distribution (e.g.
+1. Skapa en ny virtuell maskin och installera en Linux-distribution (t.ex.
 [Debian](https://www.debian.org/)).
 
-1. Experiment with snapshots. Try things that you've always wanted to try, like
-   running `sudo rm -rf --no-preserve-root /`, and see if you can recover
-   easily.
+1. Experimentera med snapshots.
+Prova saker du alltid velat testa,
+som att köra `sudo rm -rf --no-preserve-root /`,
+och se om du enkelt kan återställa.
 
-1. Read what a [fork-bomb](https://en.wikipedia.org/wiki/Fork_bomb) (`:(){ :|:& };:`) is and run it on the VM to see that the resource isolation (CPU, Memory, &c) works.
+1. Läs om vad en [fork-bomb](https://en.wikipedia.org/wiki/Fork_bomb) (`:(){ :|:& };:`) är och kör den i VM:n för att se att resursisoleringen (CPU, minne, osv.) fungerar.
 
-1. Install guest addons and experiment with different windowing modes, file
-   sharing, and other features.
+1. Installera gästtillägg och experimentera med olika fönsterlägen, fildelning och andra funktioner.
 
-# Containers
+# Containrar
 
-Virtual Machines are relatively heavy-weight; what if you want to spin
-up machines in an automated fashion? Enter containers!
+Virtuella maskiner är relativt tungviktiga.
+Men vad händer om du vill starta upp miljöer automatiserat?
+Då kommer containrar in i bilden.
 
  - Amazon Firecracker
  - Docker
  - rkt
  - lxc
 
-Containers are _mostly_ just an assembly of various Linux security
-features, like virtual file system, virtual network interfaces, chroots,
-virtual memory tricks, and the like, that together give the appearance
-of virtualization.
+Containrar är _mest_ en sammansättning av olika Linux-säkerhetsfunktioner,
+som virtuella filsystem,
+virtuella nätverksgränssnitt,
+chroots,
+virtuellt minne,
+med mera,
+som tillsammans ger ett virtualiseringsliknande beteende.
 
-Not quite as secure or isolated as a VM, but pretty close and getting
-better. Usually higher performance, and much faster to start, but not
-always.
+Inte riktigt lika säkert eller isolerat som en VM,
+men ganska nära och blir bättre.
+Vanligtvis högre prestanda och mycket snabbare uppstart,
+men inte alltid.
 
-The performance boost comes from the fact that unlike VMs which run an entire copy of the operating system, containers share the linux kernel with the host. However note that if you are running linux containers on Windows/macOS a Linux VM will need to be active as a middle layer between the two.
+Prestandavinsten kommer av att containrar, till skillnad från VM:ar som kör en hel kopia av operativsystemet,
+delar Linux-kärna med värden.
+Observera dock att om du kör Linux-containrar på Windows/macOS behöver en Linux-VM vara aktiv som mellanlager.
 
-![Docker vs VM](/2019/files/containers-vs-vms.png)
-_Comparison between Docker containers and Virtual Machines. Credit: blog.docker.com_
+![Docker vs VM]({{ '/2019/files/containers-vs-vms.png' | relative_url }})
+_Jämförelse mellan Docker-containrar och virtuella maskiner.
+Källa: blog.docker.com_
 
-Containers are handy for when you want to run an automated task in a
-standardized setup:
+Containrar är praktiska när du vill köra en automatiserad uppgift i en
+standardiserad miljö:
 
- - Build systems
- - Development environments
- - Pre-packaged servers
- - Running untrusted programs
-   - Grading student submissions
-   - (Some) cloud computing
- - Continuous integration
+  - Byggsystem
+  - Utvecklingsmiljöer
+  - Förpaketerade servrar
+  - Köra otillförlitliga program
+    - Rätta studentinlämningar
+    - (Viss) molnberäkning
+  - Kontinuerlig integration
    - Travis CI
    - GitHub Actions
 
-Moreover, container software like Docker has also been extensively used as a solution for [dependency hell](https://en.wikipedia.org/wiki/Dependency_hell). If a machine needs to be running many services with conflicting dependencies they can be isolated using containers.
+Dessutom har containerprogramvara som Docker använts mycket som lösning på [beroendehelvete](https://en.wikipedia.org/wiki/Dependency_hell).
+Om en maskin måste köra många tjänster med konfliktande beroenden kan de isoleras med containrar.
 
-Usually, you write a file that defines how to construct your container.
-You start with some minimal _base image_ (like Alpine Linux), and then
-a list of commands to run to set up the environment you want (install
-packages, copy files, build stuff, write config files, etc.). Normally,
-there's also a way to specify any external ports that should be
-available, and an _entrypoint_ that dictates what command should be run
-when the container is started (like a grading script).
+Vanligtvis skriver du en fil som definierar hur containern byggs.
+Du börjar med en minimal _basavbild_ (som Alpine Linux),
+och lägger sedan till en lista med kommandon för att sätta upp önskad miljö
+(installera paket, kopiera filer, bygga saker, skriva konfigurationsfiler osv).
+Normalt finns också ett sätt att ange externa portar som ska vara tillgängliga,
+samt en _entrypoint_ som bestämmer vilket kommando som körs när containern startar
+(t.ex. ett rättningsskript).
 
-In a similar fashion to code repository websites (like [GitHub](https://github.com/)) there are some container repository websites (like [DockerHub](https://hub.docker.com/))where many software services have prebuilt images that one can easily deploy.
+På samma sätt som kodförrådssajter (som [GitHub](https://github.com/)) finns containerförråd (som [DockerHub](https://hub.docker.com/))
+där många programtjänster har färdigbyggda avbilder som är enkla att driftsätta.
 
-## Exercises
+## Övningar
 
-1. Choose a container software (Docker, LXC, …) and install a simple Linux image. Try SSHing into it.
+1. Välj en containerprogramvara (Docker, LXC, …) och installera en enkel Linux-avbild.
+Försök SSH:a in i den.
 
-1. Search and download a prebuilt container image for a popular web server (nginx, apache, …)
+1. Sök upp och ladda ner en färdigbyggd containeravbild för en populär webbserver (nginx, apache, …).

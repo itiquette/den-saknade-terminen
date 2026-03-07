@@ -1,10 +1,10 @@
 ---
 layout: lecture
-title: "Metaprogramming"
+title: "Metaprogrammering"
 description: >
-  Learn about build systems, dependency management, testing, and continuous integration.
+  Lär dig om byggsystem, beroendehantering, testning och kontinuerlig integration.
 thumbnail: /static/assets/thumbnails/2020/lec8.png
-details: build systems, dependency management, testing, CI
+details: byggsystem, beroendehantering, testning, CI
 date: 2020-01-27
 ready: true
 video:
@@ -12,53 +12,36 @@ video:
   id: _Ms1Z4xfqv4
 ---
 
-What do we mean by "metaprogramming"? Well, it was the best collective
-term we could come up with for the set of things that are more about
-_process_ than they are about writing code or working more efficiently.
-In this lecture, we will look at systems for building and testing your
-code, and for managing dependencies. These may seem like they are of
-limited importance in your day-to-day as a student, but the moment you
-interact with a larger code base through an internship or once you enter
-the "real world", you will see this everywhere. We should note that
-"metaprogramming" can also mean "[programs that operate on
-programs](https://en.wikipedia.org/wiki/Metaprogramming)", whereas that
-is not quite the definition we are using for the purposes of this
-lecture.
+Vad menar vi med "metaprogrammering"?
+Det var helt enkelt den bästa samlingsterm vi kunde komma på för en uppsättning saker som handlar mer om _process_ än om att skriva kod eller jobba snabbare.
+I den här föreläsningen tittar vi på system för att bygga och testa kod, och för att hantera beroenden.
+Det här kan verka ha begränsad betydelse i din vardag som student, men så fort du interagerar med en större kodbas via praktik eller arbetsliv kommer du att se detta överallt.
+Vi bör också nämna att "metaprogrammering" kan betyda "[program som opererar på program](https://en.wikipedia.org/wiki/Metaprogramming)", vilket inte riktigt är den definition vi använder i den här föreläsningen.
 
-# Build systems
+# Byggsystem
 
-If you write a paper in LaTeX, what are the commands you need to run to
-produce your paper? What about the ones used to run your benchmarks,
-plot them, and then insert that plot into your paper? Or to compile the
-code provided in the class you're taking and then running the tests?
+Om du skriver en artikel i LaTeX, vilka kommandon behöver du köra för att producera artikeln?
+Och vilka kommandon behövs för att köra prestandamätningar, rita diagram och sedan lägga in diagrammen i artikeln?
+Eller för att kompilera kod från en kurs och sedan köra testerna?
 
-For most projects, whether they contain code or not, there is a "build
-process". Some sequence of operations you need to do to go from your
-inputs to your outputs. Often, that process might have many steps, and
-many branches. Run this to generate this plot, that to generate those
-results, and something else to produce the final paper. As with so many
-of the things we have seen in this class, you are not the first to
-encounter this annoyance, and luckily there exist many tools to help
-you!
+För de flesta projekt, oavsett om de innehåller kod eller inte, finns en "byggprocess".
+Det är en sekvens av operationer du behöver göra för att gå från indata till utdata.
+Ofta har processen många steg och många grenar.
+Kör detta för att generera den här plottningen, kör det där för att generera de där resultaten, och något annat för att få fram slutartikeln.
+Precis som med mycket annat vi sett i kursen är du inte den första som stöter på det här irritationsmomentet, och som tur är finns många verktyg som hjälper.
 
-These are usually called "build systems", and there are _many_ of them.
-Which one you use depends on the task at hand, your language of
-preference, and the size of the project. At their core, they are all
-very similar though. You define a number of _dependencies_, a number of
-_targets_, and _rules_ for going from one to the other. You tell the
-build system that you want a particular target, and its job is to find
-all the transitive dependencies of that target, and then apply the rules
-to produce intermediate targets all the way until the final target has
-been produced. Ideally, the build system does this without unnecessarily
-executing rules for targets whose dependencies haven't changed and where
-the result is available from a previous build.
+De kallas vanligtvis "byggsystem", och det finns _många_.
+Vilket du använder beror på uppgiften, vilket språk du föredrar och projektets storlek.
+I grunden är de ändå ganska lika.
+Du definierar ett antal _beroenden_, ett antal _mål_ och _regler_ för att gå från det ena till det andra.
+Du säger till byggsystemet att du vill ha ett visst mål, och dess jobb är att hitta alla transitiva beroenden till målet och sedan tillämpa reglerna för att producera mellanmål tills slutmålet är klart.
+Idealiskt gör byggsystemet detta utan att i onödan köra regler för mål vars beroenden inte ändrats och där resultatet redan finns från en tidigare byggning.
 
-`make` is one of the most common build systems out there, and you will
-usually find it installed on pretty much any UNIX-based computer. It has
-its warts, but works quite well for simple-to-moderate projects. When
-you run `make`, it consults a file called `Makefile` in the current
-directory. All the targets, their dependencies, and the rules are
-defined in that file. Let's take a look at one:
+`make` är ett av de vanligaste byggsystemen, och det finns oftast installerat på i princip alla UNIX-baserade datorer.
+Det har sina skavanker, men fungerar mycket bra för små till medelstora projekt.
+När du kör `make` läser det en fil som heter `Makefile` i aktuell katalog.
+Alla mål, deras beroenden och reglerna definieras där.
+Vi tittar på ett exempel:
 
 ```make
 paper.pdf: paper.tex plot-data.png
@@ -68,29 +51,24 @@ plot-%.png: %.dat plot.py
 	./plot.py -i $*.dat -o $@
 ```
 
-Each directive in this file is a rule for how to produce the left-hand
-side using the right-hand side. Or, phrased differently, the things
-named on the right-hand side are dependencies, and the left-hand side is
-the target. The indented block is a sequence of programs to produce the
-target from those dependencies. In `make`, the first directive also
-defines the default goal. If you run `make` with no arguments, this is
-the target it will build. Alternatively, you can run something like
-`make plot-data.png`, and it will build that target instead.
+Varje direktiv i filen är en regel för hur vänstersidan produceras med hjälp av högersidan.
+Eller uttryckt på ett annat sätt: sakerna på högersidan är beroenden, och vänstersidan är målet.
+Det indenterade blocket är en sekvens av program som producerar målet från dessa beroenden.
+I `make` definierar första direktivet också standardmålet.
+Om du kör `make` utan argument är det detta mål som byggs.
+Alternativt kan du köra till exempel `make plot-data.png`, så bygger det det målet i stället.
 
-The `%` in a rule is a "pattern", and will match the same string on the
-left and on the right. For example, if the target `plot-foo.png` is
-requested, `make` will look for the dependencies `foo.dat` and
-`plot.py`. Now let's look at what happens if we run `make` with an empty
-source directory.
+`%` i en regel är ett "mönster" och matchar samma sträng på vänster och höger sida.
+Om målet `plot-foo.png` till exempel efterfrågas letar `make` efter beroendena `foo.dat` och `plot.py`.
+Nu kan vi se vad som händer om vi kör `make` i en tom källkatalog.
 
 ```console
 $ make
 make: *** No rule to make target 'paper.tex', needed by 'paper.pdf'.  Stop.
 ```
 
-`make` is helpfully telling us that in order to build `paper.pdf`, it
-needs `paper.tex`, and it has no rule telling it how to make that file.
-Let's try making it!
+`make` berättar hjälpsamt att för att bygga `paper.pdf` behövs `paper.tex`, och det finns ingen regel som säger hur den filen ska skapas.
+Vi testar att skapa den.
 
 ```console
 $ touch paper.tex
@@ -98,10 +76,9 @@ $ make
 make: *** No rule to make target 'plot-data.png', needed by 'paper.pdf'.  Stop.
 ```
 
-Hmm, interesting, there _is_ a rule to make `plot-data.png`, but it is a
-pattern rule. Since the source files do not exist (`data.dat`), `make`
-simply states that it cannot make that file. Let's try creating all the
-files:
+Intressant, det _finns_ en regel för `plot-data.png`, men det är en mönsterregel.
+Eftersom källfilerna inte finns (`data.dat`) säger `make` helt enkelt att den inte kan skapa filen.
+Vi testar att skapa alla filer:
 
 ```console
 $ cat paper.tex
@@ -133,7 +110,7 @@ $ cat data.dat
 5 8
 ```
 
-Now what happens if we run `make`?
+Vad händer nu om vi kör `make`?
 
 ```console
 $ make
@@ -142,18 +119,19 @@ pdflatex paper.tex
 ... lots of output ...
 ```
 
-And look, it made a PDF for us!
-What if we run `make` again?
+Och där skapades en PDF åt oss.
+Vad händer om vi kör `make` igen?
 
 ```console
 $ make
 make: 'paper.pdf' is up to date.
 ```
 
-It didn't do anything! Why not? Well, because it didn't need to. It
-checked that all of the previously-built targets were still up to date
-with respect to their listed dependencies. We can test this by modifying
-`paper.tex` and then re-running `make`:
+Den gjorde ingenting.
+Varför?
+Jo, för att den inte behövde.
+Den kontrollerade att alla tidigare byggda mål fortfarande var uppdaterade i förhållande till sina listade beroenden.
+Vi kan testa detta genom att ändra `paper.tex` och köra `make` igen:
 
 ```console
 $ vim paper.tex
@@ -162,168 +140,105 @@ pdflatex paper.tex
 ...
 ```
 
-Notice that `make` did _not_ re-run `plot.py` because that was not
-necessary; none of `plot-data.png`'s dependencies changed!
+Notera att `make` _inte_ körde `plot.py` igen eftersom det inte behövdes.
+Inga beroenden till `plot-data.png` hade ändrats.
 
-# Dependency management
+# Beroendehantering
 
-At a more macro level, your software projects are likely to have
-dependencies that are themselves projects. You might depend on installed
-programs (like `python`), system packages (like `openssl`), or libraries
-within your programming language (like `matplotlib`). These days, most
-dependencies will be available through a _repository_ that hosts a
-large number of such dependencies in a single place, and provides a
-convenient mechanism for installing them. Some examples include the
-Ubuntu package repositories for Ubuntu system packages, which you access
-through the `apt` tool, RubyGems for Ruby libraries, PyPI for Python
-libraries, or the Arch User Repository for Arch Linux user-contributed
-packages.
+På en mer övergripande nivå har dina programvaruprojekt sannolikt beroenden som i sig är egna projekt.
+Du kan bero på installerade program (som `python`), systempaket (som `openssl`) eller bibliotek i programspråket (som `matplotlib`).
+I dag finns de flesta beroenden i ett _kodförråd_ som samlar många beroenden på ett ställe och ger en smidig mekanism för installation.
+Exempel är Ubuntus paketkodförråd för systempaket (som du når via `apt`), RubyGems för Ruby-bibliotek, PyPI för Python-bibliotek och Arch User Repository för användarbidragna Arch-paket.
 
-Since the exact mechanisms for interacting with these repositories vary
-a lot from repository to repository and from tool to tool, we won't go
-too much into the details of any specific one in this lecture. What we
-_will_ cover is some of the common terminology they all use. The first
-among these is _versioning_. Most projects that other projects depend on
-issue a _version number_ with every release. Usually something like
-8.1.3 or 64.1.20192004. They are often, but not always, numerical.
-Version numbers serve many purposes, and one of the most important of
-them is to ensure that software keeps working. Imagine, for example,
-that I release a new version of my library where I have renamed a
-particular function. If someone tried to build some software that
-depends on my library after I release that update, the build might fail
-because it calls a function that no longer exists! Versioning attempts
-to solve this problem by letting a project say that it depends on a
-particular version, or range of versions, of some other project. That
-way, even if the underlying library changes, dependent software
-continues building by using an older version of my library.
+Eftersom de exakta mekanismerna skiljer sig mycket mellan olika kodförråd och verktyg går vi inte djupt in i något specifikt i den här föreläsningen.
+Det vi _ska_ gå igenom är viss gemensam terminologi.
+Det första är _versionshantering_.
+De flesta projekt som andra projekt beror på släpper ett _versionsnummer_ vid varje utgåva.
+Ofta ser det ut som 8.1.3 eller 64.1.20192004.
+Det är ofta, men inte alltid, numeriskt.
+Versionsnummer fyller flera syften, och ett av de viktigaste är att säkerställa att programvara fortsätter fungera.
+Tänk dig till exempel att jag släpper en ny version av mitt bibliotek där jag bytt namn på en funktion.
+Om någon försöker bygga programvara som beror på biblioteket efter den uppdateringen kan bygget misslyckas eftersom koden anropar en funktion som inte längre finns.
+Versionshantering försöker lösa detta genom att låta ett projekt säga att det beror på en viss version, eller ett visst versionsintervall, av ett annat projekt.
+På så sätt kan beroende programvara fortsätta bygga mot en äldre biblioteksversion även om biblioteket förändras.
 
-That also isn't ideal though! What if I issue a security update which
-does _not_ change the public interface of my library (its "API"), and
-which any project that depended on the old version should immediately
-start using? This is where the different groups of numbers in a version
-come in. The exact meaning of each one varies between projects, but one
-relatively common standard is [_semantic
-versioning_](https://semver.org/). With semantic versioning, every
-version number is of the form: major.minor.patch. The rules are:
+Det är inte heller perfekt.
+Vad händer om jag släpper en säkerhetsuppdatering som _inte_ ändrar det publika gränssnittet i biblioteket (dess "API"), och som alla projekt på den gamla versionen borde börja använda direkt?
+Det är här de olika siffergrupperna i versionsnumret kommer in.
+Den exakta betydelsen varierar mellan projekt, men en relativt vanlig standard är [semantisk versionshantering](https://semver.org/).
+Med semantisk versionshantering har varje versionsnummer formen major.minor.patch.
+Reglerna är:
 
- - If a new release does not change the API, increase the patch version.
- - If you _add_ to your API in a backwards-compatible way, increase the
-   minor version.
- - If you change the API in a non-backwards-compatible way, increase the
-   major version.
+  - Om en ny utgåva inte ändrar API:t, öka patchversionen.
+ - Om du _lägger till_ i API:t på ett bakåtkompatibelt sätt, öka minorversionen.
+ - Om du ändrar API:t på ett icke bakåtkompatibelt sätt, öka majorversionen.
 
-This already provides some major advantages. Now, if my project depends
-on your project, it _should_ be safe to use the latest release with the
-same major version as the one I built against when I developed it, as
-long as its minor version is at least what it was back then. In other
-words, if I depend on your library at version `1.3.7`, then it _should_
-be fine to build it with `1.3.8`, `1.6.1`, or even `1.3.0`. Version
-`2.2.4` would probably not be okay, because the major version was
-increased. We can see an example of semantic versioning in Python's
-version numbers. Many of you are probably aware that Python 2 and Python
-3 code do not mix very well, which is why that was a _major_ version
-bump. Similarly, code written for Python 3.5 might run fine on Python
-3.7, but possibly not on 3.4.
+Detta ger redan stora fördelar.
+Om mitt projekt beror på ditt projekt _bör_ det nu vara säkert att använda senaste utgåva med samma majorversion som jag byggde mot när jag utvecklade, så länge minorversionen är minst lika hög som då.
+Med andra ord: om jag beror på version `1.3.7` av ditt bibliotek _bör_ det vara okej att bygga med `1.3.8`, `1.6.1` eller till och med `1.3.0`.
+Version `2.2.4` är sannolikt inte okej eftersom majorversionen höjts.
+Vi ser ett exempel på semantisk versionshantering i Pythons versionsnummer.
+Många av er känner till att Python 2-kod och Python 3-kod inte fungerar särskilt bra tillsammans, vilket är varför det var en _major_-höjning.
+På samma sätt kan kod skriven för Python 3.5 fungera fint i Python 3.7, men kanske inte i 3.4.
 
-When working with dependency management systems, you may also come
-across the notion of _lock files_. A lock file is simply a file that
-lists the exact version you are _currently_ depending on of each
-dependency. Usually, you need to explicitly run an update program to
-upgrade to newer versions of your dependencies. There are many reasons
-for this, such as avoiding unnecessary recompiles, having reproducible
-builds, or not automatically updating to the latest version (which may
-be broken). An extreme version of this kind of dependency locking is
-_vendoring_, which is where you copy all the code of your dependencies
-into your own project. That gives you total control over any changes to
-it, and lets you introduce your own changes to it, but also means you
-have to explicitly pull in any updates from the upstream maintainers
-over time.
+När du arbetar med beroendehanteringssystem kan du också stöta på _låsfiler_ (lock files).
+En låsfil är helt enkelt en fil som listar exakt vilka versioner du _just nu_ beror på för varje beroende.
+Vanligtvis måste du uttryckligen köra ett uppdateringskommando för att uppgradera beroenden till nyare versioner.
+Det finns många skäl till det, till exempel att undvika onödiga omkompileringar, få reproducerbara byggen eller undvika automatisk uppgradering till senaste version (som kan vara trasig).
+En extrem variant av denna typ av beroendelåsning är _vendoring_ (att checka in beroenden), där du kopierar in all kod från dina beroenden i ditt eget projekt.
+Det ger total kontroll över ändringar och låter dig göra egna modifieringar, men betyder också att du aktivt måste dra in uppdateringar från förvaltare av ursprungsprojektet över tid.
 
-# Continuous integration systems
+# System för kontinuerlig integration
 
-As you work on larger and larger projects, you'll find that there are
-often additional tasks you have to do whenever you make a change to it.
-You might have to upload a new version of the documentation, upload a
-compiled version somewhere, release the code to pypi, run your test
-suite, and all sort of other things. Maybe every time someone sends you
-a pull request on GitHub, you want their code to be style checked and
-you want some benchmarks to run? When these kinds of needs arise, it's
-time to take a look at continuous integration.
+När du arbetar med större och större projekt märker du att det ofta finns extra uppgifter som behöver göras varje gång du ändrar något.
+Du kanske behöver publicera en ny dokumentationsversion, ladda upp en kompilerad version någonstans, släppa kod till PyPI, köra testsviten och mycket annat.
+Kanske vill du att varje ändringsförfrågan (PR) på GitHub ska stilkontrolleras och att vissa prestandamätningar ska köras.
+När sådana behov uppstår är det dags att titta på kontinuerlig integration.
 
-Continuous integration, or CI, is an umbrella term for "stuff that runs
-whenever your code changes", and there are many companies out there that
-provide various types of CI, often for free for open-source projects.
-Some of the big ones are Travis CI, Azure Pipelines, and GitHub Actions.
-They all work in roughly the same way: you add a file to your repository
-that describes what should happen when various things happen to that
-repository. By far the most common one is a rule like "when someone
-pushes code, run the test suite". When the event triggers, the CI
-provider spins up a virtual machines (or more), runs the commands in
-your "recipe", and then usually notes down the results somewhere. You
-might set it up so that you are notified if the test suite stops
-passing, or so that a little badge appears on your repository as long as
-the tests pass.
+Kontinuerlig integration, eller CI, är ett paraplybegrepp för "saker som körs när din kod ändras", och det finns många företag som erbjuder olika typer av CI, ofta gratis för öppen källkod-projekt.
+Några stora aktörer är Travis CI, Azure Pipelines och GitHub Actions.
+Alla fungerar ungefär likadant.
+Du lägger till en fil i kodförrådet som beskriver vad som ska hända när olika saker händer i kodförrådet.
+Det vanligaste är en regel i stil med "när någon pushar kod, kör testsviten".
+När händelsen triggas startar CI-leverantören en eller flera virtuella maskiner, kör kommandona i ditt "recept" och sparar sedan vanligtvis resultatet någonstans.
+Du kan till exempel sätta upp notiser när testsviten börjar fallera, eller en liten badge i kodförrådet så länge testerna går igenom.
 
-As an example of a CI system, the class website is set up using GitHub
-Pages. Pages is a CI action that runs the Jekyll blog software on every
-push to `master` and makes the built site available on a particular
-GitHub domain. This makes it trivial for us to update the website! We
-just make our changes locally, commit them with git, and then push. CI
-takes care of the rest.
+Som exempel på CI är kursens webbplats uppsatt med GitHub Pages.
+Pages är en CI-åtgärd som kör Jekyll på varje push till `master` och publicerar den byggda sajten på en viss GitHub-domän.
+Det gör det väldigt enkelt för oss att uppdatera webbplatsen.
+Vi gör ändringar lokalt, incheckar med Git och pushar.
+CI sköter resten.
 
-## A brief aside on testing
+## En kort utvikning om testning
 
-Most large software projects come with a "test suite". You may already
-be familiar with the general concept of testing, but we thought we'd
-quickly mention some approaches to testing and testing terminology that
-you may encounter in the wild:
+De flesta större programvaruprojekt har en "testsvit".
+Du kanske redan känner till grundidén med testning, men vi tänkte snabbt nämna några testangreppssätt och termer du kan stöta på:
 
- - Test suite: a collective term for all the tests
- - Unit test: a "micro-test" that tests a specific feature in isolation
- - Integration test: a "macro-test" that runs a larger part of the
-   system to check that different feature or components work _together_.
- - Regression test: a test that implements a particular pattern that
-   _previously_ caused a bug to ensure that the bug does not resurface.
- - Mocking: to replace a function, module, or type with a fake
-   implementation to avoid testing unrelated functionality. For example,
-   you might "mock the network" or "mock the disk".
+ - Testsvit: samlingsnamn för alla tester.
+ - Enhetstest: ett "mikrotest" som testar en specifik funktion isolerat.
+ - Integrationstest: ett "makrotest" som kör en större del av systemet för att kontrollera att olika funktioner eller komponenter fungerar _tillsammans_.
+ - Regressionstest: ett test som implementerar ett mönster som _tidigare_ orsakade ett programfel, för att säkerställa att programfelet inte återkommer.
+ - Mockning: att ersätta en funktion, modul eller typ med en fejkimplementation för att undvika att testa orelaterad funktionalitet.
+   Till exempel kan du "mocka nätverket" eller "mocka disken".
 
-# Exercises
+# Övningar
 
- 1. Most makefiles provide a target called `clean`. This isn't intended
-    to produce a file called `clean`, but instead to clean up any files
-    that can be re-built by make. Think of it as a way to "undo" all of
-    the build steps. Implement a `clean` target for the `paper.pdf`
-    `Makefile` above. You will have to make the target
-    [phony](https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html).
-    You may find the [`git
-    ls-files`](https://git-scm.com/docs/git-ls-files) subcommand useful.
-    A number of other very common make targets are listed
-    [here](https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html#Standard-Targets).
- 2. Take a look at the various ways to specify version requirements for
-    dependencies in [Rust's build
-    system](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html).
-    Most package repositories support similar syntax. For each one
-    (caret, tilde, wildcard, comparison, and multiple), try to come up
-    with a use-case in which that particular kind of requirement makes
-    sense.
- 3. Git can act as a simple CI system all by itself. In `.git/hooks`
-    inside any git repository, you will find (currently inactive) files
-    that are run as scripts when a particular action happens. Write a
-    [`pre-commit`](https://git-scm.com/docs/githooks#_pre_commit) hook
-    that runs `make paper.pdf` and refuses the commit if the `make`
-    command fails. This should prevent any commit from having an
-    unbuildable version of the paper.
- 4. Set up a simple auto-published page using [GitHub
-    Pages](https://pages.github.com/).
-    Add a [GitHub Action](https://github.com/features/actions) to the
-    repository to run `shellcheck` on any shell files in that
-    repository (here is [one way to do
-    it](https://github.com/marketplace/actions/shellcheck)). Check that
-    it works!
- 5. [Build your
-    own](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/building-actions)
-    GitHub action to run [`proselint`](https://github.com/amperser/proselint) or
-    [`write-good`](https://github.com/btford/write-good) on all the
-    `.md` files in the repository. Enable it in your repository, and
-    check that it works by filing a pull request with a typo in it.
+  1. De flesta makefiler har ett mål som heter `clean`.
+     Det är inte tänkt att producera en fil som heter `clean`, utan att städa bort filer som kan byggas om av make.
+     Se det som ett sätt att "ångra" alla byggsteg.
+     Implementera ett `clean`-mål för `paper.pdf`-`Makefile` ovan.
+     Du behöver göra målet [phony](https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html).
+     Du kan ha nytta av subkommandot [`git ls-files`](https://git-scm.com/docs/git-ls-files).
+     Fler vanliga make-mål listas [här](https://www.gnu.org/software/make/manual/html_node/Standard-Targets.html#Standard-Targets).
+  2. Titta på de olika sätten att ange versionskrav för beroenden i [Rusts byggsystem](https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html).
+     De flesta paketkodförråd stödjer liknande syntax.
+     För varje variant (caret, tilde, wildcard, comparison och multiple), försök hitta ett användningsfall där just den typen av krav är rimlig.
+  3. Git kan fungera som ett enkelt CI-system i sig.
+     I `.git/hooks` i valfritt git-kodförråd hittar du filer (just nu inaktiva) som körs som skript när en viss händelse inträffar.
+     Skriv en [`pre-commit`](https://git-scm.com/docs/githooks#_pre_commit)-hook som kör `make paper.pdf` och vägrar incheckningen om `make` misslyckas.
+     Det ska förhindra incheckningar med en obar byggversion av artikeln.
+  4. Sätt upp en enkel sida som autopubliceras med [GitHub Pages](https://pages.github.com/).
+     Lägg till en [GitHub Action](https://github.com/features/actions) i kodförrådet som kör `shellcheck` på alla skalfiler i kodförrådet (här är [ett sätt att göra det](https://github.com/marketplace/actions/shellcheck)).
+     Kontrollera att det fungerar.
+  5. [Bygg din egen](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/building-actions) GitHub Action för att köra [`proselint`](https://github.com/amperser/proselint) eller [`write-good`](https://github.com/btford/write-good) på alla `.md`-filer i kodförrådet.
+     Aktivera den i kodförrådet och verifiera att den fungerar genom att skapa en ändringsförfrågan (PR) med en stavmiss.

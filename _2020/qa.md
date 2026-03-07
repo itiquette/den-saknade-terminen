@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Q&A"
+title: "Frågor och svar"
 description: >
-  Answers to student questions on topics like operating systems, shell scripting, tool recommendations, and more.
+  Svar på studentfrågor om ämnen som operativsystem, skalskriptning, verktygsrekommendationer och mer.
 thumbnail: /static/assets/thumbnails/2020/lec11.png
 date: 2020-01-30
 ready: true
@@ -12,176 +12,258 @@ video:
 special: true
 ---
 
-For the last lecture, we answered questions that the students submitted:
+I den sista föreläsningen svarade vi på frågor som studenterna skickade in:
 
-- [Any recommendations on learning Operating Systems related topics like processes, virtual memory, interrupts, memory management, etc ](#any-recommendations-on-learning-operating-systems-related-topics-like-processes-virtual-memory-interrupts-memory-management-etc)
-- [What are some of the tools you'd prioritize learning first?](#what-are-some-of-the-tools-youd-prioritize-learning-first)
-- [When do I use Python versus a Bash scripts versus some other language?](#when-do-i-use-python-versus-a-bash-scripts-versus-some-other-language)
-- [What is the difference between `source script.sh` and `./script.sh`](#what-is-the-difference-between-source-scriptsh-and-scriptsh)
-- [What are the places where various packages and tools are stored and how does referencing them work? What even is `/bin` or `/lib`?](#what-are-the-places-where-various-packages-and-tools-are-stored-and-how-does-referencing-them-work-what-even-is-bin-or-lib)
-- [Should I `apt-get install` a python-whatever, or `pip install` whatever package?](#should-i-apt-get-install-a-python-whatever-or-pip-install-whatever-package)
-- [What's the easiest and best profiling tools to use to improve performance of my code?](#whats-the-easiest-and-best-profiling-tools-to-use-to-improve-performance-of-my-code)
-- [What browser plugins do you use?](#what-browser-plugins-do-you-use)
-- [What are other useful data wrangling tools?](#what-are-other-useful-data-wrangling-tools)
-- [What is the difference between Docker and a Virtual Machine?](#what-is-the-difference-between-docker-and-a-virtual-machine)
-- [What are the advantages and disadvantages of each OS and how can we choose between them (e.g. choosing the best Linux distribution for our purposes)?](#what-are-the-advantages-and-disadvantages-of-each-os-and-how-can-we-choose-between-them-eg-choosing-the-best-linux-distribution-for-our-purposes)
-- [Vim vs Emacs?](#vim-vs-emacs)
-- [Any tips or tricks for Machine Learning applications?](#any-tips-or-tricks-for-machine-learning-applications)
-- [Any more Vim tips?](#any-more-vim-tips)
-- [What is 2FA and why should I use it?](#what-is-2fa-and-why-should-i-use-it)
-- [Any comments on differences between web browsers?](#any-comments-on-differences-between-web-browsers)
+- [Några rekommendationer för att lära sig operativsystemsrelaterade ämnen som processer, virtuellt minne, avbrott, minneshantering osv?](#any-recommendations-on-learning-operating-systems-related-topics-like-processes-virtual-memory-interrupts-memory-management-etc)
+- [Vilka verktyg skulle ni prioritera att lära er först?](#what-are-some-of-the-tools-youd-prioritize-learning-first)
+- [När ska jag använda Python jämfört med Bash-skript jämfört med något annat språk?](#when-do-i-use-python-versus-a-bash-scripts-versus-some-other-language)
+- [Vad är skillnaden mellan `source script.sh` och `./script.sh`?](#what-is-the-difference-between-source-scriptsh-and-scriptsh)
+- [Var lagras olika paket och verktyg, och hur fungerar referenser till dem?
+  Vad är egentligen `/bin` eller `/lib`?](#what-are-the-places-where-various-packages-and-tools-are-stored-and-how-does-referencing-them-work-what-even-is-bin-or-lib)
+- [Ska jag köra `apt-get install` för ett python-paket, eller `pip install` för paketet?](#should-i-apt-get-install-a-python-whatever-or-pip-install-whatever-package)
+- [Vilka är de enklaste och bästa profileringsverktygen för att förbättra prestanda i min kod?](#whats-the-easiest-and-best-profiling-tools-to-use-to-improve-performance-of-my-code)
+- [Vilka webbläsartillägg använder ni?](#what-browser-plugins-do-you-use)
+- [Vilka andra verktyg för datahantering är användbara?](#what-are-other-useful-data-wrangling-tools)
+- [Vad är skillnaden mellan Docker och en virtuell maskin?](#what-is-the-difference-between-docker-and-a-virtual-machine)
+- [Vilka är för- och nackdelarna med varje operativsystem, och hur väljer man mellan dem (t.ex. bästa Linux-distribution för sitt syfte)?](#what-are-the-advantages-and-disadvantages-of-each-os-and-how-can-we-choose-between-them-eg-choosing-the-best-linux-distribution-for-our-purposes)
+- [Vim eller Emacs?](#vim-vs-emacs)
+- [Några tips eller tricks för maskininlärningsapplikationer?](#any-tips-or-tricks-for-machine-learning-applications)
+- [Fler Vim-tips?](#any-more-vim-tips)
+- [Vad är 2FA och varför ska jag använda det?](#what-is-2fa-and-why-should-i-use-it)
+- [Några kommentarer om skillnader mellan webbläsare?](#any-comments-on-differences-between-web-browsers)
 
-## Any recommendations on learning Operating Systems related topics like processes, virtual memory, interrupts, memory management, etc
+## Några rekommendationer för att lära sig operativsystemsrelaterade ämnen som processer, virtuellt minne, avbrott, minneshantering osv? {#any-recommendations-on-learning-operating-systems-related-topics-like-processes-virtual-memory-interrupts-memory-management-etc}
 
-First, it is unclear whether you actually need to be very familiar with all of these topics since they are very low level topics.
-They will matter as you start writing more low level code like implementing or modifying a kernel. Otherwise, most topics will not be relevant, with the exception of processes and signals that were briefly covered in other lectures.
+Först och främst är det inte självklart att du faktiskt behöver vara väldigt insatt i alla de här områdena eftersom det är låg-nivåämnen.
+De blir viktiga när du börjar skriva mer låg-nivåkod, som att implementera eller modifiera en kärna.
+Annars är de flesta ämnen inte så relevanta, med undantag för processer och signaler som vi kort berörde i andra föreläsningar.
 
-Some good resources to learn about this topic:
+Några bra resurser för att lära sig mer:
 
-- [MIT's 6.828 class](https://pdos.csail.mit.edu/6.828/) - Graduate level class on Operating System Engineering. Class materials are publicly available.
-- Modern Operating Systems (4th ed) - by Andrew S. Tanenbaum is a good overview of many of the mentioned concepts.
-- The Design and Implementation of the FreeBSD Operating System - A good resource about the FreeBSD OS (note that this is not Linux).
-- Other guides like [Writing an OS in Rust](https://os.phil-opp.com/) where people implement a kernel step by step in various languages, mostly for teaching purposes.
+- [MIT:s kurs 6.828](https://pdos.csail.mit.edu/6.828/) - forskarnivåkurs i operativsystemteknik.
+  Kursmaterialet är publikt.
+- Modern Operating Systems (4:e upplagan) av Andrew S. Tanenbaum är en bra översikt över många av de nämnda begreppen.
+- The Design and Implementation of the FreeBSD Operating System - en bra resurs om FreeBSD (obs att det inte är Linux).
+- Andra guider som [Writing an OS in Rust](https://os.phil-opp.com/) där man implementerar en kärna steg för steg i olika språk, främst i undervisningssyfte.
 
+## Vilka verktyg skulle ni prioritera att lära er först? {#what-are-some-of-the-tools-youd-prioritize-learning-first}
 
-## What are some of the tools you'd prioritize learning first?
+Några områden som är värda att prioritera:
 
-Some topics worth prioritizing:
+- Lär dig använda tangentbordet mer och musen mindre.
+  Det kan handla om kortkommandon, gränssnittsanpassning osv.
+- Lär dig ditt redigeringsverktyg ordentligt.
+  Som programmerare går större delen av tiden åt till att redigera filer, så det lönar sig mycket att bli bra på det.
+- Lär dig automatisera och/eller förenkla repetitiva delar av ditt arbetsflöde, eftersom tidsvinsten blir enorm.
+- Lär dig versionshanteringsverktyg som Git och hur de används tillsammans med GitHub för samarbete i moderna programvaruprojekt.
 
-- Learning how to use your keyboard more and your mouse less. This can be through keyboard shortcuts, changing interfaces, &c.
-- Learning your editor well. As a programmer most of your time is spent editing files so it really pays off to learn this skill well.
-- Learning how to automate and/or simplify repetitive tasks in your workflow because the time savings will be enormous...
-- Learning about version control tools like Git and how to use it in conjunction with GitHub to collaborate in modern software projects.
+## När ska jag använda Python jämfört med Bash-skript jämfört med något annat språk? {#when-do-i-use-python-versus-a-bash-scripts-versus-some-other-language}
 
-## When do I use Python versus a Bash scripts versus some other language?
+Generellt är Bash-skript bra för korta och enkla engångsskript där du bara vill köra en viss sekvens av kommandon.
+Bash har dock flera egenheter som gör det svårt att arbeta med i större program eller skript:
 
-In general, bash scripts are useful for short and simple one-off scripts when you just want to run a specific series of commands. bash has a set of oddities that make it hard to work with for larger programs or scripts:
+- Bash är lätt att få rätt i enkla fall men kan vara mycket svårt att få rätt för alla möjliga indata.
+  Till exempel har mellanslag i skriptargument orsakat otaliga buggar i Bash-skript.
+- Bash lämpar sig dåligt för kodåteranvändning, så det kan vara svårt att återanvända delar av tidigare program.
+  Mer generellt finns inget tydligt bibliotekstänk i Bash.
+- Bash förlitar sig på många magiska strängar som `$?` eller `$@` för specifika värden, medan andra språk ofta använder explicita namn, som `exitCode` eller `sys.args`.
 
-- bash is easy to get right for a simple use case but it can be really hard to get right for all possible inputs. For example, spaces in script arguments have led to countless bugs in bash scripts.
-- bash is not amenable to code reuse so it can be hard to reuse components of previous programs you have written. More generally, there is no concept of software libraries in bash.
-- bash relies on many magic strings like `$?` or `$@` to refer to specific values, whereas other languages refer to them explicitly, like `exitCode` or `sys.args` respectively.
+Därför rekommenderar vi mer mogna skriptspråk som Python eller Ruby för större och/eller mer komplexa skript.
+Du hittar mängder av bibliotek på nätet där andra redan löst vanliga problem i de språken.
+Om du hittar ett bibliotek som implementerar den funktionalitet du behöver i ett visst språk är det oftast bäst att använda just det språket.
 
-Therefore, for larger and/or more complex scripts we recommend using more mature scripting languages like Python or Ruby.
-You can find online countless libraries that people have already written to solve common problems in these languages.
-If you find a library that implements the specific functionality you care about in some language, usually the best thing to do is to just use that language.
+## Vad är skillnaden mellan `source script.sh` och `./script.sh`? {#what-is-the-difference-between-source-scriptsh-and-scriptsh}
 
-## What is the difference between `source script.sh` and `./script.sh`
+I båda fallen läses och körs `script.sh` i en Bash-session, men skillnaden är vilken session som kör kommandona.
+Med `source` körs kommandona i din nuvarande Bash-session, och därför ligger förändringar i miljön kvar efteråt, som katalogbyte eller funktionsdefinitioner.
+När du kör skriptet fristående med `./script.sh` startar din nuvarande Bash-session en ny Bash-instans som kör kommandona i `script.sh`.
+Därför kan den nya instansen byta katalog, men när den avslutas och kontrollen går tillbaka till föräldersessionen ligger föräldersessionen kvar i samma katalog som tidigare.
+På samma sätt gäller att om `script.sh` definierar en funktion som du vill använda i terminalen behöver du `source`-köra den för att funktionen ska definieras i din aktuella session.
+Annars definieras funktionen i den nya Bash-processen i stället för i ditt aktuella skal.
 
-In both cases the `script.sh` will be read and executed in a bash session, the difference lies in which session is running the commands.
-For `source` the commands are executed in your current bash session and thus any changes made to the current environment, like changing directories or defining functions will persist in the current session once the `source` command finishes executing.
-When running the script standalone like `./script.sh`, your current bash session starts a new instance of bash that will run the commands in `script.sh`.
-Thus, if `script.sh` changes directories, the new bash instance will change directories but once it exits and returns control to the parent bash session, the parent session will remain in the same place.
-Similarly, if `script.sh` defines a function that you want to access in your terminal, you need to `source` it for it to be defined in your current bash session. Otherwise, if you run it, the new bash process will be the one to process the function definition instead of your current shell.
+## Var lagras olika paket och verktyg, och hur fungerar referenser till dem? Vad är egentligen `/bin` eller `/lib`? {#what-are-the-places-where-various-packages-and-tools-are-stored-and-how-does-referencing-them-work-what-even-is-bin-or-lib}
 
-## What are the places where various packages and tools are stored and how does referencing them work? What even is `/bin` or `/lib`?
+När det gäller program du kör i terminalen hittas de i katalogerna som listas i miljövariabeln `PATH`.
+Du kan använda kommandot `which` (eller `type`) för att se var skalet hittar ett visst program.
+I allmänhet finns konventioner för var olika filtyper ligger.
+Här är några av dem vi nämnde, och se [Filesystem Hierarchy Standard](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard) för en mer komplett lista.
 
-Regarding programs that you execute in your terminal, they are all found in the directories listed in your `PATH` environment variable and you can use the `which` command (or the `type` command) to check where your shell is finding a specific program.
-In general, there are some conventions about where specific types of files live. Here are some of the ones we talked about, check the [Filesystem, Hierarchy Standard](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard) for a more comprehensive list.
+- `/bin` - viktiga kommandobinärer.
+- `/sbin` - viktiga systembinärer, vanligtvis avsedda att köras av root.
+- `/dev` - enhetsfiler, specialfiler som ofta är gränssnitt mot hårdvara.
+- `/etc` - värdspecifika systemomfattande konfigurationsfiler.
+- `/home` - användarnas hemkataloger.
+- `/lib` - gemensamma bibliotek för systemprogram.
+- `/opt` - valfri applikationsprogramvara.
+- `/sys` - information och konfiguration för systemet (täcks i [första föreläsningen]({{ '/2020/course-shell/' | relative_url }})).
+- `/tmp` - temporära filer (även `/var/tmp`).
+  Rensas ofta mellan omstarter.
+- `/usr/` - skrivskyddad användardata.
+  + `/usr/bin` - icke-essentiella kommandobinärer.
+  + `/usr/sbin` - icke-essentiella systembinärer, vanligtvis avsedda att köras av root.
+  + `/usr/local/bin` - binärer för användarkompilerade program.
+- `/var` - föränderliga filer som loggar eller cache.
 
-- `/bin` - Essential command binaries
-- `/sbin` - Essential system binaries, usually to be run by root
-- `/dev` - Device files, special files that often are interfaces to hardware devices
-- `/etc` - Host-specific system-wide configuration files
-- `/home` - Home directories for users in the system
-- `/lib` - Common libraries for system programs
-- `/opt` - Optional application software
-- `/sys` - Contains information and configuration for the system (covered in the [first lecture](/2020/course-shell/))
-- `/tmp` - Temporary files (also `/var/tmp`). Usually deleted between reboots.
-- `/usr/` - Read only user data
-  + `/usr/bin` - Non-essential command binaries
-  + `/usr/sbin` - Non-essential system binaries, usually to be run by root
-  + `/usr/local/bin` - Binaries for user compiled programs
-- `/var` - Variable files like logs or caches
+## Ska jag köra `apt-get install` för ett python-paket, eller `pip install` för paketet? {#should-i-apt-get-install-a-python-whatever-or-pip-install-whatever-package}
 
-## Should I `apt-get install` a python-whatever, or `pip install` whatever package?
+Det finns inget universellt svar på den frågan.
+Det hänger ihop med den mer generella frågan om du ska använda systemets pakethanterare eller en språkspecifik pakethanterare för att installera programvara.
+Några saker att väga in:
 
-There's no universal answer to this question. It's related to the more general question of whether you should use your system's package manager or a language-specific package manager to install software. A few things to take into account:
+- Vanliga paket finns ofta i båda, men mindre populära eller nyare paket kanske inte finns i systemets pakethanterare.
+  I det fallet är det bättre med den språkspecifika lösningen.
+- Språkspecifika pakethanterare har ofta mer uppdaterade paketversioner än systemets pakethanterare.
+- När du använder systemets pakethanterare installeras bibliotek systemomfattande.
+  Om du behöver olika versioner av ett bibliotek för utveckling räcker det därför ofta inte.
+  För det scenariot erbjuder de flesta språk någon form av isolerad eller virtuell miljö så att du kan installera olika biblioteksversioner utan konflikter.
+  För Python finns virtualenv, och för Ruby finns RVM.
+- Beroende på operativsystem och hårdvaruarkitektur kan paket komma som binärer eller behöva kompileras.
+  På ARM-datorer som Raspberry Pi kan systemets pakethanterare vara bättre än den språkspecifika om den första levererar binärer och den andra kräver kompilering.
+  Det beror mycket på din miljö.
 
-- Common packages will be available through both, but less popular ones or more recent ones might not be available in your system package manager. In this case, using the language-specific tool is the better choice.
-- Similarly, language-specific package managers usually have more up to date versions of packages than system package managers.
-- When using your system package manager, libraries will be installed system wide. This means that if you need different versions of a library for development purposes, the system package manager might not suffice. For this scenario, most programming languages provide some sort of isolated or virtual environment so you can install different versions of libraries without running into conflicts. For Python, there's virtualenv, and for Ruby, there's RVM.
-- Depending on the operating system and the hardware architecture, some of these packages might come with binaries or might need to be compiled. For instance, in ARM computers like the Raspberry Pi, using the system package manager can be better than the language specific one if the former comes in form of binaries and the latter needs to be compiled. This is highly dependent on your specific setup.
+Du bör försöka använda antingen den ena eller den andra vägen, inte båda, eftersom blandning kan ge svårdebuggade konflikter.
+Vår rekommendation är att använda språkspecifik pakethanterare när det går, och isolerade miljöer (som Pythons virtualenv) för att undvika att smutsa ner den globala miljön.
 
-You should try to use one solution or the other and not both since that can lead to conflicts that are hard to debug. Our recommendation is to use the language-specific package manager whenever possible, and to use isolated environments (like Python's virtualenv) to avoid polluting the global environment.
+## Vilka är de enklaste och bästa profileringsverktygen för att förbättra prestanda i min kod? {#whats-the-easiest-and-best-profiling-tools-to-use-to-improve-performance-of-my-code}
 
-## What's the easiest and best profiling tools to use to improve performance of my code?
+Det enklaste och samtidigt ganska användbara verktyget för profilering är [tidmätning med utskrifter]({{ '/2020/debugging-profiling/#timing' | relative_url }}).
+Du beräknar manuellt tiden mellan olika delar av koden.
+Genom att upprepa detta kan du i praktiken göra en binärsökning genom koden och hitta segmentet som tar längst tid.
 
-The easiest tool that is quite useful for profiling purposes is [print timing](/2020/debugging-profiling/#timing).
-You just manually compute the time taken between different parts of your code. By repeatedly doing this, you can effectively do a binary search over your code and find the segment of code that took the longest.
+För mer avancerade verktyg låter Valgrinds [Callgrind](https://valgrind.org/docs/manual/cl-manual.html) dig köra programmet och mäta hur lång tid allt tar samt hela anropsstackar, alltså vilken funktion som anropat vilken.
+Det producerar sedan en annoterad version av programmets källkod med tidsåtgång per rad.
+Det saktar dock ner programmet ungefär en storleksordning och stödjer inte trådar.
+För andra fall kan [`perf`](https://www.brendangregg.com/perf.html) och andra språkspecifika sampling-profilerare snabbt ge användbar data.
+[Flamegraphs](https://www.brendangregg.com/flamegraphs.html) är en bra visualisering av utdata från sådana sampling-profilerare.
+Du bör också försöka använda verktyg som är specifika för språket eller uppgiften du jobbar med.
+För webbutveckling har till exempel utvecklarverktygen i Chrome och Firefox utmärkta profilerare.
 
-For more advanced tools, Valgrind's [Callgrind](https://valgrind.org/docs/manual/cl-manual.html) lets you run your program and measure how long everything takes and all the call stacks, namely which function called which other function. It then produces an annotated version of your program's source code with the time taken per line. However, it slows down your program by an order of magnitude and does not support threads. For other cases, the [`perf`](https://www.brendangregg.com/perf.html) tool and other language specific sampling profilers can output useful data pretty quickly. [Flamegraphs](https://www.brendangregg.com/flamegraphs.html) are a good visualization tool for the output of said sampling profilers. You should also try to use specific tools for the programming language or task you are working with. For example, for web development, the dev tools built into Chrome and Firefox have fantastic profilers.
+Ibland är den långsamma delen i koden att systemet väntar på en händelse, som en diskläsning eller ett nätverkspaket.
+I de fallen är det värt att kontrollera att överslagsräkningar av teoretisk hastighet utifrån hårdvarans kapacitet stämmer med faktisk mätdata.
+Det finns också specialverktyg för att analysera väntetider i systemanrop.
+Dit hör verktyg som [eBPF](https://www.brendangregg.com/blog/2019-01-01/learn-ebpf-tracing.html) som utför kärnspårning av användarprogram.
+Särskilt [`bpftrace`](https://github.com/iovisor/bpftrace) är värt att titta på om du behöver den typen av låg-nivåprofilering.
 
-Sometimes the slow part of your code will be because your system is waiting for an event like a disk read or a network packet. In those cases, it is worth checking that back-of-the-envelope calculations about the theoretical speed in terms of hardware capabilities do not deviate from the actual readings. There are also specialized tools to analyze the wait times in system calls. These include tools like [eBPF](https://www.brendangregg.com/blog/2019-01-01/learn-ebpf-tracing.html) that perform kernel tracing of user programs. In particular [`bpftrace`](https://github.com/iovisor/bpftrace) is worth checking out if you need to perform this sort of low level profiling.
+## Vilka webbläsartillägg använder ni? {#what-browser-plugins-do-you-use}
 
+Några av våra favoriter, främst för säkerhet och användbarhet:
 
-## What browser plugins do you use?
+- [uBlock Origin](https://github.com/gorhill/uBlock) - en [bred blockerare](https://github.com/gorhill/uBlock/wiki/Blocking-mode) som inte bara stoppar annonser utan även många former av tredjepartskommunikation som en sida försöker göra.
+  Det inkluderar även inline-skript och andra typer av resursladdning.
+  Om du är villig att lägga tid på konfiguration för att få saker att fungera, testa [medium mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-medium-mode) eller till och med [hard mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-hard-mode).
+  Det kommer att göra att vissa sajter inte fungerar förrän du justerat inställningarna tillräckligt, men det förbättrar också din säkerhet på nätet markant.
+  Annars är [easy mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-easy-mode) redan ett bra standardläge som blockerar de flesta annonser och spårare.
+  Du kan också definiera egna regler för vilka webbobjekt som ska blockeras.
+- [Stylus](https://github.com/openstyles/stylus/) - en förgrening av Stylish (använd inte Stylish, det visade sig [stjäla användares webbhistorik](https://www.theregister.co.uk/2018/07/05/browsers_pull_stylish_but_invasive_browser_extension/)) som låter dig sidladda egna CSS-stilmallar till webbplatser.
+  Med Stylus kan du enkelt anpassa och ändra utseendet på webbplatser.
+  Det kan vara att ta bort en sidopanel, ändra bakgrundsfärg eller textstorlek och typsnitt.
+  Det är fantastiskt för att göra webbplatser du ofta besöker mer lättlästa.
+  Stylus kan dessutom hitta stilar som andra användare skrivit och publicerat på [userstyles.org](https://userstyles.org/).
+  De flesta vanliga webbplatser har till exempel en eller flera mörka teman där.
+- Full Page Screen Capture - [inbyggt i Firefox](https://screenshots.firefox.com/) och finns även som [Chrome-tillägg](https://chrome.google.com/webstore/detail/full-page-screen-capture/fdpohaocaechififmbbbbbknoalclacl?hl=en).
+  Låter dig ta skärmdump av en hel webbplats, ofta mycket bättre än utskrift för referensändamål.
+- [Multi Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) - låter dig separera cookies i "containrar" så att du kan surfa med olika identiteter och/eller säkerställa att webbplatser inte kan dela information mellan varandra.
+- Integrering med lösenordshanterare - de flesta lösenordshanterare har webbläsartillägg som gör inmatning av inloggningsuppgifter både smidigare och säkrare.
+  Jämfört med att bara kopiera och klistra in användarnamn och lösenord kontrollerar dessa verktyg först att domänen matchar den som finns i posten, vilket skyddar mot nätfiskeattacker.
+- [Vimium](https://github.com/philc/vimium) - ett webbläsartillägg som ger tangentbordsbaserad navigering och styrning av webben i Vim-anda.
 
-Some of our favorites, mostly related to security and usability:
+## Vilka andra verktyg för datahantering är användbara? {#what-are-other-useful-data-wrangling-tools}
 
-- [uBlock Origin](https://github.com/gorhill/uBlock) - It is a [wide-spectrum](https://github.com/gorhill/uBlock/wiki/Blocking-mode) blocker that doesn’t just stop ads, but all sorts of third-party communication a page may try to do. This also covers inline scripts and other types of resource loading. If you’re willing to spend some time on configuration to make things work, go to [medium mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-medium-mode) or even [hard mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-hard-mode). Those will make some sites not work until you’ve fiddled with the settings enough, but will also significantly improve your online security. Otherwise, the [easy mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-easy-mode) is already a good default that blocks most ads and tracking. You can also define your own rules about what website objects to block.
-- [Stylus](https://github.com/openstyles/stylus/) - a fork of Stylish (don't use Stylish, it was shown to [steal users' browsing history](https://www.theregister.co.uk/2018/07/05/browsers_pull_stylish_but_invasive_browser_extension/)), allows you to sideload custom CSS stylesheets to websites. With Stylus you can easily customize and modify the appearance of websites. This can be removing a sidebar, changing the background color or even the text size or font choice. This is fantastic for making websites that you visit frequently more readable. Moreover, Stylus can find styles written by other users and published in [userstyles.org](https://userstyles.org/). Most common websites have one or several dark theme stylesheets for instance.
-- Full Page Screen Capture - [Built into Firefox](https://screenshots.firefox.com/) and [Chrome extension](https://chrome.google.com/webstore/detail/full-page-screen-capture/fdpohaocaechififmbbbbbknoalclacl?hl=en). Lets you take a screenshot of a full website, often much better than printing for reference purposes.
-- [Multi Account Containers](https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/) - lets you separate cookies into "containers", allowing you to browse the web with different identities and/or ensuring that websites are unable to share information between them.
-- Password Manager Integration - Most password managers have browser extensions that make inputting your credentials into websites not only more convenient but also more secure. Compared to simply copy-pasting your user and password, these tools will first check that the website domain matches the one listed for the entry, preventing phishing attacks that impersonate popular websites to steal credentials.
-- [Vimium](https://github.com/philc/vimium) - A browser extension that provides keyboard-based navigation and control of the web in the spirit of the Vim editor.
+Några verktyg för datahantering vi inte hann ta upp i föreläsningen är `jq` och `pup`, som är specialiserade parserverktyg för respektive JSON- och HTML-data.
+Programsproket Perl är också ett bra verktyg för mer avancerade datahanteringspipelines.
+Ett annat knep är kommandot `column -t` som kan användas för att omvandla blankstegstext (inte nödvändigtvis justerad) till korrekt kolumnjusterad text.
 
-## What are other useful data wrangling tools?
+Mer generellt är vim och Python två något mer okonventionella men kraftfulla datahanteringsverktyg.
+För vissa komplexa transformationer över flera rader kan vim-makron vara ovärderliga.
+Du kan spela in en serie åtgärder och upprepa dem så många gånger du vill.
+I [anteckningarna om redigerare]({{ '/2020/editors/#macros' | relative_url }}) (och förra årets [video]({{ '/2019/editors/' | relative_url }})) finns till exempel ett exempel där en XML-fil omvandlas till JSON med enbart vim-makron.
 
-Some of the data wrangling tools we did not have time to cover during the data wrangling lecture include `jq` or `pup` which are specialized parsers for JSON and HTML data respectively. The Perl programming language is another good tool for more advanced data wrangling pipelines. Another trick is the `column -t` command that can be used to convert whitespace text (not necessarily aligned) into properly column aligned text.
+För tabellformad data, ofta i CSV-format, är Python-biblioteket [pandas](https://pandas.pydata.org/) ett utmärkt verktyg.
+Inte bara för att det gör det enkelt att definiera komplexa operationer som group by, joins eller filter, utan också för att det gör det enkelt att plotta olika egenskaper i datan.
+Det stödjer även export till många tabellformat, inklusive XLS, HTML och LaTeX.
+Alternativt har programspråket R (ett möjligen [dåligt](https://arrgh.tim-smith.us/) språk) mycket funktionalitet för statistik över data och kan vara användbart som sista steg i din pipeline.
+[ggplot2](https://ggplot2.tidyverse.org/) är ett mycket bra plottbibliotek i R.
 
-More generally a couple of more unconventional data wrangling tools are vim and Python. For some complex and multi-line transformations, vim macros can be a quite invaluable tool to use. You can just record a series of actions and repeat them as many times as you want, for instance in the editors [lecture notes](/2020/editors/#macros) (and last year's [video](/2019/editors/)) there is an example of converting an XML-formatted file into JSON just using vim macros.
+## Vad är skillnaden mellan Docker och en virtuell maskin? {#what-is-the-difference-between-docker-and-a-virtual-machine}
 
-For tabular data, often presented in CSVs, the [pandas](https://pandas.pydata.org/) Python library is a great tool. Not only because it makes it quite easy to define complex operations like group by, join or filters; but also makes it quite easy to plot different properties of your data. It also supports exporting to many table formats including XLS, HTML or LaTeX. Alternatively the R programming language (an arguably [bad](https://arrgh.tim-smith.us/) programming language) has lots of functionality for computing statistics over data and can be quite useful as the last step of your pipeline. [ggplot2](https://ggplot2.tidyverse.org/) is a great plotting library in R.
+Docker bygger på ett mer generellt koncept som kallas containrar.
+Den viktigaste skillnaden mellan containrar och virtuella maskiner är att virtuella maskiner kör en hel OS-stack, inklusive kärnan, även om kärnan är samma som på värdmaskinen.
+Till skillnad från VM:ar undviker containrar att köra en extra kärninstans och delar i stället kärna med värden.
+I Linux görs detta via en mekanism som kallas LXC, och den använder en serie isoleringsmekanismer för att starta ett program som tror att det kör på egen hårdvara, fast det i verkligheten delar hårdvara och kärna med värden.
+Containrar har därför lägre overhead än en full VM.
+Å andra sidan har containrar svagare isolering och fungerar bara om värden kör samma kärna.
+Om du till exempel kör Docker på macOS behöver Docker starta en Linux-VM för att få en Linux-kärna, och därför blir overheaden fortfarande betydande.
+Till sist är Docker en specifik containerimplementation anpassad för programvarudistribution.
+Därför har den vissa egenheter, till exempel att Docker-containrar som standard inte bevarar någon lagring mellan omstarter.
 
-## What is the difference between Docker and a Virtual Machine?
+## Vilka är för- och nackdelarna med varje operativsystem, och hur väljer man mellan dem (t.ex. bästa Linux-distribution för sitt syfte)? {#what-are-the-advantages-and-disadvantages-of-each-os-and-how-can-we-choose-between-them-eg-choosing-the-best-linux-distribution-for-our-purposes}
 
-Docker is based on a more general concept called containers. The main difference between containers and virtual machines is that virtual machines will execute an entire OS stack, including the kernel, even if the kernel is the same as the host machine. Unlike VMs, containers avoid running another instance of the kernel and instead share the kernel with the host. In Linux, this is achieved through a mechanism called LXC, and it makes use of a series of isolation mechanisms to spin up a program that thinks it's running on its own hardware but it's actually sharing the hardware and kernel with the host. Thus, containers have a lower overhead than a full VM.
-On the flip side, containers have a weaker isolation and only work if the host runs the same kernel. For instance if you run Docker on macOS, Docker needs to spin up a Linux virtual machine to get an initial Linux kernel and thus the overhead is still significant. Lastly, Docker is a specific implementation of containers and it is tailored for software deployment. Because of this, it has some quirks: for example, Docker containers will not persist any form of storage between reboots by default.
+När det gäller Linuxdistributioner gäller att även om det finns väldigt många så beter sig de flesta ganska likt för de flesta användningsfall.
+Det mesta av Linux- och UNIX-funktioner och intern mekanik kan läras i vilken distribution som helst.
+En grundläggande skillnad mellan distributioner är hur de hanterar paketuppdateringar.
+Vissa, som Arch Linux, använder en rullande uppdateringsmodell där du får det senaste men där saker ibland går sönder.
+Andra, som Debian, CentOS eller Ubuntu LTS, är mycket mer konservativa med uppdateringar i sina kodförråd, vilket oftast ger mer stabilitet men färre nya funktioner.
+Vår rekommendation för en enkel och stabil upplevelse på både desktop och server är Debian eller Ubuntu.
 
-## What are the advantages and disadvantages of each OS and how can we choose between them (e.g. choosing the best Linux distribution for our purposes)?
+macOS är en bra mellanpunkt mellan Windows och Linux med ett välpolerat gränssnitt.
+macOS bygger dock på BSD i stället för Linux, så vissa delar av systemet och vissa kommandon skiljer sig.
+Ett alternativ värt att titta på är FreeBSD.
+Även om vissa program inte körs på FreeBSD är BSD-ekosystemet mindre fragmenterat och bättre dokumenterat än Linux.
+Vi avråder från Windows för allt utom utveckling av Windows-applikationer eller om du behöver en avgörande funktion, som bra drivrutinsstöd för spel.
 
-Regarding Linux distros, even though there are many, many distros, most of them will behave fairly identically for most use cases.
-Most of Linux and UNIX features and inner workings can be learned in any distro.
-A fundamental difference between distros is how they deal with package updates.
-Some distros, like Arch Linux, use a rolling update policy where things are bleeding-edge but things might break every so often. On the other hand, some distros like Debian, CentOS or Ubuntu LTS releases are much more conservative with releasing updates in their repositories so things are usually more stable at the expense of sacrificing newer features.
-Our recommendation for an easy and stable experience with both desktops and servers is to use Debian or Ubuntu.
+För dual-boot-system tycker vi att den mest fungerande implementationen är macOS Boot Camp, och att andra kombinationer kan bli problematiska över tid, särskilt i kombination med till exempel diskkryptering.
 
-Mac OS is a good middle point between Windows and Linux that has a nicely polished interface. However, Mac OS is based on BSD rather than Linux, so some parts of the system and commands are different.
-An alternative worth checking is FreeBSD. Even though some programs will not run on FreeBSD, the BSD ecosystem is much less fragmented and better documented than Linux.
-We discourage Windows for anything but for developing Windows applications or if there is some deal breaker feature that you need, like good driver support for gaming.
+## Vim eller Emacs? {#vim-vs-emacs}
 
-For dual boot systems, we think that the most working implementation is macOS' bootcamp and that any other combination can be problematic  on the long run, specially if you combine it with other features like disk encryption.
+Vi tre använder vim som primär redigerare, men Emacs är också ett bra alternativ, och det är värt att prova båda för att se vad som passar dig bäst.
+Emacs följer inte Vims modala redigering som standard, men det kan aktiveras via Emacs-tillägg som [Evil](https://github.com/emacs-evil/evil) eller [Doom Emacs](https://github.com/hlissner/doom-emacs).
+En fördel med Emacs är att tillägg kan implementeras i Lisp, ett bättre skriptspråk än vimscript, som är Vims standardskriptspråk.
 
-## Vim vs Emacs?
+## Några tips eller tricks för maskininlärningsapplikationer? {#any-tips-or-tricks-for-machine-learning-applications}
 
-The three of us use vim as our primary editor but Emacs is also a good alternative and it's worth trying both to see which works better for you. Emacs does not follow vim's modal editing, but this can be enabled through Emacs plugins like [Evil](https://github.com/emacs-evil/evil) or [Doom Emacs](https://github.com/hlissner/doom-emacs).
-An advantage of using Emacs is that extensions can be implemented in Lisp, a better scripting language than vimscript, Vim's default scripting language.
+Flera av lärdomarna från den här kursen går att tillämpa direkt på ML-applikationer.
+Som i många vetenskapliga discipliner gör man inom ML ofta en serie experiment och vill se vad som fungerade och inte.
+Du kan använda skalverktyg för att snabbt söka igenom experiment och aggregera resultaten på ett vettigt sätt.
+Det kan handla om att välja ut alla experiment inom ett visst tidsintervall eller de som använder en viss datamängd.
+Om du loggar relevanta experimentparametrar i en enkel JSON-fil kan detta bli väldigt enkelt med verktygen vi gått igenom i kursen.
+Om du dessutom inte jobbar i ett kluster där du skickar in GPU-jobb bör du se över hur den processen kan automatiseras, eftersom den annars kan bli både tidskrävande och mentalt dränerande.
 
-## Any tips or tricks for Machine Learning applications?
+## Fler Vim-tips? {#any-more-vim-tips}
 
-Some of the lessons and takeaways from this class can directly be applied to ML applications.
-As it is the case with many science disciplines, in ML you often perform a series of experiments and want to check what things worked and what didn't.
-You can use shell tools to easily and quickly search through these experiments and aggregate the results in a sensible way. This could mean subselecting all experiments in a given time frame or that use a specific dataset. By using a simple JSON file to log all relevant parameters of the experiments, this can be incredibly simple with the tools we covered in this class.
-Lastly, if you do not work with some sort of cluster where you submit your GPU jobs, you should look into how to automate this process since it can be a quite time consuming task that also eats away your mental energy.
+Några ytterligare tips:
 
-## Any more Vim tips?
+- Tillägg - ta dig tid att utforska tilläggsekosystemet.
+  Det finns många bra tillägg som åtgärdar begränsningar i vim eller lägger till ny funktionalitet som passar bra i befintliga vim-arbetsflöden.
+  Bra resurser är [VimAwesome](https://vimawesome.com/) och andra programmerares dotfiles.
+- Markeringar - i vim kan du sätta en markering med `m<X>` för en bokstav `X`.
+  Du hoppar tillbaka till markeringen med `'<X>`.
+  Det gör det enkelt att snabbt navigera till specifika positioner inom en fil eller mellan filer.
+- Navigering - `Ctrl+O` och `Ctrl+I` flyttar dig bakåt respektive framåt mellan nyligen besökta positioner.
+- Undo tree - Vim har en avancerad mekanism för att hålla reda på ändringar.
+  Till skillnad från andra redigerare lagrar vim ett träd av ändringar, så även om du ångrar och sedan gör en annan ändring kan du fortfarande gå tillbaka till ursprungsläget genom att navigera i trädet.
+  Tillägg som [gundo.vim](https://github.com/sjl/gundo.vim) och [undotree](https://github.com/mbbill/undotree) visar trädet grafiskt.
+- Tidsbaserad ångra - kommandona `:earlier` och `:later` låter dig navigera filer via tidsreferenser i stället för en ändring i taget.
+- [Persistent undo](https://vim.fandom.com/wiki/Using_undo_branches#Persistent_undo) är en fantastisk inbyggd vim-funktion som är avstängd som standard.
+  Den bevarar ångrahistorik mellan vim-sessioner.
+  Genom att sätta `undofile` och `undodir` i `.vimrc` sparar vim filspecifik ändringshistorik.
+- Leader key - leader-tangenten är en specialtangent som ofta lämnas till användaren för egna kommandon.
+  Mönstret är vanligtvis att trycka och släppa den tangenten (ofta mellanslag) och sedan en annan tangent för ett visst kommando.
+  Ofta använder tillägg den här tangenten för egen funktionalitet, till exempel använder UndoTree `<Leader> U` för att öppna undo tree.
+- Avancerade textobjekt - textobjekt som sökningar kan också kombineras med vim-kommandon.
+  Till exempel tar `d/<pattern>` bort text fram till nästa träff av mönstret, och `cgn` ändrar nästa förekomst av den senaste söksträngen.
 
-A few more tips:
+## Vad är 2FA och varför ska jag använda det? {#what-is-2fa-and-why-should-i-use-it}
 
-- Plugins - Take your time and explore the plugin landscape. There are a lot of great plugins that address some of vim's shortcomings or add new functionality that composes well with existing vim workflows. For this, good resources are [VimAwesome](https://vimawesome.com/) and other programmers' dotfiles.
-- Marks - In vim, you can set a mark doing `m<X>` for some letter `X`. You can then go back to that mark doing `'<X>`. This lets you quickly navigate to specific locations within a file or even across files.
-- Navigation - `Ctrl+O` and `Ctrl+I` move you backward and forward respectively through your recently visited locations.
-- Undo Tree - Vim has a quite fancy mechanism for keeping track of changes. Unlike other editors, vim stores a tree of changes so even if you undo and then make a different change you can still go back to the original state by navigating the undo tree. Some plugins like [gundo.vim](https://github.com/sjl/gundo.vim) and [undotree](https://github.com/mbbill/undotree) expose this tree in a graphical way.
-- Undo with time - The `:earlier` and `:later` commands will let you navigate the files using time references instead of one change at a time.
-- [Persistent undo](https://vim.fandom.com/wiki/Using_undo_branches#Persistent_undo) is an amazing built-in feature of vim that is disabled by default. It persists undo history between vim invocations. By setting `undofile` and `undodir` in your `.vimrc`, vim will store a per-file history of changes.
-- Leader Key - The leader key is a special key that is often left to the user to be configured for custom commands. The pattern is usually to press and release this key (often the space key) and then some other key to execute a certain command. Often, plugins will use this key to add their own functionality, for instance the UndoTree plugin uses `<Leader> U` to open the undo tree.
-- Advanced Text Objects - Text objects like searches can also be composed with vim commands. E.g. `d/<pattern>` will delete to the next match of said pattern or `cgn` will change the next occurrence of the last searched string.
+Tvåfaktorsautentisering (2FA) lägger till ett extra skyddslager för dina konton ovanpå lösenord.
+För att logga in behöver du inte bara kunna ett lösenord, utan också på något sätt "bevisa" att du har tillgång till en fysisk enhet.
+I enklaste fallet kan det vara ett SMS till mobilen, även om det finns [kända problem](https://www.kaspersky.com/blog/2fa-practical-guide/24219/) med SMS-baserad 2FA.
+Ett bättre alternativ som vi rekommenderar är en [U2F](https://en.wikipedia.org/wiki/Universal_2nd_Factor)-lösning som [YubiKey](https://www.yubico.com/).
 
-## What is 2FA and why should I use it?
+## Några kommentarer om skillnader mellan webbläsare? {#any-comments-on-differences-between-web-browsers}
 
-Two Factor Authentication (2FA) adds an extra layer of protection to your accounts on top of passwords. In order to login, you not only have to know some password, but you also have to "prove" in some way you have access to some hardware device. In the most simple case, this can be achieved by receiving an SMS on your phone, although there are [known issues](https://www.kaspersky.com/blog/2fa-practical-guide/24219/) with SMS 2FA. A better alternative we endorse is to use a [U2F](https://en.wikipedia.org/wiki/Universal_2nd_Factor) solution like [YubiKey](https://www.yubico.com/).
-
-## Any comments on differences between web browsers?
-
-The current landscape of browsers as of 2020 is that most of them are like Chrome because they use the same engine (Blink). This means that Microsoft Edge which is also based on Blink, and Safari, which is based on WebKit, a similar engine to Blink, are just worse versions of Chrome. Chrome is a reasonably good browser both in terms of performance and usability. Should you want an alternative, Firefox is our recommendation. It is comparable to Chrome in pretty much every regard and it excels for privacy reasons.
-Another browser called [Flow](https://www.ekioh.com/flow-browser/) is not user ready yet, but it is implementing a new rendering engine that promises to be faster than the current ones.
+Webbläsarlandskapet runt 2020 var att de flesta i praktiken liknade Chrome eftersom de använder samma motor (Blink).
+Det betyder att Microsoft Edge, som också bygger på Blink, och Safari, som bygger på WebKit (en liknande motor), i praktiken var sämre varianter av Chrome.
+Chrome är en rimligt bra webbläsare både vad gäller prestanda och användbarhet.
+Om du vill ha ett alternativ är Firefox vår rekommendation.
+Den är jämförbar med Chrome på nästan alla punkter och utmärker sig av integritetsskäl.
+En annan webbläsare, [Flow](https://www.ekioh.com/flow-browser/), var inte redo för användare ännu men implementerade en ny renderingsmotor som lovade högre prestanda än de dåvarande.

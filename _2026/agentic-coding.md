@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Agentic Coding"
+title: "Agentdriven kodning"
 description: >
-  Learn how to use AI coding agents effectively for software development tasks.
+  Lär dig hur du använder AI-kodagenter effektivt för uppgifter inom programvaruutveckling.
 thumbnail: /static/assets/thumbnails/2026/lec7.png
 date: 2026-01-21
 ready: true
@@ -11,9 +11,12 @@ video:
   id: sTdz6PZoAnw
 ---
 
-Coding agents are conversational AI models with access to tools such as reading/writing files, web search, and invoking shell commands. They live either in the IDE or in standalone command-line or GUI tools. Coding agents are highly autonomous and powerful tools, enabling a wide variety of use cases.
+Kodagenter är konversationella AI-modeller med tillgång till verktyg som läsning/skrivning av filer, webbsökning och körning av skalkommandon.
+De finns antingen i IDE:n eller i fristående kommandorads- eller GUI-verktyg.
+Kodagenter är mycket autonoma och kraftfulla verktyg som möjliggör många olika användningsfall.
 
-This lecture builds on the AI-powered development material from the [Development Environment and Tools](/2026/development-environment/) lecture. As a quick demo, let's continue with the example from the [AI-powered development](/2026/development-environment/#ai-powered-development) section:
+Den här föreläsningen bygger vidare på materialet om AI-stödd utveckling från föreläsningen [Utvecklingsmiljö och verktyg]({{ '/2026/development-environment/' | relative_url }}).
+Som en snabb demonstration fortsätter vi med exemplet från avsnittet [AI-stödd utveckling]({{ '/2026/development-environment/#ai-powered-development' | relative_url }}):
 
 ```python
 from urllib.request import urlopen
@@ -30,159 +33,239 @@ def extract(content: str) -> list[str]:
 print(extract(download_contents("https://raw.githubusercontent.com/missing-semester/missing-semester/refs/heads/master/_2026/development-environment.md")))
 ```
 
-We can try prompting a coding agent with the following task:
+Vi kan prova att ge en kodagent följande uppgift:
 
 ```
-Turn this into a proper command-line program, with argparse for argument parsing. Add type annotations, and make sure the program passes type checking.
+Gör om detta till ett riktigt kommandoradsprogram, med argparse för argumentparsning.
+Lägg till typannoteringar och se till att programmet klarar typkontroll.
 ```
 
-The agent will read the file to understand it, then make some edits, and finally invoke the type checker to make sure the type annotations are correct. If it makes a mistake such that it fails type checking, it will likely iterate, though this is a simple task so that is unlikely to happen. Because coding agents have access to tools that may be harmful, by default, agent harnesses prompt the user to confirm tool calls.
+Agenten kommer att läsa filen för att förstå den, sedan göra ändringar och till sist köra typkontrollen för att säkerställa att typannoteringarna är korrekta.
+Om den gör ett misstag som gör att typkontrollen misslyckas kommer den sannolikt att iterera, även om det här är en enkel uppgift där det är mindre troligt.
+Eftersom kodagenter har tillgång till verktyg som kan vara skadliga ber agentramverk som standard användaren att bekräfta verktygsanrop.
 
-> If the coding agent makes a mistake --- for example, if you have the `mypy` binary available directly on `$PATH` but the agent tries calling `python -m mypy` --- you can give it text feedback to help it course correct.
+> Om kodagenten gör ett misstag --- till exempel om du har `mypy`-binären direkt tillgänglig på `$PATH` men agenten försöker köra `python -m mypy` --- kan du ge textåterkoppling för att hjälpa den kurskorrigera.
 
-Coding agents support multi-turn interaction, so you can iterate on work over a back-and-forth conversation with the agent. You can even interrupt the agent if it's going down the wrong track. One helpful mental model might be that of a manager of an intern: the intern will do the nitty gritty work, but will require guidance, and will occasionally do the wrong thing and need to be corrected.
+Kodagenter stöder interaktion i flera turer, så du kan iterera över arbetet i en fram-och-tillbaka-konversation med agenten.
+Du kan till och med avbryta agenten om den är på väg åt fel håll.
+En hjälpsam mental modell är att tänka på dig själv som chef för en praktikant: praktikanten gör grovjobbet men behöver vägledning och gör ibland fel som måste rättas.
 
-> For a more illustrative demo, try asking the agent as a follow-up to run the resulting script. Observe the outputs, and try asking it to make a change (e.g., ask it to include only absolute URLs).
+> För en tydligare demonstration kan du som uppföljning be agenten köra det resulterande skriptet.
+> Observera utdata och be den göra en ändring (t.ex. att endast inkludera absoluta URL:er).
 
-# How AI models and agents work
+# Hur AI-modeller och agenter fungerar
 
-Fully explaining the inner workings of modern [large language models (LLMs)](https://en.wikipedia.org/wiki/Large_language_model) and infrastructure such as agent harnesses is beyond the scope of this course. However, having a high-level understanding of some of the key ideas is helpful for effectively _using_ this bleeding edge technology and understanding its limitations.
+Att fullständigt förklara det inre arbetssättet i moderna [stora språkmodeller (LLM:er)](https://en.wikipedia.org/wiki/Large_language_model) och infrastruktur som agentramverk ligger utanför den här kursens omfång.
+Det är dock hjälpsamt att ha en övergripande förståelse för några nyckelidéer för att effektivt _använda_ den här tekniken i framkant och förstå dess begränsningar.
 
-LLMs can be viewed as modeling the probability distribution of completion strings (outputs) given prompt strings (inputs). LLM inference (what happens when you, e.g., supply a query to a conversational chat app) _samples_ from this probability distribution. LLMs have a fixed _context window_, the maximum length of the input and output strings.
+LLM:er kan ses som modeller av sannolikhetsfördelningen för fullföljande strängar (utdata) givet promptsträngar (indata).
+LLM-inferens (det som händer när du t.ex. skickar en fråga till en konversationsapp) _drar stickprov_ från denna sannolikhetsfördelning.
+LLM:er har ett fast _kontextfönster_, den maximala längden på in- och utsträngarna.
 
 {% comment %}
-> In mathematical notation, the LLM models the probability distribution $\pi_\theta$ of completions $y$ conditioned on prompts $x$, and we sample from this distribution: $\hat{y} \sim \pi_\theta(\cdot \mid x)$.
+> I matematisk notation modellerar LLM:en sannolikhetsfördelningen $\pi_\theta$ för fullföljanden $y$ givet prompts $x$, och vi samplar från denna fördelning: $\hat{y} \sim \pi_\theta(\cdot \mid x)$.
 {% endcomment %}
 
-AI tools such as conversational chat and coding agents build on top of this primitive. For multi-turn interactions, chat apps and agents use turn markers and supply the entire conversation history as the prompt string every time there is a new user prompt, invoking LLM inference once per user prompt. For tool-calling agents, the harness interprets certain LLM outputs as requests to invoke a tool, and the harness supplies the results of the tool call back to the model as part of the prompt string (so LLM inference runs again every time there is a tool call/response). The core concepts in tool-calling agents can be [implemented in 200 lines of code](https://www.mihaileric.com/The-Emperor-Has-No-Clothes/).
+AI-verktyg som konversationschatt och kodagenter bygger ovanpå denna grundmekanism.
+För interaktioner i flera turer använder chattappar och agenter turmarkörer och skickar hela konversationshistoriken som promptsträng varje gång det kommer en ny användarfråga, vilket kör LLM-inferens en gång per användarfråga.
+För verktygsanropande agenter tolkar ramverket vissa LLM-utdata som förfrågningar om att anropa ett verktyg, och ramverket skickar tillbaka resultatet av verktygsanropet till modellen som en del av promptsträngen (så LLM-inferens körs igen vid varje verktygsanrop och svar).
+Kärnkoncepten i verktygsanropande agenter kan [implementeras på 200 rader kod](https://www.mihaileric.com/The-Emperor-Has-No-Clothes/).
 
-## Privacy
+## Integritet
 
-Most AI coding tools in their standard configurations send a lot of your data to the cloud. Sometimes the harness runs locally while LLM inference runs in the cloud, other times even more of the software is running in the cloud (and, e.g., the service provider might effectively get a copy of your entire repository as well as all interactions you have with the AI tool).
+De flesta AI-kodverktyg i standardkonfiguration skickar mycket av din data till molnet.
+Ibland kör ramverket lokalt medan LLM-inferensen kör i molnet.
+Andra gånger körs ännu mer av programvaran i molnet (och t.ex. kan tjänsteleverantören i praktiken få en kopia av hela ditt kodförråd och alla interaktioner du har med AI-verktyget).
 
-There are open-source AI coding tools and open-source LLMs that are pretty good (though not quite as good as the proprietary models), but at the present, for most users, running bleeding-edge open LLMs locally will be infeasible due to hardware limitations.
+Det finns AI-kodverktyg med öppen källkod och öppna LLM:er som är ganska bra (även om de inte är fullt lika bra som de proprietära modellerna), men i dagsläget är det för de flesta användare inte praktiskt möjligt att köra de mest avancerade öppna LLM:erna lokalt på grund av hårdvarubegränsningar.
 
-# Use cases
+# Användningsfall
 
-Coding agents can be helpful for a wide variety of tasks. Some examples:
+Kodagenter kan vara hjälpsamma för en stor variation av uppgifter.
+Några exempel:
 
-- **Implementing new features.** As in the example above, you can ask a coding agent to implement a feature. Giving a good specification is more of an art than a science at this point; you want the input to the agent to be descriptive enough so that the agent does what you want it to do (at least heading in the right direction so you can iterate), but not overly descriptive to the point where you're doing too much work yourself. Test-driven development can be particularly effective: write tests (or use the coding agent to help you write tests), audit them to ensure they capture what you want, and then ask the coding agent to implement the feature. Models are continually improving, so you'll have to keep your intuition up-to-date on what the models are capable of.
-    > We used Claude Code to [implement](https://github.com/missing-semester/missing-semester/pull/345) these Tufte-style sidenotes.
+- **Implementera nya funktioner.** Som i exemplet ovan kan du be en kodagent att implementera en funktion.
+  Att ge en bra specifikation är just nu mer konst än vetenskap.
+  Du vill att indata till agenten ska vara tillräckligt beskrivande för att den ska göra det du vill (åtminstone vara på rätt spår så att du kan iterera), men inte så överdetaljerad att du gör för mycket av arbetet själv.
+  Testdriven utveckling kan vara särskilt effektivt: skriv tester (eller använd kodagenten för att hjälpa dig skriva tester), granska dem så att de verkligen fångar det du vill och be sedan kodagenten implementera funktionen.
+  Modeller förbättras kontinuerligt, så du behöver hålla din intuition uppdaterad om vad modellerna klarar.
+    > Vi använde Claude Code för att [implementera](https://github.com/missing-semester/missing-semester/pull/345) dessa Tufte-liknande marginalnoter.
 {%- comment %}
-No need to demo this, since the intro of a lecture was a small demo of adding a new feature.
+Ingen demo behövs här, eftersom introduktionen av en föreläsning redan var en liten demo av att lägga till en ny funktion.
 {% endcomment %}
-- **Fixing errors.** If you have errors from your compiler, linter, type checker, or tests, you can ask your agent to correct them, for example with a prompt like "fix the issues with mypy". Coding models are particularly effective when you can get them in a feedback loop, so try to set things up so that the model can run the failing check directly, which will let it iterate autonomously. If this is impractical, you can give the model feedback manually.
-    > On commit [f552b55](https://github.com/missing-semester/missing-semester/commit/f552b5523462b22b8893a8404d2110c4e59613dd) of the missing-semester repo, we prompted Claude Code with "Review the agentic coding lecture for typos and grammatical issues" and subsequently asked it to fix the issues it found, which were committed in [f1e1c41](https://github.com/missing-semester/missing-semester/commit/f1e1c417adba6b4149f7eef91ff5624de40dc637).
+- **Fixa fel.** Om du har fel från kompilator, linter, typkontroll eller tester kan du be agenten rätta dem, till exempel med en uppmaning som "fixa problemen med mypy".
+  Kodmodeller är särskilt effektiva när du kan få in dem i en återkopplingsslinga, så försök att sätta upp det så att modellen kan köra den felande kontrollen direkt, vilket låter den iterera autonomt.
+  Om det är opraktiskt kan du ge modellen återkoppling manuellt.
+    > I incheckningen [f552b55](https://github.com/missing-semester/missing-semester/commit/f552b5523462b22b8893a8404d2110c4e59613dd) i Missing Semesters kodförråd bad vi Claude Code "Granska föreläsningen om agentdriven kodning för stavfel och grammatiska problem" och bad den därefter att åtgärda problemen den hittade, vilket lades in i [f1e1c41](https://github.com/missing-semester/missing-semester/commit/f1e1c417adba6b4149f7eef91ff5624de40dc637).
 {%- comment %}
-Demo a coding agent fixing the bug in https://github.com/anishathalye/dotbot/commit/cef40c902ef0f52f484153413142b5154bbc5e99.
+Demo av en kodagent som åtgärdar programfelet i https://github.com/anishathalye/dotbot/commit/cef40c902ef0f52f484153413142b5154bbc5e99.
 
-Write the failing tests to demo the bug, and then ask the agent to fix. Prepped in branch demo-bugfix.
+Skriv de fallerande testerna för att demonstrera programfelet, och be sedan agenten fixa det.
+Förberett i grenen demo-bugfix.
 
-Can run the failing test with:
+Det fallerande testet kan köras med:
 
     hatch test tests/test_cli.py::test_issue_357
 
-Can prompt coding agent with:
+Du kan ge kodagenten den här uppmaningen:
 
-    There is a bug I wrote a failing test for, you can repro it with `hatch test tests/test_cli.py::test_issue_357`. Fix the bug.
+    Det finns ett programfel som jag har skrivit ett fallerande test för, och du kan reproducera det med `hatch test tests/test_cli.py::test_issue_357`.
+    Åtgärda programfelet.
 
-Get it to commit the changes.
+Få den att skapa en incheckning med ändringarna.
 {% endcomment %}
-- **Refactoring.** You can use coding agents to refactor code in various ways, from simple tasks like renaming a method (this kind of refactoring is also supported by [code intelligence](/2026/development-environment/#code-intelligence-and-language-servers)) to more complex tasks like breaking out functionality into a separate module.
-    > We used Claude Code to [split](https://github.com/missing-semester/missing-semester/pull/344) agentic coding into its own lecture.
+- **Refaktorering.** Du kan använda kodagenter för att refaktorera kod på olika sätt, från enkla uppgifter som att byta namn på en metod (den här typen av refaktorering stöds också av [kodintelligens]({{ '/2026/development-environment/#code-intelligence-and-language-servers' | relative_url }})) till mer komplexa uppgifter som att bryta ut funktionalitet till en separat modul.
+    > Vi använde Claude Code för att [dela upp](https://github.com/missing-semester/missing-semester/pull/344) agentdriven kodning till en egen föreläsning.
 {%- comment %}
-Show usage in Missing Semester, point out that the agent did make some mistakes.
+Visa användning i Missing Semester, och påpeka att agenten gjorde några misstag.
 {% endcomment %}
-- **Code review.** You can ask coding agents to review code. You can give them basic guidance, like "review my latest changes that are not yet committed". If you want to review a pull request and your coding agent supports web fetch, or you have command-line tools like the [GitHub CLI](https://cli.github.com/) installed, you might even be able to ask the coding agent "Review the pull request {link}" and it'll handle it from there.
+- **Kodgranskning.** Du kan be kodagenter granska kod.
+  Du kan ge enkel vägledning, som "granska mina senaste ändringar som ännu inte ligger i en incheckning".
+  Om du vill granska en ändringsförfrågan (PR) och din kodagent kan hämta webbsidor, eller om du har kommandoradsverktyg som [GitHub CLI](https://cli.github.com/) installerade, kan du kanske till och med be kodagenten "granska ändringsförfrågan {länk}" och låta den hantera resten.
 {%- comment %}
-In Porcupine repo, prompt agent with:
+I Porcupines kodförråd, ge agenten följande uppmaning:
 
-    Review this PR: https://github.com/anishathalye/porcupine/pull/39
+    Granska denna PR: https://github.com/anishathalye/porcupine/pull/39
 {% endcomment %}
-- **Code understanding.** You can ask a coding agent questions about a codebase, which can be particularly helpful for onboarding.
+- **Kodförståelse.** Du kan ställa frågor till en kodagent om en kodbas, vilket kan vara särskilt hjälpsamt när du är ny i ett projekt.
 {%- comment %}
-Some prompts to try in the missing-semester repo:
+Några uppmaningar att prova i Missing Semesters kodförråd:
 
-    How do I run this site locally?
+    Hur kör jag den här sajten lokalt?
 
-    How are the social preview cards implemented?
+    Hur är de sociala förhandsvisningskorten implementerade?
 {% endcomment %}
-- **As a shell.** You can ask the coding agent to use a particular tool to solve a task, so you can invoke a shell command using natural language, such as "use the find command to find all files older than 30 days" or "use mogrify to resize all the jpgs to 50% of their original size".
+- **Som ett skal.** Du kan be kodagenten använda ett visst verktyg för att lösa en uppgift, så att du kan köra skalkommandon med naturligt språk, till exempel "använd find-kommandot för att hitta alla filer äldre än 30 dagar" eller "använd mogrify för att ändra storlek på alla jpg-filer till 50 % av originalstorleken".
 {%- comment %}
-In Dotbot repo, prompt agent with:
+I Dotbots kodförråd, ge agenten följande uppmaning:
 
-    Use the ag command to find all Python renaming imports
+    Använd ag-kommandot för att hitta alla omdöpta importer i Python
 {% endcomment %}
-- **Vibe coding.** Agents are powerful enough that you can implement some applications without writing a single line of code yourself.
-    > [Here is an example](https://github.com/cleanlab/office-presence-dashboard) of a real-world project that one of the instructors vibe-coded.
+- **Vibekodning.** Agenter är tillräckligt kraftfulla för att du ska kunna implementera vissa applikationer utan att själv skriva en enda rad kod.
+    > [Här är ett exempel](https://github.com/cleanlab/office-presence-dashboard) på ett verkligt projekt som en av instruktörerna vibekodade.
 {%- comment %}
-In missing-semester repo, prompt agent with:
+I Missing Semesters kodförråd, ge agenten följande uppmaning:
 
-    Make this site look retro.
+    Få den här sajten att se retro ut.
 {% endcomment %}
 
-# Advanced agents
+# Avancerade agenter
 
-Here, we give a brief overview of some more advanced usage patterns and capabilities of coding agents.
+Här ger vi en kort översikt över några mer avancerade användningsmönster och förmågor hos kodagenter.
 
-- **Reusable prompts.** Create reusable prompts or templates. For example, you can write a detailed prompt to do code review in a particular way, and save that as a reusable prompt.
-    > Agent tooling evolves quickly. In some tools, reusable prompts as a standalone feature are deprecated. For example, in Codex and Claude Code, they are [subsumed](https://developers.openai.com/codex/custom-prompts) by [skills](https://code.claude.com/docs/en/skills).
-- **Parallel agents.** Coding agents can be slow: you can prompt the agent, and it can work at a problem for tens of minutes. You can run multiple copies of agents at the same time, either working on the same task (LLMs are stochastic, so it can be helpful to run the same thing multiple times and take the best solution) or different tasks (e.g., implement two non-overlapping features at the same time). To keep the different agents' changes from interfering with each other, you can use [git worktrees](https://git-scm.com/docs/git-worktree), which we cover in the lecture on [version control](/2026/version-control/).
-- **MCPs.** MCP, which stands for _Model Context Protocol_, is an open protocol that you can use to connect your coding agents with tools. For example, this [Notion MCP server](https://github.com/makenotion/notion-mcp-server) can let your agent read/write Notion docs, enabling use cases like "read the spec linked in {Notion doc}, draft an implementation plan as a new page in Notion, and then implement a prototype". For discovering MCPs, you can use directories like [Pulse](https://www.pulsemcp.com/servers) and [Glama](https://glama.ai/mcp/servers).
-- **Context management.** As we noted [above](#how-ai-models-and-agents-work), the LLMs that underlie coding agents have a limited _context window_. Effective use of coding agents necessitates making good use of context. You want to make sure the agent has access to the information it needs, but avoid unnecessary context to avoid overflowing the context window or degrading the performance of the model (which tends to happen as context size grows, even if it doesn't overflow the context window). Agent harnesses automatically supply, and to some degree, manage context, but a lot of control is left to the user.
-    - **Clearing the context window.** The most basic control, coding agents support clearing the context window (starting a new conversation), which you should do for unrelated queries.
-    - **Rewinding the conversation.** Some coding agents support undoing steps in the conversation history. Rather than give a follow-up message steering the agent in a different direction, in situations where an "undo" makes more sense, this more effectively manages context.
+- **Återanvändbara uppmaningar.** Skapa återanvändbara uppmaningar eller mallar.
+  Du kan till exempel skriva en detaljerad uppmaning för kodgranskning på ett särskilt sätt och spara den som en återanvändbar uppmaning.
+    > Agentverktyg utvecklas snabbt.
+    > I vissa verktyg är återanvändbara uppmaningar som fristående funktion avvecklade.
+    > I till exempel Codex och Claude Code [ingår de](https://developers.openai.com/codex/custom-prompts) i [skills (färdigheter)](https://code.claude.com/docs/en/skills).
+- **Parallella agenter.** Kodagenter kan vara långsamma: du kan ge agenten en uppmaning och låta den arbeta på ett problem i tiotals minuter.
+  Du kan köra flera kopior av agenter samtidigt, antingen på samma uppgift (LLM:er är stokastiska, så det kan vara hjälpsamt att köra samma sak flera gånger och välja bästa lösningen) eller på olika uppgifter (t.ex. implementera två icke-överlappande funktioner samtidigt).
+  För att undvika att ändringar från olika agenter stör varandra kan du använda [git worktrees](https://git-scm.com/docs/git-worktree), som vi tar upp i föreläsningen om [versionshantering]({{ '/2026/version-control/' | relative_url }}).
+- **MCP:er.** MCP, som står för _Model Context Protocol_, är ett öppet protokoll som du kan använda för att koppla dina kodagenter till verktyg.
+  Till exempel kan denna [Notion MCP-server](https://github.com/makenotion/notion-mcp-server) låta agenten läsa/skriva Notion-dokument, vilket möjliggör användningsfall som "läs specifikationen länkad i {Notion-dokument}, utarbeta en implementationsplan som en ny sida i Notion och implementera sedan en prototyp".
+  För att hitta MCP:er kan du använda kataloger som [Pulse](https://www.pulsemcp.com/servers) och [Glama](https://glama.ai/mcp/servers).
+- **Kontexthantering.** Som vi noterade [ovan](#hur-ai-modeller-och-agenter-fungerar) har LLM:erna som ligger bakom kodagenter ett begränsat _kontextfönster_.
+  Effektiv användning av kodagenter kräver att du hanterar kontext väl.
+  Du vill säkerställa att agenten har tillgång till informationen den behöver men undvika onödig kontext för att inte överfylla kontextfönstret eller försämra modellens prestanda (vilket ofta händer när kontextstorleken växer, även om den inte överstiger kontextfönstret).
+  Agentramverk tillför och i viss grad hanterar kontext automatiskt, men mycket kontroll lämnas till användaren.
+    - **Rensa kontextfönstret.** Den mest grundläggande kontrollen är att kodagenter stöder att rensa kontextfönstret (starta en ny konversation), vilket du bör göra för orelaterade frågor.
+    - **Spola tillbaka konversationen.** Vissa kodagenter stöder att ångra steg i konversationshistoriken.
+      I stället för att skicka ett uppföljningsmeddelande som styr agenten åt ett annat håll kan ett "undo" i vissa lägen hantera kontext mer effektivt.
 {%- comment %}
-Make up a quick demo.
+Hitta på en snabb demo.
 {% endcomment %}
-    - **Compaction.** To enable conversations of unbounded length, coding agents support context _compaction_: if the conversation history grows too long, they will automatically call an LLM to summarize the prefix of the conversation, and replace the conversation history with the summary. Some agents give control to the user to invoke compaction when desired.
+    - **Kompaktering.** För att möjliggöra konversationer med obegränsad längd stöder kodagenter kontext-_kompaktering_: om konversationshistoriken blir för lång anropar de automatiskt en LLM för att sammanfatta början av konversationen och ersätter historiken med sammanfattningen.
+      Vissa agenter ger användaren kontroll att utlösa kompaktering när det önskas.
 {%- comment %}
-Show `/compact` in Claude Code, show full summary.
+Visa `/compact` i Claude Code, och visa hela sammanfattningen.
 {% endcomment %}
-    - **llms.txt.** The `/llms.txt` file is a proposed [standard](https://llmstxt.org/) location for a document meant for LLMs to use at inference time. Products (e.g., [cursor.com/llms.txt](https://cursor.com/llms.txt)), software libraries (e.g., [ai.pydantic.dev/llms.txt](https://ai.pydantic.dev/llms.txt)), and APIs (e.g., [apify.com/llms.txt](https://apify.com/llms.txt)) might have `llms.txt` files that are handy for development. Such documents are more information dense per token, and so they are more context-efficient than asking your coding agent to fetch and read an HTML page. External documentation is handy when a coding agent doesn't have built-in knowledge about a dependency you are trying to use (e.g., because it was published after the LLM's knowledge cutoff).
+    - **llms.txt.** Filen `/llms.txt` är en föreslagen [standardplats](https://llmstxt.org/) för ett dokument som LLM:er kan använda vid inferens.
+      Produkter (t.ex. [cursor.com/llms.txt](https://cursor.com/llms.txt)), programvarubibliotek (t.ex. [ai.pydantic.dev/llms.txt](https://ai.pydantic.dev/llms.txt)) och API:er (t.ex. [apify.com/llms.txt](https://apify.com/llms.txt)) kan ha `llms.txt`-filer som är praktiska i utveckling.
+      Sådana dokument är mer informationstäta per token och därmed mer kontexteffektiva än att be kodagenten hämta och läsa en HTML-sida.
+      Extern dokumentation är användbar när kodagenten saknar inbyggd kunskap om ett beroende du försöker använda (t.ex. för att det publicerades efter LLM:ens kunskapsgräns).
 {%- comment %}
-Side-by-side comparison in an empty repo (on Desktop or some other self-contained place, with `git init` run in it):
+Jämförelse sida vid sida i ett tomt kodförråd (på skrivbordet eller annan självbärande plats, med `git init` kört i det):
 
-    Write a single-file Python program example in demo.py using semlib to sort "Ilya Sutskever", "Soumith Chintala", and "Donald Knuth" in terms of their fame as AI researchers.
+    Skriv ett exempelprogram i Python i en enda fil, demo.py, som använder semlib för att sortera "Ilya Sutskever", "Soumith Chintala" och "Donald Knuth" utifrån deras berömmelse som AI-forskare.
 
-    Write a single-file Python program example in demo.py using semlib to sort "Ilya Sutskever", "Soumith Chintala", and "Donald Knuth" in terms of their fame as AI researchers. See https://semlib.anish.io/llms.txt. Follow links to Markdown versions of any pages linked in llms.txt files.
+    Skriv ett exempelprogram i Python i en enda fil, demo.py, som använder semlib för att sortera "Ilya Sutskever", "Soumith Chintala" och "Donald Knuth" utifrån deras berömmelse som AI-forskare. Se https://semlib.anish.io/llms.txt. Följ länkar till Markdown-versioner av alla sidor som länkas från llms.txt-filer.
 
-Not sure why the agent doesn't do this by default. You'd probably put that last sentence in a CLAUDE.md file.
+Inte säker på varför agenten inte gör detta som standard.
+Du skulle förmodligen lägga den sista meningen i en CLAUDE.md-fil.
 {% endcomment %}
-    - **AGENTS.md.** Most coding agents support [AGENTS.md](https://agents.md/) or similar (e.g., Claude Code looks for `CLAUDE.md`) as a README for coding agents. When the agent starts, it pre-fills the context with the entire contents of `AGENTS.md`. You can use this to give the agent advice that is common across sessions (e.g., instruct it to always run the type-checker after making code changes, explain how to run unit tests, or provide links to third-party docs that the agent can browse). Some coding agents can auto-generate this file (e.g., the `/init` command in Claude Code). See [here](https://github.com/pydantic/pydantic-ai/blob/main/CLAUDE.md) for a real-world example of an `AGENTS.md`.
+    - **AGENTS.md.** De flesta kodagenter stöder [AGENTS.md](https://agents.md/) eller liknande (t.ex. letar Claude Code efter `CLAUDE.md`) som en README för kodagenter.
+      När agenten startar förfyller den kontexten med hela innehållet i `AGENTS.md`.
+      Du kan använda det för att ge agenten råd som gäller över sessioner (t.ex. instruera den att alltid köra typkontroll efter kodändringar, förklara hur man kör enhetstester eller länka tredjepartsdokumentation som agenten kan läsa).
+      Vissa kodagenter kan autogenerera den här filen (t.ex. kommandot `/init` i Claude Code).
+      Se [här](https://github.com/pydantic/pydantic-ai/blob/main/CLAUDE.md) för ett verkligt exempel på en `AGENTS.md`.
 {%- comment %}
-Dotbot example, CLAUDE.md that includes @DEVELOPMENT.md and says to always run the type checker and code formatter after making any changes to Python code.
+Dotbot-exempel, CLAUDE.md som inkluderar @DEVELOPMENT.md och säger att man alltid ska köra typkontroll och kodformatterare efter ändringar i Python-kod.
 
-Example prompt, off of master:
+Exempelprompt, utifrån master:
 
-    Remove the "--version" command-line flag.
+    Ta bort command-line-flaggan "--version".
 
-This is something that'll be fast, for demonstration purposes.
+Det här går snabbt och är bra för demonstrationssyfte.
 {% endcomment %}
-    - **Skills.** Content in the `AGENTS.md` is always loaded, in its entirety, into the context window of an agent. _Skills_ add one level of indirection to avoid context bloat: you can provide the agent with a list of skills along with descriptions, and the agent can "open" the skill (load it into its context window) as desired.
-    - **Subagents.** Some coding agents let you define subagents, which are agents for task-specific workflows. The top-level coding agent can invoke a sub-agent to complete a particular task, which enables both the top-level agent and subagent to more effectively manage context. The top-level agent's context isn't bloated with everything the subagent sees, and the subagent can get just the context it needs for its task. As one example, some coding agents implement web research as a subagent: the top-level agent will pose a query to the subagent, which will run web search, retrieve individual web pages, analyze them, and provide an answer to the query to the top-level agent. This way, the top-level agent doesn't have its context bloated by the full content of all retrieved web pages, and the subagent doesn't have in its context the rest of the conversation history of the top-level agent.
+    - **Skills (färdigheter).** Innehåll i `AGENTS.md` laddas alltid, i sin helhet, in i agentens kontextfönster.
+      _Skills_ lägger till ett lager av indirektion för att undvika kontextuppblåsning: du kan ge agenten en lista med skills och beskrivningar, och agenten kan "öppna" en skill (ladda den i sitt kontextfönster) vid behov.
+    - **Subagenter.** Vissa kodagenter låter dig definiera subagenter, alltså agenter för uppgiftsspecifika arbetsflöden.
+      Toppnivåagenten kan anropa en subagent för att lösa en viss uppgift, vilket gör att både toppnivåagenten och subagenten kan hantera kontext mer effektivt.
+      Toppnivåagentens kontext sväller inte av allt subagenten ser, och subagenten kan få precis den kontext den behöver för uppgiften.
+      Som exempel implementerar vissa kodagenter webbundersökning som en subagent: toppnivåagenten ställer en fråga till subagenten, som gör webbsökning, hämtar enskilda webbsidor, analyserar dem och returnerar ett svar till toppnivåagenten.
+      På så sätt får toppnivåagenten inte sin kontext uppblåst av allt innehåll från hämtade webbsidor, och subagenten får inte resten av toppnivåagentens konversationshistorik i sin kontext.
 
-For many of the advanced features that require writing prompts (e.g., skills or subagents), you can use LLMs to get you started. Some coding agents even have built-in support for doing this. For example, Claude Code can generate a subagent from a short prompt (invoke `/agents` and create a new agent). Try creating a subagent with this prompt:
+För många av de avancerade funktioner som kräver att du skriver uppmaningar (t.ex. skills/färdigheter eller subagenter) kan du använda LLM:er för att komma igång.
+Vissa kodagenter har till och med inbyggt stöd för detta.
+Till exempel kan Claude Code generera en subagent från en kort uppmaning (anropa `/agents` och skapa en ny agent).
+Prova att skapa en subagent med följande uppmaning:
 
 ```
-A Python code checking agent that uses `mypy` and `ruff` to type-check, lint, and format *check* any files that have been modified from the last git commit.
+En Python-agent för kodkontroll som använder `mypy` och `ruff` för typkontroll, lintning och formatkontroll av alla filer som har ändrats sedan senaste git-incheckning.
 ```
 
-Then, you can use the top-level agent to explicitly invoke the subagent with a message like "use the code checker subagent". You might also be able to get the top-level agent to automatically invoke the subagent when appropriate, for example, after modifying any Python files.
+Sedan kan du använda toppnivåagenten för att uttryckligen anropa subagenten med ett meddelande som "använd subagenten för kodkontroll".
+Du kan också vid behov få toppnivåagenten att automatiskt anropa subagenten när det är lämpligt, till exempel efter att Python-filer har ändrats.
 
-# What to watch out for
+# Saker att se upp med
 
-AI tools can make mistakes. They are built on LLMs, which are just probabilistic next-token-prediction models. They are not "intelligent" in the same way as humans. Review AI output for correctness and security bugs. Sometimes verifying code can be harder than writing the code yourself; for critical code, consider writing it by hand. AI can go down rabbit holes and try to gaslight you; be aware of debugging spirals. Don't use AI as a crutch, and be wary of overreliance or having a shallow understanding. There's still a huge class of programming tasks that AI is still incapable of doing. Computational thinking is still valuable.
+AI-verktyg kan göra misstag.
+De bygger på LLM:er, som bara är probabilistiska modeller för nästa token.
+De är inte "intelligenta" på samma sätt som människor.
+Granska AI-utdata för korrekthet och säkerhetsfel.
+Ibland kan det vara svårare att verifiera kod än att skriva koden själv.
+För kritisk kod kan det vara bättre att skriva den för hand.
+AI kan fastna i kaninhål och försöka vilseleda dig, så var uppmärksam på felsökningsspiraler.
+Använd inte AI som krycka, och var vaksam på överberoende eller ytlig förståelse.
+Det finns fortfarande en stor klass av programmeringsuppgifter som AI ännu inte klarar.
+Beräkningstänkande är fortfarande värdefullt.
 
-# Recommended software
+# Rekommenderad programvara
 
-Many IDEs / AI coding extensions include coding agents (see recommendations from the [development environment lecture](/2026/development-environment/)). Other popular coding agents include Anthropic's [Claude Code](https://www.claude.com/product/claude-code), OpenAI's [Codex](https://openai.com/codex/), and open-source agents like [opencode](https://github.com/anomalyco/opencode).
+Många IDE:er och AI-kodtillägg innehåller kodagenter (se rekommendationerna från [föreläsningen om utvecklingsmiljö]({{ '/2026/development-environment/' | relative_url }})).
+Andra populära kodagenter inkluderar Anthropics [Claude Code](https://www.claude.com/product/claude-code), OpenAI:s [Codex](https://openai.com/codex/) och agenter med öppen källkod som [opencode](https://github.com/anomalyco/opencode).
 
-# Exercises
+# Övningar
 
-1. Compare the experience of coding by hand, using AI autocomplete, inline chat, and agents by doing the same programming task four times. The best candidate is a small-sized feature from a project you're already working on. If you're looking for other ideas, you could consider completing "good first issue" style tasks in open-source projects on GitHub, or [Advent of Code](https://adventofcode.com/) or [LeetCode](https://leetcode.com/) problems.
-1. Use an AI coding agent to navigate an unfamiliar codebase. This is best done in the context of wanting to debug or add a new feature to a project you actually care about. If you don't have any that come to mind, try using an AI agent to understand how security-related features work in the [opencode](https://github.com/anomalyco/opencode) agent.
-1. Vibe code a small app from scratch. Do not write a single line of code by hand.
-1. For your coding agent of choice, create and test an `AGENTS.md` (or analogous for your agent of choice, such as `CLAUDE.md`), a skill (e.g., [skill in Claude Code](https://code.claude.com/docs/en/skills) or [skill in Codex](https://developers.openai.com/codex/skills/)), and a subagent (e.g., [subagent in Claude Code](https://code.claude.com/docs/en/sub-agents)). Think about when you'd want to use one of these versus another. Note that your coding agent of choice might not support some of these functionalities; you can either skip them, or try a different coding agent that has support.
-1. Use a coding agent to accomplish the same goal as in the Markdown bullet points regex exercise from the [Code Quality lecture](/2026/code-quality/). Does it complete the tasks via direct file edits? What are the downsides and limitations of an agent editing the file directly to complete such a task? Figure out how to prompt the agent such that it doesn't complete the task via direct file edits. Hint: ask the agent to use one of the command-line tools mentioned in the [first lecture](/2026/course-shell/).
-1. Most coding agents support a form of "yolo mode" (e.g., in Claude Code, `--dangerously-skip-permissions`). It is not secure to use this mode directly, but it may be acceptable to run a coding agent in an isolated environment like a virtual machine or container and then enable autonomous operation. Get this setup running on your machine. Documentation such as [Claude Code devcontainers](https://code.claude.com/docs/en/devcontainer) or [Docker Sandboxes / Claude Code](https://docs.docker.com/ai/sandboxes/agents/claude-code/) may come in handy. There is more than one way to set this up.
+1. Jämför upplevelsen av att koda för hand, använda AI-autokomplettering, inbäddad chatt och agenter genom att göra samma programmeringsuppgift fyra gånger.
+1. Den bästa kandidaten är en liten funktion i ett projekt du redan arbetar med.
+1. Om du vill ha fler idéer kan du överväga att lösa uppgifter av typen "good first issue" i öppen källkod-projekt på GitHub, eller problem från [Advent of Code](https://adventofcode.com/) eller [LeetCode](https://leetcode.com/).
+1. Använd en AI-kodagent för att navigera i en obekant kodbas.
+1. Det fungerar bäst när du vill felsöka eller lägga till en ny funktion i ett projekt du faktiskt bryr dig om.
+1. Om du inte kommer på något kan du prova att använda en AI-agent för att förstå hur säkerhetsrelaterade funktioner fungerar i agenten [opencode](https://github.com/anomalyco/opencode).
+1. Vibekoda en liten app från grunden.
+1. Skriv inte en enda rad kod för hand.
+1. För den kodagent du föredrar, skapa och testa en `AGENTS.md` (eller motsvarande för din agent, som `CLAUDE.md`), en skill (t.ex. [skill in Claude Code](https://code.claude.com/docs/en/skills) eller [skill in Codex](https://developers.openai.com/codex/skills/)) och en subagent (t.ex. [subagent in Claude Code](https://code.claude.com/docs/en/sub-agents)).
+1. Fundera på när du vill använda den ena jämfört med den andra.
+1. Observera att din valda kodagent kanske inte stöder alla dessa funktioner.
+1. Du kan då antingen hoppa över dem eller prova en annan kodagent som har stöd.
+1. Använd en kodagent för att uppnå samma mål som i regex-övningen om Markdown-punktlistor från [föreläsningen om kodkvalitet]({{ '/2026/code-quality/' | relative_url }}).
+1. Löser den uppgifterna via direkta filändringar?
+1. Vilka nackdelar och begränsningar finns med att låta en agent redigera filen direkt för att lösa en sådan uppgift?
+1. Ta reda på hur du ska formulera uppmaningen så att agenten inte löser uppgiften via direkta filändringar.
+1. Tips: be agenten använda ett av kommandoradsverktygen som nämns i [första föreläsningen]({{ '/2026/course-shell/' | relative_url }}).
+1. De flesta kodagenter stöder någon form av "yolo mode" (t.ex. i Claude Code, `--dangerously-skip-permissions`).
+1. Det är inte säkert att använda detta läge direkt, men det kan vara acceptabelt att köra en kodagent i en isolerad miljö som en virtuell maskin eller container och sedan aktivera autonom drift.
+1. Få den här uppsättningen att fungera på din dator.
+1. Dokumentation som [Claude Code devcontainers](https://code.claude.com/docs/en/devcontainer) eller [Docker Sandboxes / Claude Code](https://docs.docker.com/ai/sandboxes/agents/claude-code/) kan vara användbar.
+1. Det finns mer än ett sätt att sätta upp detta.

@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "OS Customization"
+title: "Anpassa operativsystemet"
 presenter: Anish
 date: 2019-01-29
 order: 3
@@ -10,81 +10,77 @@ video:
 special: true
 ---
 
-There is a lot you can do to customize your operating system beyond what is
-available in the settings menus.
+Det finns mycket du kan göra för att anpassa operativsystemet utöver det
+som finns i inställningsmenyerna.
 
-# Keyboard remapping
+# Tangentomappning
 
-Your keyboard probably has keys that you aren't using very much. Instead of
-having useless keys, you can remap them to do useful things.
+Ditt tangentbord har troligen tangenter du nästan aldrig använder.
+I stället för onödiga tangenter kan du mappa om dem till något användbart.
 
-## Remapping to other keys
+## Mappa om till andra tangenter
 
-The simplest thing is to remap keys to other keys. For example, if you don't
-use the caps lock key very much, then you can remap it to something more
-useful. If you are a Vim user, for example, you might want to remap caps lock
-to escape.
+Det enklaste är att mappa tangenter till andra tangenter.
+Om du till exempel inte använder Caps Lock särskilt mycket kan du mappa om den till något nyttigare.
+Om du använder Vim kan du till exempel vilja mappa Caps Lock till Escape.
 
-On macOS, you can do some remappings through Keyboard settings in System
-Preferences; for more complicated mappings, you need special software.
+I macOS kan du göra vissa ommappningar via tangentbordsinställningarna i Systeminställningar.
+För mer avancerade mappningar behöver du särskild programvara.
 
-## Remapping to arbitrary commands
+## Mappa om till valfria kommandon
 
-You don't just have to remap keys to other keys: there are tools that will let
-you remap keys (or combinations of keys) to arbitrary commands. For example,
-you could make command-shift-t open a new terminal window.
+Du behöver inte begränsa dig till att mappa tangenter till andra tangenter.
+Det finns verktyg som låter dig mappa tangenter (eller tangentkombinationer) till valfria kommandon.
+Du kan till exempel låta command-shift-t öppna ett nytt terminalfönster.
 
-# Customizing hidden OS settings
+# Anpassa dolda OS-inställningar
 
 ## macOS
 
-macOS exposes a lot of useful settings through the `defaults` command. For
-example, you can make Dock icons of hidden applications translucent:
+macOS exponerar många användbara inställningar via kommandot `defaults`.
+Till exempel kan du göra Dock-ikoner för dolda program genomskinliga:
 
 ```shell
 defaults write com.apple.dock showhidden -bool true
 ```
 
-There is no single list of all possible settings, but you can find lists of
-specific customizations online, such as Mathias Bynens'
+Det finns ingen enda komplett lista över alla möjliga inställningar,
+men du hittar listor med specifika anpassningar på nätet, till exempel Mathias Bynens
 [.macos](https://github.com/mathiasbynens/dotfiles/blob/master/.macos).
 
-# Window management
+# Fönsterhantering
 
-## Tiling window management
+## Tiling-baserad fönsterhantering
 
 [Tiling window management](https://en.wikipedia.org/wiki/Tiling_window_manager)
-is one approach to window management, where you organize windows into
-non-overlapping frames. If you're using a Unix-based operating system, you can
-install a tiling window manager; if you're using something like Windows or
-macOS, you can install applications that let you approximate this behavior.
+är ett sätt att hantera fönster där du organiserar fönster i ramar som inte överlappar.
+Om du använder ett Unix-baserat operativsystem kan du installera en tiling-fönsterhanterare.
+Om du använder något som Windows eller macOS kan du installera program som efterliknar beteendet.
 
-## Screen management
+## Skärmhantering
 
-You can set up keyboard shortcuts to help you manipulate windows across
-screens.
+Du kan sätta upp tangentbordsgenvägar som hjälper dig att hantera fönster över flera skärmar.
 
-## Layouts
+## Layouter
 
-If there are specific ways you lay out windows on a screen, rather than
-"executing" that layout manually, you can script it, making instantiating a
-layout trivial.
+Om du ofta placerar fönster på ett visst sätt på skärmen,
+kan du skripta layouten i stället för att "utföra" den manuellt varje gång.
+Då blir det enkelt att återskapa layouten.
 
-# Resources
+# Resurser
 
-- [Hammerspoon](https://www.hammerspoon.org/) - macOS desktop automation
-- [Rectangle](https://rectangleapp.com/) - macOS window manager
-- [Karabiner](https://karabiner-elements.pqrs.org/) - sophisticated macOS keyboard remapping
-- [r/unixporn](https://www.reddit.com/r/unixporn/) - screenshots and
-documentation of people's fancy configurations
+- [Hammerspoon](https://www.hammerspoon.org/) - skrivbordsautomation för macOS
+- [Rectangle](https://rectangleapp.com/) - fönsterhanterare för macOS
+- [Karabiner](https://karabiner-elements.pqrs.org/) - avancerad tangentomappning för macOS
+- [r/unixporn](https://www.reddit.com/r/unixporn/) - skärmbilder och
+dokumentation av andras snygga konfigurationer
 
-# Exercises
+# Övningar
 
-1. Figure out how to remap your Caps Lock key to something you use more often
-   (such as Escape or Ctrl or Backspace).
+1. Ta reda på hur du mappar om Caps Lock till något du använder oftare
+   (som Escape, Ctrl eller Backspace).
 
-1. Make a custom global keyboard shortcut to open a new terminal window or a
-   new browser window.
+1. Skapa en global anpassad tangentbordsgenväg för att öppna ett nytt terminalfönster eller ett nytt webbläsarfönster.
 
 {% comment %}
 

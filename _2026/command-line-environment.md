@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Command-line Environment"
+title: "Kommandoradsmiljön"
 description: >
-  Learn how command-line programs work, including input/output streams, environment variables, and remote machines with SSH.
+  Lär dig hur kommandoradsprogram fungerar, inklusive in-/utdataströmmar, miljövariabler och fjärrmaskiner med SSH.
 thumbnail: /static/assets/thumbnails/2026/lec2.png
 date: 2026-01-13
 ready: true
@@ -11,24 +11,25 @@ video:
   id: ccBGsPedE9Q
 ---
 
-As we covered in the previous lecture, most shells are not a mere launcher to start up other programs,
-but in practice they provide an entire programming language full of common patterns and abstractions.
-However, unlike the majority of programming languages, in shell scripting everything is designed around running programs and getting them to communicate with each other simply and efficiently.
+Som vi tog upp i förra föreläsningen är de flesta skal inte bara en startare för andra program.
+I praktiken erbjuder de ett helt programmeringsspråk med vanliga mönster och abstraktioner.
+Till skillnad från de flesta andra programmeringsspråk är allt i skalskriptning designat kring att köra program och låta dem kommunicera enkelt och effektivt.
 
-In particular, shell scripting is tightly bound by _conventions_. For a command line interface (CLI) program to play nicely within the broader shell environment there are some common patterns that it needs to follow.
-We will now cover many of the concepts required to understand how command line programs work as well as ubiquitous conventions on how to use and configure them.
+Skalskriptning är dessutom starkt bunden till _konventioner_.
+För att ett kommandoradsprogram (CLI) ska fungera väl i den större skalmiljön finns några mönster det bör följa.
+Nu går vi igenom centrala begrepp för hur kommandoradsprogram fungerar och vanliga konventioner för hur de används och konfigureras.
 
-# The Command Line Interface
+# Kommandoradsgränssnittet
 
-Writing a function in most programming languages looks something like:
+Att skriva en funktion i de flesta programmeringsspråk ser ut ungefär så här:
 
 ```
 def add(x: int, y: int) -> int:
     return x + y
 ```
 
-Here we can explicitly see the inputs and the outputs of the program.
-In contrast, shell scripts can look quite different at first glance.
+Här ser vi tydligt programmets indata och utdata.
+Skalskript kan däremot se ganska annorlunda ut vid första anblick.
 
 ```shell
 #!/usr/bin/env bash
@@ -46,51 +47,63 @@ else
 fi
 ```
 
-To properly understand what is going in scripts like this one we first need to introduce a few concepts that appear often when shell programs communicate with each other or with the shell environment:
+För att förstå vad som händer i sådana skript behöver vi några begrepp som ofta dyker upp när skalprogram kommunicerar med varandra eller med skalmiljön:
 
-- Arguments
-- Streams
-- Environment variables
-- Return codes
-- Signals
+- Argument
+- Strömmar
+- Miljövariabler
+- Returkoder
+- Signaler
 
-## Arguments
+## Argument
 
-Shell programs receive a list of arguments when they are executed.
-Arguments are plain strings in shell, and it is up to the program how to interpret them.
-For instance when we do `ls -l folder/`, we are executing the program `/bin/ls` with arguments `['-l', 'folder/']`.
+Skalprogram får en lista med argument när de körs.
+Argument är vanliga strängar i skalet,
+och det är upp till programmet hur de tolkas.
+När vi kör `ls -l folder/` kör vi till exempel programmet `/bin/ls` med argumenten `['-l', 'folder/']`.
 
-From within a shell script we access these via special shell syntax.
-To access the first argument we access the variable `$1`, second argument `$2` and so on and so forth until `$9`. To access all arguments as a list we use `$@` and to retrieve the number of arguments `$#`. Additionally we can also access the name of the program with `$0`.
+Inifrån ett skalskript når vi dessa via särskild skalsyntax.
+Första argumentet är `$1`, andra `$2` och så vidare till `$9`.
+Alla argument som lista fås med `$@` och antal argument med `$#`.
+Vi kan också läsa programmets namn via `$0`.
 
-For most programs the arguments will consist of a mixture of _flags_ and regular strings.
-Flags can be identified because they are preceded by a dash (`-`) or double-dash (`--`).
-Flags are usually optional and their role is to modify the behavior of the program.
-For example `ls -l` changes how `ls` formats its output.
+För de flesta program består argumenten av en blandning av _flaggor_ och vanliga strängar.
+Flaggor känns igen på inledande bindestreck (`-`) eller dubbelt bindestreck (`--`).
+Flaggor är oftast valfria och ändrar programmets beteende.
+Till exempel ändrar `ls -l` hur `ls` formaterar utdata.
 
-You will see double dash flags with long names like `--all`, and single dash flags like `-a`, which are most often followed by a single letter.
-The same option might be specified in both formats, `ls -a` and `ls --all` are equivalent.
-Single dash flags are often grouped, so `ls -l -a` and `ls -la` are also equivalent.
-The order of flags usually doesn't matter either, `ls -la` and `ls -al` produce the same result.
-Some flags are quite prevalent and as you get more familiar with the shell environment you'll intuitively reach for them, for example (`--help`, `--verbose`, `--version`).
+Du ser långa flaggor som `--all` och korta som `-a`, oftast med en bokstav.
+Samma val kan ofta anges i båda formerna,
+`ls -a` och `ls --all` är ekvivalenta.
+Korta flaggor kan ofta grupperas,
+så `ls -l -a` och `ls -la` är också ekvivalenta.
+Ordningen på flaggor spelar vanligtvis ingen roll,
+`ls -la` och `ls -al` ger samma resultat.
+Vissa flaggor återkommer ofta,
+till exempel `--help`, `--verbose` och `--version`.
 
-> Flags are a first good example of shell conventions. The shell language does not require that our program uses `-` or `--` in this particular way.
-Nothing prevents us from writing a program with syntax `myprogram +myoption myfile`, but it would lead to confusion since the expectation is that we use dashes.
-> In practice, most programming languages provide CLI flag parsing libraries (e.g. `argparse` in python to parse arguments with the dash syntax).
+> Flaggor är ett bra första exempel på skalets konventioner.
+> Skalspråket kräver inte att program använder `-` eller `--` på det här sättet.
+> Inget hindrar syntax som `myprogram +myoption myfile`,
+> men det skapar förvirring eftersom förväntningen är bindestreck.
+> I praktiken erbjuder de flesta språk bibliotek för CLI-flaggparsning (t.ex. `argparse` i Python).
 
-Another common convention in CLI programs is for programs to accept a variable number of arguments of the same type. When given arguments in this way the command performs the same operation on each one of them.
+En annan vanlig CLI-konvention är att ta ett variabelt antal argument av samma typ.
+När argument ges så utför kommandot samma operation för varje argument.
 
 ```shell
 mkdir src
 mkdir docs
-# is equivalent to
+# motsvarar
 mkdir src docs
 ```
 
-This syntax sugar might seem unnecessary at first, but it becomes really powerful when combined with _globbing_.
-Globbing or globs are special patterns that the shell will expand before calling the program.
+Detta kan först se ut som onödigt syntaktiskt socker,
+men blir väldigt kraftfullt i kombination med _globbing_.
+Globbar är speciella mönster som skalet expanderar innan programmet körs.
 
-Say we wanted to delete all .py files in the current folder nonrecursively. From what we learned in the previous lecture we could achieve this by running
+Säg att vi vill ta bort alla `.py`-filer i aktuell katalog utan rekursion.
+Utifrån förra föreläsningen kan vi göra:
 
 ```shell
 for file in $(ls | grep -P '\.py$'); do
@@ -98,54 +111,54 @@ for file in $(ls | grep -P '\.py$'); do
 done
 ```
 
-But we can replace that with just `rm *.py`!
+Men vi kan ersätta det med bara `rm *.py`.
 
-When we type `rm *.py` into the terminal, the shell will not call the `/bin/rm` program with arguments `['*.py']`.
-Instead, the shell will search for files in the current folder matching the pattern `*.py` where `*` can match any string of zero or more characters of any type.
-So if our folder has `main.py` and `utils.py` then the `rm` program will receive arguments `['main.py', 'utils.py']`.
+När vi skriver `rm *.py` i terminalen kommer skalet inte anropa `/bin/rm` med argument `['*.py']`.
+I stället letar skalet efter filer i aktuell katalog som matchar mönstret `*.py`, där `*` kan matcha vilken sträng som helst av noll eller fler tecken.
+Om katalogen innehåller `main.py` och `utils.py` får `rm` alltså argumenten `['main.py', 'utils.py']`.
 
-The most common globs you will find are wildcards `*` (zero or more of anything), `?` (exactly one of anything) and curly braces.
-Curly braces `{}` expand a comma-separated list of patterns into multiple arguments.
+De vanligaste globbarna är jokertecken `*` (noll eller fler av vad som helst), `?` (exakt ett av vad som helst) och klamrar.
+Klamrar `{}` expanderar en kommaseparerad lista av mönster till flera argument.
 
-In practice, globs are best understood with motivating examples.
+I praktiken förstås globbar bäst med exempel:
 
 ```shell
 touch folder/{a,b,c}.py
-# Will expand to
+# Expanderar till
 touch folder/a.py folder/b.py folder/c.py
 
 convert image.{png,jpg}
-# Will expand to
+# Expanderar till
 convert image.png image.jpg
 
 cp /path/to/project/{setup,build,deploy}.sh /newpath
-# Will expand to
+# Expanderar till
 cp /path/to/project/setup.sh /path/to/project/build.sh /path/to/project/deploy.sh /newpath
 
-# Globbing techniques can also be combined
+# Globbingtekniker kan kombineras
 mv *{.py,.sh} folder
-# Will move all *.py and *.sh files
+# Flyttar alla *.py- och *.sh-filer
 ```
 
-> Some shells (e.g. zsh) support even more advanced forms of globbing such as `**` that will expand to include recursive paths. So `rm **/*.py` will delete all .py files recursively.
+> Vissa skal (t.ex. zsh) har ännu mer avancerad globbing som `**` för rekursiva sökvägar.
+> `rm **/*.py` tar då bort alla `.py`-filer rekursivt.
 
+## Strömmar
 
-## Streams
-
-Whenever we execute a program pipeline like
+När vi kör en rörkedja som
 
 ```shell
 cat myfile | grep -P '\d+' | uniq -c
 ```
 
-we see that the `grep` program is communicating with both the `cat` and `uniq` programs.
+ser vi att `grep` kommunicerar både med `cat` och `uniq`.
 
-An important observation here is that all three programs are executing at once.
-Namely, the shell is not first calling cat, then grep, and then uniq.
-Instead, all three programs are being spawned and the shell is connecting the output of cat to the input of grep and the output of grep to the input of uniq.
-When using the pipe operator `|`, the shell operates on streams of data that flow from one program to the next in the chain.
+En viktig observation är att alla tre program kör samtidigt.
+Skalet kör alltså inte först `cat`, sedan `grep`, sedan `uniq` i sekvens.
+I stället startas alla tre processer och skalet kopplar utdata från `cat` till indata för `grep`, och utdata från `grep` till indata för `uniq`.
+Med operatorn `|` arbetar skalet med dataströmmar som flyter från ett program till nästa i kedjan.
 
-We can demonstrate this concurrency, all commands in a pipeline start immediately:
+Vi kan demonstrera samtidigheten:
 
 ```console
 $ (sleep 15 && cat numbers.txt) | grep -P '^\d$' | sort | uniq  &
@@ -158,166 +171,198 @@ $ ps | grep -P '(sleep|cat|grep|sort|uniq)'
   32948 pts/1    00:00:00 grep
 ```
 
-We can see that all processes but `cat` are running right away. The shell spawns all processes and connects their streams before any of them finish. `cat` will only get started once sleep finishes, and the output of `cat` will be sent to grep and so on and so forth.
+Vi ser att alla processer utom `cat` kör direkt.
+Skalet startar processerna och kopplar deras strömmar innan någon av dem är klar.
+`cat` börjar först när `sleep` är klar,
+och dess utdata skickas vidare till `grep` och så vidare.
 
-Every program has an input stream, labeled stdin (for standard input). When piping, stdin is connected automatically. Within a script, many programs accept `-` as a filename to mean "read from stdin":
+Varje program har en inström, stdin (standard input).
+När du använder rör kopplas stdin automatiskt.
+I skript accepterar många program `-` som filnamn för "läs från stdin":
 
 ```shell
-# These are equivalent when data comes from a pipe
+# Dessa är likvärdiga när data kommer från ett rör
 echo "hello" | grep "hello"
 echo "hello" | grep "hello" -
 ```
 
-Similarly, every program has two output streams: stdout and stderr.
-The standard output is the one most commonly encountered and it is the one that is used for piping the output of the program to the next command in the pipeline.
-The standard error is an alternative stream that is intended for programs to report warnings and other types of issues, without that output getting parsed by the next command in the chain.
+På motsvarande sätt har varje program två utströmmar: stdout och stderr.
+Standard output är den vanligaste och används för att skicka vidare genom ett rör till nästa kommando.
+Standard error är en separat ström för varningar och fel,
+så att den utdata inte tolkas av nästa kommando i kedjan.
 
 ```console
 $ ls /nonexistent
 ls: cannot access '/nonexistent': No such file or directory
 $ ls /nonexistent | grep "pattern"
 ls: cannot access '/nonexistent': No such file or directory
-# The error message still appears because stderr is not piped
+# Felmeddelandet syns fortfarande eftersom stderr inte går genom röret
 $ ls /nonexistent 2>/dev/null
-# No output - stderr was redirected to /dev/null
+# Ingen utdata - stderr omdirigerades till /dev/null
 ```
 
-The shell provides syntax for redirecting these streams. Here are some illustrative examples.
+Skalet har syntax för att omdirigera strömmar.
+Här är några exempel:
 
 ```shell
-# Redirect stdout to a file (overwrite)
+# Omdirigera stdout till en fil (skriv över)
 echo "hello" > output.txt
 
-# Redirect stdout to a file (append)
+# Omdirigera stdout till en fil (lägg till)
 echo "world" >> output.txt
 
-# Redirect stderr to a file
+# Omdirigera stderr till en fil
 ls foobar 2> errors.txt
 
-# Redirect both stdout and stderr to the same file
+# Omdirigera både stdout och stderr till samma fil
 ls foobar &> all_output.txt
 
-# Redirect stdin from a file
+# Omdirigera stdin från en fil
 grep "pattern" < input.txt
 
-# Discard output by redirecting to /dev/null
+# Kasta utdata genom att omdirigera till /dev/null
 cmd > /dev/null 2>&1
 ```
 
-Another powerful tool that exemplifies the Unix philosophy is [`fzf`](https://github.com/junegunn/fzf), a fuzzy finder. It reads lines from stdin and provides an interactive interface to filter and select:
+Ett annat kraftfullt verktyg i Unix-andan är [`fzf`](https://github.com/junegunn/fzf), en fuzzy finder.
+Det läser rader från stdin och ger ett interaktivt gränssnitt för filtrering och val:
 
 ```console
 $ ls | fzf
 $ cat ~/.bash_history | fzf
 ```
 
-`fzf` can be integrated with many shell operations. We'll see more uses of it when we discuss shell customization.
+`fzf` kan integreras med många skaloperationer.
+Vi ser fler användningar när vi pratar skalanpassning.
 
+## Miljövariabler
 
-## Environment variables
+För att tilldela variabler i bash använder vi `foo=bar`,
+och värdet nås med `$foo`.
+Observera att `foo = bar` är ogiltig syntax,
+eftersom skalet då tolkar det som att programmet `foo` anropas med argument `['=', 'bar']`.
+I skalskriptning används blanktecken för argumentsplittring,
+vilket kan vara förvirrande tills man vant sig.
 
-To assign variables in bash we use the syntax `foo=bar`, and then access the value of the variable with the `$foo` syntax.
-Note that `foo = bar` is invalid syntax as the shell will parse it as calling the program `foo` with arguments `['=', 'bar']`.
-In shell scripting the role of the space character is to perform argument splitting.
-This behavior can be confusing and tricky to get used to, so keep it in mind.
-
-Shell variables do not have types, they are all strings.
-Note that when writing string expressions in the shell single and double quotes are not interchangeable.
-Strings delimited with `'` are literal strings and will not expand variables, perform command substitution, or process escape sequences, whereas `"` delimited strings will.
+Skalvariabler har inga typer,
+de är alla strängar.
+Observera också att enkla och dubbla citationstecken inte är utbytbara.
+Strängar i `'` är bokstavliga och expanderar inte variabler,
+gör inte kommandosubstitution (_command substitution_) och tolkar inte escape-sekvenser.
+Strängar i `"` gör det.
 
 ```shell
 foo=bar
 echo "$foo"
-# prints bar
+# skriver ut bar
 echo '$foo'
-# prints $foo
+# skriver ut $foo
 ```
 
-To capture the output of a command into a variable we use _command substitution_.
-When we execute
+För att fånga utdata från ett kommando i en variabel använder vi _kommandosubstitution_.
+När vi kör:
+
 ```shell
 files=$(ls)
 echo "$files" | grep README
 echo "$files" | grep ".py"
 ```
-the output (concretely the stdout) of ls is placed into the variable `$files` which we can access later.
-The content of the `$files` variable does include the newlines from the ls output, which is how programs like `grep` know to operate on each item independently.
 
-A lesser known similar feature is _process substitution_, `<( CMD )` will execute `CMD` and place the output in a temporary file and substitute the `<()` with that file's name.
-This is useful when commands expect values to be passed by file instead of by STDIN.
-For example, `diff <(ls src) <(ls docs)` will show differences between files in dirs `src` and `docs`.
+placeras stdout från `ls` i variabeln `$files`.
+Innehållet i `$files` innehåller radbrytningar från `ls`,
+vilket gör att program som `grep` kan behandla varje post separat.
 
-Whenever a shell program calls another program it passes along a set of variables that are often referred to as _environment variables_.
-From within a shell we can find the current environment variables by running `printenv`.
-To pass an environment variable explicitly we can prepend a command with a variable assignment
+En mindre känd närliggande funktion är processsubstitution (_process substitution_).
+`<( CMD )` kör `CMD`, placerar utdata i en temporär fil och ersätter `<()` med filnamnet.
+Det är användbart när kommandon väntar sig filer i stället för stdin.
+Till exempel visar `diff <(ls src) <(ls docs)` skillnader mellan filerna i `src` och `docs`.
 
-> Environment variables are conventionally written in ALL_CAPS (e.g., `HOME`, `PATH`, `DEBUG`). This is a convention, not a technical requirement, but following it helps distinguish environment variables from local shell variables which are typically lowercase.
+När ett skalprogram anropar ett annat skickar det med en uppsättning variabler som ofta kallas _miljövariabler_.
+I skalet kan du se nuvarande miljövariabler med `printenv`.
+För att skicka en miljövariabel explicit kan vi prefixa ett kommando med tilldelning.
+
+> Miljövariabler skrivs normalt med VERSALER (t.ex. `HOME`, `PATH`, `DEBUG`).
+> Det är en konvention, inte ett tekniskt krav,
+> men det hjälper att skilja dem från lokala skalvariabler som oftast är gemener.
 
 ```shell
-TZ=Asia/Tokyo date  # prints the current time in Tokyo
-echo $TZ  # this will be empty, since TZ was only set for the child command
+TZ=Asia/Tokyo date  # skriver ut aktuell tid i Tokyo
+echo $TZ  # blir tomt, eftersom TZ bara sattes för barnkommandot
 ```
 
-Alternatively, we can use the `export` built-in function that will modify our current environment and thus all child processes will inherit the variable:
+Alternativt kan vi använda den inbyggda funktionen `export`,
+som ändrar nuvarande miljö så att alla barnprocesser ärver variabeln:
 
 ```shell
 export DEBUG=1
-# All programs from this point onwards will have DEBUG=1 in their environment
+# Alla program från och med nu får DEBUG=1 i sin miljö
 bash -c 'echo $DEBUG'
-# prints 1
+# skriver ut 1
 ```
 
-To delete a variable use the `unset` built-in command, e.g. `unset DEBUG`.
+För att ta bort en variabel använder du `unset`, till exempel `unset DEBUG`.
 
-> Environment variables are another shell convention. They can be used to modify the behavior of many programs implicitly rather than explicitly. For example, the shell sets the `$HOME` environment variable with the path of the home folder of the current user. Then programs can access this variable to get this information instead of requiring an explicit `--home /home/alice`. Another common example is `$TZ`, which many programs use to format dates and times according to the specified timezone.
+> Miljövariabler är ännu en skalkonvention.
+> De kan implicit ändra beteendet hos många program.
+> Skalet sätter till exempel `$HOME` till nuvarande användares hemkatalog,
+> och program kan läsa den i stället för att kräva ett explicit `--home /home/alice`.
+> Ett annat vanligt exempel är `$TZ`,
+> som många program använder för datum/tid i en viss tidszon.
 
-## Return codes
+## Returkoder
 
-As we saw earlier, the main output of a shell program is conveyed through the stdout/stderr streams and filesystem side effects.
+Som vi såg tidigare förmedlas huvudutdata från skalprogram via stdout/stderr och sidoeffekter i filsystemet.
 
-By default a shell script will return exit code zero.
-The convention is that zero means everything went well whereas nonzero means some issues were encountered.
-To return a nonzero exit code we have to use the `exit NUM` shell built-in.
-We can access the return code of the last command that was run by accessing the special variable `$?`.
+Som standard returnerar ett skalskript exit-kod noll.
+Konventionen är att noll betyder att allt gick bra,
+medan icke-noll betyder att något gick fel.
+För att returnera icke-noll använder vi den inbyggda funktionen `exit NUM`.
+Returkoden från senaste kommandot finns i specialvariabeln `$?`.
 
-The shell has boolean operators `&&` and `||` for performing AND and OR operations respectively.
-Unlike those encountered in regular programming languages, the ones in the shell operate on the return code of programs.
-Both of these are [short-circuiting](https://en.wikipedia.org/wiki/Short-circuit_evaluation) operators.
-This means that they can be used to conditionally run commands based on the success or failure of previous commands, where success is determined based on whether the return code is zero or not. Some examples:
+Skalet har booleska operatorer `&&` och `||` för AND respektive OR.
+Till skillnad från många programmeringsspråk verkar de i skalet på programmens returkoder.
+Båda är [kortslutande](https://en.wikipedia.org/wiki/Short-circuit_evaluation).
+Det betyder att de kan användas för villkorlig körning baserat på om tidigare kommandon lyckades eller misslyckades.
+Lyckat betyder här att returkoden är noll.
+Exempel:
 
 ```shell
-# echo will only run if grep succeeds (finds a match)
-grep -q "pattern" file.txt && echo "Pattern found"
+# echo körs bara om grep lyckas (hittar en träff)
+grep -q "pattern" file.txt && echo "Mönster hittat"
 
-# echo will only run if grep fails (no match)
-grep -q "pattern" file.txt || echo "Pattern not found"
+# echo körs bara om grep misslyckas (ingen träff)
+grep -q "pattern" file.txt || echo "Mönster saknas"
 
-# true is a shell program that always succeeds
-true && echo "This will always print"
+# true är ett skalprogram som alltid lyckas
+true && echo "Det här skrivs alltid ut"
 
-# and false is a shell program that always fails
-false || echo "This will always print"
+# och false är ett skalprogram som alltid misslyckas
+false || echo "Det här skrivs alltid ut"
 ```
 
-The same principle applies to `if` and `while` statements, they both use return codes to make decisions:
+Samma princip gäller för `if` och `while`,
+som båda använder returkoder för beslut:
 
 ```shell
-# if uses the return code of the condition command (0 = true, nonzero = false)
+# if använder returvärdet från villkorskommandot (0 = sant, icke-noll = falskt)
 if grep -q "pattern" file.txt; then
-    echo "Found"
+    echo "Hittat"
 fi
 
-# while loops continue as long as the command returns 0
+# while-loopar fortsätter så länge kommandot returnerar 0
 while read line; do
     echo "$line"
 done < file.txt
 ```
 
-## Signals
+## Signaler
 
-In some cases you will need to interrupt a program while it is executing, for instance if a command is taking too long to complete.
-The simplest way to interrupt a program is to press `Ctrl-C` and the command will probably stop.
-But how does this actually work and why does it sometimes fail to stop the process?
+Ibland behöver du avbryta ett program medan det kör,
+till exempel om ett kommando tar för lång tid.
+Det enklaste är att trycka `Ctrl-C`,
+och då stoppas kommandot oftast.
+Men hur fungerar det egentligen,
+och varför misslyckas det ibland?
 
 ```console
 $ sleep 100
@@ -325,21 +370,24 @@ $ sleep 100
 $
 ```
 
-> Note, here `^C` is how `Ctrl-C` is displayed when typed in the terminal.
+> Observera att `^C` är hur `Ctrl-C` visas i terminalen.
 
-Under the hood, what happened here is the following:
+Under huven händer detta:
 
-1. We pressed `Ctrl-C`
-2. The shell identified the special combination of characters
-3. The shell process sent a SIGINT signal to the `sleep` process
-4. The signal interrupted the execution of the `sleep` process
+1. Vi trycker `Ctrl-C`.
+2. Skalet känner igen den särskilda tangentkombinationen.
+3. Skalprocessen skickar signalen SIGINT till `sleep`-processen.
+4. Signalen avbryter körningen i `sleep`-processen.
 
-Signals are a special communication mechanism.
-When a process receives a signal it stops its execution, deals with the signal and potentially changes the flow of execution based on the information that the signal delivered. For this reason, signals are _software interrupts_.
+Signaler är en särskild kommunikationsmekanism.
+När en process tar emot en signal stoppar den körningen,
+hanterar signalen,
+och kan ändra kontrollflödet utifrån informationen i signalen.
+Därför är signaler _programvaruavbrott_.
 
-
-In our case, when typing `Ctrl-C` this prompts the shell to deliver a `SIGINT` signal to the process.
-Here's a minimal example of a Python program that captures `SIGINT` and ignores it, no longer stopping. To kill this program we can now use the `SIGQUIT` signal instead, by typing `Ctrl-\`.
+När du trycker `Ctrl-C` får alltså skalet anledning att leverera `SIGINT` till processen.
+Här är ett minimalt Python-program som fångar `SIGINT` och ignorerar den.
+För att döda programmet kan vi då använda `SIGQUIT` genom att trycka `Ctrl-\`.
 
 ```python
 #!/usr/bin/env python
@@ -356,7 +404,8 @@ while True:
     i += 1
 ```
 
-Here's what happens if we send `SIGINT` twice to this program, followed by `SIGQUIT`. Note that `^` is how `Ctrl` is displayed when typed in the terminal.
+Så här ser det ut om vi skickar `SIGINT` två gånger, följt av `SIGQUIT`.
+Notera att `^` är hur `Ctrl` visas i terminalen.
 
 ```console
 $ python sigint.py
@@ -367,25 +416,35 @@ I got a SIGINT, but I am not stopping
 30^\[1]    39913 quit       python sigint.py
 ```
 
-While `SIGINT` and `SIGQUIT` are both usually associated with terminal related requests, a more generic signal for asking a process to exit gracefully is the `SIGTERM` signal.
-To send this signal we can use the [`kill`](https://www.man7.org/linux/man-pages/man1/kill.1.html) command, with the syntax `kill -TERM <PID>`.
+`SIGINT` och `SIGQUIT` kopplas ofta till terminalhändelser,
+men en mer allmän signal för att be en process avsluta snyggt är `SIGTERM`.
+Den skickas med [`kill`](https://www.man7.org/linux/man-pages/man1/kill.1.html):
+`kill -TERM <PID>`.
 
-Signals can do other things beyond killing a process. For instance, `SIGSTOP` pauses a process. In the terminal, typing `Ctrl-Z` will prompt the shell to send a `SIGTSTP` signal, short for Terminal Stop (i.e. the terminal's version of `SIGSTOP`).
+Signaler kan göra mer än att avsluta processer.
+`SIGSTOP` pausar till exempel en process.
+I terminalen gör `Ctrl-Z` att skalet skickar `SIGTSTP`,
+alltså terminalvarianten av stopp.
 
-We can then continue the paused job in the foreground or in the background using [`fg`](https://www.man7.org/linux/man-pages/man1/fg.1p.html) or [`bg`](https://man7.org/linux/man-pages/man1/bg.1p.html), respectively.
+Du kan fortsätta ett pausat jobb i förgrund eller bakgrund med [`fg`](https://www.man7.org/linux/man-pages/man1/fg.1p.html) respektive [`bg`](https://man7.org/linux/man-pages/man1/bg.1p.html).
 
-The [`jobs`](https://www.man7.org/linux/man-pages/man1/jobs.1p.html) command lists the unfinished jobs associated with the current terminal session.
-You can refer to those jobs using their pid (you can use [`pgrep`](https://www.man7.org/linux/man-pages/man1/pgrep.1.html) to find that out).
-More intuitively, you can also refer to a process using the percent symbol followed by its job number (displayed by `jobs`). To refer to the last backgrounded job you can use the `$!` special parameter.
+[`jobs`](https://www.man7.org/linux/man-pages/man1/jobs.1p.html) listar ofärdiga jobb kopplade till aktuell terminalsesssion.
+Du kan referera till jobben med PID (hitta med [`pgrep`](https://www.man7.org/linux/man-pages/man1/pgrep.1.html)).
+Mer intuitivt kan du också referera med procenttecken och jobbnummer från `jobs`.
+För senast bakgrundssatta jobb kan du använda specialparametern `$!`.
 
-One more thing to know is that the `&` suffix in a command will run the command in the background, giving you the prompt back, although it will still use the shell's STDOUT which can be annoying (use shell redirections in that case). Equivalently, to background an already running program you can do `Ctrl-Z` followed by `bg`.
+Ännu en sak:
+suffixet `&` kör ett kommando i bakgrunden och ger tillbaka prompten,
+men processen kan fortfarande skriva till skalets STDOUT vilket kan vara störande.
+Använd omdirigeringar i sådana fall.
+Motsvarande kan du bakgrundssätta ett redan körande program med `Ctrl-Z` följt av `bg`.
 
+Bakgrundsprocesser är fortfarande barnprocesser till terminalen,
+och dör om du stänger terminalen (det skickar `SIGHUP`).
+För att undvika det kan du köra programmet via [`nohup`](https://www.man7.org/linux/man-pages/man1/nohup.1.html) (som ignorerar `SIGHUP`) eller använda `disown` om processen redan startat.
+Alternativt kan du använda en terminalmultiplexer, vilket vi tar i nästa avsnitt.
 
-Note that backgrounded processes are still children processes of your terminal and will die if you close the terminal (this will send yet another signal, `SIGHUP`).
-To prevent that from happening you can run the program with [`nohup`](https://www.man7.org/linux/man-pages/man1/nohup.1.html) (a wrapper to ignore `SIGHUP`), or use `disown` if the process has already been started.
-Alternatively, you can use a terminal multiplexer as we will see in the next section.
-
-Below is a sample session to showcase some of these concepts.
+Nedan är en exempelsession som visar några av dessa koncept.
 
 ```
 $ sleep 1000
@@ -403,7 +462,7 @@ $ jobs
 $ kill -SIGHUP %1
 [1]  + 18653 hangup     sleep 1000
 
-$ kill -SIGHUP %2   # nohup protects from SIGHUP
+$ kill -SIGHUP %2   # nohup skyddar mot SIGHUP
 
 $ jobs
 [2]  + running    nohup sleep 2000
@@ -412,49 +471,53 @@ $ kill %2
 [2]  + 18745 terminated  nohup sleep 2000
 ```
 
-A special signal is `SIGKILL` since it cannot be captured by the process and it will always terminate it immediately. However, it can have bad side effects such as leaving orphaned children processes.
+En särskild signal är `SIGKILL`,
+som inte kan fångas av processen och därför alltid dödar den direkt.
+Den kan dock ge oönskade bieffekter, till exempel föräldralösa barnprocesser.
 
-You can learn more about these and other signals [here](https://en.wikipedia.org/wiki/Signal_(IPC)) or typing [`man signal`](https://www.man7.org/linux/man-pages/man7/signal.7.html) or `kill -l`.
+Läs mer om signaler [här](https://en.wikipedia.org/wiki/Signal_(IPC)), eller via [`man signal`](https://www.man7.org/linux/man-pages/man7/signal.7.html) eller `kill -l`.
 
-Within shell scripts, you can use the `trap` built-in to execute commands when signals are received. This is useful for cleanup operations:
+I skalskript kan du använda inbyggda `trap` för att köra kommandon när signaler tas emot,
+vilket är användbart för städning:
 
 ```shell
 #!/usr/bin/env bash
 cleanup() {
-    echo "Cleaning up temporary files..."
+    echo "Städar tillfälliga filer..."
     rm -f /tmp/mytemp.*
 }
-trap cleanup EXIT  # Run cleanup when script exits
-trap cleanup SIGINT SIGTERM  # Also on Ctrl-C or kill
+trap cleanup EXIT  # Kör städning när skriptet avslutas
+trap cleanup SIGINT SIGTERM  # Kör också vid Ctrl-C eller kill
 ```
 {% comment %}
-### Users, Files and Permissions
+### Användare, filer och rättigheter
 
-Lastly, another way programs have to indirectly communicate with each other is using files.
-For a program to be able to correctly read/write/delete files and folders, the file permissions must allow the operation.
+Till sist finns ytterligare ett sätt för program att kommunicera indirekt med varandra: via filer.
+För att ett program ska kunna läsa/skriva/ta bort filer och kataloger korrekt måste filrättigheterna tillåta operationen.
 
-Listing a specific file will give the following output
+Att lista en specifik fil kan ge följande utdata
 
 ```console
 $ ls -l notes.txt
 -rw-r--r--  1 alice  users  12693 Jan 11 23:05 notes.txt
 ```
 
-Here `ls` is listing what is the owner of the file, user `alice`, and the group `users`. Then the `rw-r--r--` are a shorthand notation for the permissions.
-In this case, the file `notes.txt` has read/write permissions for the user alice `rw-`, and only read permissions for the group and the rest of users in the file system.
+Här visar `ls` vem som äger filen, användaren `alice`, och gruppen `users`.
+`rw-r--r--` är en kort notation för rättigheterna.
+I detta fall har filen `notes.txt` läs/skriv-rättigheter för användaren alice `rw-`, och endast läsrättigheter för gruppen och övriga användare i filsystemet.
 
 ```console
 $ ./script.sh
-# permission denied
+# behörighet saknas
 $ chmod +x script.sh
 $ ls -l script.sh
 -rwxr-xr-x  1 alice  users  3125 Jan 11 23:07 script.sh
 $ ./script.sh
 ```
 
-For a script to be executable, the executable rights must be set, hence why we had to use the `chmod` (change mode) program.
-`chmod` syntax, while intuitive, is not obvious when first encountered.
-If you, like me, prefer to learn by example, this is a good usecase of the `tldr` tool (note that you need to install it first).
+För att ett skript ska vara körbart måste kör-rättighet vara satt, därför behövde vi använda `chmod` (change mode).
+`chmod`-syntaxen är intuitiv när man väl kan den, men inte självklar första gången.
+Om du, som jag, föredrar att lära dig med exempel är detta ett bra användningsfall för verktyget `tldr` (som du först behöver installera).
 
 ```console
 ❯ tldr chmod
@@ -474,71 +537,91 @@ If you, like me, prefer to learn by example, this is a good usecase of the `tldr
       chmod a+rx path/to/file
 ```
 
-Run `tldr chmod` to see more examples, including recursive operations and group permissions.
+Kör `tldr chmod` för fler exempel, inklusive rekursiva operationer och grupprättigheter.
 
-> Your shell might show you something like `command not found: tldr`. That is because it is a more modern tool and it is not pre-installed in most systems. A good reference for how to install tools is the [https://command-not-found.com](https://command-not-found.com) website. It contains instructions for a huge collection of CLI tools for popular OS distributions.
+> Ditt skal kan visa något i stil med `command not found: tldr`.
+> Det beror på att det är ett modernare verktyg som inte är förinstallerat på de flesta system.
+> En bra referens för hur du installerar verktyg är [https://command-not-found.com](https://command-not-found.com).
+> Sidan innehåller instruktioner för en stor mängd CLI-verktyg i vanliga OS-distributioner.
 
-Each program is run as a specific user in the system. We can use the `whoami` command to find our user name and `id -u` to find our UID (user id) which is the integer value that the OS associates with the user.
+Varje program körs som en specifik användare i systemet.
+Vi kan använda kommandot `whoami` för att hitta användarnamnet och `id -u` för att hitta vårt UID (user id), alltså heltalsvärdet som operativsystemet associerar med användaren.
 
-When running `sudo command`, the `command` is run as the root user which can bypass most permissions in the system.
-Try running `sudo whoami` and `sudo id -u` to see how the output changes (you might be prompted for your password).
-To change the owner of a file or folder, we use the `chown` command.
+När du kör `sudo command` körs `command` som root-användaren, som kan kringgå de flesta rättigheter i systemet.
+Prova `sudo whoami` och `sudo id -u` för att se hur utdata ändras (du kan bli ombedd att ange lösenord).
+För att ändra ägare på en fil eller katalog använder vi kommandot `chown`.
 
-You can learn more about UNIX file permissions [here](https://en.wikipedia.org/wiki/File-system_permissions#Traditional_Unix_permissions)
+Du kan läsa mer om UNIX-filsystemrättigheter [här](https://en.wikipedia.org/wiki/File-system_permissions#Traditional_Unix_permissions)
 
-So far we've focused on your local machine, but many of these skills become even more valuable when working with remote servers.
+Hittills har vi fokuserat på din lokala maskin, men många av dessa färdigheter blir ännu mer värdefulla när du arbetar med fjärrservrar.
 
 {% endcomment %}
 
-# Remote Machines
+# Fjärrmaskiner
 
-It has become more and more common for programmers to work with remote servers in their everyday work. The most common tool for the job here is SSH (Secure Shell) which will help us connect to a remote server and provide the now familiar shell interface. We connect to a server with a command like:
+Det har blivit allt vanligare att programmerare arbetar mot fjärrservrar i vardagen.
+Det vanligaste verktyget här är SSH (Secure Shell),
+som hjälper oss att ansluta till en fjärrserver och ger samma skalgränssnitt vi redan känner till.
+Vi ansluter till en server med ett kommando som:
 
 ```bash
 ssh alice@server.mit.edu
 ```
 
-Here we are trying to ssh as user `alice` in server `server.mit.edu`.
+Här försöker vi ansluta som användaren `alice` till servern `server.mit.edu`.
 
-An often overlooked feature of `ssh` is the ability to run commands non-interactively. `ssh` correctly handles sending the stdin and receiving the stdout of the command, so we can combine it with other commands
+En ofta förbisedd funktion i `ssh` är att köra kommandon icke-interaktivt.
+`ssh` hanterar både stdin till kommandot och stdout tillbaka korrekt,
+så vi kan kombinera det med andra kommandon:
 
 ```shell
-# here ls runs in the remote, and wc runs locally
+# Här körs ls på fjärrmaskinen och wc lokalt
 ssh alice@server ls | wc -l
 
-# here both ls and wc run in the server
+# Här körs både ls och wc på servern
 ssh alice@server 'ls | wc -l'
 
 ```
 
-> Try installing [Mosh](https://mosh.org/) as a SSH replacement that can handle disconnections, entering/exiting sleep, changing networks and dealing with high latency links.
+> Testa gärna [Mosh](https://mosh.org/) som SSH-alternativ.
+> Det hanterar avbrott, sömn/vakna, nätverksbyten och hög latens bättre.
 
-For `ssh` to let us run commands in the remote server we need to prove that we are authorized to do so.
-We can do this via passwords or ssh keys.
-Key-based authentication utilizes public-key cryptography to prove to the server that the client owns the secret private key without revealing the key.
-Key based authentication is both more convenient and more secure, so you should prefer it.
-Note that the private key (often `~/.ssh/id_rsa` and more recently `~/.ssh/id_ed25519`) is effectively your password, so treat it like so and never share its contents.
+För att `ssh` ska låta oss köra kommandon på servern måste vi bevisa att vi är behöriga.
+Det kan göras med lösenord eller SSH-nycklar.
+Nyckelbaserad autentisering använder publik nyckelkryptografi för att bevisa att klienten har den privata nyckeln utan att avslöja den.
+Nyckelbaserad autentisering är både smidigare och säkrare,
+så den bör föredras.
+Observera att den privata nyckeln (ofta `~/.ssh/id_rsa` och numera oftare `~/.ssh/id_ed25519`) i praktiken är ditt lösenord.
+Behandla den därefter och dela aldrig dess innehåll.
 
-To generate a pair you can run [`ssh-keygen`](https://www.man7.org/linux/man-pages/man1/ssh-keygen.1.html).
+För att generera ett nyckelpar kan du köra [`ssh-keygen`](https://www.man7.org/linux/man-pages/man1/ssh-keygen.1.html).
+
 ```bash
 ssh-keygen -a 100 -t ed25519 -f ~/.ssh/id_ed25519
 ```
 
-If you have ever configured pushing to GitHub using SSH keys, then you have probably done the steps outlined [here](https://help.github.com/articles/connecting-to-github-with-ssh/) and have a valid key pair already. To check if you have a passphrase and validate it you can run `ssh-keygen -y -f /path/to/key`.
+Om du har konfigurerat push till GitHub via SSH har du sannolikt redan följt stegen [här](https://help.github.com/articles/connecting-to-github-with-ssh/) och har ett giltigt nyckelpar.
+För att kontrollera passphrase och verifiera nyckeln kan du köra `ssh-keygen -y -f /path/to/key`.
 
-At the server side `ssh` will look into `.ssh/authorized_keys` to determine which clients it should let in. To copy a public key over you can use:
+På serversidan tittar `ssh` i `.ssh/authorized_keys` för att avgöra vilka klienter som tillåts.
+För att kopiera över en publik nyckel kan du använda:
 
 ```bash
 cat .ssh/id_ed25519.pub | ssh alice@remote 'cat >> ~/.ssh/authorized_keys'
 
-# or more simply (if ssh-copy-id is available)
+# eller enklare (om ssh-copy-id finns)
 
 ssh-copy-id -i .ssh/id_ed25519 alice@remote
 ```
 
-Beyond running commands, the connection that ssh establishes can be used to transfer files from and to the server securely. [`scp`](https://www.man7.org/linux/man-pages/man1/scp.1.html) is the most traditional tool and the syntax is `scp path/to/local_file remote_host:path/to/remote_file`. [`rsync`](https://www.man7.org/linux/man-pages/man1/rsync.1.html) improves upon `scp` by detecting identical files in local and remote, and preventing copying them again. It also provides more fine grained control over symlinks, permissions and has extra features like the `--partial` flag that can resume from a previously interrupted copy. `rsync` has a similar syntax to `scp`.
+Utöver kommandokörning kan SSH-anslutningen användas för säker filöverföring till och från servern.
+[`scp`](https://www.man7.org/linux/man-pages/man1/scp.1.html) är det mest traditionella verktyget och syntaxen är `scp path/to/local_file remote_host:path/to/remote_file`.
+[`rsync`](https://www.man7.org/linux/man-pages/man1/rsync.1.html) förbättrar `scp` genom att känna igen identiska filer lokalt/fjärr och undvika att kopiera dem igen.
+Det ger också finare kontroll över symlänkar och rättigheter och har extrafunktioner som `--partial`, som kan återuppta en avbruten kopiering.
+`rsync` har liknande syntax som `scp`.
 
-SSH client configuration is located at `~/.ssh/config` and it lets us declare hosts and set default settings for them. This configuration file is not just read by `ssh` but also other programs like `scp`, `rsync`, `mosh`, &c.
+Konfiguration av SSH-klienten ligger i `~/.ssh/config` och låter oss deklarera värdar och standardinställningar.
+Den här filen läses inte bara av `ssh` utan även av verktyg som `scp`, `rsync`, `mosh`, etc.
 
 ```bash
 Host vm
@@ -547,110 +630,138 @@ Host vm
     Port 2222
     IdentityFile ~/.ssh/id_ed25519
 
-# Configs can also take wildcards
+# Konfigurationen kan också använda jokertecken
 Host *.mit.edu
     User alice
 ```
 
+# Terminalmultiplexrar
 
+När du arbetar i kommandoraden vill du ofta köra mer än en sak samtidigt.
+Du kanske till exempel vill ha redigeraren och programmet sida vid sida.
+Det går att lösa med flera terminalfönster,
+men en terminalmultiplexer är mer flexibel.
 
+Terminalmultiplexrar som [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html) låter dig dela upp terminalfönster i paneler och flikar,
+så att du kan arbeta effektivt med flera skalsessioner.
+Dessutom kan du koppla från en pågående session och återansluta senare.
+Det gör terminalmultiplexrar särskilt praktiska på fjärrmaskiner,
+eftersom du slipper `nohup` och liknande knep.
 
-# Terminal Multiplexers
+Den mest populära terminalmultiplexern i dag är [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html).
+`tmux` är mycket konfigurerbart,
+och med rätt kortkommandon kan du skapa flera flikar och paneler och snabbt växla mellan dem.
 
-When using the command line interface you will often want to run more than one thing at once.
-For instance, you might want to run your editor and your program side by side.
-Although this can be achieved by opening new terminal windows, using a terminal multiplexer is a more versatile solution.
+`tmux` bygger på att du kan dess kortkommandon.
+De har formen `<C-b> x`, vilket betyder:
+(1) tryck `Ctrl+b`,
+(2) släpp,
+(3) tryck `x`.
+`tmux` har följande objekt-hierarki:
 
-Terminal multiplexers like [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html) allow you to multiplex terminal windows using panes and tabs so you can interact with multiple shell sessions in an efficient manner.
-Moreover, terminal multiplexers let you detach a current terminal session and reattach at some point later in time.
-Because of this, terminal multiplexers are really convenient when working with remote machines, as it avoids the need to use `nohup` and similar tricks.
+- **Sessioner** - en session är en separat arbetsyta med ett eller flera fönster.
+    + `tmux` startar en ny session.
+    + `tmux new -s NAME` startar med angivet namn.
+    + `tmux ls` listar aktuella sessioner.
+    + Inne i `tmux` kopplar `<C-b> d` från aktuell session.
+    + `tmux a` ansluter till senaste sessionen.
+      Du kan använda `-t` för att välja vilken.
 
-The most popular terminal multiplexer these days is [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html). `tmux` is highly configurable and by using the associated keybindings you can create multiple tabs and panes and quickly navigate through them.
+- **Fönster** - motsvarar flikar i editorer/webbläsare.
+    + `<C-b> c` skapar ett nytt fönster.
+      För att stänga det kan du avsluta skalet med `<C-d>`.
+    + `<C-b> N` går till fönster nummer _N_.
+    + `<C-b> p` går till föregående fönster.
+    + `<C-b> n` går till nästa fönster.
+    + `<C-b> ,` byter namn på aktuellt fönster.
+    + `<C-b> w` listar aktuella fönster.
 
-`tmux` expects you to know its keybindings, and they all have the form `<C-b> x` where that means (1) press `Ctrl+b`, (2) release `Ctrl+b`, and then (3) press `x`. `tmux` has the following hierarchy of objects:
-- **Sessions** - a session is an independent workspace with one or more windows
-    + `tmux` starts a new session.
-    + `tmux new -s NAME` starts it with that name.
-    + `tmux ls` lists the current sessions
-    + Within `tmux` typing `<C-b> d`  detaches the current session
-    + `tmux a` attaches the last session. You can use `-t` flag to specify which
+- **Paneler** - likt splits i vim låter paneler dig ha flera skal i samma vy.
+    + `<C-b> "` delar aktuell panel horisontellt.
+    + `<C-b> %` delar aktuell panel vertikalt.
+    + `<C-b> <direction>` flyttar till panel i angiven riktning (piltangenter).
+    + `<C-b> z` växlar zoom för aktuell panel.
+    + `<C-b> [` startar scrollback.
+      Där kan du trycka `<space>` för markering och `<enter>` för kopiering.
+    + `<C-b> <space>` cyklar panelarrangemang.
 
-- **Windows** - Equivalent to tabs in editors or browsers, they are visually separate parts of the same session
-    + `<C-b> c` Creates a new window. To close it you can just terminate the shells doing `<C-d>`
-    + `<C-b> N` Go to the _N_ th window. Note they are numbered
-    + `<C-b> p` Goes to the previous window
-    + `<C-b> n` Goes to the next window
-    + `<C-b> ,` Rename the current window
-    + `<C-b> w` List current windows
+> För mer om tmux, läs gärna [den här](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/) snabba guiden och [den här](https://linuxcommand.org/lc3_adv_termmux.php) mer detaljerade genomgången.
 
-- **Panes** - Like vim splits, panes let you have multiple shells in the same visual display.
-    + `<C-b> "` Split the current pane horizontally
-    + `<C-b> %` Split the current pane vertically
-    + `<C-b> <direction>` Move to the pane in the specified _direction_. Direction here means arrow keys.
-    + `<C-b> z` Toggle zoom for the current pane
-    + `<C-b> [` Start scrollback. You can then press `<space>` to start a selection and `<enter>` to copy that selection.
-    + `<C-b> <space>` Cycle through pane arrangements.
+Med tmux och SSH i verktygslådan vill du snart få miljön att kännas som hemma på alla maskiner.
+Där kommer skalanpassning in.
 
-> To learn more about tmux, consider reading [this](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/) quick tutorial and [this](https://linuxcommand.org/lc3_adv_termmux.php) more detailed explanation.
+# Anpassa skalet
 
-With tmux and SSH in your toolkit, you'll want to make your environment feel like home on any machine. That's where shell customization comes in.
+Många kommandoradsprogram konfigureras med textfiler som kallas _dotfiles_
+(eftersom filnamnen börjar med `.`, t.ex. `~/.vimrc`, och därför döljs i `ls` som standard).
 
-# Customizing the Shell
+> Dotfiles är ännu en skalkonvention.
+> Punkten i början används för att "dölja" filen i listningar.
 
-A wide array of command line programs are configured using plain-text files known as _dotfiles_
-(because the file names begin with a `.`, e.g. `~/.vimrc`, so that they are
-hidden in the directory listing `ls` by default).
+Skal är ett exempel på program som konfigureras med sådana filer.
+Vid uppstart läser skalet flera filer för att ladda konfiguration.
+Beroende på skal och om du startar login-/interaktiv session kan processen vara ganska komplex.
+[Här](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html) finns en utmärkt resurs.
 
-> Dotfiles are yet another shell convention. The dot in the front is to "hide" them when listing (yes, another convention).
-
-Shells are one example of programs configured with such files. On startup, your shell will read many files to load its configuration.
-Depending on the shell and whether you are starting a login and/or interactive session, the entire process can be quite complex.
-[Here](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html) is an excellent resource on the topic.
-
-For `bash`, editing your `.bashrc` or `.bash_profile` will work in most systems.
-Some other examples of tools that can be configured through dotfiles are:
+För `bash` fungerar det på de flesta system att redigera `.bashrc` eller `.bash_profile`.
+Andra verktyg som kan konfigureras via dotfiles:
 
 - `bash` - `~/.bashrc`, `~/.bash_profile`
 - `git` - `~/.gitconfig`
-- `vim` - `~/.vimrc` and the `~/.vim` folder
+- `vim` - `~/.vimrc` och mappen `~/.vim`
 - `ssh` - `~/.ssh/config`
 - `tmux` - `~/.tmux.conf`
 
-A common configuration change is adding new locations for the shell to find programs. You will encounter this pattern when installing software:
+En vanlig ändring är att lägga till nya sökvägar där skalet ska hitta program.
+Du ser mönstret ofta vid installation av programvara:
 
 ```shell
 export PATH="$PATH:path/to/append"
 ```
 
-Here, we are telling the shell to set the value of the $PATH variable to its current value plus a new path, and have all children processes inherit this new value for PATH.
-This will allow children processes to find programs located under `path/to/append`.
+Här sätter vi `$PATH` till nuvarande värde plus en ny sökväg,
+och låter barnprocesser ärva det.
+Då kan de hitta program under `path/to/append`.
 
+Att anpassa skalet betyder ofta att installera nya CLI-verktyg.
+Pakethanterare gör detta enkelt.
+De hanterar nedladdning, installation och uppdateringar.
+Olika operativsystem har olika pakethanterare:
+macOS använder [Homebrew](https://brew.sh/),
+Ubuntu/Debian använder `apt`,
+Fedora använder `dnf`,
+och Arch använder `pacman`.
+Vi går djupare i detta i föreläsningen om att leverera kod.
 
-Customizing your shell often means installing new command-line tools. Package managers make this easy. They handle downloading, installing, and updating software. Different operating systems have different package managers: macOS uses [Homebrew](https://brew.sh/), Ubuntu/Debian use `apt`, Fedora uses `dnf`, and Arch uses `pacman`. We'll cover package managers in more depth in the shipping code lecture.
-
-Here's how to install two useful tools using Homebrew on macOS:
+Så här installerar du två användbara verktyg med Homebrew på macOS:
 
 ```shell
-# ripgrep: a faster grep with better defaults
+# ripgrep: ett snabbare grep med bättre standardvärden
 brew install ripgrep
 
-# fd: a faster, user-friendly find
+# fd: ett snabbare och mer användarvänligt alternativ till `find`
 brew install fd
 ```
 
-With these installed, you can use `rg` instead of `grep` and `fd` instead of `find`.
+Efter installation kan du använda `rg` i stället för `grep` och `fd` i stället för `find`.
 
-> **Warning about `curl | bash`**: You'll often see installation instructions like `curl -fsSL https://example.com/install.sh | bash`. This pattern downloads a script and immediately executes it, which is convenient but risky; you're running code you haven't inspected. A safer approach is to download first, review, then execute:
+> **Varning för `curl | bash`**: Du ser ofta installationskommandon som `curl -fsSL https://example.com/install.sh | bash`.
+> Mönstret laddar ner ett skript och kör det direkt,
+> vilket är bekvämt men riskabelt eftersom du kör kod du inte granskat.
+> Säkrare är att ladda ner först, granska och sedan köra:
 > ```shell
 > curl -fsSL https://example.com/install.sh -o install.sh
-> less install.sh  # review the script
+> less install.sh  # granska skriptet
 > bash install.sh
 > ```
-> Some installers use a slightly safer variant: `/bin/bash -c "$(curl -fsSL https://url)"` which at least ensures bash interprets the script rather than your current shell.
+> Vissa installationer använder en något säkrare variant: `/bin/bash -c "$(curl -fsSL https://url)"`.
 
-When you try to run a command that isn't installed, your shell will show `command not found`. The website [command-not-found.com](https://command-not-found.com) is a helpful resource you can use to search for any command to find out how to install it across different package managers and distributions.
+När du försöker köra ett kommando som inte är installerat visar skalet `command not found`.
+Webbplatsen [command-not-found.com](https://command-not-found.com) är en bra resurs för att hitta installationsinstruktioner i olika pakethanterare och distributioner.
 
-Another useful tool is [`tldr`](https://tldr.sh/), which provides simplified, example-focused man pages. Instead of reading through lengthy documentation, you can quickly see common usage patterns:
+Ett annat användbart verktyg är [`tldr`](https://tldr.sh/),
+som ger förenklade man-sidor med fokus på exempel.
+I stället för lång dokumentation ser du snabbt vanliga användningsmönster:
 
 ```console
 $ tldr fd
@@ -667,109 +778,119 @@ $ tldr fd
       fd --extension txt
 ```
 
-Sometimes you don't need a whole new program, but rather just a shortcut for an existing command with specific flags. That's where aliases come in.
+Ibland behöver du inte ett nytt program,
+utan bara en genväg till ett befintligt kommando med vissa flaggor.
+Där kommer alias in.
 
-We can also create our own command aliases using the `alias` shell built-in.
-A shell alias is a short form for another command that your shell will replace automatically before evaluating the expression.
-For instance, an alias in bash has the following structure:
+Vi kan skapa egna alias med inbyggda `alias`.
+Ett skalalias är en kortform som skalet ersätter automatiskt innan uttrycket evalueras.
+I bash ser strukturen ut så här:
 
 ```bash
 alias alias_name="command_to_alias arg1 arg2"
 ```
 
-> Note that there is no space around the equal sign `=`, because [`alias`](https://www.man7.org/linux/man-pages/man1/alias.1p.html) is a shell command that takes a single argument.
+> Notera att det inte ska vara mellanslag runt `=`,
+> eftersom [`alias`](https://www.man7.org/linux/man-pages/man1/alias.1p.html) är ett skalkommando som tar ett enda argument.
 
-Aliases have many convenient features:
+Alias har många praktiska användningar:
 
 ```bash
-# Make shorthands for common flags
+# Skapa kortformer för vanliga flaggor
 alias ll="ls -lh"
 
-# Save a lot of typing for common commands
+# Spara mycket skrivande för vanliga kommandon
 alias gs="git status"
 alias gc="git commit"
 
-# Save you from mistyping
+# Hjälp dig undvika felstavningar
 alias sl=ls
 
-# Overwrite existing commands for better defaults
-alias mv="mv -i"           # -i prompts before overwrite
-alias mkdir="mkdir -p"     # -p make parent dirs as needed
-alias df="df -h"           # -h prints human readable format
+# Skriv över befintliga kommandon för bättre standardvärden
+alias mv="mv -i"           # -i frågar före överskrivning
+alias mkdir="mkdir -p"     # -p skapar föräldrakataloger vid behov
+alias df="df -h"           # -h skriver ut i läsbart format
 
-# Alias can be composed
+# Alias kan byggas på varandra
 alias la="ls -A"
 alias lla="la -l"
 
-# To ignore an alias run it prepended with \
+# För att ignorera ett alias, kör kommandot med \ först
 \ls
-# Or disable an alias altogether with unalias
+# Eller stäng av aliaset helt med unalias
 unalias la
 
-# To get an alias definition just call it with alias
+# För att visa aliasdefinitionen, anropa det med alias
 alias ll
-# Will print ll='ls -lh'
+# Skriver ut ll='ls -lh'
 ```
 
-Aliases have limitations: they cannot take arguments in the middle of a command. For more complex behavior, you should use shell functions instead.
+Alias har begränsningar:
+de kan inte ta argument i mitten av ett kommando.
+För mer avancerat beteende bör du använda skalfunktioner.
 
-Most shells support `Ctrl-R` for reverse history search. Type `Ctrl-R` and start typing to search through previous commands. Earlier we introduced `fzf` as a fuzzy finder; with fzf's shell integration configured, `Ctrl-R` becomes an interactive fuzzy search through your entire history, far more powerful than the default.
+De flesta skal stöder `Ctrl-R` för omvänd historiksökning.
+Tryck `Ctrl-R` och börja skriva för att söka bland tidigare kommandon.
+Tidigare introducerade vi `fzf` som fuzzy finder.
+Med fzf:s skalintegration blir `Ctrl-R` en interaktiv fuzzy-sökning i hela historiken,
+mycket kraftfullare än standardläget.
 
-How should you organize your dotfiles? They should be in their own folder,
-under version control, and **symlinked** into place using a script. This has
-the benefits of:
+Hur bör du organisera dina dotfiles?
+De bör ligga i en egen mapp,
+under versionshantering,
+och **symboliskt länkas** in på plats med ett skript.
+Det ger:
 
-- **Easy installation**: if you log in to a new machine, applying your
-customizations will only take a minute.
-- **Portability**: your tools will work the same way everywhere.
-- **Synchronization**: you can update your dotfiles anywhere and keep them all
-in sync.
-- **Change tracking**: you're probably going to be maintaining your dotfiles
-for your entire programming career, and version history is nice to have for
-long-lived projects.
+- **Enkel installation**: på en ny maskin tar det bara någon minut att få allt på plats.
+- **Portabilitet**: dina verktyg fungerar likadant överallt.
+- **Synkronisering**: du kan uppdatera dotfiles var som helst och hålla allt synkroniserat.
+- **Historik**: du kommer sannolikt att underhålla dotfiles länge, och versionshistorik är värdefull.
 
-What should you put in your dotfiles?
-You can learn about your tool's settings by reading online documentation or
-[man pages](https://en.wikipedia.org/wiki/Man_page). Another great way is to
-search the internet for blog posts about specific programs, where authors will
-tell you about their preferred customizations. Yet another way to learn about
-customizations is to look through other people's dotfiles: you can find tons of
-[dotfiles
-repositories](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories)
-on GitHub --- see the most popular one
-[here](https://github.com/mathiasbynens/dotfiles) (we advise you not to blindly
-copy configurations though).
-[Here](https://dotfiles.github.io/) is another good resource on the topic.
+Vad ska ligga i dotfiles?
+Lär dig verktygens inställningar via dokumentation på nätet eller [man-sidor](https://en.wikipedia.org/wiki/Man_page).
+Ett annat bra sätt är blogginlägg om specifika program,
+där författare beskriver sina favoritinställningar.
+Du kan också läsa andras dotfiles:
+det finns mängder av [dotfiles-kodförråd](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories) på GitHub.
+Se det mest populära [här](https://github.com/mathiasbynens/dotfiles) (kopiera inte blint).
+[Här](https://dotfiles.github.io/) finns ytterligare en bra resurs.
 
-All of the class instructors have their dotfiles publicly accessible on GitHub: [Anish](https://github.com/anishathalye/dotfiles),
+Alla kursens lärare har sina dotfiles offentliga på GitHub:
+[Anish](https://github.com/anishathalye/dotfiles),
 [Jon](https://github.com/jonhoo/configs),
 [Jose](https://github.com/jjgo/dotfiles).
 
-**Frameworks and plugins** can improve your shell as well. Some popular general frameworks are [prezto](https://github.com/sorin-ionescu/prezto) or [oh-my-zsh](https://ohmyz.sh/), and smaller plugins that focus on specific features:
+**Ramverk och insticksmoduler** kan också förbättra skalet.
+Populära ramverk är [prezto](https://github.com/sorin-ionescu/prezto) och [oh-my-zsh](https://ohmyz.sh/),
+plus mindre insticksmoduler för specifika funktioner:
 
-- [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) - colors valid/invalid commands as you type
-- [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) - suggests commands from history as you type
-- [zsh-completions](https://github.com/zsh-users/zsh-completions) - additional completion definitions
-- [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search) - fish-like history search
-- [powerlevel10k](https://github.com/romkatv/powerlevel10k) - fast, customizable prompt theme
+- [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) - färgar giltiga/ogiltiga kommandon medan du skriver
+- [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) - föreslår kommandon från historik medan du skriver
+- [zsh-completions](https://github.com/zsh-users/zsh-completions) - fler kompletteringsdefinitioner
+- [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search) - fish-lik historiksökning
+- [powerlevel10k](https://github.com/romkatv/powerlevel10k) - snabbt, anpassningsbart prompttema
 
-Shells like [fish](https://fishshell.com/) include many of these features by default.
+Skal som [fish](https://fishshell.com/) har många av dessa funktioner som standard.
 
-> You don't need a massive framework like oh-my-zsh to get these features. Installing individual plugins is often faster and gives you more control. Large frameworks can significantly slow down shell startup time, so consider installing only what you actually use.
+> Du behöver inte ett stort ramverk som oh-my-zsh för att få funktionerna.
+> Att installera enskilda insticksmoduler är ofta snabbare och ger bättre kontroll.
+> Stora ramverk kan sakta ner skalets uppstart avsevärt,
+> så installera helst bara det du faktiskt använder.
 
+# AI i skalet
 
-# AI in the Shell
+Det finns många sätt att använda AI-verktyg i skalet.
+Här är några exempel med olika integrationsnivå:
 
-There are many ways to incorporate AI tooling in the shell. Here are a few examples at different levels of integration:
-
-**Command generation**: Tools like [`simonw/llm`](https://github.com/simonw/llm) can help generate shell commands from natural language descriptions:
+**Kommandogenerering**: verktyg som [`simonw/llm`](https://github.com/simonw/llm) kan hjälpa till att generera skalkommandon från naturligt språk:
 
 ```console
-$ llm cmd "find all python files modified in the last week"
+$ llm cmd "hitta alla Python-filer som ändrats senaste veckan"
 find . -name "*.py" -mtime -7
 ```
 
-**Pipeline integration**: LLMs can be integrated into shell pipelines to process and transform data. They're particularly useful when you need to extract information from inconsistent formats where regex would be painful:
+**Pipelineintegration**: LLM:er kan integreras i pipelines för att bearbeta och transformera data.
+De är särskilt användbara när du vill extrahera information ur inkonsekventa format där regex vore besvärligt:
 
 ```console
 $ cat users.txt
@@ -779,7 +900,7 @@ Posted by: @bob_jones on Twitter
 Author: Jane Doe (jdoe)
 Message from mike_wilson yesterday
 Submitted by user: sarah.connor
-$ INSTRUCTIONS="Extract just the username from each line, one per line, nothing else"
+$ INSTRUCTIONS="Extrahera bara användarnamnet från varje rad, en per rad, inget annat"
 $ llm "$INSTRUCTIONS" < users.txt
 john.doe
 alice_smith
@@ -789,40 +910,44 @@ mike_wilson
 sarah.connor
 ```
 
-Note how we use `"$INSTRUCTIONS"` (quoted) because the variable contains spaces, and `< users.txt` to redirect the file's content to stdin.
+Notera att vi använder `"$INSTRUCTIONS"` (citerat) eftersom variabeln innehåller blanksteg,
+och `< users.txt` för att omdirigera filens innehåll till stdin.
 
-**AI shells**: Tools like [Claude Code](https://docs.anthropic.com/en/docs/claude-code) act as a meta-shell that accepts English commands and translates them into shell operations, file edits, and more complex multi-step tasks.
+**AI-skal**: verktyg som [Claude Code](https://docs.anthropic.com/en/docs/claude-code) fungerar som ett meta-skal som tar engelska instruktioner och översätter dem till skaloperationer, filändringar och mer komplexa flerstegsuppgifter.
 
-# Terminal Emulators
+# Terminalemulatorer
 
-Along with customizing your shell, it is worth spending some time figuring out your choice of **terminal emulator** and its settings.
-A terminal emulator is a GUI program that provides the text-based interface where your shell runs.
-There are many terminal emulators out there.
+Utöver att anpassa skalet är det värt att lägga lite tid på valet av **terminalemulator** och dess inställningar.
+En terminalemulator är ett GUI-program som tillhandahåller det textbaserade gränssnitt där skalet körs.
+Det finns många alternativ.
 
-Since you might be spending hundreds to thousands of hours in your terminal it pays off to look into its settings. Some of the aspects that you may want to modify in your terminal include:
+Eftersom du sannolikt tillbringar hundratals till tusentals timmar i terminalen lönar det sig att utforska inställningarna.
+Exempel på saker du kan vilja justera:
 
-- Font choice
-- Color Scheme
-- Keyboard shortcuts
-- Tab/Pane support
-- Scrollback configuration
-- Performance (some newer terminals like [Alacritty](https://github.com/alacritty/alacritty) or [Ghostty](https://ghostty.org/) offer GPU acceleration).
+- Fontval
+- Färgschema
+- Tangentbordsgenvägar
+- Flik-/panelstöd
+- Scrollback-konfiguration
+- Prestanda (vissa nyare terminaler som [Alacritty](https://github.com/alacritty/alacritty) eller [Ghostty](https://ghostty.org/) erbjuder GPU-acceleration)
 
+# Övningar
 
+## Argument och globbar
 
-# Exercises
+1. Du kan se kommandon som `cmd --flag -- --notaflag`.
+   `--` är ett specialargument som säger åt programmet att sluta parsa flaggor.
+   Allt efter `--` behandlas som positionsargument.
+   Varför kan det vara användbart?
+   Testa `touch -- -myfile` och ta sedan bort filen utan `--`.
 
-## Arguments and Globs
+1. Läs [`man ls`](https://www.man7.org/linux/man-pages/man1/ls.1.html) och skriv ett `ls`-kommando som listar filer på följande sätt:
+    - Inkluderar alla filer, även dolda.
+    - Storlekar visas i läsbart format för människor (t.ex. 454M i stället för 454279954).
+    - Filer sorteras efter nyast först.
+    - Utdata är färglagd.
 
-1. You might see commands like `cmd --flag -- --notaflag`. The `--` is a special argument that tells the program to stop parsing flags. Everything after `--` is treated as a positional argument. Why might this be useful? Try running `touch -- -myfile` and then removing it without `--`.
-
-1. Read [`man ls`](https://www.man7.org/linux/man-pages/man1/ls.1.html) and write an `ls` command that lists files in the following manner:
-    - Includes all files, including hidden files
-    - Sizes are listed in human readable format (e.g. 454M instead of 454279954)
-    - Files are ordered by recency
-    - Output is colorized
-
-    A sample output would look like this:
+    Exempelutdata:
 
     ```
     -rw-r--r--   1 user group 1.1M Jan 14 09:53 baz
@@ -836,11 +961,17 @@ Since you might be spending hundreds to thousands of hours in your terminal it p
 ls -lath --color=auto
 {% endcomment %}
 
-1. Process substitution `<(command)` lets you use a command's output as if it were a file. Use `diff` with process substitution to compare the output of `printenv` and `export`. Why are they different? (Hint: try `diff <(printenv | sort) <(export | sort)`).
+1. Processsubstitution (_process substitution_) `<(command)` låter dig använda ett kommandos utdata som om det vore en fil.
+   Använd `diff` med processsubstitution för att jämföra utdata från `printenv` och `export`.
+   Varför skiljer de sig?
+   (Tips: testa `diff <(printenv | sort) <(export | sort)`.)
 
-## Environment Variables
+## Miljövariabler
 
-1. Write bash functions `marco` and `polo` that do the following: whenever you execute `marco` the current working directory should be saved in some manner, then when you execute `polo`, no matter what directory you are in, `polo` should `cd` you back to the directory where you executed `marco`. For ease of debugging you can write the code in a file `marco.sh` and (re)load the definitions to your shell by executing `source marco.sh`.
+1. Skriv bash-funktionerna `marco` och `polo` som gör följande:
+   när du kör `marco` ska nuvarande arbetskatalog sparas,
+   och när du kör `polo` ska du, oavsett var du befinner dig, `cd` tillbaka till katalogen där `marco` kördes.
+   För enklare felsökning kan du skriva koden i en fil `marco.sh` och (om)ladda definitionerna med `source marco.sh`.
 
 {% comment %}
 marco() {
@@ -852,9 +983,14 @@ polo() {
 }
 {% endcomment %}
 
-## Return Codes
+## Returkoder
 
-1. Say you have a command that fails rarely. In order to debug it you need to capture its output but it can be time consuming to get a failure run. Write a bash script that runs the following script until it fails and captures its standard output and error streams to files and prints everything at the end. Bonus points if you can also report how many runs it took for the script to fail.
+1. Anta att du har ett kommando som sällan misslyckas.
+   För felsökning vill du fånga utdata, men det kan ta lång tid att få ett felkörningstillfälle.
+   Skriv ett bash-skript som kör följande skript tills det misslyckas,
+   fångar stdout och stderr till filer,
+   och skriver ut allt i slutet.
+   Bonus om du också rapporterar hur många körningar som krävdes innan fel.
 
     ```bash
     #!/usr/bin/env bash
@@ -862,12 +998,12 @@ polo() {
     n=$(( RANDOM % 100 ))
 
     if [[ n -eq 42 ]]; then
-       echo "Something went wrong"
-       >&2 echo "The error was using magic numbers"
+       echo "Något gick fel"
+       >&2 echo "Felet var användning av magiska tal"
        exit 1
     fi
 
-    echo "Everything went according to plan"
+    echo "Allt gick enligt plan"
     ```
 
 {% comment %}
@@ -880,51 +1016,72 @@ do
   ./random.sh &> out.txt
 done
 
-echo "found error after $count runs"
+echo "hittade fel efter $count körningar"
 cat out.txt
 {% endcomment %}
 
-## Signals and Job Control
+## Signaler och jobbstyrning
 
-1. Start a `sleep 10000` job in a terminal, background it with `Ctrl-Z` and continue its execution with `bg`. Now use [`pgrep`](https://www.man7.org/linux/man-pages/man1/pgrep.1.html) to find its pid and [`pkill`](https://man7.org/linux/man-pages/man1/pgrep.1.html) to kill it without ever typing the pid itself. (Hint: use the `-af` flags).
+1. Starta ett jobb `sleep 10000` i en terminal,
+   bakgrundssätt det med `Ctrl-Z` och fortsätt körningen med `bg`.
+   Använd sedan [`pgrep`](https://www.man7.org/linux/man-pages/man1/pgrep.1.html) för att hitta PID och [`pkill`](https://man7.org/linux/man-pages/man1/pgrep.1.html) för att döda processen utan att skriva PID manuellt.
+   (Tips: använd flaggorna `-af`.)
 
-1. Say you don't want to start a process until another completes. How would you go about it? In this exercise, our limiting process will always be `sleep 60 &`. One way to achieve this is to use the [`wait`](https://www.man7.org/linux/man-pages/man1/wait.1p.html) command. Try launching the sleep command and having an `ls` wait until the background process finishes.
+1. Säg att du inte vill starta en process förrän en annan har avslutats.
+   I övningen är den begränsande processen alltid `sleep 60 &`.
+   Ett sätt är kommandot [`wait`](https://www.man7.org/linux/man-pages/man1/wait.1p.html).
+   Testa att starta sleep och låt ett `ls` vänta tills bakgrundsprocessen är klar.
 
-    However, this strategy will fail if we start in a different bash session, since `wait` only works for child processes. One feature we did not discuss in the notes is that the `kill` command's exit status will be zero on success and nonzero otherwise. `kill -0` does not send a signal but will give a nonzero exit status if the process does not exist. Write a bash function called `pidwait` that takes a pid and waits until the given process completes. You should use `sleep` to avoid wasting CPU unnecessarily.
+   Den strategin fallerar dock om du startar i en annan bash-session,
+   eftersom `wait` bara fungerar för barnprocesser.
+   En funktion vi inte tog upp är att `kill` returnerar noll vid framgång och icke-noll annars.
+   `kill -0` skickar ingen signal men ger icke-noll om processen inte finns.
+   Skriv en bash-funktion `pidwait` som tar en PID och väntar tills processen avslutas.
+   Du bör använda `sleep` för att undvika onödig CPU-förbrukning.
 
-## Files and Permissions
+## Filer och rättigheter
 
-1. (Advanced) Write a command or script to recursively find the most recently modified file in a directory. More generally, can you list all files by recency?
+1. (Avancerad) Skriv ett kommando eller skript som rekursivt hittar den senast modifierade filen i en katalog.
+   Mer allmänt, kan du lista alla filer sorterade efter recency?
 
-## Terminal Multiplexers
+## Terminalmultiplexrar
 
-1. Follow this `tmux` [tutorial](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/) and then learn how to do some basic customizations following [these steps](https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/).
+1. Följ denna `tmux`-[guide](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/),
+   och lär dig sedan några grundläggande anpassningar via [de här stegen](https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/).
 
-## Aliases and Dotfiles
+## Alias och dotfiles
 
-1. Create an alias `dc` that resolves to `cd` for when you type it wrong.
+1. Skapa ett alias `dc` som expanderar till `cd` för när du skriver fel.
 
-1. Run `history | awk '{$1="";print substr($0,2)}' | sort | uniq -c | sort -n | tail -n 10` to get your top 10 most used commands and consider writing shorter aliases for them. Note: this works for Bash; if you're using ZSH, use `history 1` instead of just `history`.
+1. Kör `history | awk '{$1="";print substr($0,2)}' | sort | uniq -c | sort -n | tail -n 10` för att få dina 10 mest använda kommandon och överväg kortare alias för dem.
+   Notera: detta gäller Bash.
+   Om du använder ZSH, använd `history 1` i stället för bara `history`.
 
-1. Create a folder for your dotfiles and set up version control.
+1. Skapa en mapp för dina dotfiles och lägg den under versionshantering.
 
-1. Add a configuration for at least one program, e.g. your shell, with some customization (to start off, it can be something as simple as customizing your shell prompt by setting `$PS1`).
+1. Lägg till konfiguration för minst ett program, t.ex. ditt skal, med någon anpassning.
+   För att komma igång kan det räcka att ändra skalets prompt genom att sätta `$PS1`.
 
-1. Set up a method to install your dotfiles quickly (and without manual effort) on a new machine. This can be as simple as a shell script that calls `ln -s` for each file, or you could use a [specialized utility](https://dotfiles.github.io/utilities/).
+1. Sätt upp ett sätt att installera dina dotfiles snabbt och utan manuellt arbete på en ny maskin.
+   Det kan vara så enkelt som ett skalskript som kör `ln -s` för varje fil,
+   eller ett [specialiserat verktyg](https://dotfiles.github.io/utilities/).
 
-1. Test your installation script on a fresh virtual machine.
+1. Testa installationsskriptet på en ren virtuell maskin.
 
-1. Migrate all of your current tool configurations to your dotfiles repository.
+1. Migrera alla dina nuvarande verktygskonfigurationer till ditt dotfiles-kodförråd.
 
-1. Publish your dotfiles on GitHub.
+1. Publicera dina dotfiles på GitHub.
 
-## Remote Machines (SSH)
+## Fjärrmaskiner (SSH)
 
-Install a Linux virtual machine (or use an already existing one) for these exercises. If you are not familiar with virtual machines check out [this](https://hibbard.eu/install-ubuntu-virtual-box/) tutorial for installing one.
+Installera en Linux-VM (eller använd en befintlig) för övningarna.
+Om du inte är bekant med virtuella maskiner, se [den här](https://hibbard.eu/install-ubuntu-virtual-box/) guiden.
 
-1. Go to `~/.ssh/` and check if you have a pair of SSH keys there. If not, generate them with `ssh-keygen -a 100 -t ed25519`. It is recommended that you use a password and use `ssh-agent`, more info [here](https://www.ssh.com/ssh/agent).
+1. Gå till `~/.ssh/` och kontrollera om du har ett SSH-nyckelpar.
+   Om inte, skapa ett med `ssh-keygen -a 100 -t ed25519`.
+   Rekommendationen är att använda lösenfras och `ssh-agent`, mer info [här](https://www.ssh.com/ssh/agent).
 
-1. Edit `.ssh/config` to have an entry as follows:
+1. Redigera `.ssh/config` så att den har en post som:
 
     ```bash
     Host vm
@@ -934,12 +1091,18 @@ Install a Linux virtual machine (or use an already existing one) for these exerc
         LocalForward 9999 localhost:8888
     ```
 
-1. Use `ssh-copy-id vm` to copy your ssh key to the server.
+1. Använd `ssh-copy-id vm` för att kopiera din SSH-nyckel till servern.
 
-1. Start a webserver in your VM by executing `python -m http.server 8888`. Access the VM webserver by navigating to `http://localhost:9999` in your machine.
+1. Starta en webbserver i din VM med `python -m http.server 8888`.
+   Gå till `http://localhost:9999` på din egen maskin för att nå webbservern i VM.
 
-1. Edit your SSH server config by doing `sudo vim /etc/ssh/sshd_config` and disable password authentication by editing the value of `PasswordAuthentication`. Disable root login by editing the value of `PermitRootLogin`. Restart the `ssh` service with `sudo service sshd restart`. Try sshing in again.
+1. Redigera SSH-serverkonfigurationen med `sudo vim /etc/ssh/sshd_config` och stäng av lösenordsautentisering genom att ändra `PasswordAuthentication`.
+   Stäng också av root-inloggning genom att ändra `PermitRootLogin`.
+   Starta om SSH-tjänsten med `sudo service sshd restart`.
+   Testa att SSH:a in igen.
 
-1. (Challenge) Install [`mosh`](https://mosh.org/) in the VM and establish a connection. Then disconnect the network adapter of the server/VM. Can mosh properly recover from it?
+1. (Utmaning) Installera [`mosh`](https://mosh.org/) i VM:n och upprätta en anslutning.
+   Koppla sedan bort nätverksadaptern för servern/VM:n.
+   Kan mosh återhämta sig korrekt?
 
-1. (Challenge) Look into what the `-N` and `-f` flags do in `ssh` and figure out a command to achieve background port forwarding.
+1. (Utmaning) Ta reda på vad flaggorna `-N` och `-f` gör i `ssh` och hitta ett kommando för port-forwarding i bakgrunden.

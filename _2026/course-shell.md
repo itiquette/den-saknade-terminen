@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Course Overview + Introduction to the Shell"
+title: "Kursöversikt + introduktion till skalet"
 description: >
-  Learn about the motivation for this class, and get started with the shell.
+  Lär dig varför kursen finns och kom igång med skalet.
 thumbnail: /static/assets/thumbnails/2026/lec1.png
 date: 2026-01-12
 ready: true
@@ -11,156 +11,134 @@ video:
   id: MSgoeuMqUmU
 ---
 
-# Who are we?
+# Vilka är vi?
 
-This class is co-taught by [Anish](https://anish.io/),
-[Jon](https://thesquareplanet.com/), and [Jose](http://josejg.com/). We
-are all ex-MIT students who started this MIT IAP class back when we were
-students. You can reach us collectively at
-[missing-semester@mit.edu](mailto:missing-semester@mit.edu).
+Den här kursen undervisas gemensamt av [Anish](https://anish.io/),
+[Jon](https://thesquareplanet.com/) och [Jose](http://josejg.com/).
+Vi är alla tidigare MIT-studenter som startade den här MIT IAP-kursen när vi själva studerade.
+Du kan nå oss gemensamt på [missing-semester@mit.edu](mailto:missing-semester@mit.edu).
 
-We are not paid to teach this class, and do not monetize the class in
-any way. We make all the [course
-materials](https://missing.csail.mit.edu/) and [recordings of the
-lectures](https://www.youtube.com/@MissingSemester) freely available
-online. If you want to support our work, the best way to do so is to
-simply spread the word about the class. If you're a company, university,
-or other organization that runs this content past larger cohorts, please
-send us experience reports/testimonials by email so we get to hear about
-it :)
+Vi får inte betalt för att undervisa kursen och vi tjänar inte pengar på den på något sätt.
+Vi gör allt [kursmaterial](https://missing.csail.mit.edu/) och [inspelningar av föreläsningarna](https://www.youtube.com/@MissingSemester) fritt tillgängliga på nätet.
+Om du vill stötta vårt arbete är bästa sättet att sprida ordet om kursen.
+Om du representerar ett företag, universitet eller annan organisation som kör innehållet för större grupper får du gärna e-posta erfarenheter eller omdömen så vi får höra om det.
 
 # Motivation
 
-As computer scientists, we know that computers are great at aiding in
-repetitive tasks. However, far too often, we forget that this applies
-just as much to our _use_ of the computer as it does to the computations
-we want our programs to perform. We have a vast range of tools available
-at our fingertips that enable us to be more productive and solve more
-complex problems when working on any computer-related problem. Yet many
-of us utilize only a small fraction of those tools; we only know enough
-magical incantations by rote to get by, and blindly copy-paste commands
-from the internet when we get stuck.
+Som datavetare vet vi att datorer är fantastiska på att hjälpa till med repetitiva uppgifter.
+Alltför ofta glömmer vi dock att detta gäller lika mycket för _hur vi använder_ datorn som för de beräkningar vi vill att våra program ska utföra.
+Vi har en stor uppsättning verktyg nära till hands som gör oss mer produktiva och låter oss lösa mer komplexa problem i allt datorrelaterat arbete.
+Trots det använder många av oss bara en liten del av verktygen.
+Vi kan precis tillräckligt många magiska rader utantill för att klara oss och kopierar blint kommandon från internet när vi kör fast.
 
-This class is an attempt to [address this](/about/).
+Den här kursen är ett försök att [åtgärda det]({{ '/about/' | relative_url }}).
 
-We want to teach you how to make the most of the tools you know, show
-you new tools to add to your toolbox, and hopefully instill in you some
-excitement for exploring (and perhaps building) more tools on your own.
-This is what we believe to be the missing semester from most Computer
-Science curricula.
+Vi vill lära dig att få ut mer av verktygen du redan känner till,
+visa nya verktyg att lägga i verktygslådan,
+och förhoppningsvis väcka lust att utforska (och kanske bygga) fler verktyg själv.
+Det är detta vi menar är den saknade terminen i många datavetenskapliga utbildningar.
 
-# Class structure
+# Kursupplägg
 
-The not-for-credit class consists of nine 1-hour lectures, each one
-centering on a [particular topic](/2026/). The lectures are largely
-independent, though as the semester goes on we will presume that you are
-familiar with the content from the earlier lectures. We have lecture
-notes online, but there may be content covered in class (e.g. in the
-form of demos) that may not be in the notes. As for past years, we will
-be recording lectures and posting the recordings
-[online](https://www.youtube.com/@MissingSemester).
+Den poängfria kursen består av nio föreläsningar på en timme vardera,
+och varje föreläsning fokuserar på ett [särskilt ämne]({{ '/2026/' | relative_url }}).
+Föreläsningarna är till stor del fristående,
+men ju längre terminen går desto mer antar vi att du kan innehållet från tidigare pass.
+Vi har föreläsningsanteckningar på nätet,
+men visst innehåll som tas upp i klass (t.ex. demos) kanske inte finns i anteckningarna.
+Som tidigare år spelar vi in föreläsningarna och publicerar dem [på nätet](https://www.youtube.com/@MissingSemester).
 
-We are trying to cover a lot of ground over the course of just a few
-1-hour lectures, so the lectures are fairly dense. To allow you some
-time to get familiar with the content at your own pace, each lecture
-includes a set of exercises that guide you through the lecture's key
-points. We will not be running dedicated office hours, but we encourage
-you to ask questions on the [OSSU Discord](https://ossu.dev/#community),
-in `#missing-semester-forum`, or email us at
-[missing-semester@mit.edu](mailto:missing-semester@mit.edu).
+Vi försöker täcka mycket på bara några få en-timmespass,
+så föreläsningarna är ganska täta.
+För att du ska kunna ta till dig innehållet i din egen takt innehåller varje föreläsning en uppsättning övningar som leder dig genom nyckelpunkterna.
+Vi kommer inte att ha särskilda mottagningstider,
+men vi uppmuntrar frågor på [OSSU Discord](https://ossu.dev/#community), i `#missing-semester-forum`, eller via e-post till [missing-semester@mit.edu](mailto:missing-semester@mit.edu).
 
-Due to the limited time we have, we won't be able to cover all the tools
-in the same level of detail a full-scale class might. Where possible, we
-will try to point you towards resources for digging further into a tool
-or topic, but if something particularly strikes your fancy, don't
-hesitate to reach out to us and ask for pointers!
+På grund av begränsad tid kan vi inte täcka alla verktyg med samma detaljnivå som en fullskalig kurs.
+Där det går försöker vi hänvisa dig till resurser för att fördjupa dig i ett verktyg eller ämne,
+men om något verkligen fångar ditt intresse får du gärna höra av dig och be om tips.
 
-Finally, if you have feedback about the class, please send it to us by
-email at [missing-semester@mit.edu](mailto:missing-semester@mit.edu).
+Om du har synpunkter på kursen får du gärna e-posta dem till [missing-semester@mit.edu](mailto:missing-semester@mit.edu).
 
-# Topic 1: The Shell
+# Ämne 1: Skalet
 
 {% comment %}
 lecturer: Jon
 {% endcomment %}
 
-## What is the shell?
+## Vad är skalet?
 
-Computers these days have a variety of interfaces for giving them
-commands; fanciful graphical user interfaces, voice interfaces, AR/VR,
-and more recently: LLMs. These are great for 80% of use-cases, but they
-are often fundamentally restricted in what they allow you to do — you
-cannot press a button that isn't there or give a voice command that
-hasn't been programmed. To take full advantage of the tools your
-computer provides, we have to go old-school and drop down to a textual
-interface: The Shell.
+Datorer har i dag många gränssnitt för att ge dem kommandon:
+avancerade grafiska gränssnitt, röstgränssnitt, AR/VR,
+och på senare tid: LLM:er.
+De är utmärkta för 80 % av användningsfallen,
+men de är ofta i grunden begränsade i vad de låter dig göra.
+Du kan inte trycka på en knapp som inte finns,
+eller ge ett röstkommando som ingen har programmerat.
+För att fullt ut utnyttja verktygen i din dator behöver vi gå tillbaka till grunderna och använda ett textbaserat gränssnitt: skalet.
 
-Nearly all platforms you can get your hands on have a shell in one form
-or another, and many of them have several shells for you to choose from.
-While they may vary in the details, at their core they are all roughly
-the same: they allow you to run programs, give them input, and inspect
-their output in a semi-structured way.
+Nästan alla plattformar du kan få tag i har ett skal i någon form,
+och många har flera skal att välja mellan.
+Detaljerna skiljer sig,
+men i grunden är de ungefär lika:
+de låter dig köra program, ge dem indata och läsa deras utdata på ett semistrukturerat sätt.
 
-To open a shell _prompt_ (where you can type commands), you first need a
-_terminal_, which is the visual interface to a shell. Your device
-probably shipped with one installed, or you can install one fairly
-easily:
+För att öppna en skalprompt (där du kan skriva kommandon) behöver du först en terminal,
+som är det visuella gränssnittet till ett skal.
+Din enhet har troligen en installerad,
+annars är den enkel att installera:
 
 - **Linux:**
-  Press `Ctrl + Alt + T` (works on most distributions). Or search for
-  "Terminal" in your applications menu.
+  Tryck `Ctrl + Alt + T` (fungerar i de flesta distributioner).
+  Eller sök efter "Terminal" i programmenyn.
 - **Windows:**
-  Press `Win + R`, type `cmd` or `powershell`, and press Enter.
-  Alternatively, search "Terminal" or "Command Prompt" in the Start menu.
+  Tryck `Win + R`, skriv `cmd` eller `powershell` och tryck Enter.
+  Du kan också söka efter "Terminal" eller "Command Prompt" i Start-menyn.
 - **macOS:**
-  Press `Cmd + Space` to open Spotlight, type "Terminal", and press Enter.
-  Or find it in Applications → Utilities → Terminal.
+  Tryck `Cmd + Space` för att öppna Spotlight,
+  skriv "Terminal" och tryck Enter.
+  Eller hitta den i Applications -> Utilities -> Terminal.
 
-On Linux and macOS, this will usually open the Bourne Again SHell, or
-"bash" for short. This is one of the most widely used shells, and its
-syntax is similar to what you will see in many other shells. On Windows,
-you'll be greeted by the "batch" or "powershell" shells, depending on
-which command you ran. These are Windows-specific, and not what we'll be
-focusing on in this class, although it has analogues for most of what
-we'll be teaching. You'll instead want the [Windows Subsystem for
-Linux](https://docs.microsoft.com/en-us/windows/wsl/) or a Linux virtual
-machine.
+På Linux och macOS öppnas oftast Bourne Again SHell,
+eller "bash".
+Det är ett av de mest använda skalen,
+och dess syntax liknar det du ser i många andra skal.
+På Windows möts du av "batch" eller "powershell" beroende på vilket kommando du körde.
+De är Windows-specifika och inte det vi fokuserar på i kursen,
+även om de har motsvarigheter till det mesta vi lär ut.
+Du vill i stället använda [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) eller en Linux-virtuell maskin.
 
-Other shells exist, often with many ergonomic improvements over bash
-(fish and zsh are among the most common). While these are very popular
-(all the instructors use one), they're nowhere near as ubiquitous as
-bash, and lean on many of the same concepts, so we won't be focusing on
-those in this lecture.
+Andra skal finns också,
+ofta med många ergonomiska förbättringar jämfört med bash (fish och zsh är vanliga exempel).
+Även om de är populära (alla lärare använder något av dem),
+är de inte alls lika allmänt förekommande som bash,
+och bygger på samma grundkoncept,
+så vi lägger inte fokus på dem i den här föreläsningen.
 
-## Why should you care about it?
+## Varför ska du bry dig?
 
-The shell is not just (usually) much faster than "clicking around", it
-also comes with expressive power you can't easily find in any one
-graphical program. As we'll see, the shell gives you the ability to
-_combine_ programs in creative ways to automate nearly any task.
+Skalet är inte bara (oftast) mycket snabbare än att "klicka runt".
+Det ger också en uttryckskraft som du sällan hittar i ett enskilt grafiskt program.
+Som vi ska se ger skalet dig möjlighet att _kombinera_ program på kreativa sätt för att automatisera nästan vilken uppgift som helst.
 
-Knowing your way around a shell is also very useful to navigate the
-world of open-source software (which often come with install
-instructions that require the shell), building continuous integration
-for your software projects (as described in the [Code Quality
-lecture](/2026/code-quality/)), and debugging errors when other programs
-fail.
+Att kunna skalet är också väldigt nyttigt när du navigerar i världen av fri programvara och öppen källkod,
+där installationsinstruktioner ofta kräver skalet,
+när du bygger kontinuerlig integration för projekt (som i [föreläsningen om kodkvalitet]({{ '/2026/code-quality/' | relative_url }})),
+och när du felsöker fel när andra program kraschar.
 
-## Navigating in the shell
+## Navigera i skalet
 
-When you launch your terminal, you will see a _prompt_ that often looks
-a little like this:
+När du startar terminalen ser du en _prompt_ som ofta liknar detta:
 
 ```console
 missing:~$
 ```
 
-This is the main textual interface to the shell. It tells you that you
-are on the machine `missing` and that your "current working directory",
-or where you currently are, is `~` (short for "home"). The `$` tells you
-that you are not the root user (more on that later). At this prompt you
-can type a _command_, which will then be interpreted by the shell. The
-most basic command is to execute a program:
+Det här är skalets huvudsakliga textgränssnitt.
+Det berättar att du är på maskinen `missing` och att din "nuvarande arbetskatalog" är `~` (kort för "home").
+`$` visar att du inte är root-användare (mer om det senare).
+Vid prompten kan du skriva ett _kommando_ som skalet tolkar.
+Det mest grundläggande kommandot är att köra ett program:
 
 ```console
 missing:~$ date
@@ -168,43 +146,37 @@ Fri 10 Jan 2020 11:49:31 AM EST
 missing:~$
 ```
 
-Here, we executed the `date` program, which (perhaps unsurprisingly)
-prints the current date and time. The shell then asks us for another
-command to execute. We can also execute a command with _arguments_:
+Här körde vi programmet `date`,
+som (inte oväntat) skriver ut aktuellt datum och tid.
+Sedan ber skalet oss om nästa kommando.
+Vi kan också köra kommandon med _argument_:
 
 ```console
 missing:~$ echo hello
 hello
 ```
 
-In this case, we told the shell to execute the program `echo` with the
-argument `hello`. The `echo` program simply prints out its arguments.
-The shell parses the command by splitting it by whitespace, and then
-runs the program indicated by the first word, supplying each subsequent
-word as an argument that the program can access. If you want to provide
-an argument that contains spaces or other special characters (e.g., a
-directory named "My Photos"), you can either quote the argument with `'`
-or `"` (`"My Photos"`), or escape just the relevant characters with `\`
-(`My\ Photos`).
+Här bad vi skalet köra programmet `echo` med argumentet `hello`.
+`echo` skriver helt enkelt ut sina argument.
+Skalet parsar kommandot genom att dela på blanktecken,
+kör programmet i första ordet,
+och skickar efterföljande ord som argument programmet kan läsa.
+Om du vill ge ett argument som innehåller blanksteg eller specialtecken (t.ex. en katalog med namnet "My Photos") kan du citera med `'` eller `"` (`"My Photos"`),
+eller escapa enskilda tecken med `\` (`My\ Photos`).
 
-Perhaps the most important command when you're starting out is `man`,
-short for "manual". The `man` program, among other things, lets you look
-up more information about any command on your system. For example, if
-you run `man date`, it'll explain what `date` is, and all of the various
-arguments you can pass it to alter its behavior. You can also usually
-get a short version of the help by passing `--help` as an argument to
-most commands.
+Det viktigaste kommandot i början är kanske `man`, kort för "manual".
+`man` låter dig slå upp information om kommandon på ditt system.
+Om du till exempel kör `man date` får du en beskrivning av `date` och alla argument som ändrar beteendet.
+Du kan ofta också få en kortare hjälpsida genom att ge `--help` till kommandot.
 
-> Consider installing and using [`tldr`](https://tldr.sh/) in addition
-> to `man`, as it shows you common usage examples right there in the
-> terminal. LLMs are also usually very good at explaining how commands
-> work and how you can call them to achieve what you want to accomplish.
+> Överväg att installera och använda [`tldr`](https://tldr.sh/) utöver `man`, eftersom det visar vanliga exempel direkt i terminalen.
+> LLM:er är också ofta mycket bra på att förklara hur kommandon fungerar och hur de kan anropas.
 
-After `man`, the most important command to learn is `cd`, or "change
-directory". This command is actually built into the shell, and isn't a
-separate program (i.e., `which cd` will say "no cd found"). You pass it
-a path, and that path becomes your current working directory. You'll
-also see the working directory reflected in the shell prompt:
+Efter `man` är `cd` ("change directory") det viktigaste kommandot.
+Det är inbyggt i skalet och inte ett separat program (dvs. `which cd` säger "no cd found").
+Du skickar in en sökväg,
+och den blir din nuvarande arbetskatalog.
+Du ser det också i prompten:
 
 ```console
 missing:~$ cd /bin
@@ -213,23 +185,19 @@ missing:/$ cd ~
 missing:~$
 ```
 
-> Note that the shell comes with auto-completion, so you can often
-> complete paths faster by pressing `<TAB>`!
+> Skalet har autokomplettering,
+> så du kan ofta komplettera sökvägar snabbare med `<TAB>`.
 
-A lot of commands operate on the current working directory if nothing
-else is specified. If you're ever unsure where you are, you can run
-`pwd` or print the `$PWD` environment variable (with `echo $PWD`), both
-of which produce the current working directory.
+Många kommandon arbetar på nuvarande arbetskatalog om inget annat anges.
+Om du är osäker på var du är kan du köra `pwd` eller skriva ut miljövariabeln `$PWD` med `echo $PWD`.
+Båda visar nuvarande arbetskatalog.
 
-The current working directory also comes in handy in that it allows us to
-use _relative_ paths. All the paths we've seen so far have been
-_absolute_ --- they start with `/` and give the full set of directories
-needed to navigate to some location from the root of the file system
-(`/`). In practice, you'll more commonly work with relative paths; so
-called because they are relative to the current working directory. In a
-relative path (anything _not_ starting with `/`), the first path
-component is looked up in the current working directory, and subsequent
-components traverse as usual. For example:
+Nuvarande arbetskatalog är också viktig eftersom den låter oss använda _relativa_ sökvägar.
+Alla sökvägar vi sett hittills har varit _absoluta_ --- de börjar med `/` och anger hela vägen från filsystemets rot (`/`).
+I praktiken jobbar du oftare med relativa sökvägar,
+som är relativa till nuvarande arbetskatalog.
+I en relativ sökväg (allt som _inte_ börjar med `/`) slås första komponenten upp i nuvarande katalog och resten följer därifrån.
+Till exempel:
 
 ```console
 missing:~$ cd /
@@ -237,9 +205,10 @@ missing:/$ cd bin
 missing:/bin$
 ```
 
-There are also two "special" components that exist in every directory:
-`.` and `..`. `.` is "this directory", and `..` is "the parent
-directory". So:
+Det finns också två "specialkomponenter" i varje katalog:
+`.` och `..`.
+`.` är "den här katalogen" och `..` är "föräldrakatalogen".
+Alltså:
 
 ```console
 missing:~$ cd /
@@ -247,21 +216,16 @@ missing:/$ cd bin/../bin/../bin/././../bin/..
 missing:/$
 ```
 
-You can usually use absolute and relative paths interchangeably for any
-command argument, just keep in mind what your current working directory
-is when using a relative one!
+Du kan i regel använda absoluta och relativa sökvägar omväxlande i kommandon.
+Kom bara ihåg var din nuvarande arbetskatalog är när du använder relativa.
 
-> Consider installing and using
-> [`zoxide`](https://github.com/ajeetdsouza/zoxide) to speed up your
-> `cd`ing --- `z` will remember the paths you frequently visit and let
-> you access with less typing.
+> Överväg att installera och använda [`zoxide`](https://github.com/ajeetdsouza/zoxide) för snabbare `cd` --- `z` minns sökvägar du ofta besöker.
 
-## What is available in the shell?
+## Vad finns tillgängligt i skalet?
 
-But how does the shell know how to find programs like `date` or `echo`?
-If the shell is asked to execute a command, it consults an _environment
-variable_ called `$PATH` that lists which directories the shell should
-search for programs when it is given a command:
+Hur vet skalet var program som `date` och `echo` finns?
+Om skalet ombeds köra ett kommando tittar det på en _miljövariabel_ kallad `$PATH`.
+Den listar kataloger som skalet ska söka i efter program:
 
 ```console
 missing:~$ echo $PATH
@@ -272,122 +236,100 @@ missing:~$ /bin/echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ```
 
-When we run the `echo` command, the shell sees that it should execute
-the program `echo`, and then searches through the `:`-separated list of
-directories in `$PATH` for a file by that name. When it finds it, it
-runs it (assuming the file is _executable_; more on that later). We can
-find out which file is executed for a given program name using the
-`which` program. We can also bypass `$PATH` entirely by giving the
-_path_ to the file we want to execute.
+När vi kör `echo` ser skalet att programmet `echo` ska köras,
+och söker i den `:`-separerade listan i `$PATH` efter en fil med det namnet.
+När det hittas körs den (om filen är _körbar_, mer om det senare).
+Vi kan se exakt vilken fil som körs för ett namn med `which`.
+Vi kan också kringgå `$PATH` helt genom att ange full _sökväg_ till filen.
 
-This also gives a clue for how we can determine _all_ the programs we're
-able to execute in the shell: by listing the contents of all the
-directories on `$PATH`. We can do this by passing a given directory path
-to the `ls` program, which lists files:
+Detta visar också hur vi kan ta reda på _alla_ program vi kan köra:
+lista innehållet i alla kataloger i `$PATH`.
+Det gör vi genom att ge en katalog till `ls`, som listar filer:
 
 ```console
 missing:~$ ls /bin
 ```
 
-> Consider installing and using [`eza`](https://eza.rocks/) for a more
-> human-friendly `ls`.
+> Överväg att installera och använda [`eza`](https://eza.rocks/) för en mer användarvänlig `ls`.
 
-This will, on most computers, print a _lot_ of programs, but we'll only
-focus on some of the most important ones here. First, some simple ones:
+Detta skriver på de flesta datorer ut _väldigt_ många program,
+men här fokuserar vi på några viktiga:
 
-- `cat file`, which prints the contents of `file`.
-- `sort file`, which prints out the lines of `file` in sorted order.
-- `uniq file`, which eliminates consecutive duplicate lines from `file`.
-- `head file` and `tail file`, which respectively print the first and
-  last few lines of `file`.
+- `cat file`, som skriver ut innehållet i `file`.
+- `sort file`, som skriver ut raderna i `file` sorterade.
+- `uniq file`, som tar bort intilliggande dubblettrader i `file`.
+- `head file` och `tail file`, som visar de första respektive sista raderna.
 
-> Consider installing and using [`bat`](https://github.com/sharkdp/bat)
-> over `cat` for syntax highlighting and scrolling.
+> Överväg att installera och använda [`bat`](https://github.com/sharkdp/bat) i stället för `cat` för syntaxfärgning och scrollning.
 
-There's also `grep pattern file`, which finds lines matching `pattern`
-in `file`. This one deserves slightly more attention as it's both _very_
-useful and sports a wider array of features than one may expect.
-`pattern` is actually a _regular expression_ which can express very
-complex patterns --- we'll [cover
-those](/2026/code-quality/#regular-expressions)
-in the code quality lecture. You can also specify a directory instead of a
-file (or leave it off for `.`) and pass `-r` to recursively search all
-the files in a directory.
+Det finns också `grep pattern file`, som hittar rader som matchar `pattern` i `file`.
+Detta kommando förtjänar lite extra uppmärksamhet eftersom det är både _mycket_ användbart och mer kraftfullt än det ser ut.
+`pattern` är ett _reguljärt uttryck_ som kan beskriva komplexa mönster.
+Vi går igenom dem i [föreläsningen om kodkvalitet]({{ '/2026/code-quality/#regular-expressions' | relative_url }}).
+Du kan också ange en katalog i stället för en fil (eller utelämna för `.`) och skicka `-r` för rekursiv sökning.
 
-> Consider installing and using
-> [`ripgrep`](https://github.com/BurntSushi/ripgrep) over `grep` for a
-> faster and more human-friendly (but less portable) alternative.
-> `ripgrep` will also recursively search the current working directory
-> by default!
+> Överväg att installera och använda [`ripgrep`](https://github.com/BurntSushi/ripgrep) i stället för `grep` för ett snabbare och mer användarvänligt (men mindre portabelt) alternativ.
+> `ripgrep` söker också rekursivt i aktuell arbetskatalog som standard.
 
-There are also some very useful tools with a slightly more complicated
-interface. First among those is `sed`, which is a programmatic file
-editor. It has its own programming language for making automated edits
-to files, but the most common use of it is:
+Det finns även mycket nyttiga verktyg med lite mer avancerat gränssnitt.
+Ett är `sed`, som är en programmerbar filredigerare.
+Den har ett eget språk för automatiserade redigeringar,
+men vanligaste användningen är:
 
 ```console
 missing:~$ sed -i 's/pattern/replacement/g' file
 ```
 
-This replaces all instances of `pattern` with `replacement` in `file`.
-The `-i` indicates that we want the substitutions to happen inline (as
-opposed to leaving `file` unmodified and printing the substituted
-contents). The `s/` is the way to express in the sed programming
-language that we want to do a substitution. The `/` separates the
-pattern from the replacement. And the trailing `/g` indicates that we
-want to replace _all_ occurrences on each line rather than just the
-first. As with `grep`, `pattern` here is a regular expression, which
-gives you significant expressive power. Regular expression substitutions
-also allow `replacement` to refer back to parts of the matched pattern;
-we'll see an example of that in a second.
+Detta ersätter alla förekomster av `pattern` med `replacement` i `file`.
+`-i` betyder att ersättningen görs i filen (i stället för att skriva ut modifierat innehåll till stdout).
+`s/` uttrycker i sed-språket att vi vill göra en substitution.
+`/` separerar mönster från ersättning.
+Avslutande `/g` betyder att vi ersätter _alla_ förekomster per rad,
+inte bara den första.
+Som i `grep` är `pattern` ett reguljärt uttryck,
+vilket ger hög uttryckskraft.
+Reguljära ersättningar låter också `replacement` referera tillbaka till delar av matchningen.
 
-Next, we have `find`, which lets you find files (recursively) that match
-certain conditions. For example:
+Sedan har vi `find`, som låter dig hitta filer rekursivt som matchar vissa villkor.
+Till exempel:
 
 ```console
 missing:~$ find ~/Downloads -type f -name "*.zip" -mtime +30
 ```
 
-Finds ZIP files in the download directory that are older than 30 days.
+Hittar ZIP-filer i nedladdningskatalogen som är äldre än 30 dagar.
 
 ```console
 missing:~$ find ~ -type f -size +100M -exec ls -lh {} \;
 ```
 
-Finds files larger than 100M in your home directory and lists them. Note
-that `-exec` takes a _command_ terminated with a stand-alone `;` (which
-we need to escape much like a space) where `{}` is replaced with each
-matching file path by `find`.
+Hittar filer större än 100M i hemkatalogen och listar dem.
+Observera att `-exec` tar ett _kommando_ som avslutas med ett fristående `;` (som måste escapas), där `{}` ersätts av varje matchande sökväg.
 
 ```console
 missing:~$ find . -name "*.py" -exec grep -l "TODO" {} \;
 ```
 
-Finds any `.py` files with TODO items in them.
+Hittar alla `.py`-filer med TODO-poster.
 
-The syntax of `find` can be a little daunting, but hopefully this gives
-you a sense of how useful it can be!
+`find`-syntaxen kan kännas avskräckande,
+men förhoppningsvis ger exemplen en bild av hur användbart det är.
 
-> Consider installing and using [`fd`](https://github.com/sharkdp/fd)
-> instead of `find` for a more human-friendly (but less portable!)
-> experience.
+> Överväg att installera och använda [`fd`](https://github.com/sharkdp/fd) i stället för `find` för en mer användarvänlig (men mindre portabel) upplevelse.
 
-Next on the docket is `awk`, which, like `sed`, has its own programming
-language. Where `sed` is built for editing files, `awk` is built for
-parsing them. By far the most common use of `awk` is for data files with
-a regular syntax (like CSV files) where you want to extract only certain
-parts of every record (i.e., line):
+Nästa verktyg är `awk`, som likt `sed` har ett eget språk.
+Där `sed` är byggt för att redigera filer är `awk` byggt för att parsa dem.
+Den vanligaste användningen är datafiler med regelbunden struktur (som CSV) där du vill extrahera vissa delar av varje post (dvs. rad):
 
 ```console
 missing:~$ awk '{print $2}' file
 ```
 
-Prints the second whitespace-separated column of every line of `file`.
-If you add `-F,`, it'll print the second comma-separated column of every
-line. `awk` can do much more --- filtering rows, computing aggregates,
-and more --- see the exercises for a taste.
+Skriver ut andra blankteckensseparerade kolumnen i varje rad av `file`.
+Om du lägger till `-F,` skrivs i stället andra kommaseparerade kolumnen ut.
+`awk` kan mycket mer --- filtrera rader, beräkna aggregat med mera.
 
-Putting these tools together, we can do fancy things like:
+Genom att kombinera verktygen kan vi göra avancerade saker som:
 
 ```console
 missing:~$ ssh myserver 'journalctl -u sshd -b-1 | grep "Disconnected from"' \
@@ -398,259 +340,218 @@ missing:~$ ssh myserver 'journalctl -u sshd -b-1 | grep "Disconnected from"' \
 postgres,mysql,oracle,dell,ubuntu,inspur,test,admin,user,root
 ```
 
-This grabs SSH logs from a remote server (we'll talk more about `ssh` in
-the next lecture), searches for disconnect messages, extracts the
-username from each such message, and prints the top 10 usernames
-comma-separated. All in one command! We'll leave dissecting each step as
-an exercise.
+Detta hämtar SSH-loggar från en fjärrserver,
+söker efter frånkopplingsmeddelanden,
+extraherar användarnamn,
+och skriver ut de 10 vanligaste kommaseparerat.
+Allt i ett kommando.
 
-## The shell language (bash)
+## Skalspråket (bash)
 
-The previous example introduced a new concept: pipes (`|`). These let
-you string together the output of one program with the input of another.
-This works because most command-line programs will operate on their
-"standard input" (where your keystrokes normally go) if no `file`
-argument is given. `|` takes the "standard output" (what normally gets
-printed to your terminal) of the program before the `|` and makes it be
-the standard input of the program after the `|`. This allows you to
-_compose_ shell programs, and it's part of what makes the shell such a
-productive environment to work in!
+Föregående exempel introducerade ett nytt koncept: rör (`|`).
+De låter dig kedja utdata från ett program till indata för ett annat.
+Det fungerar eftersom de flesta kommandoradsprogram läser från "standard input" om inget `file`-argument ges.
+`|` tar "standard output" från programmet före `|` och gör det till standard input för programmet efter `|`.
+Det låter dig _komponera_ skalprogram,
+och är en stor del av varför skalet är så produktivt.
 
-In fact, most shells implement a full programming language (like bash),
-just like Python or Ruby. It has variables, conditionals, loops, and
-functions. When you run commands in your shell, you are really writing a
-small bit of code that your shell interprets. We won't teach you all of
-bash today, but there are some bits you'll find particularly useful:
+De flesta skal implementerar faktiskt ett komplett programmeringsspråk (som bash),
+precis som Python eller Ruby.
+Det har variabler, villkor, loopar och funktioner.
+När du kör kommandon skriver du i praktiken små kodsnuttar som skalet tolkar.
+Vi lär inte ut hela bash i dag,
+men några delar är särskilt nyttiga:
 
-First, redirects: `>file` lets you take the standard output of a program
-and write it to `file` instead of to your terminal. This makes it easier
-to analyze after the fact. `>>file` will append to `file` rather than
-overwrite it. There's also `<file` which tells the shell to read from
-`file` instead of from your keyboard as the standard input to a program.
+Först, omdirigeringar:
+`>file` tar standard output från ett program och skriver till `file` i stället för terminalen.
+`>>file` appenderar till `file` i stället för att skriva över.
+`<file` säger åt skalet att läsa standard input från fil i stället för tangentbordet.
 
-> This is a good time to mention the `tee` program. `tee` will print
-> standard input to standard output (just like `cat`!), but will _also_
-> write it to a file. So `verbose cmd | tee verbose.log | grep CRITICAL`
-> will preserve the full verbose log to a file while keeping your
-> terminal clean!
+> Detta är ett bra tillfälle att nämna `tee`.
+> `tee` skriver standard input till standard output (som `cat`), men _också_ till fil.
+> `verbose cmd | tee verbose.log | grep CRITICAL` bevarar alltså full logg i fil samtidigt som terminalen hålls ren.
 
-Next, conditionals: `if command1; then command2; command3; fi` will
-execute `command1`, and if it doesn't result in an error, will run
-`command2` and `command3`. You can also have an `else` branch if you
-wish. The most common command to use as `command1` is the `test`
-command, often abbreviated simply as `[`, which lets you evaluate
-conditions like "does a file exist" (`test -f file` / `[ -f file ]`) or
-"does a string equal another" (`[ "$var" = "string" ]`). In bash,
-there's also `[[ ]]`, which is a "safer" built-in version of `test` that
-has fewer odd behaviours around quoting.
+Sedan villkor:
+`if command1; then command2; command3; fi` kör `command1`,
+och om det lyckas körs `command2` och `command3`.
+Du kan också ha en `else`-gren.
+Vanligast är att använda `test` som `command1`, ofta förkortat `[`,
+för villkor som "finns filen" (`test -f file` / `[ -f file ]`) eller "är strängen lika med" (`[ "$var" = "string" ]`).
+I bash finns också `[[ ]]`,
+en säkrare inbyggd variant med färre underligheter kring quoting.
 
-Bash also has two forms of loops, `while` and `for`. `while command1; do
-command2; command3; done` functions just like the equivalent `if`
-command, except that it will re-execute the whole thing over and over
-for as long as `command1` does not error. `for varname in a b c d; do
-command; done` executes `command` four times, each time with `$varname`
-set to one of `a`, `b`, `c`, and `d`. Instead of listing the items
-explicitly, you'll often use "command substitution", such as:
+Bash har två looptyper, `while` och `for`.
+`while command1; do command2; command3; done` fungerar som motsvarande `if`,
+men upprepas så länge `command1` inte ger fel.
+`for varname in a b c d; do command; done` kör `command` fyra gånger,
+med `$varname` satt till `a`, `b`, `c` respektive `d`.
+I stället för att lista element explicit används ofta kommandosubstitution (_command substitution_),
+som:
 
 ```bash
 for i in $(seq 1 10); do
 ```
 
-This executes the command `seq 1 10` (which prints the numbers from 1 to
-10 inclusive) and then replaces the whole `$()` with that command's
-output, giving you a 10-iteration for loop. In older code you'll
-sometimes see literal backticks (like ``for i in `seq 1 10`; do``)
-instead of `$()`, but you should strongly prefer the `$()` form as it
-can be nested.
+Det kör `seq 1 10` (som skriver ut 1 till 10) och ersätter hela `$()` med kommandots utdata.
+Du får då en for-loop med 10 iterationer.
+I äldre kod ser du ibland backticks i stället (``for i in `seq 1 10`; do``),
+men föredra starkt `$()` eftersom den kan nästlas.
 
-While you _can_ write long shell scripts directly in your prompt, you'll
-usually want to write them into a `.sh` file instead. For example,
-here's a script that will run a program in a loop until it fails,
-printing the output only of the failed run, while stressing your CPU in
-the background (useful to reproduce flaky tests for example):
+Även om du _kan_ skriva långa skalskript direkt i prompten,
+vill du oftast lägga dem i en `.sh`-fil.
+Här är ett skript som kör ett program i loop tills det fallerar,
+skriver ut logg från den felande körningen,
+och belastar CPU i bakgrunden (nyttigt för att reproducera flakiga tester):
 
 ```bash
 #!/bin/bash
 set -euo pipefail
 
-# Start CPU stress in background
+# Starta CPU-belastning i bakgrunden
 stress --cpu 8 &
 STRESS_PID=$!
 
-# Setup log file
+# Sätt upp loggfil
 LOGFILE="test_runs_$(date +%s).log"
-echo "Logging to $LOGFILE"
+echo "Loggar till $LOGFILE"
 
-# Run tests until one fails
+# Kör tester tills ett misslyckas
 RUN=1
 while cargo test my_test > "$LOGFILE" 2>&1; do
-    echo "Run $RUN passed"
+    echo "Körning $RUN lyckades"
     ((RUN++))
 done
 
-# Cleanup and report
+# Städa upp och rapportera
 kill $STRESS_PID
-echo "Test failed on run $RUN"
-echo "Last 20 lines of output:"
+echo "Testet misslyckades under körning $RUN"
+echo "Sista 20 raderna i utdata:"
 tail -n 20 "$LOGFILE"
-echo "Full log: $LOGFILE"
+echo "Fullständig logg: $LOGFILE"
 ```
 
-This has a number of new things in it that I recommend you spend some
-time diving into, as they're very useful in crafting useful shell
-invocations like background jobs (`&`) to run programs concurrently,
-trickier [shell
-redirections](https://www.gnu.org/software/bash/manual/html_node/Redirections.html),
-and [arithmetic
-expansion](https://www.gnu.org/software/bash/manual/html_node/Arithmetic-Expansion.html).
+Detta innehåller flera nya saker värda att gräva i,
+som bakgrundsjobb (`&`) för samtidighet,
+mer avancerade [skalomdirigeringar](https://www.gnu.org/software/bash/manual/html_node/Redirections.html),
+och [aritmetisk expansion](https://www.gnu.org/software/bash/manual/html_node/Arithmetic-Expansion.html).
 
-It's worth spending a second on the first two lines of the program
-though. The first is the "shebang" -- you'll see this at the top of
-other files than shell scripts too. When a file that starts with the
-magic incantation `#!/path` is executed, the shell will start the
-program at `/path`, and pass it the contents of the file as input. In
-the case of a shell script, this means passing the contents of the shell
-script to `/bin/bash`, but you can also write Python scripts with a
-shebang line of `/usr/bin/python`!
+Det är också värt att titta på programmets två första rader.
+Första raden är "shebang".
+Den syns i många filtyper, inte bara skalskript.
+När en fil som börjar med `#!/path` körs startar skalet programmet på `/path` och skickar filens innehåll som indata.
+För skalskript innebär det att innehållet skickas till `/bin/bash`.
+Du kan på samma sätt skriva Python-skript med shebang `/usr/bin/python`.
 
-The second line is a way to make bash "stricter", and mitigate a number
-of footguns when writing shell scripts. `set` can take a whole lot of
-arguments, but briefly: `-e` makes it so that if any command fails, the
-script exits early; `-u` makes it so that use of undefined variables
-crashes the script rather than just using an empty string; and `-o
-pipefail` makes it so that if programs in a `|` sequence fail, the
-shell script as a whole also exits early.
+Andra raden gör bash "striktare" och minskar vanliga fallgropar.
+`set` tar många argument, men kort:
+`-e` avslutar skriptet när ett kommando misslyckas,
+`-u` gör att odefinierade variabler blir fel i stället för tom sträng,
+och `-o pipefail` gör att fel i en `|`-kedja också får hela skriptet att avslutas.
 
-> Shell programming is a deep topic, just as any programming language
-> is, but be warned: bash has an unusual number of gotchas, to the point
-> that there are [multiple](https://tldp.org/LDP/abs/html/gotchas.html)
-> websites dedicated to [listing them](https://mywiki.wooledge.org/BashPitfalls).
-> I highly recommend making heavy use of
-> [shellcheck](https://www.shellcheck.net/) when writing them. LLMs are
-> also great at writing and debugging shell scripts, as well as
-> translating them to a "real" programming language (like Python) when
-> they've grown too unwieldy for bash (100+ lines).
+> Skalprogrammering är ett djupt ämne, och en varning är befogad:
+> bash har ovanligt många fallgropar,
+> till den grad att det finns [flera](https://tldp.org/LDP/abs/html/gotchas.html) webbplatser som [listar dem](https://mywiki.wooledge.org/BashPitfalls).
+> Vi rekommenderar starkt [shellcheck](https://www.shellcheck.net/) när du skriver skalskript.
+> LLM:er är också bra på att skriva och felsöka skalskript,
+> och på att översätta dem till ett "riktigt" språk (som Python) när de blir för stora för bash.
 
-# Next steps
+# Nästa steg
 
-At this point you know your way around a shell enough to accomplish
-basic tasks. You should be able to navigate around to find files of
-interest and use the basic functionality of most programs. In the next
-lecture, we will talk about how to perform and automate more complex
-tasks using the shell and the many handy command-line programs out
-there.
+Nu kan du tillräckligt mycket om skalet för att utföra grundläggande uppgifter.
+Du bör kunna navigera, hitta filer av intresse och använda basfunktioner i de flesta program.
+I nästa föreläsning pratar vi om hur du utför och automatiserar mer komplexa uppgifter med skalet och många användbara kommandoradsprogram.
 
-# Exercises
+# Övningar
 
-All classes in this course are accompanied by a series of exercises.
-Some give you a specific task to do, while others are open-ended, like
-"try using X and Y programs". We highly encourage you to try them out.
+Alla pass i kursen har tillhörande övningar.
+Vissa är tydliga och konkreta,
+andra är öppnare,
+som "testa att använda X och Y".
+Vi uppmuntrar dig starkt att prova.
 
-We have not written solutions for the exercises. If you are stuck on
-anything in particular, feel free to post in `#missing-semester-forum`
-on [Discord](https://ossu.dev/#community) or send us an email describing
-what you've tried so far, and we will try to help you out. These
-exercises will also likely work well as initial prompts in a
-conversation with an LLM where you can interactively dive into the
-topic. The real value in these exercises is the journey of discovering
-the answers, not the answer itself. We encourage you to follow tangents
-and ask "why" as you work through them, rather than just looking for the
-shortest path to the solution.
+Vi har inte skrivit facit till övningarna.
+Om du fastnar får du gärna skriva i `#missing-semester-forum` på [Discord](https://ossu.dev/#community) eller e-posta oss och beskriva vad du testat.
+De här övningarna fungerar också bra som startprompter i en LLM-konversation.
+Det verkliga värdet är vägen till svaret, inte själva svaret.
+Följ gärna sidospår och fråga "varför" när du jobbar igenom dem.
 
-1. For this course, you need to be using a Unix shell like Bash or ZSH. If
-   you are on Linux or macOS, you don't have to do anything special. If you
-   are on Windows, you need to make sure you are not running cmd.exe or
-   PowerShell; you can use [Windows Subsystem for
-   Linux](https://docs.microsoft.com/en-us/windows/wsl/) or a Linux virtual
-   machine to use Unix-style command-line tools. To make sure you're running
-   an appropriate shell, you can try the command `echo $SHELL`. If it says
-   something like `/bin/bash` or `/usr/bin/zsh`, that means you're running
-   the right program.
+1. För den här kursen behöver du använda ett Unix-skal som Bash eller ZSH.
+   Om du använder Linux eller macOS behöver du inte göra något särskilt.
+   Om du använder Windows måste du se till att du inte kör cmd.exe eller PowerShell.
+   Du kan använda [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) eller en Linux-VM för Unix-liknande kommandoradsverktyg.
+   För att kontrollera att du kör rätt skal kan du testa `echo $SHELL`.
+   Om det står något som `/bin/bash` eller `/usr/bin/zsh` kör du rätt program.
 
-1. What does the `-l` flag to `ls` do? Run `ls -l /` and examine the output.
-   What do the first 10 characters of each line mean? (Hint: `man ls`)
+1. Vad gör flaggan `-l` i `ls`?
+   Kör `ls -l /` och granska utdata.
+   Vad betyder de första 10 tecknen på varje rad?
+   (Tips: `man ls`.)
 
-1. In the command `find ~/Downloads -type f -name "*.zip" -mtime +30`, the
-   `*.zip` is a "glob". What is a glob? Create a test directory with some
-   files and experiment with patterns like `ls *.txt`, `ls file?.txt`, and
-   `ls {a,b,c}.txt`. See [Pattern
-   Matching](https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html)
-   in the Bash manual.
+1. I kommandot `find ~/Downloads -type f -name "*.zip" -mtime +30` är `*.zip` en "glob".
+   Vad är en glob?
+   Skapa en testkatalog med några filer och experimentera med `ls *.txt`, `ls file?.txt` och `ls {a,b,c}.txt`.
+   Se [Mönstermatchning](https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html) i Bash-manualen.
 
-1. What's the difference between `'single quotes'`, `"double quotes"`, and
-   `$'ANSI quotes'`? Write a command that echoes a string containing a
-   literal `$`, a `!`, and a newline character. See
-   [Quoting](https://www.gnu.org/software/bash/manual/html_node/Quoting.html).
+1. Vad är skillnaden mellan `'single quotes'`, `"double quotes"` och `$'ANSI quotes'`?
+   Skriv ett kommando som ekar en sträng med en bokstavlig `$`, en `!` och en radbrytning.
+   Se [citering](https://www.gnu.org/software/bash/manual/html_node/Quoting.html).
 
-1. The shell has three standard streams: stdin (0), stdout (1), and stderr
-   (2). Run `ls /nonexistent /tmp` and redirect stdout to one file and
-   stderr to another. How would you redirect both to the same file? See
-   [Redirections](https://www.gnu.org/software/bash/manual/html_node/Redirections.html).
+1. Skalet har tre standardströmmar: stdin (0), stdout (1) och stderr (2).
+   Kör `ls /nonexistent /tmp` och omdirigera stdout till en fil och stderr till en annan.
+   Hur omdirigerar du båda till samma fil?
+   Se [omdirigeringar](https://www.gnu.org/software/bash/manual/html_node/Redirections.html).
 
-1. `$?` holds the exit status of the last command (0 = success). `&&` runs
-   the next command only if the previous succeeded; `||` runs it only if
-   the previous failed. Write a one-liner that creates `/tmp/mydir` only if
-   it doesn't already exist. See [Exit
-   Status](https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html).
+1. `$?` innehåller exit-status för senaste kommandot (0 = lyckat).
+   `&&` kör nästa kommando bara om föregående lyckas och `||` kör nästa bara om föregående misslyckas.
+   Skriv ett enradskommando som skapar `/tmp/mydir` bara om den inte redan finns.
+   Se [avslutningsstatus](https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html).
 
-1. Why does `cd` have to be built into the shell itself rather than a
-   standalone program? (Hint: think about what a child process can and
-   cannot affect in its parent.)
+1. Varför måste `cd` vara inbyggt i skalet i stället för ett fristående program?
+   (Tips: fundera på vad en barnprocess kan och inte kan påverka i sin förälder.)
 
-1. Write a script that takes a filename as an argument (`$1`) and checks
-   whether the file exists using `test -f` or `[ -f ... ]`. It should print
-   different messages depending on whether the file exists. See [Bash
-   Conditional
-   Expressions](https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html).
+1. Skriv ett skript som tar ett filnamn som argument (`$1`) och kontrollerar om filen finns med `test -f` eller `[ -f ... ]`.
+   Skriptet ska skriva olika meddelanden beroende på om filen finns.
+   Se [villkorsuttryck i Bash](https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html).
 
-1. Save the script from the previous exercise to a file (e.g., `check.sh`).
-   Try running it with `./check.sh somefile`. What happens? Now run
-   `chmod +x check.sh` and try again. Why is this step necessary? (Hint:
-   look at `ls -l check.sh` before and after the `chmod`.)
+1. Spara skriptet från förra övningen till en fil (t.ex. `check.sh`).
+   Testa `./check.sh somefile`.
+   Vad händer?
+   Kör sedan `chmod +x check.sh` och testa igen.
+   Varför är steget nödvändigt?
+   (Tips: jämför `ls -l check.sh` före och efter `chmod`.)
 
-1. What happens if you add `-x` to the `set` flags in a script? Try it with
-    a simple script and observe the output. See [The Set
-    Builtin](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html).
+1. Vad händer om du lägger till `-x` till `set`-flaggorna i ett skript?
+   Prova med ett enkelt skript och observera utdata.
+   Se [det inbyggda kommandot set](https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html).
 
-1. Write a command that copies a file to a backup with today's date in the
-    filename (e.g., `notes.txt` → `notes_2026-01-12.txt`). (Hint: `$(date
-    +%Y-%m-%d)`). See [Command
-    Substitution](https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html).
+1. Skriv ett kommando som kopierar en fil till en backup med dagens datum i filnamnet (t.ex. `notes.txt` -> `notes_2026-01-12.txt`).
+   (Tips: `$(date +%Y-%m-%d)`.)
+   Se [kommandosubstitution (command substitution)](https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html).
 
-1. Modify the flaky test script from the lecture to accept the test command
-    as an argument instead of hardcoding `cargo test my_test`. (Hint: `$1`
-    or `$@`). See [Special
-    Parameters](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html).
+1. Modifiera skriptet för flakiga tester från föreläsningen så att testkommandot tas som argument i stället för hårdkodat `cargo test my_test`.
+   (Tips: `$1` eller `$@`.)
+   Se [särskilda parametrar](https://www.gnu.org/software/bash/manual/html_node/Special-Parameters.html).
 
-1. Use pipes to find the 5 most common file extensions in your home
-    directory. (Hint: combine `find`, `grep` or `sed` or `awk`, `sort`,
-    `uniq -c`, and `head`.)
+1. Använd rör (`|`) för att hitta de 5 vanligaste filändelserna i din hemkatalog.
+   (Tips: kombinera `find`, `grep` eller `sed` eller `awk`, `sort`, `uniq -c` och `head`.)
 
-1. `xargs` converts lines from stdin into command arguments. Use `find` and
-    `xargs` together (not `find -exec`) to find all `.sh` files in a
-    directory and count the lines in each with `wc -l`. Bonus: make it
-    handle filenames with spaces. (Hint: `-print0` and `-0`). See `man
-    xargs`.
+1. `xargs` gör om rader från stdin till kommandoradsargument.
+   Använd `find` och `xargs` tillsammans (inte `find -exec`) för att hitta alla `.sh`-filer i en katalog och räkna rader i varje med `wc -l`.
+   Bonus: få det att fungera med filnamn som innehåller blanksteg.
+   (Tips: `-print0` och `-0`.)
+   Se `man xargs`.
 
-1. Use `curl` to fetch the HTML of the course website
-    (`https://missing.csail.mit.edu/`) and pipe it to `grep` to count how
-    many lectures are listed. (Hint: look for a pattern that appears once
-    per lecture; use `curl -s` to silence the progress output.)
+1. Använd `curl` för att hämta HTML för kurswebbplatsen (`https://missing.csail.mit.edu/`) och skicka resultatet genom ett rör till `grep` för att räkna hur många föreläsningar som listas.
+   (Tips: leta efter ett mönster som finns en gång per föreläsning och använd `curl -s` för tyst läge.)
 
-1. [`jq`](https://jqlang.github.io/jq/) is a powerful tool for processing
-    JSON data. Fetch the sample data at
-    `https://microsoftedge.github.io/Demos/json-dummy-data/64KB.json` with
-    `curl` and use `jq` to extract just the names of people whose version
-    is greater than 6. (Hint: pipe to `jq .` first to see the structure;
-    then try `jq '.[] | select(...) | .name'`)
+1. [`jq`](https://jqlang.github.io/jq/) är ett kraftfullt verktyg för att bearbeta JSON.
+   Hämta exempeldata på `https://microsoftedge.github.io/Demos/json-dummy-data/64KB.json` med `curl` och använd `jq` för att extrahera namnen på personer vars version är större än 6.
+   (Tips: skicka först genom ett rör till `jq .` för att se strukturen och testa sedan `jq '.[] | select(...) | .name'`.)
 
-1. `awk` can filter lines based on column values and manipulate output.
-    For example, `awk '$3 ~ /pattern/ {$4=""; print}'` prints only lines
-    where the third column matches `pattern`, while omitting the fourth
-    column. Write an `awk` command that prints only lines where the second
-    column is greater than 100, and swaps the first and third columns. Test
-    with: `printf 'a 50 x\nb 150 y\nc 200 z\n'`
+1. `awk` kan filtrera rader baserat på kolumnvärden och manipulera utdata.
+   Exempel: `awk '$3 ~ /pattern/ {$4=""; print}'` skriver bara rader där tredje kolumnen matchar `pattern`, men utelämnar fjärde kolumnen.
+   Skriv ett `awk`-kommando som bara skriver rader där andra kolumnen är större än 100, och byter plats på första och tredje kolumnen.
+   Testa med: `printf 'a 50 x\nb 150 y\nc 200 z\n'`.
 
-1. Dissect the SSH log pipeline from the lecture: what does each step do?
-    Then build something similar to find your most-used shell commands from
-    `~/.bash_history` (or `~/.zsh_history`).
+1. Dela upp SSH-loggkedjan från föreläsningen: vad gör varje steg?
+   Bygg sedan något liknande för att hitta dina mest använda skalkommandon från `~/.bash_history` (eller `~/.zsh_history`).

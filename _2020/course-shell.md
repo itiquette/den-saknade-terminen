@@ -1,8 +1,8 @@
 ---
 layout: lecture
-title: "Course Overview + The Shell"
+title: "Kursöversikt + skalet"
 description: >
-  Learn about the motivation for this class, and get started with the shell.
+  Lär dig varför kursen finns och kom igång med skalet.
 thumbnail: /static/assets/thumbnails/2020/lec1.png
 date: 2020-01-13
 ready: true
@@ -13,90 +13,61 @@ video:
 
 # Motivation
 
-As computer scientists, we know that computers are great at aiding in
-repetitive tasks. However, far too often, we forget that this applies
-just as much to our _use_ of the computer as it does to the computations
-we want our programs to perform. We have a vast range of tools
-available at our fingertips that enable us to be more productive and
-solve more complex problems when working on any computer-related
-problem. Yet many of us utilize only a small fraction of those tools; we
-only know enough magical incantations by rote to get by, and blindly
-copy-paste commands from the internet when we get stuck.
+Som datavetare vet vi att datorer är fantastiska på att hjälpa till med repetitiva uppgifter.
+Ofta glömmer vi att det här gäller lika mycket för _hur vi använder_ datorn som för de beräkningar vi vill att våra program ska utföra.
+Vi har många verktyg nära till hands som gör oss mer produktiva och låter oss lösa mer komplexa problem i allt datorrelaterat arbete.
+Trots det använder många av oss bara en liten del av verktygen; vi kan precis tillräckligt många magiska rader utantill för att klara oss, och kopierar blint kommandon från internet när vi kör fast.
 
-This class is an attempt to address this.
+Den här kursen är ett försök att rätta till det.
 
-We want to teach you how to make the most of the tools you know, show
-you new tools to add to your toolbox, and hopefully instill in you some
-excitement for exploring (and perhaps building) more tools on your own.
-This is what we believe to be the missing semester from most Computer
-Science curricula.
+Vi vill lära dig att få ut mer av verktygen du redan känner till, visa nya verktyg att lägga i verktygslådan och förhoppningsvis väcka lust att utforska (och kanske bygga) fler verktyg själv.
+Det är det vi menar med den saknade terminen i många datavetenskapliga utbildningar.
 
-# Class structure
+# Kursupplägg
 
-The class consists of 11 1-hour lectures, each one centering on a
-[particular topic](/2020/). The lectures are largely independent,
-though as the semester goes on we will presume that you are familiar
-with the content from the earlier lectures. We have lecture notes
-online, but there will be a lot of content covered in class (e.g. in the
-form of demos) that may not be in the notes. We will be recording
-lectures and posting the recordings online.
+Kursen består av 11 föreläsningar på en timme vardera, där varje föreläsning kretsar kring ett [särskilt ämne]({{ '/2020/' | relative_url }}).
+Föreläsningarna är till stor del fristående, även om vi längre fram under terminen antar att du är bekant med innehållet från tidigare pass.
+Vi har föreläsningsanteckningar på nätet, men en hel del av det som tas upp i klassrummet (t.ex. demonstrationer) kanske inte finns i anteckningarna.
+Vi spelar in föreläsningarna och publicerar inspelningarna på nätet.
 
-We are trying to cover a lot of ground over the course of just 11 1-hour
-lectures, so the lectures are fairly dense. To allow you some time to
-get familiar with the content at your own pace, each lecture includes a
-set of exercises that guide you through the lecture's key points. After
-each lecture, we are hosting office hours where we will be present to
-help answer any questions you might have. If you are attending the class
-online, you can send us questions at
-[missing-semester@mit.edu](mailto:missing-semester@mit.edu).
+Vi försöker täcka mycket under bara 11 en-timmesföreläsningar, så föreläsningarna är ganska täta.
+För att ge dig tid att ta till dig innehållet i din egen takt innehåller varje föreläsning en uppsättning övningar som leder dig genom föreläsningens nyckelpunkter.
+Efter varje föreläsning har vi mottagningstid där vi finns på plats för att hjälpa till med frågor.
+Om du deltar på distans kan du skicka frågor till [missing-semester@mit.edu](mailto:missing-semester@mit.edu).
 
-Due to the limited time we have, we won't be able to cover all the tools
-in the same level of detail a full-scale class might. Where possible, we
-will try to point you towards resources for digging further into a tool
-or topic, but if something particularly strikes your fancy, don't
-hesitate to reach out to us and ask for pointers!
+På grund av begränsad tid kan vi inte täcka alla verktyg på samma detaljnivå som en fullskalig kurs.
+Där det går försöker vi hänvisa dig till resurser för att fördjupa dig i ett verktyg eller ämne, men om något särskilt fångar ditt intresse får du gärna höra av dig och be om tips.
 
-# Topic 1: The Shell
+# Ämne 1: Skalet
 
-## What is the shell?
+## Vad är skalet?
 
-Computers these days have a variety of interfaces for giving them
-commands; fanciful graphical user interfaces, voice interfaces, and
-even AR/VR are everywhere. These are great for 80% of use-cases, but
-they are often fundamentally restricted in what they allow you to do —
-you cannot press a button that isn't there or give a voice command that
-hasn't been programmed. To take full advantage of the tools your
-computer provides, we have to go old-school and drop down to a textual
-interface: The Shell.
+Datorer har i dag många gränssnitt för att ge dem kommandon; avancerade grafiska gränssnitt, röstgränssnitt och till och med AR/VR finns överallt.
+De är utmärkta för 80 % av användningsfallen, men de är ofta i grunden begränsade i vad de låter dig göra.
+Du kan inte trycka på en knapp som inte finns eller ge ett röstkommando som inte har programmerats.
+För att fullt ut utnyttja verktygen i din dator behöver vi gå tillbaka till grunderna och använda ett textbaserat gränssnitt: skalet.
 
-Nearly all platforms you can get your hands on have a shell in one form or
-another, and many of them have several shells for you to choose from.
-While they may vary in the details, at their core they are all roughly
-the same: they allow you to run programs, give them input, and inspect
-their output in a semi-structured way.
+Nästan alla plattformar du kan få tag i har ett skal i någon form, och många av dem har flera skal att välja mellan.
+Detaljerna skiljer sig, men i grunden är de ungefär lika: de låter dig köra program, ge dem indata och läsa deras utdata på ett semistrukturerat sätt.
 
-In this lecture, we will focus on the Bourne Again SHell, or "bash" for
-short. This is one of the most widely used shells, and its syntax is
-similar to what you will see in many other shells. To open a shell
-_prompt_ (where you can type commands), you first need a _terminal_.
-Your device probably shipped with one installed, or you can install one
-fairly easily.
+I den här föreläsningen fokuserar vi på Bourne Again SHell, eller "bash".
+Det är ett av de mest använda skalen, och dess syntax liknar det du ser i många andra skal.
+För att öppna en skalprompt (där du kan skriva kommandon) behöver du först en terminal.
+Din enhet har troligen en förinstallerad, annars är den enkel att installera.
 
-## Using the shell
+## Använda skalet
 
-When you launch your terminal, you will see a _prompt_ that often looks
-a little like this:
+När du startar terminalen ser du en _prompt_ som ofta ser ut så här:
 
 ```console
 missing:~$
 ```
 
-This is the main textual interface to the shell. It tells you that you
-are on the machine `missing` and that your "current working directory",
-or where you currently are, is `~` (short for "home"). The `$` tells you
-that you are not the root user (more on that later). At this prompt you
-can type a _command_, which will then be interpreted by the shell. The
-most basic command is to execute a program:
+Det här är skalets viktigaste textgränssnitt.
+Det berättar att du är på maskinen `missing` och att din "nuvarande arbetskatalog", alltså var du befinner dig just nu, är `~` (kort för "home").
+`$` visar att du inte är administratörsanvändare (`root`) (mer om det senare).
+Vid prompten kan du skriva ett _kommando_ som skalet tolkar.
+Det mest grundläggande kommandot är att köra ett program:
 
 ```console
 missing:~$ date
@@ -104,34 +75,24 @@ Fri 10 Jan 2020 11:49:31 AM EST
 missing:~$
 ```
 
-Here, we executed the `date` program, which (perhaps unsurprisingly)
-prints the current date and time. The shell then asks us for another
-command to execute. We can also execute a command with _arguments_:
+Här körde vi programmet `date`, som (inte oväntat) skriver ut aktuellt datum och tid.
+Skalet ber oss sedan om nästa kommando.
+Du kan också köra kommandon med _argument_:
 
 ```console
 missing:~$ echo hello
 hello
 ```
 
-In this case, we told the shell to execute the program `echo` with the
-argument `hello`. The `echo` program simply prints out its arguments.
-The shell parses the command by splitting it by whitespace, and then
-runs the program indicated by the first word, supplying each subsequent
-word as an argument that the program can access. If you want to provide
-an argument that contains spaces or other special characters (e.g., a
-directory named "My Photos"), you can either quote the argument with `'`
-or `"` (`"My Photos"`), or escape just the relevant characters with `\`
-(`My\ Photos`).
+I det här fallet bad vi skalet köra programmet `echo` med argumentet `hello`.
+Programmet `echo` skriver helt enkelt ut sina argument.
+Skalet parsar kommandot genom att dela på blanktecken, kör programmet i första ordet och skickar varje efterföljande ord som ett argument programmet kan läsa.
+Om du vill ge ett argument som innehåller blanksteg eller andra specialtecken (t.ex. en katalog med namnet "My Photos") kan du antingen citera argumentet med `'` eller `"` (`"My Photos"`), eller escapa enskilda tecken med `\` (`My\ Photos`).
 
-But how does the shell know how to find the `date` or `echo` programs?
-Well, the shell is a programming environment, just like Python or Ruby,
-and so it has variables, conditionals, loops, and functions (next
-lecture!). When you run commands in your shell, you are really writing a
-small bit of code that your shell interprets. If the shell is asked to
-execute a command that doesn't match one of its programming keywords, it
-consults an _environment variable_ called `$PATH` that lists which
-directories the shell should search for programs when it is given a
-command:
+Men hur vet skalet var program som `date` eller `echo` finns?
+Skalet är en programmeringsmiljö, precis som Python eller Ruby, och har därför variabler, villkor, loopar och funktioner (nästa föreläsning!).
+När du kör kommandon i skalet skriver du i praktiken små kodsnuttar som skalet tolkar.
+Om skalet ombeds köra ett kommando som inte matchar något av dess egna nyckelord tittar det på en _miljövariabel_ som heter `$PATH`, som listar vilka kataloger skalet ska söka i efter program:
 
 
 ```console
@@ -143,26 +104,20 @@ missing:~$ /bin/echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ```
 
-When we run the `echo` command, the shell sees that it should execute
-the program `echo`, and then searches through the `:`-separated list of
-directories in `$PATH` for a file by that name. When it finds it, it
-runs it (assuming the file is _executable_; more on that later). We can
-find out which file is executed for a given program name using the
-`which` program. We can also bypass `$PATH` entirely by giving the
-_path_ to the file we want to execute.
+När vi kör kommandot `echo` ser skalet att programmet `echo` ska köras och söker sedan i den `:`-separerade listan av kataloger i `$PATH` efter en fil med det namnet.
+När det hittar filen kör det den (förutsatt att filen är _körbar_; mer om det senare).
+Vi kan ta reda på vilken fil som körs för ett visst programnamn med programmet `which`.
+Vi kan också kringgå `$PATH` helt genom att ange _sökvägen_ till filen vi vill köra.
 
-## Navigating in the shell
+## Navigera i skalet
 
-A path on the shell is a delimited list of directories; separated by `/`
-on Linux and macOS and `\` on Windows. On Linux and macOS, the path `/`
-is the "root" of the file system, under which all directories and files
-lie, whereas on Windows there is one root for each disk partition (e.g.,
-`C:\`). We will generally assume that you are using a Linux filesystem
-in this class. A path that starts with `/` is called an _absolute_ path.
-Any other path is a _relative_ path. Relative paths are relative to the
-current working directory, which we can see with the `pwd` command and
-change with the `cd` command. In a path, `.` refers to the current
-directory, and `..` to its parent directory:
+En sökväg i skalet är en avgränsad lista av kataloger; separerade med `/` i Linux och macOS och `\` i Windows.
+I Linux och macOS är sökvägen `/` filsystemets "rot", under vilken alla kataloger och filer finns, medan Windows har en rot per diskpartition (t.ex. `C:\`).
+I den här kursen antar vi i allmänhet att du använder ett Linux-filsystem.
+En sökväg som börjar med `/` kallas en _absolut_ sökväg.
+Alla andra sökvägar är _relativa_.
+Relativa sökvägar är relativa till nuvarande arbetskatalog, som vi kan se med kommandot `pwd` och ändra med kommandot `cd`.
+I en sökväg betyder `.` nuvarande katalog och `..` dess föräldrakatalog:
 
 ```console
 missing:~$ pwd
@@ -183,15 +138,13 @@ missing:~$ ../../bin/echo hello
 hello
 ```
 
-Notice that our shell prompt kept us informed about what our current
-working directory was. You can configure your prompt to show you all
-sorts of useful information, which we will cover in a later lecture.
+Notera att skalprompten hela tiden höll oss informerade om vad vår nuvarande arbetskatalog var.
+Du kan konfigurera prompten så att den visar många olika sorters användbar information, vilket vi tar upp i en senare föreläsning.
 
-In general, when we run a program, it will operate in the current
-directory unless we tell it otherwise. For example, it will usually
-search for files there, and create new files there if it needs to.
+I allmänhet gäller att när vi kör ett program arbetar det i nuvarande katalog om vi inte säger något annat.
+Programmet kommer till exempel oftast att leta efter filer där och skapa nya filer där om det behöver.
 
-To see what lives in a given directory, we use the `ls` command:
+För att se vad som finns i en viss katalog använder vi kommandot `ls`:
 
 ```console
 missing:~$ ls
@@ -208,12 +161,10 @@ home
 ...
 ```
 
-Unless a directory is given as its first argument, `ls` will print the
-contents of the current directory. Most commands accept flags and
-options (flags with values) that start with `-` to modify their
-behavior. Usually, running a program with the `-h` or `--help` flag
-will print some help text that tells you what flags
-and options are available. For example, `ls --help` tells us:
+Om ingen katalog anges som första argument skriver `ls` ut innehållet i nuvarande katalog.
+De flesta kommandon accepterar flaggor och alternativ (flaggor med värden) som börjar med `-` för att ändra beteendet.
+Vanligtvis skriver ett program ut hjälpinformation om tillgängliga flaggor och alternativ om du kör det med `-h` eller `--help`.
+Till exempel säger `ls --help`:
 
 ```
   -l                         use a long listing format
@@ -224,45 +175,37 @@ missing:~$ ls -l /home
 drwxr-xr-x 1 missing  users  4096 Jun 15  2019 missing
 ```
 
-This gives us a bunch more information about each file or directory
-present. First, the `d` at the beginning of the line tells us that
-`missing` is a directory. Then follow three groups of three characters
-(`rwx`). These indicate what permissions the owner of the file
-(`missing`), the owning group (`users`), and everyone else respectively
-have on the relevant item. A `-` indicates that the given principal does
-not have the given permission. Above, only the owner is allowed to
-modify (`w`) the `missing` directory (i.e., add/remove files in it). To
-enter a directory, a user must have "search" (represented by "execute":
-`x`) permissions on that directory (and its parents). To list its
-contents, a user must have read (`r`) permissions on that directory. For
-files, the permissions are as you would expect. Notice that nearly all
-the files in `/bin` have the `x` permission set for the last group,
-"everyone else", so that anyone can execute those programs.
+Detta ger oss mycket mer information om varje fil eller katalog som finns.
+Först säger `d` i början av raden att `missing` är en katalog.
+Sedan följer tre grupper om tre tecken (`rwx`).
+Dessa visar vilka rättigheter ägaren av filen (`missing`), ägargruppen (`users`) respektive alla andra har på objektet.
+Ett `-` betyder att den aktuella parten inte har den aktuella rättigheten.
+Ovan är det bara ägaren som får ändra (`w`) katalogen `missing` (dvs. lägga till/ta bort filer i den).
+För att gå in i en katalog måste en användare ha "sök"-rättighet (representerad av "execute": `x`) på den katalogen (och dess föräldrar).
+För att lista innehållet måste en användare ha läsrättighet (`r`) på katalogen.
+För filer fungerar rättigheterna ungefär som du förväntar dig.
+Notera att nästan alla filer i `/bin` har `x`-rättighet för den sista gruppen, "alla andra", så att vem som helst kan köra de programmen.
 
-Some other handy programs to know about at this point are `mv` (to
-rename/move a file), `cp` (to copy a file), and `mkdir` (to make a new
-directory).
+Några andra praktiska program att känna till här är `mv` (för att byta namn/flytta en fil), `cp` (för att kopiera en fil) och `mkdir` (för att skapa en ny katalog).
 
-If you ever want _more_ information about a program's arguments, inputs,
-outputs, or how it works in general, give the `man` program a try. It
-takes as an argument the name of a program, and shows you its _manual
-page_. Press `q` to exit.
+Om du någon gång vill ha _mer_ information om ett programs argument, indata, utdata eller hur det fungerar i allmänhet kan du prova programmet `man`.
+Det tar ett programnamn som argument och visar dess _manualsida_.
+Tryck `q` för att avsluta.
 
 ```console
 missing:~$ man ls
 ```
 
-## Connecting programs
+## Koppla samman program
 
-In the shell, programs have two primary "streams" associated with them:
-their input stream and their output stream. When the program tries to
-read input, it reads from the input stream, and when it prints
-something, it prints to its output stream. Normally, a program's input
-and output are both your terminal. That is, your keyboard as input and
-your screen as output. However, we can also rewire those streams!
+I skalet har program två huvudsakliga "strömmar" kopplade till sig: en inström och en utström.
+När programmet försöker läsa indata läser det från inströmmen, och när det skriver ut något skriver det till utströmmen.
+Normalt är ett programs indata och utdata båda terminalen.
+Det betyder tangentbordet som indata och skärmen som utdata.
+Men vi kan också koppla om dessa strömmar.
 
-The simplest form of redirection is `< file` and `> file`. These let you
-rewire the input and output streams of a program to a file respectively:
+Den enklaste formen av omdirigering är `< file` och `> file`.
+Dessa låter dig koppla om ett programs in- respektive utström till en fil:
 
 ```console
 missing:~$ echo hello > hello.txt
@@ -275,16 +218,13 @@ missing:~$ cat hello2.txt
 hello
 ```
 
-Demonstrated in the example above, `cat` is a program that con`cat`enates
-files. When given file names as arguments, it prints the contents of each of
-the files in sequence to its output stream. But when `cat` is not given any
-arguments, it prints contents from its input stream to its output stream (like
-in the third example above).
+Som visat i exemplet ovan är `cat` ett program som con`cat`enerar filer.
+När det får filnamn som argument skriver det ut innehållet i varje fil i följd till utströmmen.
+Men när `cat` inte får några argument skriver det i stället innehåll från inströmmen till utströmmen (som i det tredje exemplet ovan).
 
-You can also use `>>` to append to a file. Where this kind of
-input/output redirection really shines is in the use of _pipes_. The `|`
-operator lets you "chain" programs such that the output of one is the
-input of another:
+Du kan också använda `>>` för att appendera till en fil.
+Det här slaget av in-/utdataomdirigering blir särskilt kraftfullt tillsammans med rör (`|`).
+Operatorn `|` låter dig "kedja" program så att utdata från ett program blir indata till ett annat:
 
 ```console
 missing:~$ ls -l / | tail -n1
@@ -293,36 +233,31 @@ missing:~$ curl --head --silent google.com | grep --ignore-case content-length |
 219
 ```
 
-We will go into a lot more detail about how to take advantage of pipes
-in the lecture on data wrangling.
+Vi går in mycket mer i detalj på hur du utnyttjar rör i föreläsningen om datahantering.
 
-## A versatile and powerful tool
+## Ett mångsidigt och kraftfullt verktyg
 
-On most Unix-like systems, one user is special: the "root" user. You may
-have seen it in the file listings above. The root user is above (almost)
-all access restrictions, and can create, read, update, and delete any
-file in the system. You will not usually log into your system as the
-root user though, since it's too easy to accidentally break something.
-Instead, you will be using the `sudo` command. As its name implies, it
-lets you "do" something "as su" (short for "super user", or "root").
-When you get permission denied errors, it is usually because you need to
-do something as root. Though make sure you first double-check that you
-really wanted to do it that way!
+På de flesta Unix-liknande system finns en särskild användare: "root".
+Du kan ha sett den i fillistningarna ovan.
+Root-användaren står över (nästan) alla åtkomstbegränsningar och kan skapa, läsa, uppdatera och ta bort vilken fil som helst i systemet.
+Du loggar normalt inte in som `root`, eftersom det är för lätt att råka förstöra något.
+I stället använder du kommandot `sudo`.
+Som namnet antyder låter det dig "göra" något "som su" (kort för "superanvändare", alltså `root`).
+När du får fel av typen "åtkomst nekad" ("permission denied") beror det ofta på att du behöver göra något som `root`.
+Dubbelkolla dock först att det verkligen är vad du vill göra.
 
-One thing you need to be root in order to do is writing to the `sysfs` file
-system mounted under `/sys`. `sysfs` exposes a number of kernel parameters as
-files, so that you can easily reconfigure the kernel on the fly without
-specialized tools. **Note that sysfs does not exist on Windows or macOS.**
+En sak som kräver `root` är att skriva till filsystemet `sysfs` som är monterat under `/sys`.
+`sysfs` exponerar ett antal kärnparametrar som filer, så att du enkelt kan konfigurera om kärnan i farten utan specialverktyg.
+**Observera att sysfs inte finns i Windows eller macOS.**
 
-For example, the brightness of your laptop's screen is exposed through a file
-called `brightness` under
+Till exempel exponeras ljusstyrkan på din bärbara skärm genom en fil som heter `brightness` under
 
 ```
 /sys/class/backlight
 ```
 
-By writing a value into that file, we can change the screen brightness.
-Your first instinct might be to do something like:
+Genom att skriva ett värde till den filen kan vi ändra skärmens ljusstyrka.
+Din första instinkt kan vara att göra något i stil med:
 
 ```console
 $ sudo find -L /sys/class/backlight -maxdepth 2 -name '*brightness*'
@@ -333,87 +268,58 @@ An error occurred while redirecting file 'brightness'
 open: Permission denied
 ```
 
-This error may come as a surprise. After all, we ran the command with
-`sudo`! This is an important thing to know about the shell. Operations
-like `|`, `>`, and `<` are done _by the shell_, not by the individual
-program. `echo` and friends do not "know" about `|`. They just read from
-their input and write to their output, whatever it may be. In the case
-above, the _shell_ (which is authenticated just as your user) tries to
-open the brightness file for writing, before setting that as `sudo
-echo`'s output, but is prevented from doing so since the shell does not
-run as root. Using this knowledge, we can work around this:
+Det här felet kan komma som en överraskning.
+Vi körde ju kommandot med `sudo`.
+Detta är en viktig sak att känna till om skalet.
+Operationer som `|`, `>` och `<` görs _av skalet_, inte av det enskilda programmet.
+`echo` och liknande "känner" inte till `|`.
+De läser bara från sin indata och skriver till sin utdata, vad de än råkar vara.
+I fallet ovan försöker _skalet_ (som är autentiserat som din vanliga användare) öppna brightness-filen för skrivning innan den kopplas som utdata till `sudo echo`.
+Det förhindras eftersom skalet inte körs som `root`.
+Med den kunskapen kan vi arbeta runt problemet:
 
 ```console
 $ echo 3 | sudo tee brightness
 ```
 
-Since the `tee` program is the one to open the `/sys` file for writing,
-and _it_ is running as `root`, the permissions all work out. You can
-control all sorts of fun and useful things through `/sys`, such as the
-state of various system LEDs (your path might be different):
+Eftersom programmet `tee` är det som öppnar `/sys`-filen för skrivning, och _det_ körs som `root`, fungerar rättigheterna.
+Du kan styra många roliga och användbara saker via `/sys`, till exempel tillståndet för olika system-LED:ar (din sökväg kan skilja sig):
 
 ```console
 $ echo 1 | sudo tee /sys/class/leds/input6::scrolllock/brightness
 ```
 
-# Next steps
+# Nästa steg
 
-At this point you know your way around a shell enough to accomplish
-basic tasks. You should be able to navigate around to find files of
-interest and use the basic functionality of most programs. In the next
-lecture, we will talk about how to perform and automate more complex
-tasks using the shell and the many handy command-line programs out
-there.
+Nu kan du tillräckligt mycket om skalet för att utföra grundläggande uppgifter.
+Du bör kunna navigera för att hitta filer av intresse och använda basfunktioner i de flesta program.
+I nästa föreläsning pratar vi om hur man utför och automatiserar mer komplexa uppgifter med skalet och de många praktiska kommandoradsprogram som finns.
 
-# Exercises
+# Övningar
 
-All classes in this course are accompanied by a series of exercises. Some give
-you a specific task to do, while others are open-ended, like "try using X and Y
-programs". We highly encourage you to try them out.
+Alla pass i kursen har tillhörande övningar.
+Vissa är tydliga och konkreta, medan andra är öppnare, som "prova att använda programmen X och Y".
+Vi uppmuntrar dig starkt att testa dem.
 
-We have not written solutions for the exercises. If you are stuck on anything
-in particular, feel free to send us an email describing what you've tried so
-far, and we will try to help you out.
+Vi har inte skrivit facit till övningarna.
+Om du fastnar på något särskilt får du gärna e-posta oss och beskriva vad du har provat hittills, så försöker vi hjälpa till.
 
- 1. For this course, you need to be using a Unix shell like Bash or ZSH. If you
-    are on Linux or macOS, you don't have to do anything special. If you are on
-    Windows, you need to make sure you are not running cmd.exe or PowerShell;
-    you can use [Windows Subsystem for
-    Linux](https://docs.microsoft.com/en-us/windows/wsl/) or a Linux virtual
-    machine to use Unix-style command-line tools. To make sure you're running
-    an appropriate shell, you can try the command `echo $SHELL`. If it says
-    something like `/bin/bash` or `/usr/bin/zsh`, that means you're running the
-    right program.
- 1. Create a new directory called `missing` under `/tmp`.
- 1. Look up the `touch` program. The `man` program is your friend.
- 1. Use `touch` to create a new file called `semester` in `missing`.
- 1. Write the following into that file, one line at a time:
-    ```
-    #!/bin/sh
-    curl --head --silent https://missing.csail.mit.edu
-    ```
-    The first line might be tricky to get working. It's helpful to know that
-    `#` starts a comment in Bash, and `!` has a special meaning even within
-    double-quoted (`"`) strings. Bash treats single-quoted strings (`'`)
-    differently: they will do the trick in this case. See the Bash
-    [quoting](https://www.gnu.org/software/bash/manual/html_node/Quoting.html)
-    manual page for more information.
- 1. Try to execute the file, i.e. type the path to the script (`./semester`)
-    into your shell and press enter. Understand why it doesn't work by
-    consulting the output of `ls` (hint: look at the permission bits of the
-    file).
- 1. Run the command by explicitly starting the `sh` interpreter, and giving it
-    the file `semester` as the first argument, i.e. `sh semester`. Why does
-    this work, while `./semester` didn't?
- 1. Look up the `chmod` program (e.g. use `man chmod`).
- 1. Use `chmod` to make it possible to run the command `./semester` rather than
-    having to type `sh semester`. How does your shell know that the file is
-    supposed to be interpreted using `sh`? See this page on the
-    [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line for more
-    information.
- 1. Use `|` and `>` to write the "last modified" date output by
-    `semester` into a file called `last-modified.txt` in your home
-    directory.
- 1. Write a command that reads out your laptop battery's power level or your
-    desktop machine's CPU temperature from `/sys`. Note: if you're a macOS
-    user, your OS doesn't have sysfs, so you can skip this exercise.
+  1. För den här kursen behöver du använda ett Unix-skal som Bash eller ZSH. Om du använder Linux eller macOS behöver du inte göra något särskilt. Om du använder Windows måste du se till att du inte kör cmd.exe eller PowerShell; du kan använda [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/) eller en Linux-virtuell maskin för Unix-liknande kommandoradsverktyg. För att kontrollera att du kör ett lämpligt skal kan du prova kommandot `echo $SHELL`. Om det står något som `/bin/bash` eller `/usr/bin/zsh` betyder det att du kör rätt program.
+  1. Skapa en ny katalog med namnet `missing` under `/tmp`.
+  1. Slå upp programmet `touch`. Programmet `man` är din vän.
+  1. Använd `touch` för att skapa en ny fil som heter `semester` i `missing`.
+  1. Skriv följande i filen, en rad i taget:
+     ```
+     #!/bin/sh
+     curl --head --silent https://missing.csail.mit.edu
+     ```
+     Den första raden kan vara lite knepig att få att fungera.
+     Det är bra att veta att `#` startar en kommentar i Bash, och att `!` har en specialbetydelse även i dubbelt citerade (`"`) strängar.
+     Bash behandlar enkla citationstecken (`'`) annorlunda: de gör jobbet i det här fallet.
+     Se Bash-manualsidan om [citering](https://www.gnu.org/software/bash/manual/html_node/Quoting.html) för mer information.
+  1. Försök att köra filen, dvs. skriv sökvägen till skriptet (`./semester`) i skalet och tryck enter. Förstå varför det inte fungerar genom att titta på utdata från `ls` (tips: titta på filens rättighetsbitar).
+  1. Kör kommandot genom att uttryckligen starta tolken `sh` och ge den filen `semester` som första argument, dvs. `sh semester`. Varför fungerar detta medan `./semester` inte gjorde det?
+  1. Slå upp programmet `chmod` (t.ex. med `man chmod`).
+  1. Använd `chmod` för att göra det möjligt att köra kommandot `./semester` i stället för att behöva skriva `sh semester`. Hur vet skalet att filen ska tolkas med `sh`? Se sidan om [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) för mer information.
+  1. Använd `|` och `>` för att skriva datumet för "last modified" som `semester` skriver ut till en fil med namnet `last-modified.txt` i din hemkatalog.
+  1. Skriv ett kommando som läser ut batterinivån på din bärbara dator eller CPU-temperaturen på din stationära dator från `/sys`. Obs: om du använder macOS har ditt operativsystem inte sysfs, så du kan hoppa över den här övningen.

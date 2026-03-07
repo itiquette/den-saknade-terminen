@@ -1,33 +1,34 @@
 ---
 layout: default
-title: "License"
+title: "Licens"
 permalink: /license/
 ---
 
-# License
+# Licens
 
-All the content in this course, including the website source code, lecture notes, exercises, and lecture videos is licensed under Attribution-NonCommercial-ShareAlike 4.0 International [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Allt innehåll i den här kursen, inklusive webbplatsens källkod, föreläsningsanteckningar, övningar och föreläsningsvideor, är licensierat under Attribution-NonCommercial-ShareAlike 4.0 International [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-This means that you are free to:
-- **Share** — copy and redistribute the material in any medium or format
-- **Adapt** — remix, transform, and build upon the material
+Det innebär att du får:
+- **Dela** — kopiera och återdistribuera materialet i valfritt medium eller format.
+- **Bearbeta** — remixa, omforma och bygga vidare på materialet.
 
-Under the following terms:
+Under följande villkor:
 
-- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
-- **NonCommercial** — You may not use the material for commercial purposes.
-- **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+- **Attribution** — Du måste ange korrekt upphov, länka till licensen och ange om ändringar har gjorts.
+Du får göra detta på ett rimligt sätt, men inte på ett sätt som antyder att licensgivaren stöder dig eller din användning.
+- **NonCommercial** — Du får inte använda materialet i kommersiellt syfte.
+- **ShareAlike** — Om du remixar, omformar eller bygger vidare på materialet måste du distribuera dina bidrag under samma licens som originalet.
 
-This is a human-readable summary of (and not a substitute for) the [license](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
+Detta är en lättläst sammanfattning av (och inte en ersättning för) den fullständiga [licensen](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 
-## Contribution guidelines
+## Riktlinjer för bidrag
 
-You can submit corrections and suggestions to the course material by submitting issues and pull requests on our GitHub [repo](https://github.com/missing-semester/missing-semester). This includes the captions for the video lectures which are also in the repo (see [here](https://github.com/missing-semester/missing-semester/tree/master/static/files/subtitles/2020)).
+Du kan skicka in rättelser och förslag till kursmaterialet genom att skapa ärenden och ändringsförfrågningar (PR:er) i vårt GitHub-[kodförråd](https://github.com/missing-semester/missing-semester).
+Detta inkluderar undertexterna till föreläsningsvideorna, som också finns i kodförrådet (se [här](https://github.com/missing-semester/missing-semester/tree/master/static/files/subtitles/2020)).
 
-## Translation guidelines
+## Riktlinjer för översättning
 
-You are free to translate the lecture notes and exercises as long as you follow the license terms.
-If your translation mirrors the course structure, please contact us so we can link your translated version from our page.
+Du får gärna översätta föreläsningsanteckningar och övningar så länge du följer licensvillkoren.
+Om din översättning speglar kursens struktur, kontakta oss gärna så att vi kan länka till din översatta version från vår sida.
 
-For translating the video captions, please submit your translations as community contributions in YouTube.
-
+För översättning av videoundertexter, skicka gärna in dina översättningar som gemenskapsbidrag på YouTube.
