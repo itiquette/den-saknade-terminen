@@ -15,12 +15,12 @@ special: true
 Förra årets [föreläsning om säkerhet och integritet]({{ '/2019/security/' | relative_url }}) fokuserade på hur du kan vara säkrare som dator_användare_.
 I år fokuserar vi på säkerhets- och kryptografibegrepp som är relevanta för att förstå verktygen vi gått igenom tidigare i kursen, som användningen av hashfunktioner i Git eller nyckelhärledningsfunktioner och symmetriska/asymmetriska kryptosystem i SSH.
 
-Den här föreläsningen ersätter inte en mer rigorös och komplett kurs i systemsäkerhet ([6.858](https://css.csail.mit.edu/6.858/)) eller kryptografi ([6.857](https://courses.csail.mit.edu/6.857/) och 6.875).
+Föreläsningen ersätter inte en mer rigorös och komplett kurs i systemsäkerhet ([6.858](https://css.csail.mit.edu/6.858/)) eller kryptografi ([6.857](https://courses.csail.mit.edu/6.857/) och 6.875).
 Arbeta inte med säkerhet utan formell säkerhetsutbildning.
 Om du inte är expert, [implementera inte din egen kryptografi](https://www.schneier.com/blog/archives/2015/05/amateurs_produc.html).
 Samma princip gäller systemsäkerhet.
 
-Den här föreläsningen behandlar grundläggande kryptografibegrepp på ett mycket informellt (men förhoppningsvis praktiskt) sätt.
+Föreläsningen behandlar grundläggande kryptografibegrepp på ett högst informellt (men förhoppningsvis praktiskt) sätt.
 Den räcker inte för att lära dig _designa_ säkra system eller kryptografiska protokoll, men vi hoppas att den räcker för att ge en generell förståelse för program och protokoll du redan använder.
 
 # Entropi
@@ -76,7 +76,7 @@ En hashfunktion har följande egenskaper:
 
 Obs: även om den kan fungera för vissa syften anses SHA-1 [inte längre](https://web.archive.org/web/20260207211148/https://shattered.io/) vara en stark kryptografisk hashfunktion.
 Du kan tycka att tabellen över [livslängder för kryptografiska hashfunktioner](https://valerieaurora.org/hash.html) är intressant.
-Notera dock att rekommendationer av specifika hashfunktioner ligger utanför den här föreläsningens omfång.
+Notera dock att rekommendationer av specifika hashfunktioner ligger utanför föreläsningens omfång.
 Om du arbetar med sådant behöver du formell utbildning i säkerhet/kryptografi.
 
 ## Tillämpningar
@@ -125,8 +125,7 @@ Ett exempel på ett symmetriskt kryptosystem som används brett i dag är [AES](
 
 ## Tillämpningar
 
-- Kryptera filer för lagring i en icke betrodd molntjänst.
-  Detta kan kombineras med KDF:er så att du kan kryptera en fil med en lösenfras.
+- Kryptera filer för lagring i en icke betrodd molntjänst. Detta kan kombineras med KDF:er så att du kan kryptera en fil med en lösenfras.
   Generera `key = KDF(passphrase)` och lagra sedan `encrypt(file, key)`.
 
 # Asymmetrisk kryptografi
@@ -184,7 +183,7 @@ Vi (föreläsarna) gillar Keybases modell.
 
 ## Lösenordshanterare
 
-Detta är ett grundläggande verktyg som alla bör försöka använda (t.ex. [KeePassXC](https://keepassxc.org/), [pass](https://git.zx2c4.com/password-store/about/) och [1Password](https://1password.com)).
+Det är ett grundläggande verktyg som alla bör försöka använda (t.ex. [KeePassXC](https://keepassxc.org/), [pass](https://git.zx2c4.com/password-store/about/) och [1Password](https://1password.com)).
 Lösenordshanterare gör det enkelt att använda unika, slumpgenererade högentropilösenord för alla inloggningar, och de sparar alla lösenord på ett ställe, krypterade med ett symmetriskt chiffer med en nyckel framställd ur en lösenfras via en KDF.
 
 Att använda lösenordshanterare gör att du kan undvika återanvändning av lösenord (så du påverkas mindre när webbplatser komprometteras), använda högentropilösenord (så risken minskar att du komprometteras) och bara behöva komma ihåg ett enda högentropilösenord.
@@ -197,7 +196,7 @@ Att använda lösenordshanterare gör att du kan undvika återanvändning av lö
 
 Att ha hela din bärbara dators disk krypterad är ett enkelt sätt att skydda data om datorn blir stulen.
 Du kan använda [cryptsetup + LUKS](https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_a_non-root_file_system) på Linux, [BitLocker](https://fossbytes.com/enable-full-disk-encryption-windows-10/) på Windows eller [FileVault](https://support.apple.com/en-us/HT204837) på macOS.
-Detta krypterar hela disken med ett symmetriskt chiffer, med en nyckel skyddad av en lösenfras.
+Det krypterar hela disken med ett symmetriskt chiffer, med en nyckel skyddad av en lösenfras.
 
 ## Privat meddelandeutbyte
 
@@ -212,15 +211,15 @@ Vi har gått igenom SSH och SSH-nycklar i en [tidigare föreläsning]({{ '/2020/
 Låt oss titta på kryptografidelen av detta.
 
 När du kör `ssh-keygen` genereras ett asymmetriskt nyckelpar, `public_key, private_key`.
-Detta genereras slumpmässigt med entropi från operativsystemet (insamlad från hårdvaruhändelser m.m.).
+Det genereras slumpmässigt med entropi från operativsystemet (insamlad från hårdvaruhändelser m.m.).
 Den publika nyckeln lagras som den är (den är publik, så hemlighållande är inte viktigt), men den privata nyckeln bör i vila vara krypterad på disk.
 Programmet `ssh-keygen` ber användaren om en lösenfras, och den matas genom en nyckelhärledningsfunktion för att ta fram en nyckel som sedan används för att kryptera den privata nyckeln med ett symmetriskt chiffer.
 
 I användning, när servern känner till klientens publika nyckel (lagrad i `.ssh/authorized_keys`), kan en anslutande klient bevisa sin identitet med asymmetriska signaturer.
-Detta görs med [challenge-response](https://en.wikipedia.org/wiki/Challenge%E2%80%93response_authentication).
+Det sker med [challenge-response](https://en.wikipedia.org/wiki/Challenge%E2%80%93response_authentication).
 På hög nivå väljer servern ett slumpmässigt tal och skickar det till klienten.
 Klienten signerar sedan meddelandet och skickar signaturen tillbaka till servern, som kontrollerar signaturen mot den registrerade publika nyckeln.
-Detta bevisar i praktiken att klienten har den privata nyckeln som motsvarar den publika nyckeln i serverns `.ssh/authorized_keys`, och servern kan därför tillåta inloggning.
+Det bevisar i praktiken att klienten har den privata nyckeln som motsvarar den publika nyckeln i serverns `.ssh/authorized_keys`, och servern kan därför tillåta inloggning.
 
 {% comment %}
 extra topics, if there's time
@@ -247,11 +246,9 @@ security concepts, tips
     1. Vilket är det starkare lösenordet?
     1. Anta att en angripare kan prova 10 000 lösenord per sekund.
        Hur lång tid tar det i genomsnitt att knäcka respektive lösenord?
-1. **Kryptografiska hashfunktioner.**
-   Ladda ner en Debian-avbildning från en [spegel](https://www.debian.org/CD/http-ftp/) (t.ex. [från denna argentinska spegel](http://debian.xfree.com.ar/debian-cd/current/amd64/iso-cd/)).
+1. **Kryptografiska hashfunktioner.** Ladda ner en Debian-avbildning från en [spegel](https://www.debian.org/CD/http-ftp/) (t.ex. [från denna argentinska spegel](http://debian.xfree.com.ar/debian-cd/current/amd64/iso-cd/)).
    Verifiera hashen (t.ex. med kommandot `sha256sum`) mot hashen hämtad från den officiella Debian-sajten (t.ex. [denna fil](https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/SHA256SUMS) som ligger på `debian.org`, om du har laddat ner den länkade filen från den argentinska spegeln).
-1. **Symmetrisk kryptografi.**
-   Kryptera en fil med AES med [OpenSSL](https://www.openssl.org/): `openssl aes-256-cbc -salt -in {input filename} -out {output filename}`.
+1. **Symmetrisk kryptografi.** Kryptera en fil med AES med [OpenSSL](https://www.openssl.org/): `openssl aes-256-cbc -salt -in {input filename} -out {output filename}`.
    Titta på innehållet med `cat` eller `hexdump`.
    Dekryptera med `openssl aes-256-cbc -d -in {input filename} -out {output filename}` och bekräfta med `cmp` att innehållet matchar originalet.
 1. **Asymmetrisk kryptografi.**

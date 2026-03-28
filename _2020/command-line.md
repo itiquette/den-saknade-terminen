@@ -11,7 +11,7 @@ video:
   id: e8BO_dYxk5c
 ---
 
-I den här föreläsningen går vi igenom flera sätt att förbättra ditt arbetssätt när du använder skalet.
+I föreläsningen går vi igenom flera sätt att förbättra ditt arbetssätt när du använder skalet.
 Vi har arbetat med skalet ett tag nu, men främst fokuserat på att köra olika kommandon.
 Nu ska vi se hur man kör flera processer samtidigt och ändå håller ordning på dem, hur man stoppar eller pausar en viss process och hur man låter en process köra i bakgrunden.
 
@@ -22,7 +22,7 @@ Vi tittar också på hur man arbetar med fjärrmaskiner via SSH.
 
 # Jobbstyrning
 
-I vissa fall behöver du avbryta ett jobb medan det körs, till exempel om ett kommando tar för lång tid att bli klart (som en `find` över en mycket stor katalogstruktur).
+I vissa fall behöver du avbryta ett jobb medan det körs, till exempel om ett kommando tar för lång tid att bli klart (som en `find` över en stor katalogstruktur).
 Oftast räcker det att trycka `Ctrl-C` så stoppas kommandot.
 Men hur fungerar det egentligen, och varför misslyckas det ibland att stoppa processen?
 
@@ -42,7 +42,7 @@ För att döda programmet kan vi i stället använda signalen `SIGQUIT` genom at
 import signal, time
 
 def handler(signum, time):
-    print("\nI got a SIGINT, but I am not stopping")
+    print("\nJag fick en SIGINT, men jag tänker inte sluta")
 
 signal.signal(signal.SIGINT, handler)
 i = 0
@@ -58,9 +58,9 @@ Observera att `^` är hur `Ctrl` visas när det skrivs i terminalen.
 ```
 $ python sigint.py
 24^C
-I got a SIGINT, but I am not stopping
+Jag fick en SIGINT, men jag tänker inte sluta
 26^C
-I got a SIGINT, but I am not stopping
+Jag fick en SIGINT, men jag tänker inte sluta
 30^\[1]    39913 quit       python sigint.py
 ```
 
@@ -148,10 +148,10 @@ Det går att lösa genom att öppna nya terminalfönster, men en terminalmultipl
 
 Terminalmultiplexrar som [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html) låter dig dela upp terminalfönster i paneler och flikar så att du kan interagera med flera skalsessioner.
 Dessutom låter terminalmultiplexrar dig koppla loss en aktiv terminalsession och återansluta senare.
-Detta kan göra arbetsflödet mycket bättre när du arbetar med fjärrmaskiner eftersom du slipper `nohup` och liknande knep.
+Det kan göra arbetsflödet betydligt bättre när du arbetar med fjärrmaskiner eftersom du slipper `nohup` och liknande knep.
 
 Den mest populära terminalmultiplexern i dag är [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html).
-`tmux` är mycket konfigurerbar, och med tillhörande tangentbindningar kan du skapa flera flikar och paneler och snabbt navigera mellan dem.
+`tmux` är i hög grad konfigurerbar, och med tillhörande tangentbindningar kan du skapa flera flikar och paneler och snabbt navigera mellan dem.
 
 `tmux` förutsätter att du kan dess tangentbindningar, och de har formen `<C-b> x` vilket betyder (1) tryck `Ctrl+b`, (2) släpp `Ctrl+b`, och (3) tryck `x`.
 `tmux` har följande hierarki av objekt:
@@ -160,11 +160,14 @@ Den mest populära terminalmultiplexern i dag är [`tmux`](https://www.man7.org/
     + `tmux new -s NAME` startar den med det namnet.
     + `tmux ls` listar aktuella sessioner
     + Inuti `tmux` kopplar `<C-b> d` loss den aktuella sessionen
-    + `tmux a` ansluter till senaste sessionen. Du kan använda flaggan `-t` för att ange vilken
+    + `tmux a` ansluter till senaste sessionen.
+      Du kan använda flaggan `-t` för att ange vilken
 
 - **Fönster** - motsvarar flikar i redigerare eller webbläsare; visuellt separata delar av samma session
-    + `<C-b> c` skapar ett nytt fönster. För att stänga det kan du helt enkelt avsluta skalet med `<C-d>`
-    + `<C-b> N` går till fönster nummer _N_. Observera att de är numrerade
+    + `<C-b> c` skapar ett nytt fönster.
+      För att stänga det kan du helt enkelt avsluta skalet med `<C-d>`
+    + `<C-b> N` går till fönster nummer _N_.
+      Observera att de är numrerade
     + `<C-b> p` går till föregående fönster
     + `<C-b> n` går till nästa fönster
     + `<C-b> ,` byter namn på aktuellt fönster
@@ -173,9 +176,10 @@ Den mest populära terminalmultiplexern i dag är [`tmux`](https://www.man7.org/
 - **Paneler** - likt splits i vim låter paneler dig ha flera skal i samma vy.
     + `<C-b> "` delar aktuell panel horisontellt
     + `<C-b> %` delar aktuell panel vertikalt
-    + `<C-b> <direction>` flyttar till panelen i angiven _direction_. Direction betyder här piltangenter.
+    + `<C-b> <direction>` flyttar till panelen i angiven riktning (piltangenter).
     + `<C-b> z` växlar zoom för aktuell panel
-    + `<C-b> [` startar scrollback. Du kan sedan trycka `<space>` för att starta en markering och `<enter>` för att kopiera markeringen.
+    + `<C-b> [` startar scrollback.
+      Du kan sedan trycka `<space>` för att starta en markering och `<enter>` för att kopiera markeringen.
     + `<C-b> <space>` växlar mellan panelarrangemang.
 
 För vidare läsning finns [här](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/) en snabb introduktion till `tmux`, och [här](https://linuxcommand.org/lc3_adv_termmux.php) en mer detaljerad förklaring som även täcker det ursprungliga kommandot `screen`.
@@ -233,13 +237,11 @@ För att göra ett alias beständigt behöver du lägga det i skalets uppstartsf
 
 # Dotfiles
 
-Många program konfigureras med vanlig text i filer som kallas _dotfiles_
-(eftersom filnamnen börjar med `.`, t.ex. `~/.vimrc`, så att de är dolda i kataloglistningen `ls` som standard).
+Många program konfigureras med vanlig text i filer som kallas _dotfiles_ (eftersom filnamnen börjar med `.`, t.ex. `~/.vimrc`, så att de är dolda i kataloglistningen `ls` som standard).
 
 Skal är ett exempel på program som konfigureras med sådana filer.
 Vid uppstart läser skalet många filer för att ladda sin konfiguration.
-Beroende på skal, och om du startar en inloggningssession och/eller en interaktiv session, kan hela processen vara ganska komplex.
-[Här](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html) finns en utmärkt resurs om ämnet.
+Beroende på skal, och om du startar en inloggningssession och/eller en interaktiv session, kan hela processen vara ganska komplex. [Här](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html) finns en utmärkt resurs om ämnet.
 
 För `bash` fungerar det i de flesta system att redigera `.bashrc` eller `.bash_profile`.
 Här kan du lägga in kommandon du vill köra vid uppstart, som aliasen vi just beskrev eller ändringar av miljövariabeln `PATH`.
@@ -249,12 +251,12 @@ Några andra verktyg som kan konfigureras via dotfiles är:
 
 - `bash` - `~/.bashrc`, `~/.bash_profile`
 - `git` - `~/.gitconfig`
-- `vim` - `~/.vimrc` och mappen `~/.vim`
+- `vim` - `~/.vimrc` och katalogen `~/.vim`
 - `ssh` - `~/.ssh/config`
 - `tmux` - `~/.tmux.conf`
 
 Hur bör du organisera dina dotfiles?
-De bör ligga i en egen mapp, vara versionshanterade och **symboliskt länkas** på plats med ett skript.
+De bör ligga i en egen katalog, vara versionshanterade och **symboliskt länkas** på plats med ett skript.
 Det ger fördelar som:
 
 - **Enkel installation**: om du loggar in på en ny maskin tar det bara en minut att få in dina anpassningar.
@@ -268,9 +270,7 @@ Ett annat bra sätt är att söka efter blogginlägg om specifika program där f
 Ytterligare ett sätt är att titta i andras dotfiles: det finns mängder av [dotfiles-kodförråd](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories) på GitHub --- se det mest populära [här](https://github.com/mathiasbynens/dotfiles) (vi rekommenderar dock att du inte kopierar konfigurationer blint).
 [Här](https://dotfiles.github.io/) finns ännu en bra resurs om ämnet.
 
-Alla kursens lärare har sina dotfiles publikt tillgängliga på GitHub: [Anish](https://github.com/anishathalye/dotfiles),
-[Jon](https://github.com/jonhoo/configs),
-[Jose](https://github.com/jjgo/dotfiles).
+Alla kursens lärare har sina dotfiles publikt tillgängliga på GitHub: [Anish](https://github.com/anishathalye/dotfiles), [Jon](https://github.com/jonhoo/configs), [Jose](https://github.com/jjgo/dotfiles).
 
 
 ## Portabilitet
@@ -318,7 +318,7 @@ fi
 
 Det har blivit allt vanligare att programmerare använder fjärrservrar i det dagliga arbetet.
 Om du behöver fjärrservrar för att driftsätta backend-programvara, eller behöver en server med högre beräkningskapacitet, kommer du att använda Secure Shell (SSH).
-Som de flesta verktyg vi tar upp är SSH mycket konfigurerbart, så det är värt att lära sig.
+Som de flesta verktyg vi tar upp är SSH i hög grad konfigurerbart, så det är värt att lära sig.
 
 För att logga in med `ssh` på en server kör du ett kommando enligt följande:
 
@@ -374,22 +374,24 @@ ssh-copy-id -i .ssh/id_ed25519 foobar@remote
 
 Det finns många sätt att kopiera filer över ssh:
 
-- `ssh+tee`, det enklaste är att använda kommandokörning via `ssh` och indata från STDIN med `cat localfile | ssh remote_server tee serverfile`. Kom ihåg att [`tee`](https://www.man7.org/linux/man-pages/man1/tee.1.html) skriver utdata från STDIN till en fil.
-- [`scp`](https://www.man7.org/linux/man-pages/man1/scp.1.html) när du kopierar stora mängder filer/kataloger är kommandot secure copy `scp` smidigare eftersom det enkelt kan gå rekursivt över sökvägar. Syntaxen är `scp path/to/local_file remote_host:path/to/remote_file`
-- [`rsync`](https://www.man7.org/linux/man-pages/man1/rsync.1.html) förbättrar `scp` genom att upptäcka identiska filer lokalt och på fjärrsidan och undvika att kopiera dem igen. Det ger också mer finmaskig kontroll över symlänkar, rättigheter och har extra funktioner som flaggan `--partial`, som kan återuppta en tidigare avbruten kopiering. `rsync` har liknande syntax som `scp`.
+- `ssh+tee`, det enklaste är att använda kommandokörning via `ssh` och indata från STDIN med `cat localfile | ssh remote_server tee serverfile`.
+  Kom ihåg att [`tee`](https://www.man7.org/linux/man-pages/man1/tee.1.html) skriver utdata från STDIN till en fil.
+- [`scp`](https://www.man7.org/linux/man-pages/man1/scp.1.html) när du kopierar stora mängder filer/kataloger är kommandot secure copy `scp` smidigare eftersom det enkelt kan gå rekursivt över sökvägar.
+  Syntaxen är `scp path/to/local_file remote_host:path/to/remote_file`
+- [`rsync`](https://www.man7.org/linux/man-pages/man1/rsync.1.html) förbättrar `scp` genom att upptäcka identiska filer lokalt och på fjärrsidan och undvika att kopiera dem igen.
+  Det ger också mer finmaskig kontroll över symlänkar, rättigheter och har extra funktioner som flaggan `--partial`, som kan återuppta en tidigare avbruten kopiering.
+  `rsync` har liknande syntax som `scp`.
 
 ## Portvidarebefordran
 
 I många scenarier stöter du på program som lyssnar på specifika portar på en maskin.
 När det sker på din lokala maskin kan du skriva `localhost:PORT` eller `127.0.0.1:PORT`, men vad gör du med en fjärrserver som inte exponerar sina portar direkt via nätverket/internet?
 
-Detta kallas portvidarebefordran (_port forwarding_) och finns i två varianter: lokal portvidarebefordran (_local port forwarding_) och fjärrportvidarebefordran (_remote port forwarding_) (se bilderna för mer detaljer; bildkredit från [detta StackOverflow-inlägg](https://unix.stackexchange.com/questions/115897/whats-ssh-port-forwarding-and-whats-the-difference-between-ssh-local-and-remot)).
+Det kallas portvidarebefordran (_port forwarding_) och finns i två varianter: lokal portvidarebefordran (_local port forwarding_) och fjärrportvidarebefordran (_remote port forwarding_) (se bilderna för mer detaljer; bildkredit från [detta StackOverflow-inlägg](https://unix.stackexchange.com/questions/115897/whats-ssh-port-forwarding-and-whats-the-difference-between-ssh-local-and-remot)).
 
-**Lokal portvidarebefordran**
-![Lokal portvidarebefordran]({{ '/static/media/images/local-port-forwarding.png' | relative_url }})
+**Lokal portvidarebefordran** ![Lokal portvidarebefordran]({{ '/static/media/images/local-port-forwarding.png' | relative_url }})
 
-**Fjärrportvidarebefordran**
-![Fjärrportvidarebefordran]({{ '/static/media/images/remote-port-forwarding.png' | relative_url }})
+**Fjärrportvidarebefordran** ![Fjärrportvidarebefordran]({{ '/static/media/images/remote-port-forwarding.png' | relative_url }})
 
 Det vanligaste scenariot är lokal portvidarebefordran, där en tjänst på fjärrmaskinen lyssnar på en port och du vill koppla en port på din lokala maskin till den fjärrporten.
 Om vi till exempel kör `jupyter notebook` på fjärrservern och den lyssnar på port `8888`, kan vi vidarebefordra den till lokal port `9999` med `ssh -L 9999:localhost:8888 foobar@remote_server` och sedan öppna `localhost:9999` på vår lokala maskin.
@@ -433,7 +435,7 @@ Du kan ange konfigurationsinställningar per användare.
 
 Ett vanligt problem vid anslutning till fjärrserver är avbrott när datorn stängs av, går i vila eller byter nätverk.
 Dessutom kan ssh bli frustrerande om anslutningen har märkbar fördröjning.
-[Mosh](https://mosh.org/), mobile shell, förbättrar ssh genom att tillåta roaming-anslutningar, intermittent uppkoppling och intelligent lokalt eko.
+[Mosh](https://mosh.org/), mobile shell, förbättrar ssh genom att tillåta roaming-anslutningar, ojämn uppkoppling och intelligent lokalt eko.
 
 Ibland är det praktiskt att montera en fjärrkatalog.
 [sshfs](https://github.com/libfuse/sshfs) kan montera en katalog på en fjärrserver lokalt, så att du kan använda en lokal redigerare.
@@ -446,8 +448,8 @@ Det är dock inte det enda alternativet.
 
 Till exempel är skalet `zsh` en övermängd av `bash` och erbjuder många praktiska funktioner direkt:
 
-- Smartare globbing, `**`
-- Inline-expansion av globbar/jokertecken
+- Smartare mönstermatchning, `**`
+- Inline-expansion av mönstermatchning/jokertecken
 - Stavningskorrigering
 - Bättre tab completion/selection
 - Sökvägsexpansion (`cd /u/lo/b` expanderar till `/usr/local/bin`)
@@ -486,12 +488,18 @@ Några aspekter du kan vilja ändra i terminalen är:
 
 ## Jobbstyrning
 
-1. Av det vi har sett kan vi använda kommandon som `ps aux | grep` för att få fram PID för jobb och sedan döda dem, men det finns bättre sätt. Starta ett jobb `sleep 10000` i en terminal, lägg det i bakgrunden med `Ctrl-Z` och fortsätt körningen med `bg`. Använd sedan [`pgrep`](https://www.man7.org/linux/man-pages/man1/pgrep.1.html) för att hitta dess PID och [`pkill`](https://man7.org/linux/man-pages/man1/pgrep.1.html) för att döda det utan att någonsin skriva PID direkt. (Tips: använd flaggorna `-af`).
+1. Av det vi har sett kan vi använda kommandon som `ps aux | grep` för att få fram PID för jobb och sedan döda dem, men det finns bättre sätt.
+   Starta ett jobb `sleep 10000` i en terminal, lägg det i bakgrunden med `Ctrl-Z` och fortsätt körningen med `bg`.
+   Använd sedan [`pgrep`](https://www.man7.org/linux/man-pages/man1/pgrep.1.html) för att hitta dess PID och [`pkill`](https://man7.org/linux/man-pages/man1/pgrep.1.html) för att döda det utan att någonsin skriva PID direkt.
+   (Tips: använd flaggorna `-af`).
 
-1. Säg att du inte vill starta en process förrän en annan är klar. Hur skulle du göra det? I den här övningen är den begränsande processen alltid `sleep 60 &`.
-Ett sätt att lösa det är att använda kommandot [`wait`](https://www.man7.org/linux/man-pages/man1/wait.1p.html). Testa att starta sleep-kommandot och låta ett `ls` vänta tills bakgrundsprocessen är klar.
+1. Säg att du inte vill starta en process förrän en annan är klar.
+   Hur skulle du göra det?
+   I övningen är den begränsande processen alltid `sleep 60 &`.
+Ett sätt att lösa det är att använda kommandot [`wait`](https://www.man7.org/linux/man-pages/man1/wait.1p.html).
+Testa att starta sleep-kommandot och låta ett `ls` vänta tills bakgrundsprocessen är klar.
 
-    Den här strategin fallerar dock om vi startar i en annan bash-session, eftersom `wait` bara fungerar för barnprocesser. En funktion som vi inte tog upp i anteckningarna är att `kill`-kommandots exit-status är noll vid framgång och skild från noll annars. `kill -0` skickar ingen signal men ger en exit-status skild från noll om processen inte finns.
+    Den här strategin misslyckas dock om vi startar i en annan bash-session, eftersom `wait` bara fungerar för barnprocesser. En funktion som vi inte tog upp i anteckningarna är att `kill`-kommandots slutstatus är noll vid framgång och skild från noll annars. `kill -0` skickar ingen signal men ger en slutstatus skild från noll om processen inte finns.
     Skriv en bash-funktion `pidwait` som tar en PID och väntar tills den processen är klar. Du bör använda `sleep` för att undvika onödig CPU-förbrukning.
 
 ## Terminalmultiplexrar
@@ -502,25 +510,29 @@ Ett sätt att lösa det är att använda kommandot [`wait`](https://www.man7.org
 
 1. Skapa ett alias `dc` som blir `cd` för när du skriver fel.
 
-1.  Kör `history | awk '{$1="";print substr($0,2)}' | sort | uniq -c | sort -n | tail -n 10`  för att få dina 10 mest använda kommandon och överväg att skriva kortare alias för dem. Obs: detta fungerar för Bash; om du använder ZSH, använd `history 1` i stället för bara `history`.
+1.  Kör `history | awk '{$1="";print substr($0,2)}' | sort | uniq -c | sort -n | tail -n 10` för att få dina 10 mest använda kommandon och överväg att skriva kortare alias för dem.
+    Obs: detta fungerar för Bash; om du använder ZSH, använd `history 1` i stället för bara `history`.
 
 
 ## Dotfiles
 
 Nu ska vi få upp farten med dotfiles.
-1. Skapa en mapp för dina dotfiles och sätt upp versionshantering.
+1. Skapa en katalog för dina dotfiles och sätt upp versionshantering.
 1. Lägg till konfiguration för minst ett program, t.ex. ditt skal, med någon anpassning (för att börja enkelt kan det räcka att anpassa skalprompten genom att sätta `$PS1`).
-1. Sätt upp en metod för att snabbt (och utan manuellt arbete) installera dina dotfiles på en ny maskin. Det kan vara så enkelt som ett skalskript som anropar `ln -s` för varje fil, eller så kan du använda ett [specialiserat verktyg](https://dotfiles.github.io/utilities/).
+1. Sätt upp en metod för att snabbt (och utan manuellt arbete) installera dina dotfiles på en ny maskin.
+   Det kan vara så enkelt som ett skalskript som anropar `ln -s` för varje fil, eller så kan du använda ett [specialiserat verktyg](https://dotfiles.github.io/utilities/).
 1. Testa installationsskriptet på en ny virtuell maskin.
 1. Migrera alla dina nuvarande verktygskonfigurationer till ditt dotfiles-kodförråd.
 1. Publicera dina dotfiles på GitHub.
 
 ## Fjärrmaskiner
 
-Installera en Linux-virtuell maskin (eller använd en befintlig) för den här övningen.
+Installera en Linux-virtuell maskin (eller använd en befintlig) för övningen.
 Om du inte är bekant med virtuella maskiner, titta på [den här](https://hibbard.eu/install-ubuntu-virtual-box/) guiden för att installera en.
 
-1. Gå till `~/.ssh/` och kontrollera om du har ett par SSH-nycklar där. Om inte, skapa dem med `ssh-keygen -a 100 -t ed25519`. Det rekommenderas att du använder ett lösenord och `ssh-agent`, mer info [här](https://www.ssh.com/ssh/agent).
+1. Gå till `~/.ssh/` och kontrollera om du har ett par SSH-nycklar där.
+   Om inte, skapa dem med `ssh-keygen -a 100 -t ed25519`.
+   Det rekommenderas att du använder ett lösenord och `ssh-agent`, mer info [här](https://www.ssh.com/ssh/agent).
 1. Redigera `.ssh/config` så att den har en post enligt följande
 
     ```bash
@@ -531,7 +543,13 @@ Om du inte är bekant med virtuella maskiner, titta på [den här](https://hibba
         LocalForward 9999 localhost:8888
     ```
 1. Använd `ssh-copy-id vm` för att kopiera din ssh-nyckel till servern.
-1. Starta en webbserver i din VM genom att köra `python -m http.server 8888`. Kom åt VM:ens webbserver genom att öppna `http://localhost:9999` på din maskin.
-1. Redigera din SSH-serverkonfiguration med `sudo vim /etc/ssh/sshd_config` och stäng av lösenordsautentisering genom att ändra värdet på `PasswordAuthentication`. Stäng av root-inloggning genom att ändra värdet på `PermitRootLogin`. Starta om `ssh`-tjänsten med `sudo service sshd restart`. Försök logga in med ssh igen.
-1. (Utmaning) Installera [`mosh`](https://mosh.org/) i VM:en och upprätta en anslutning. Koppla sedan från nätverksadaptern för servern/VM:en. Kan mosh återhämta sig korrekt?
+1. Starta en webbserver i din VM genom att köra `python -m http.server 8888`.
+   Kom åt VM:ens webbserver genom att öppna `http://localhost:9999` på din maskin.
+1. Redigera din SSH-serverkonfiguration med `sudo vim /etc/ssh/sshd_config` och stäng av lösenordsautentisering genom att ändra värdet på `PasswordAuthentication`.
+   Stäng av root-inloggning genom att ändra värdet på `PermitRootLogin`.
+   Starta om `ssh`-tjänsten med `sudo service sshd restart`.
+   Försök logga in med ssh igen.
+1. (Utmaning) Installera [`mosh`](https://mosh.org/) i VM:en och upprätta en anslutning.
+   Koppla sedan från nätverksadaptern för servern/VM:en.
+   Kan mosh återhämta sig korrekt?
 1. (Utmaning) Ta reda på vad flaggorna `-N` och `-f` gör i `ssh` och hitta ett kommando för att åstadkomma portvidarebefordran i bakgrunden.

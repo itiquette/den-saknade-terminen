@@ -15,8 +15,7 @@ Därför är det värt att lära sig använda den effektivt.
 
 ## Kortkommandon
 
-Att klicka runt i webbläsaren är ofta inte snabbast.
-Att bli bekant med vanliga kortkommandon lönar sig på sikt.
+Att klicka runt i webbläsaren är ofta inte snabbast. Att bli bekant med vanliga kortkommandon lönar sig på sikt.
 
 - `Middle Button Click` på en länk öppnar den i en ny flik
 - `Ctrl+T` öppnar en ny flik
@@ -58,14 +57,12 @@ En annan fördel med upplägget är att det, till skillnad från bokmärken, fun
 ## Integritetstillägg
 
 Numera kan webbsurfning bli ganska störig på grund av annonser och påträngande spårning.
-En bra annonsblockerare blockerar inte bara annonsinnehåll,
-utan kan också blockera suspekta och skadliga webbplatser eftersom de ofta finns i vanliga blocklistor.
+En bra annonsblockerare blockerar inte bara annonsinnehåll, utan kan också blockera suspekta och skadliga webbplatser eftersom de ofta finns i vanliga blocklistor.
 Ibland förbättras även laddningstider eftersom färre förfrågningar skickas.
 Några rekommendationer:
 
 - **uBlock origin** ([Chrome](https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/)): blockerar annonser och spårare utifrån fördefinierade regler.
-Du bör också titta på aktiverade blocklistor i inställningarna,
-eftersom du kan slå på fler beroende på region eller surfvanor.
+Du bör också titta på aktiverade blocklistor i inställningarna, eftersom du kan slå på fler beroende på region eller surfvanor.
 Du kan till och med installera filter från [olika källor på webben](https://github.com/gorhill/uBlock/wiki/Filter-lists-from-around-the-web).
 
 - **[Privacy Badger](https://privacybadger.org/)**: upptäcker och blockerar spårare automatiskt.
@@ -77,10 +74,9 @@ Du hittar fler tillägg av den här typen [här](https://www.privacytools.io/pri
 
 ## Stilanpassning
 
-Webbläsare är bara ännu en programvara som kör på _din maskin_,
-så du har i regel sista ordet om vad de ska visa och hur de ska bete sig.
+Webbläsare är bara ännu en programvara som kör på _din maskin_, så du har i regel sista ordet om vad de ska visa och hur de ska bete sig.
 Ett exempel är anpassade stilar.
-Webbläsare avgör hur en webbsidas stil renderas med Cascading Style Sheets, oftast förkortat CSS.
+Webbläsare avgör hur en webbsidas stil återges med Cascading Style Sheets, oftast förkortat CSS.
 
 Du kan komma åt en webbplats källkod genom att inspektera den och ändra innehåll och stilar tillfälligt.
 (Det är också en anledning till att du aldrig bör lita blint på skärmbilder av webbsidor.)
@@ -109,8 +105,7 @@ a:link {
 
 Stylus kan dessutom hitta stilar skrivna av andra användare och publicerade på [userstyles.org](https://userstyles.org/).
 Många vanliga webbplatser har till exempel en eller flera mörka teman.
-Använd däremot inte Stylish,
-eftersom tillägget visat sig läcka användardata.
+Använd däremot inte Stylish, eftersom tillägget visat sig läcka användardata.
 Läs mer [här](https://arstechnica.com/information-technology/2018/07/stylish-extension-with-2m-downloads-banished-for-tracking-every-site-visit/).
 
 
@@ -148,26 +143,20 @@ Följande skript aktiverar till exempel vim-liknande navigering med tangenterna 
 ```
 
 Det finns också skriptarkiv som [OpenUserJS](https://openuserjs.org/) och [Greasy Fork](https://greasyfork.org/en).
-Men var försiktig:
-att installera användarskript från andra kan vara mycket farligt,
-eftersom de i princip kan göra vad som helst, till exempel stjäla dina kortuppgifter.
-Installera aldrig ett skript om du inte läst hela själv,
-förstått vad det gör,
-och är helt säker på att det inte gör något misstänkt.
+Men var försiktig: att installera användarskript från andra kan vara väldigt farligt, eftersom de i princip kan göra vad som helst, till exempel stjäla dina kortuppgifter.
+Installera aldrig ett skript om du inte läst hela själv, förstått vad det gör, och är helt säker på att det inte gör något misstänkt.
 Installera aldrig skript med minifierad eller obfuskerad kod som du inte kan läsa.
 
 ## Webb-API:er
 
-Det har blivit allt vanligare att webbtjänster erbjuder ett applikationsgränssnitt, alltså ett webb-API,
-så att du kan interagera med tjänsten via webbförfrågningar.
+Det har blivit allt vanligare att webbtjänster erbjuder ett applikationsgränssnitt, alltså ett webb-API, så att du kan interagera med tjänsten via webbförfrågningar.
 En mer djupgående introduktion finns [här](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Introduction).
 Det finns [många publika API:er](https://github.com/toddmotto/public-apis).
 Webb-API:er kan vara användbara av många skäl:
 
 - **Hämtning**.
 Webb-API:er kan enkelt ge dig information som kartor, väder eller din publika IP-adress.
-Till exempel returnerar `curl ipinfo.io` ett JSON-objekt med detaljer om publik IP, region, plats, osv.
-Med korrekt parsning kan sådana verktyg integreras även med kommandoradsverktyg.
+Till exempel returnerar `curl ipinfo.io` ett JSON-objekt med detaljer om publik IP, region, plats, osv. Med korrekt tolkning kan sådana verktyg integreras även med kommandoradsverktyg.
 Följande bash-funktion pratar med Googles API för autokomplettering och returnerar de tio första träffarna.
 
 ```bash
@@ -181,22 +170,18 @@ function c() {
 ```
 
 - **Interaktion**.
-API-endpoints kan också användas för att trigga handlingar.
+API-ändpunkter kan också användas för att utlösa handlingar.
 Det kräver vanligtvis någon form av autentiseringstoken som du får via tjänsten.
-Till exempel skickar följande
-`curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' "https://hooks.slack.com/services/$SLACK_TOKEN"`
-ett `Hello, World!`-meddelande i en kanal.
+Till exempel skickar följande `curl -X POST -H 'Content-type: application/json' --data '{"text":"Hej, världen!"}' "https://hooks.slack.com/services/$SLACK_TOKEN"` ett `Hej, världen!`-meddelande i en kanal.
 
 - **Kopplingar**.
-Eftersom vissa tjänster med webb-API:er är populära finns vanlig API-"ihopkoppling" redan implementerad och tillhandahålls som tjänst.
-Det gäller tjänster som [If This Then That](https://ifttt.com/) och [Zapier](https://zapier.com/).
+Eftersom vissa tjänster med webb-API:er är populära finns vanlig API-"ihopkoppling" redan implementerad och tillhandahålls som tjänst. Det gäller tjänster som [If This Then That](https://ifttt.com/) och [Zapier](https://zapier.com/).
 
 
 ## Webbautomatisering
 
 Ibland räcker webb-API:er inte till.
-Om du bara behöver läsa innehåll kan du använda en HTML-parser som `pup` eller ett bibliotek,
-till exempel BeautifulSoup i Python.
+Om du bara behöver läsa innehåll kan du använda en HTML-tolk som `pup` eller ett bibliotek, till exempel BeautifulSoup i Python.
 Men om interaktivitet eller JavaScript-körning krävs räcker de lösningarna inte.
 Då är WebDriver relevant.
 
@@ -232,7 +217,7 @@ Undersök hur uBlock Origin/Privacy Badger kan inaktiveras för en webbplats.
 Vilka skillnader ser du?
 Testa på en webbplats med mycket annonser, som YouTube.
 1. Installera Stylus och skriv en egen stil för kurswebbplatsen med den CSS som ges.
-Här är några vanliga programmeringstecken: `=   ==   ===   >=   =>   ++   /=   ~=`.
+Här är några vanliga programmeringstecken: `= == === >= => ++ /= ~=`.
 Vad händer med dem när du byter typsnitt till Fira Code?
 Om du vill veta mer, sök på typsnittsligaturer för programmering.
 1. Hitta ett webb-API för väder i din stad eller region.

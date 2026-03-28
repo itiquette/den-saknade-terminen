@@ -22,7 +22,7 @@ phony: true
         {% endif %}
         {% if lecture.details %}
           <br>
-          ({{ lecture.details }})
+({{ lecture.details }})
         {% endif %}
       </li>
     {% endif %}
@@ -44,7 +44,7 @@ Du hittar inlägg och diskussioner på:
  - [YouTube](https://www.youtube.com/playlist?list=PLyzOVJj3bHQuloKGG59rS43e29ro7I57J)
 
 {% comment %}
-Några fler länkar:
+Fler länkar:
 
 - https://news.ycombinator.com/item?id=27154577
 - https://news.ycombinator.com/item?id=34934216

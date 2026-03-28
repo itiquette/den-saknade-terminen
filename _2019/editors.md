@@ -15,40 +15,30 @@ Som programmerare tillbringar vi större delen av tiden med att redigera vanliga
 Det är värt att investera tid i att lära sig en redigerare som passar ens behov.
 
 Hur lär man sig en ny redigerare?
-Man tvingar sig själv att använda den under en period,
-även om produktiviteten tillfälligt sjunker.
+Man tvingar sig själv att använda den under en period, även om produktiviteten tillfälligt sjunker.
 Det lönar sig snart.
 Två veckor räcker för att lära sig grunderna.
 
-Vi kommer att lära ut Vim,
-men vi uppmuntrar dig att testa andra redigerare.
-Det är ett mycket personligt val,
-och folk har [starka åsikter](https://en.wikipedia.org/wiki/Editor_war).
+Vi kommer att lära ut Vim, men vi uppmuntrar dig att testa andra redigerare.
+Det är ett högst personligt val, och folk har [starka åsikter](https://en.wikipedia.org/wiki/Editor_war).
 
-Vi kan inte lära ut en kraftfull redigerare på 50 minuter,
-så vi fokuserar på grunderna,
-visar mer avancerad funktionalitet,
-och ger resurser för att bemästra verktyget.
-Vi undervisar i Vim-kontext,
-men de flesta idéer går att överföra till andra kraftfulla redigerare.
+Vi kan inte lära ut en kraftfull redigerare på 50 minuter, så vi fokuserar på grunderna, visar mer avancerad funktionalitet, och ger resurser för att bemästra verktyget.
+Vi undervisar i Vim-kontext, men de flesta idéer går att överföra till andra kraftfulla redigerare.
 Om de inte gör det bör du kanske inte använda den redigeraren.
 
-![Editor Learning Curves]({{ '/2019/files/editor-learning-curves.jpg' | relative_url }})
+![Inlärningskurvor för textredigerare]({{ '/2019/files/editor-learning-curves.jpg' | relative_url }})
 
 <!-- source: https://blogs.msdn.microsoft.com/steverowe/2004/11/17/code-editor-learning-curves/ -->
 
 Grafen över inlärningskurvor för redigerare är en myt.
-Att lära sig grunderna i en kraftfull redigerare är ganska enkelt,
-även om det kan ta år att bemästra allt.
+Att lära sig grunderna i en kraftfull redigerare är ganska enkelt, även om det kan ta år att bemästra allt.
 
 Vilka redigerare är populära i dag?
-Se den här [Stack Overflow-undersökningen](https://insights.stackoverflow.com/survey/2018/#development-environments-and-tools)
-(det kan finnas viss bias eftersom Stack Overflow-användare inte nödvändigtvis representerar programmerare i stort).
+Se den här [Stack Overflow-undersökningen](https://insights.stackoverflow.com/survey/2018/#development-environments-and-tools) (det kan finnas viss bias eftersom Stack Overflow-användare inte nödvändigtvis representerar programmerare i stort).
 
 ## Kommandoradsredigerare
 
-Även om du i slutändan väljer en GUI-redigerare,
-är det värt att kunna en kommandoradsredigerare för att enkelt redigera filer på fjärrmaskiner.
+Även om du i slutändan väljer en GUI-redigerare, är det värt att kunna en kommandoradsredigerare för att enkelt redigera filer på fjärrmaskiner.
 
 # Nano
 
@@ -60,15 +50,10 @@ Nano är en enkel kommandoradsredigerare.
 # Vim
 
 Vi/Vim är en kraftfull textredigerare.
-Det är ett kommandoradsprogram som vanligtvis finns installerat överallt,
-vilket gör det praktiskt för redigering på fjärrmaskiner.
+Det är ett kommandoradsprogram som vanligtvis finns installerat överallt, vilket gör det praktiskt för redigering på fjärrmaskiner.
 
-Vim har också grafiska versioner,
-som GVim och [MacVim](https://macvim-dev.github.io/macvim/).
-De erbjuder extra funktioner,
-som 24-bitarsfärg,
-menyer
-och popup-fönster.
+Vim har också grafiska versioner, som GVim och [MacVim](https://macvim-dev.github.io/macvim/).
+De erbjuder extra funktioner, som 24-bitarsfärg, menyer och popup-fönster.
 
 ## Vims filosofi
 
@@ -92,14 +77,9 @@ Vim visar aktuellt läge längst ner till vänster.
 - Infogningsläge: för att skriva in text
 - Visuellt läge (tecken-, rad- eller blockläge): för att markera textblock
 
-Du byter läge genom att trycka `<ESC>` för att gå tillbaka till normalläge från vilket läge som helst.
-Från normalläge går du till infogningsläge med `i`,
-visuellt läge med `v`,
-visuellt radläge med `V`,
-och visuellt blockläge med `<C-v>`.
+Du byter läge genom att trycka `<ESC>` för att gå tillbaka till normalläge från vilket läge som helst. Från normalläge går du till infogningsläge med `i`, visuellt läge med `v`, visuellt radläge med `V`, och visuellt blockläge med `<C-v>`.
 
-Du använder `<ESC>` mycket i Vim,
-så överväg att mappa om Caps Lock till Escape.
+Du använder `<ESC>` mycket i Vim, så överväg att mappa om Caps Lock till Escape.
 
 ### Grunder
 
@@ -150,8 +130,7 @@ Du kan använda förflyttningskommandon för att göra markeringar.
 
 ### Manipulera text
 
-Allt du tidigare gjorde med musen gör du nu med tangentbordet
-(och kraftfulla, komponerbara kommandon).
+Allt du tidigare gjorde med musen gör du nu med tangentbordet (och kraftfulla, komponerbara kommandon).
 
 - `i` gå till infogningsläge
     - men för manipulation/radering vill du använda mer än backsteg
@@ -175,15 +154,11 @@ Allt du tidigare gjorde med musen gör du nu med tangentbordet
 
 ## Anpassa Vim
 
-Vim anpassas via en textbaserad konfigurationsfil i `~/.vimrc`
-(som innehåller Vimscript-kommandon).
+Vim anpassas via en textbaserad konfigurationsfil i `~/.vimrc` (som innehåller Vimscript-kommandon).
 Det finns troligen många grundinställningar du vill slå på.
 
-Titta på andras dotfiles på GitHub för inspiration,
-men undvik att kopiera hela konfigurationer rakt av.
-Läs,
-förstå,
-och ta det du behöver.
+Titta på andras dotfiles på GitHub för inspiration, men undvik att kopiera hela konfigurationer rakt av.
+Läs, förstå, och ta det du behöver.
 
 Några anpassningar att överväga:
 
@@ -195,11 +170,8 @@ Några anpassningar att överväga:
 ## Avancerad Vim
 
 Här är några exempel som visar redigerarens kraft.
-Vi kan inte lära ut alla sådana tekniker här,
-men du lär dig dem över tid.
-En bra tumregel är:
-när du tänker "det måste finnas ett bättre sätt att göra det här",
-så finns det ofta det.
+Vi kan inte lära ut alla sådana tekniker här, men du lär dig dem över tid.
+En bra tumregel är: när du tänker "det måste finnas ett bättre sätt att göra det här", så finns det ofta det.
 Sök upp det.
 
 ### Sök och ersätt
@@ -214,14 +186,12 @@ Kommandot `:s` (substitute) ([dokumentation](https://vim.fandom.com/wiki/Search_
 ### Flera fönster
 
 - `sp` / `vsp` för att dela fönster
-- Du kan ha flera vyer av samma buffer.
+- Du kan ha flera vyer av samma buffert.
 
 ### Musstöd
 
 - `set mouse+=a`
-    - du kan klicka,
-      skrolla
-      och markera
+    - du kan klicka, skrolla och markera
 
 ### Makron
 
@@ -233,7 +203,7 @@ Kommandot `:s` (substitute) ([dokumentation](https://vim.fandom.com/wiki/Search_
 - Makron kan vara rekursiva
     - rensa först makrot med `q{character}q`
     - spela in makrot och använd `@{character}` för att anropa makrot rekursivt
-    (det gör inget förrän inspelningen är klar)
+  (det gör inget förrän inspelningen är klar)
 - Exempel: konvertera xml till json ([fil]({{ '/2019/files/example-data.xml' | relative_url }}))
     - Array av objekt med nycklarna "name" / "email"
     - Använda ett Python-program?
@@ -261,14 +231,11 @@ Kommandot `:s` (substitute) ([dokumentation](https://vim.fandom.com/wiki/Search_
 
 Det finns massor av insticksmoduler för att bygga ut Vim.
 
-Börja med en hanterare för insticksmoduler som
-[vim-plug](https://github.com/junegunn/vim-plug),
-[Vundle](https://github.com/VundleVim/Vundle.vim),
-eller [pathogen.vim](https://github.com/tpope/vim-pathogen).
+Börja med en hanterare för insticksmoduler som [vim-plug](https://github.com/junegunn/vim-plug), [Vundle](https://github.com/VundleVim/Vundle.vim), eller [pathogen.vim](https://github.com/tpope/vim-pathogen).
 
 Några insticksmoduler att överväga:
 
-- [ctrlp.vim](https://github.com/kien/ctrlp.vim): fuzzy filsökare
+- [ctrlp.vim](https://github.com/kien/ctrlp.vim): ungefärlig filsökare
 - [vim-fugitive](https://github.com/tpope/vim-fugitive): git-integration
 - [vim-surround](https://github.com/tpope/vim-surround): manipulera "omgivning"-tecken
 - [gundo.vim](https://github.com/sjl/gundo.vim): navigera i ångra-trädet
@@ -283,8 +250,7 @@ Listor med insticksmoduler:
 
 ## Vim-läge i andra program
 
-För många populära redigerare (t.ex. vim och emacs)
-finns emuleringsstöd i andra verktyg.
+För många populära redigerare (t.ex. vim och emacs) finns emuleringsstöd i andra verktyg.
 
 - Skal
     - bash: `set -o vi`
@@ -293,9 +259,8 @@ finns emuleringsstöd i andra verktyg.
 - `~/.inputrc`
     - `set editing-mode vi`
 
-Det finns till och med tillägg med vim-tangentbindningar för webbläsare.
-Några populära är [Vimium](https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb?hl=en) för Google Chrome
-och [Tridactyl](https://github.com/tridactyl/tridactyl) för Firefox.
+Det finns även tillägg med vim-tangentbindningar för webbläsare.
+Några populära är [Vimium](https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb?hl=en) för Google Chrome och [Tridactyl](https://github.com/tridactyl/tridactyl) för Firefox.
 
 
 ## Resurser
@@ -314,15 +279,12 @@ TODO: resurser för andra redigerare?
 # Övningar
 
 1. Experimentera med några redigerare.
-   Prova minst en kommandoradsredigerare (t.ex. Vim)
-   och minst en GUI-redigerare (t.ex. Atom).
+   Prova minst en kommandoradsredigerare (t.ex. Vim) och minst en GUI-redigerare (t.ex. Atom).
    Lär via handledningar som `vimtutor` (eller motsvarande för andra redigerare).
-   För att verkligen få känsla för en ny redigerare,
-   använd den exklusivt i ett par dagar i ditt vanliga arbete.
+   För att verkligen få känsla för en ny redigerare, använd den exklusivt i ett par dagar i ditt vanliga arbete.
 
 1. Anpassa din redigerare.
-   Titta på tips och tricks på nätet,
-   och gå igenom andras konfigurationer (de är ofta väldokumenterade).
+   Titta på tips och tricks på nätet, och gå igenom andras konfigurationer (de är ofta väldokumenterade).
 
 1. Experimentera med insticksmoduler för din redigerare.
 
@@ -330,6 +292,4 @@ TODO: resurser för andra redigerare?
    Då bör du börja se fördelarna.
    Vid någon punkt bör redigeraren kunna arbeta i samma hastighet som du tänker.
 
-1. Installera en linter (t.ex. pyflakes för python),
-   koppla den till din redigerare,
-   och testa att den fungerar.
+1. Installera en linter (t.ex. pyflakes för python), koppla den till din redigerare, och testa att den fungerar.

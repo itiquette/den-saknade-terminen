@@ -22,7 +22,7 @@ phony: true
         {% endif %}
         {% if lecture.details %}
           <br>
-          ({{ lecture.details }})
+({{ lecture.details }})
         {% endif %}
       </li>
     {% endif %}
@@ -33,7 +33,8 @@ Videoinspelningar av föreläsningarna finns [på YouTube](https://www.youtube.c
 
 # Bortom MIT
 
-Vi har också delat kursen bortom MIT i hopp om att fler ska ha nytta av materialet. Du hittar inlägg och diskussioner på
+Vi har också delat kursen bortom MIT i hopp om att fler ska ha nytta av materialet.
+Du hittar inlägg och diskussioner på
 
 - [Hacker News](https://news.ycombinator.com/item?id=47124171)
 - [Lobsters](https://lobste.rs/s/q4ykw7/missing_semester_your_cs_education_2026)
@@ -46,4 +47,5 @@ Vi har också delat kursen bortom MIT i hopp om att fler ska ha nytta av materia
 
 # Tack
 
-Vi tackar Elaine Mello och [MIT Open Learning](https://openlearning.mit.edu/) för att de gjorde det möjligt för oss att spela in föreläsningsvideor. Vi tackar Luis Turino / [SIPB](https://sipb.mit.edu/) för stöd till kursen inom ramen för [SIPB IAP 2026](https://sipb.mit.edu/iap/).
+Vi tackar Elaine Mello och [MIT Open Learning](https://openlearning.mit.edu/) för att de gjorde det möjligt för oss att spela in föreläsningsvideor.
+Vi tackar Luis Turino / [SIPB](https://sipb.mit.edu/) för stöd till kursen inom ramen för [SIPB IAP 2026](https://sipb.mit.edu/iap/).

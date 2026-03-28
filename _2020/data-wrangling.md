@@ -14,7 +14,7 @@ special: true
 
 Har du någon gång velat ta data i ett format och göra om den till ett annat format?
 Självklart har du det.
-Det är, mycket generellt uttryckt, vad den här föreläsningen handlar om.
+Det är, mycket generellt uttryckt, vad föreläsningen handlar om.
 Mer specifikt handlar det om att bearbeta data, oavsett om den är i text- eller binärformat, tills du får exakt det du vill ha.
 
 Vi har redan sett grundläggande datahantering i tidigare föreläsningar.
@@ -40,7 +40,7 @@ Låt oss begränsa till ssh-relaterat innehåll:
 ssh myserver journalctl | grep sshd
 ```
 
-Notera att vi använder en pipe för att strömma en _fjärrfil_ genom `grep` på vår lokala dator.
+Notera att vi använder ett rör för att strömma en _fjärrfil_ genom `grep` på vår lokala dator.
 `ssh` är magiskt, och vi pratar mer om det i nästa föreläsning om kommandoradsmiljön.
 Det här är fortfarande mycket mer än vi vill ha.
 Och ganska svårt att läsa.
@@ -64,7 +64,7 @@ $ less ssh.log
 Det är fortfarande mycket brus här.
 Det finns _många_ sätt att bli av med det, men låt oss titta på ett av de kraftfullaste verktygen i verktygslådan: `sed`.
 
-`sed` är en "stream editor" som bygger på den äldre redigeraren `ed`.
+`sed` är en strömredigerare som bygger på den äldre redigeraren `ed`.
 I `sed` ger du i princip korta kommandon för hur filen ska ändras, i stället för att manipulera innehållet direkt (även om du kan göra det också).
 Det finns mängder av kommandon, men ett av de vanligaste är `s`: substitution.
 Vi kan till exempel skriva:
@@ -144,8 +144,7 @@ Det vi behöver göra är att matcha _hela_ raden:
  | sed -E 's/.*Disconnected from (invalid |authenticating )?user .* [^ ]+ port [0-9]+( \[preauth\])?$//'
 ```
 
-Låt oss titta på vad som händer med en [regex-
-felsökare](https://regex101.com/r/qqbZqh/2).
+Låt oss titta på vad som händer med en [regex- felsökare](https://regex101.com/r/qqbZqh/2).
 Starten är som tidigare.
 Sedan matchar vi någon av varianterna av "user" (det finns två prefix i loggarna).
 Därefter matchar vi en godtycklig teckensträng där användarnamnet finns.
@@ -160,22 +159,17 @@ Det finns dock ett problem: hela loggraden blir tom.
 Vi vill ju _behålla_ användarnamnet.
 För det kan vi använda "capture groups".
 All text som matchas av regex inom parenteser lagras i en numrerad fångstgrupp.
-Dessa finns tillgängliga i substitutionen (och i vissa motorer även i mönstret självt) som `\1`, `\2`, `\3` osv.
-Alltså:
+Dessa finns tillgängliga i substitutionen (och i vissa motorer även i mönstret självt) som `\1`, `\2`, `\3` osv. Alltså:
 
 ```bash
  | sed -E 's/.*Disconnected from (invalid |authenticating )?user (.*) [^ ]+ port [0-9]+( \[preauth\])?$/\2/'
 ```
 
 Som du säkert anar kan man skapa _väldigt_ komplexa reguljära uttryck.
-Till exempel finns en artikel om hur man kan matcha en [e-post-
-adress](https://www.regular-expressions.info/email.html).
-Det är [inte
-lätt](https://web.archive.org/web/20221223174323/http://emailregex.com/).
-Och det finns [mycket
-diskussion](https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression/1917982).
-Och folk har [skrivit
-tester](https://fightingforalostcause.net/content/misc/2006/compare-email-regex.php).
+Till exempel finns en artikel om hur man kan matcha en [e-post- adress](https://www.regular-expressions.info/email.html).
+Det är [inte lätt](https://web.archive.org/web/20221223174323/http://emailregex.com/).
+Och det finns [mycket diskussion](https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression/1917982).
+Och folk har [skrivit tester](https://fightingforalostcause.net/content/misc/2006/compare-email-regex.php).
 Och [testmatriser](https://mathiasbynens.be/demo/url-regex).
 Du kan till och med skriva ett regex som avgör om ett tal [är ett primtal](https://www.noulakaz.net/2007/03/18/a-regular-expression-to-check-for-prime-numbers/).
 
@@ -195,8 +189,7 @@ ssh myserver journalctl
 `sed` kan göra många andra intressanta saker, som att injicera text (med kommandot `i`), skriva ut rader explicit (med kommandot `p`), välja rader via index och mycket mer.
 Kolla `man sed`.
 
-Hur som helst.
-Det vi har nu ger en lista över alla användarnamn som har försökt logga in.
+Hur som helst. Det vi har nu ger en lista över alla användarnamn som har försökt logga in.
 Men det är ganska oanvändbart.
 Låt oss leta efter vanliga namn:
 
@@ -281,8 +274,7 @@ END { print rows }
 
 `BEGIN` är ett mönster som matchar början av indata (och `END` matchar slutet).
 Nu adderar blocket per rad bara antalet från första fältet (även om det alltid blir 1 i just detta fall), och sedan skriver vi ut det i slutet.
-Faktum är att vi _skulle_ kunna ta bort både `grep` och `sed` helt, eftersom `awk` [kan göra
-allt](https://web.archive.org/web/20251210045942/https://backreference.org/2010/02/10/idiomatic-awk/), men vi lämnar det som övning till läsaren.
+Faktum är att vi _skulle_ kunna ta bort både `grep` och `sed` helt, eftersom `awk` [kan göra allt](https://web.archive.org/web/20251210045942/https://backreference.org/2010/02/10/idiomatic-awk/), men vi lämnar det som övning till läsaren.
 
 ## Analysera data
 
@@ -311,7 +303,7 @@ ssh myserver journalctl
  | awk '{print $1}' | R --no-echo -e 'x <- scan(file="stdin", quiet=TRUE); summary(x)'
 ```
 
-R är ännu ett (märkligt) programmeringsspråk som är mycket bra för dataanalys och [plotting](https://ggplot2.tidyverse.org/).
+R är ännu ett (märkligt) programmeringsspråk som är mycket bra för dataanalys och [diagramritning](https://ggplot2.tidyverse.org/).
 Vi går inte in i detalj här, men det räcker att säga att `summary` skriver ut sammanfattande statistik för en vektor, och att vi skapade en vektor med indataflödet av tal, så R ger oss statistiken vi ville ha.
 
 Om du bara vill ha enklare diagram är `gnuplot` din vän:
@@ -371,8 +363,7 @@ ffmpeg -loglevel panic -i /dev/video0 -frames 1 -f image2 -
    ```
    systemd[577]: Startup finished in ...
    ```
-   I macOS, [leta
-   efter](https://eclecticlight.co/2018/03/21/macos-unified-log-3-finding-your-way/):
+   I macOS, [leta efter](https://eclecticlight.co/2018/03/21/macos-unified-log-3-finding-your-way/):
    ```
    === system boot:
    ```
@@ -387,8 +378,7 @@ ffmpeg -loglevel panic -i /dev/video0 -frames 1 -f image2 -
    Ta sedan bort delar av raden som _alltid_ varierar (som tidsstämpeln).
    Avdubbla därefter indata och behåll antal för varje rad (`uniq` är din vän).
    Och till sist, eliminera alla rader vars antal är 3 (eftersom de _delades_ av alla uppstarter).
-6. Hitta en datamängd på nätet, som [den här](https://commons.wikimedia.org/wiki/Data:Wikipedia_statistics/data.tab), [den här](https://ucr.fbi.gov/crime-in-the-u.s/2016/crime-in-the-u.s.-2016/topic-pages/tables/table-1),
-   eller kanske en [härifrån](https://www.springboard.com/blog/data-science/free-public-data-sets-data-science-project/).
+6. Hitta en datamängd på nätet, som [den här](https://commons.wikimedia.org/wiki/Data:Wikipedia_statistics/data.tab), [den här](https://ucr.fbi.gov/crime-in-the-u.s/2016/crime-in-the-u.s.-2016/topic-pages/tables/table-1), eller kanske en [härifrån](https://www.springboard.com/blog/data-science/free-public-data-sets-data-science-project/).
    Hämta den med `curl` och extrahera bara två kolumner med numeriska data.
    Om du hämtar HTML-data kan [`pup`](https://github.com/EricChiang/pup) vara hjälpsamt.
    För JSON-data, prova [`jq`](https://stedolan.github.io/jq/).

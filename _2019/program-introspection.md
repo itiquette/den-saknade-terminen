@@ -11,11 +11,9 @@ video:
 
 # Felsökning (debugging)
 
-När printf-felsökning inte räcker:
-använd en felsökare.
+När printf-felsökning inte räcker: använd en felsökare.
 
-Debuggers låter dig interagera med körningen av ett program,
-så att du kan göra saker som:
+Felsökare låter dig interagera med körningen av ett program, så att du kan göra saker som:
 
 - stoppa programkörning när den når en viss rad
 - stega programmet rad för rad
@@ -28,8 +26,7 @@ så att du kan göra saker som:
 Stödjer många C-liknande språk.
 
 Låt oss titta på [example.c]({{ '/2019/files/example.c' | relative_url }}).
-Kompilera med debug-flaggor:
-`gcc -g -o example example.c`.
+Kompilera med debug-flaggor: `gcc -g -o example example.c`.
 
 Öppna GDB:
 
@@ -56,8 +53,7 @@ Det är i praktiken en hybrid av felsökare (som GDB) och Python-skal.
 
 ## Utvecklarverktyg i webbläsaren
 
-Ytterligare ett exempel på en felsökare,
-denna gång med grafiskt gränssnitt.
+Ytterligare ett exempel på en felsökare, denna gång med grafiskt gränssnitt.
 
 # strace
 
@@ -65,10 +61,7 @@ Observera systemanrop som ett program gör: `strace {program}`.
 
 # Profilering
 
-Typer av profilering:
-CPU,
-minne,
-osv.
+Typer av profilering: CPU, minne, osv.
 
 Enklaste profileraren: `time`.
 

@@ -2,25 +2,25 @@
 layout: page
 title: Den saknade terminen i din datavetenskapsutbildning
 description: >
-  Bemästra kraftfulla verktyg som gör dig till en mer produktiv datavetare och programmerare.
+  Bemästra kraftfulla verktyg som gör dig till en produktivare datavetare och programmerare.
 # subtitle: IAP 2026
 subtitle: "2026"
 nositetitle: true
 ---
 
-På många datavetenskapskurser lär du dig avancerade ämnen, från operativsystem till maskininlärning.
-Men ett avgörande område hamnar ofta i skymundan och lämnas åt studenterna själva: att bli skicklig med sina verktyg.
+När du studerar datavetenskap får du lära dig avancerade ämnen, allt från operativsystem till maskininlärning.
+Men ett avgörande område hamnar ofta i skymundan och lämnas åt studenterna själva: att behärska sina verktyg.
 Vi lär dig att behärska kommandoraden, använda en kraftfull textredigerare, utnyttja avancerade funktioner i versionshanteringssystem och mer därtill.
 
-Studenter lägger hundratals timmar på de här verktygen under utbildningen (och tusentals under arbetslivet), så det är rimligt att göra arbetet så smidigt som möjligt.
-När du behärskar de här verktygen lägger du mindre tid på att få dem att göra som du vill, och kan samtidigt lösa problem som tidigare verkade nästan omöjliga.
+Det är rimligt att göra det arbetet så smidigt och flytande som möjligt då studenter kan lägga hundratals timmar på de här verktygen under utbildningen (och tusentals under arbetslivet).
+När du väl bemästrar de här verktygen lägger du mindre tid på att få dem att göra som du vill, och kan samtidigt lösa problem som tidigare verkade omöjliga.
 
-I dag förändras också många delar av programvaruutveckling genom införandet av AI-stödda verktyg och arbetsflöden.
-När de används på rätt sätt, och med förståelse för deras begränsningar, kan de ge tydliga fördelar för alla som jobbar med programvara.
-Därför är det värt att bygga upp praktisk kunskap om dem.
+AI-stödda verktyg och arbetsflöden förändrar numera också många delar av programvaruutvecklingen.
+När de används på rätt sätt, och med en förståelse för deras begränsningar, kan de ge tydliga fördelar för alla som jobbar med programvara.
+Det är därför värt att bygga upp praktisk kunskap om dem.
 Eftersom AI är en tvärgående teknik har vi ingen fristående AI-föreläsning; i stället har vi vävt in relevanta AI-verktyg och tekniker direkt i varje föreläsning.
 
-Läs om [motivationen för kursen]({{ '/about/' | relative_url }}).
+Läs om [motivationen för att hålla kursen]({{ '/about/' | relative_url }}).
 
 {% comment %}
 # Registration
@@ -51,9 +51,10 @@ Sign up for the IAP 2026 class by filling out this [registration form](https://f
 {% endfor %}
 </ul>
 
-## Specialämnen från tidigare år
+## Tidigare års specialämnen
 
-Ämnena vi tar upp varierar från år till år. För studenter som är intresserade av alla ämnen vi har behandlat genom åren lyfter vi här fram ämnen från tidigare år som inte ingick 2026.
+Ämnena vi tar upp varierar från år till år.
+Vi lyfter här fram ämnen vi har behandlat tidigare år som inte ingick 2026.
 
 {% comment %} pop to remove default "posts" collection {% endcomment %}
 {% assign sorted_collections = site.collections | sort: 'label' | pop | reverse %}
@@ -80,20 +81,18 @@ The system has a limitation that only those with an MIT Kerberos can access the 
 We are working on editing lecture videos and uploading them to YouTube.
 A couple have been uploaded already; we expect the rest to be uploaded by mid-February.
 
-If you can't wait until January 2026, you can also take a look at the lectures
-from the [previous offering of the course]({{ '/2020/' | relative_url }}), which covers many of the
-same topics.
+If you can't wait until January 2026, you can also take a look at the lectures from the [previous offering of the course]({{ '/2020/' | relative_url }}), which covers many of the same topics.
 {% endcomment %}
 
 # Allmän information
 
-**Lärare**: Den här kursen undervisas tillsammans av [Anish](https://anish.io/), [Jon](https://thesquareplanet.com/) och [Jose](https://josejg.com/).<br>
+**Lärare**: Kursen undervisas tillsammans av [Anish](https://anish.io/), [Jon](https://thesquareplanet.com/) och [Jose](https://josejg.com/).<br>
 **Frågor**: Mejla oss på [missing-semester@mit.edu](mailto:missing-semester@mit.edu).<br>
 **Diskussion**: [OSSU Discord](https://ossu.dev/#community) (använd `#missing-semester-forum` ungefär som Piazza, och `#missing-semester` för att prata med klassen och lärarna).
 
 # Bortom MIT
 
-Vi har också delat den här kursen bortom MIT i hopp om att fler ska kunna dra nytta av materialet.
+Vi har också delat kursen bortom MIT i hopp om att fler ska kunna dra nytta av materialet.
 Du hittar inlägg och diskussioner på
 
  - Hacker News ([2026](https://news.ycombinator.com/item?id=47124171), [2020](https://news.ycombinator.com/item?id=22226380), [2019](https://news.ycombinator.com/item?id=19078281))
@@ -110,29 +109,29 @@ Du hittar inlägg och diskussioner på
 
 {% comment %} keep these in alphabetical order {% endcomment %}
 
-- [Arabic](https://missing-semester-ar.github.io/)
+- [Arabiska](https://missing-semester-ar.github.io/)
 - [Bengali](https://missing-semester-bn.github.io/)
-- [Chinese (Simplified)](https://missing-semester-cn.github.io/)
-- [Chinese (Traditional, Taiwan)](https://missing-semester-tw.github.io/)
-- [German](https://missing-semester-de.github.io/)
-- [Italian](https://missing-semester-it.github.io/)
-- [Japanese](https://missing-semester-jp.github.io/)
+- [Kinesiska (förenklad)](https://missing-semester-cn.github.io/)
+- [Kinesiska (traditionell, Taiwan)](https://missing-semester-tw.github.io/)
+- [Italienska](https://missing-semester-it.github.io/)
+- [Japanska](https://missing-semester-jp.github.io/)
 - [Kannada](https://missing-semester-kn.github.io/)
-- [Korean](https://missing-semester-kr.github.io/)
-- [Persian](https://missing-semester-fa.github.io/)
-- [Portuguese](https://missing-semester-pt.github.io/)
-- [Russian](https://missing-semester-rus.github.io/)
-- [Serbian](https://netboxify.com/missing-semester/)
-- [Spanish](https://missing-semester-esp.github.io/)
-- [Swedish](https://itiquette.github.io/den-saknade-terminen/)
-- [Thai](https://missing-semester-th.github.io/)
-- [Turkish](https://missing-semester-tr.github.io/)
-- [Vietnamese](https://missing-semester-vn.github.io/)
+- [Koreanska](https://missing-semester-kr.github.io/)
+- [Persiska](https://missing-semester-fa.github.io/)
+- [Portugisiska](https://missing-semester-pt.github.io/)
+- [Ryska](https://missing-semester-rus.github.io/)
+- [Serbiska](https://netboxify.com/missing-semester/)
+- [Spanska](https://missing-semester-esp.github.io/)
+- [Svenska](https://itiquette.github.io/den-saknade-terminen/)
+- [Thailändska](https://missing-semester-th.github.io/)
+- [Turkiska](https://missing-semester-tr.github.io/)
+- [Tyska](https://missing-semester-de.github.io/)
+- [Vietnamesiska](https://missing-semester-vn.github.io/)
 
 Obs: detta är externa länkar till gemenskapsöversättningar.
 Vi har inte granskat dem.
 
-Har du skapat en översättning av kursanteckningarna från den här kursen?
+Har du skapat en översättning av kursanteckningarna från kursen?
 Skicka en [ändringsförfrågan (PR)](https://github.com/missing-semester/missing-semester/pulls) så kan vi lägga till den i listan.
 
 ## Tack
@@ -142,12 +141,12 @@ Skicka en [ändringsförfrågan (PR)](https://github.com/missing-semester/missin
 {% endcomment %}
 
 Vi tackar Elaine Mello och [MIT Open Learning](https://openlearning.mit.edu/) för att de gjorde det möjligt för oss att spela in föreläsningsvideor.
-Vi tackar Luis Turino / [SIPB](https://sipb.mit.edu/) för att de stöttar den här kursen som en del av [SIPB IAP 2026](https://sipb.mit.edu/iap/).
+Vi tackar Luis Turino / [SIPB](https://sipb.mit.edu/) för att de stöttar kursen som en del av [SIPB IAP 2026](https://sipb.mit.edu/iap/).
 
 ---
 
 <div class="small center">
 <p><a href="https://github.com/missing-semester/missing-semester">Källkod</a>.</p>
 <p>Licensierat under CC BY-NC-SA.</p>
-<p>Se <a href="{{ '/license/' | relative_url }}">här</a> för riktlinjer för bidrag och översättning.</p>
+<p>Se <a href="{{ '/license/' | relative_url }}">här</a> för vägledning om hur du bidrar och översätter.</p>
 </div>

@@ -11,18 +11,18 @@ video:
   id: kgII-YWo3Zw
 ---
 
-I den här föreläsningen går vi igenom grunderna i att använda bash som skriptspråk tillsammans med ett antal skalverktyg som täcker flera av de vanligaste uppgifterna du ständigt utför i kommandoraden.
+I föreläsningen går vi igenom grunderna i att använda bash som skriptspråk tillsammans med ett antal skalverktyg som täcker flera av de vanligaste uppgifterna du ständigt utför i kommandoraden.
 
 # Skalskriptning
 
 Hittills har vi sett hur man kör kommandon i skalet och kopplar ihop dem med rör.
-I många scenarier vill du dock köra en serie kommandon och använda styrflöde som villkor eller loopar.
+I många scenarier vill du dock köra en serie kommandon och använda styrflöde som villkor eller slingor.
 
 Skalskript är nästa steg i komplexitet.
 De flesta skal har ett eget skriptspråk med variabler, styrflöde och egen syntax.
 Det som skiljer skalskriptning från andra skriptspråk är att det är optimerat för skalrelaterade uppgifter.
-Att bygga kommandokedjor, spara resultat i filer och läsa från standard input är därför grundfunktioner i skalskriptning, vilket ofta gör det enklare att använda än allmänna skriptspråk.
-I det här avsnittet fokuserar vi på bash-skriptning eftersom det är vanligast.
+Att bygga kommandokedjor, spara resultat i filer och läsa från standard in är därför grundfunktioner i skalskriptning, vilket ofta gör det enklare att använda än allmänna skriptspråk.
+I avsnittet fokuserar vi på bash-skriptning eftersom det är vanligast.
 
 För att tilldela variabler i bash använder du syntaxen `foo=bar` och läser värdet med `$foo`.
 Observera att `foo = bar` inte fungerar, eftersom det tolkas som att programmet `foo` körs med argumenten `=` och `bar`.
@@ -57,22 +57,24 @@ Till skillnad från andra skriptspråk använder bash en mängd specialvariabler
 Nedan är en lista över några av dem.
 En mer komplett lista finns [här](https://tldp.org/LDP/abs/html/special-chars.html).
 - `$0` - Skriptets namn
-- `$1` till `$9` - Argument till skriptet. `$1` är första argumentet och så vidare.
+- `$1` till `$9` - Argument till skriptet.
+  `$1` är första argumentet och så vidare.
 - `$@` - Alla argument
 - `$#` - Antal argument
 - `$?` - Returkod för föregående kommando
 - `$$` - Process-ID (PID) för det aktuella skriptet
-- `!!` - Hela senaste kommandot inklusive argument. Ett vanligt mönster är att köra ett kommando som misslyckas på grund av saknade rättigheter; då kan du snabbt köra om det med sudo genom att skriva `sudo !!`
-- `$_` - Sista argumentet i senaste kommandot. I ett interaktivt skal kan du också snabbt få värdet genom att skriva `Esc` följt av `.` eller `Alt+.`
+- `!!` - Hela senaste kommandot inklusive argument.
+  Ett vanligt mönster är att köra ett kommando som misslyckas på grund av saknade rättigheter; då kan du snabbt köra om det med sudo genom att skriva `sudo !!`
+- `$_` - Sista argumentet i senaste kommandot.
+  I ett interaktivt skal kan du också snabbt få värdet genom att skriva `Esc` följt av `.` eller `Alt+.`
 
 Kommandon returnerar ofta utdata via `STDOUT`, fel via `STDERR` och en returkod för att rapportera fel på ett skriptvänligt sätt.
-Returkoden, eller exit-status, är hur skript/kommandon kommunicerar hur körningen gick.
+Returkoden, eller slutstatus, är hur skript/kommandon kommunicerar hur körningen gick.
 Värdet 0 betyder vanligtvis att allt gick bra; allt annat än 0 betyder att ett fel uppstod.
 
-Exit-koder kan användas för villkorad körning av kommandon med `&&` (och-operator) och `||` (eller-operator), som båda är [kortslutande](https://en.wikipedia.org/wiki/Short-circuit_evaluation) operatorer.
+Slutkoder kan användas för villkorad körning av kommandon med `&&` (och-operator) och `||` (eller-operator), som båda är [kortslutande](https://en.wikipedia.org/wiki/Short-circuit_evaluation) operatorer.
 Kommandon kan också separeras på samma rad med semikolon `;`.
-Programmet `true` returnerar alltid 0 och kommandot `false` returnerar alltid 1.
-Låt oss se några exempel.
+Programmet `true` returnerar alltid 0 och kommandot `false` returnerar alltid 1. Låt oss se några exempel.
 
 ```bash
 false || echo "Oj, fel"
@@ -99,12 +101,12 @@ Det kan göras med _command substitution_ (kommandosubstitution).
 Varje gång du skriver `$( CMD )` körs `CMD`, kommandots utdata hämtas och ersätter uttrycket på plats.
 Om du till exempel skriver `for file in $(ls)` kommer skalet först att köra `ls` och sedan iterera över värdena.
 En mindre känd liknande funktion är _process substitution_ (processsubstitution), där `<( CMD )` kör `CMD`, lägger utdata i en temporär fil och ersätter `<()` med filens namn.
-Detta är användbart när kommandon förväntar sig värden via fil i stället för via STDIN.
+Det är användbart när kommandon förväntar sig värden via fil i stället för via STDIN.
 Till exempel visar `diff <(ls foo) <(ls bar)` skillnader mellan filer i katalogerna `foo` och `bar`.
 
 
 Eftersom det var mycket information på en gång tar vi ett exempel som visar några av funktionerna.
-Det itererar över argumenten vi skickar in, kör `grep` efter strängen `foobar` och appenderar den till filen som en kommentar om den inte hittas.
+Det itererar över argumenten vi skickar in, kör `grep` efter strängen `foobar` och lägger till den i filen som en kommentar om den inte hittas.
 
 ```bash
 #!/bin/bash
@@ -115,7 +117,7 @@ echo "Kör programmet $0 med $# argument och PID $$"
 
 for file in "$@"; do
     grep foobar "$file" > /dev/null 2> /dev/null
-    # När mönstret inte hittas får grep exit-status 1
+    # När mönstret inte hittas får grep slutstatus 1
     # Vi omdirigerar STDOUT och STDERR till /dev/null eftersom vi inte bryr oss om utdata här
     if [[ $? -ne 0 ]]; then
         echo "Filen $file innehåller inte foobar, lägger till en rad"
@@ -124,17 +126,18 @@ for file in "$@"; do
 done
 ```
 
-I jämförelsen testade vi om `$?` inte var lika med 0.
-Bash implementerar många jämförelser av detta slag; en detaljerad lista finns i manualsidan för [`test`](https://www.man7.org/linux/man-pages/man1/test.1.html).
+I jämförelsen testade vi om `$?` inte var lika med 0. Bash implementerar många jämförelser av detta slag; en detaljerad lista finns i manualsidan för [`test`](https://www.man7.org/linux/man-pages/man1/test.1.html).
 När du gör jämförelser i bash, försök använda dubbla hakparenteser `[[ ]]` i stället för enkla `[ ]`.
 Risken för misstag är mindre, även om det då inte blir portabelt till `sh`.
 En mer detaljerad förklaring finns [här](https://mywiki.wooledge.org/BashFAQ/031).
 
 När du startar skript vill du ofta skicka in liknande argument.
 Bash har sätt att underlätta detta genom att expandera uttryck via filnamnsexpansion.
-Dessa tekniker kallas ofta skalglobbing.
-- Jokertecken - När du vill matcha med jokertecken kan du använda `?` och `*` för att matcha ett respektive valfritt antal tecken. Givet filerna `foo`, `foo1`, `foo2`, `foo10` och `bar` tar kommandot `rm foo?` bort `foo1` och `foo2`, medan `rm foo*` tar bort alla utom `bar`.
-- Måsvingar `{}` - När du har en gemensam delsträng i en serie kommandon kan du använda måsvingar för att låta bash expandera detta automatiskt. Detta är mycket praktiskt när du flyttar eller konverterar filer.
+Dessa tekniker kallas ofta mönstermatchning (globbing).
+- Jokertecken - När du vill matcha med jokertecken kan du använda `?` och `*` för att matcha ett respektive valfritt antal tecken.
+  Givet filerna `foo`, `foo1`, `foo2`, `foo10` och `bar` tar kommandot `rm foo?` bort `foo1` och `foo2`, medan `rm foo*` tar bort alla utom `bar`.
+- Måsvingar `{}` - När du har en gemensam delsträng i en serie kommandon kan du använda måsvingar för att låta bash expandera detta automatiskt.
+  Detta är mycket praktiskt när du flyttar eller konverterar filer.
 
 ```bash
 convert image.{png,jpg}
@@ -145,7 +148,7 @@ cp /path/to/project/{foo,bar,baz}.sh /newpath
 # Expanderar till
 cp /path/to/project/foo.sh /path/to/project/bar.sh /path/to/project/baz.sh /newpath
 
-# Globbingtekniker kan kombineras
+# Mönster kan kombineras
 mv *{.py,.sh} folder
 # Flyttar alla *.py- och *.sh-filer
 
@@ -184,15 +187,20 @@ I detta exempel skulle shebang-raden se ut som `#!/usr/bin/env python`.
 
 Några skillnader mellan skalfunktioner och skript att ha i åtanke är:
 - Funktioner måste skrivas i samma språk som skalet, medan skript kan skrivas i vilket språk som helst. Därför är shebang viktig för skript.
-- Funktioner laddas en gång när deras definition läses in. Skript laddas varje gång de körs. Detta gör funktioner något snabbare att ladda, men när du ändrar dem måste du ladda om definitionen.
-- Funktioner körs i den aktuella skalmiljön medan skript körs i en egen process. Därför kan funktioner ändra miljövariabler, t.ex. byta aktuell katalog, medan skript inte kan det. Miljövariabler som exporterats med [`export`](https://www.man7.org/linux/man-pages/man1/export.1p.html) skickas med värde till skript.
-- Som i alla programmeringsspråk är funktioner en kraftfull konstruktion för modularitet, kodåteranvändning och tydlighet i skalkod. Ofta innehåller skalskript egna funktionsdefinitioner.
+- Funktioner laddas en gång när deras definition läses in.
+  Skript laddas varje gång de körs.
+  Detta gör funktioner något snabbare att ladda, men när du ändrar dem måste du ladda om definitionen.
+- Funktioner körs i den aktuella skalmiljön medan skript körs i en egen process.
+  Därför kan funktioner ändra miljövariabler, t.ex. byta aktuell katalog, medan skript inte kan det.
+  Miljövariabler som exporterats med [`export`](https://www.man7.org/linux/man-pages/man1/export.1p.html) skickas med värde till skript.
+- Som i alla programmeringsspråk är funktioner en kraftfull konstruktion för modularitet, kodåteranvändning och tydlighet i skalkod.
+  Ofta innehåller skalskript egna funktionsdefinitioner.
 
 # Skalverktyg
 
 ## Ta reda på hur kommandon används
 
-Vid det här laget kanske du undrar hur man hittar flaggorna för kommandon i avsnittet om alias, som `ls -l`, `mv -i` och `mkdir -p`.
+Nu kanske du undrar hur man hittar flaggorna för kommandon i avsnittet om alias, som `ls -l`, `mv -i` och `mkdir -p`.
 Mer generellt: givet ett kommando, hur tar du reda på vad det gör och vilka alternativ som finns?
 Du kan alltid börja googla, men eftersom UNIX är äldre än StackOverflow finns inbyggda sätt att få den informationen.
 
@@ -219,7 +227,7 @@ Några exempel:
 ```bash
 # Hitta alla kataloger som heter src
 find . -name src -type d
-# Hitta alla Python-filer som har en mapp med namnet test i sökvägen
+# Hitta alla Python-filer som har en katalog med namnet test i sökvägen
 find . -path '*/test/*.py' -type f
 # Hitta alla filer som ändrats det senaste dygnet
 find . -mtime -1
@@ -265,7 +273,7 @@ Några jag ofta använder är `-C` för **C**ontext runt matchande rad och `-v` 
 Till exempel skriver `grep -C 5` ut 5 rader före och efter matchningen.
 När du snabbt vill söka genom många filer vill du använda `-R` eftersom det går **R**ekursivt in i kataloger och letar i filer efter matchsträngen.
 
-Men `grep -R` kan förbättras på många sätt, som att ignorera `.git`-mappar, använda flera CPU-kärnor, &c.
+Men `grep -R` kan förbättras på många sätt, som att ignorera `.git`-kataloger, använda flera CPU-kärnor, &c.
 Många alternativ till `grep` har utvecklats, bland annat [ack](https://github.com/beyondgrep/ack3), [ag](https://github.com/ggreer/the_silver_searcher) och [rg](https://github.com/BurntSushi/ripgrep).
 Alla är utmärkta och erbjuder i stort sett samma funktionalitet.
 Just nu håller jag mig till ripgrep (`rg`) tack vare dess hastighet och intuitiva användning.
@@ -289,17 +297,17 @@ Hittills har vi sett hur man hittar filer och kod, men när du lägger mer tid i
 Det första att känna till är att uppåtpilen ger dig senaste kommandot tillbaka, och om du fortsätter trycka går du gradvis bakåt i skalhistoriken.
 
 Kommandot `history` låter dig komma åt skalhistoriken programmatiskt.
-Det skriver ut historiken till standard output.
+Det skriver ut historiken till standard ut.
 Om vi vill söka i den kan vi skicka utdata genom ett rör till `grep` och leta efter mönster.
 `history | grep find` skriver ut kommandon som innehåller delsträngen "find".
 
 I de flesta skal kan du använda `Ctrl+R` för bakåtsökning i historiken.
 Efter att ha tryckt `Ctrl+R` kan du skriva en delsträng som ska matcha kommandon i historiken.
 Om du fortsätter trycka cyklar du genom träffarna.
-Detta kan också aktiveras med UP/DOWN-pilar i [zsh](https://github.com/zsh-users/zsh-history-substring-search).
+Det kan också aktiveras med UP/DOWN-pilar i [zsh](https://github.com/zsh-users/zsh-history-substring-search).
 Ett trevligt tillägg till `Ctrl+R` är bindningar med [fzf](https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings#ctrl-r).
-`fzf` är en generell fuzzy finder som kan användas med många kommandon.
-Här används den för fuzzy-matchning i historiken och presenterar resultat på ett smidigt och visuellt tilltalande sätt.
+`fzf` är en generell ungefärlig sökare som kan användas med många kommandon.
+Här används den för ungefärlig matchning i historiken och presenterar resultat på ett smidigt och visuellt tilltalande sätt.
 
 Ett annat historiktrick jag gillar mycket är **history-based autosuggestions**.
 Funktionen introducerades först i skalet [fish](https://fishshell.com/) och autokompletterar dynamiskt aktuellt kommando med det senaste kommandot du skrivit som delar prefix.
@@ -316,7 +324,7 @@ Hittills har vi antagit att du redan befinner dig där du behöver vara för att
 Men hur navigerar man snabbt mellan kataloger?
 Det finns många enkla sätt, som att skriva skalalias eller skapa symlänkar med [ln -s](https://www.man7.org/linux/man-pages/man1/ln.1.html), men sanningen är att utvecklare redan har tagit fram ganska smarta och sofistikerade lösningar.
 
-Som så ofta i den här kursen vill du optimera för det vanliga fallet.
+Som så ofta i kursen vill du optimera för det vanliga fallet.
 Att hitta frekventa och/eller nyligen använda filer och kataloger går med verktyg som [`fasd`](https://github.com/clvv/fasd) och [`autojump`](https://github.com/wting/autojump).
 Fasd rankar filer och kataloger efter [_frecency_](https://web.archive.org/web/20210421120120/https://developer.mozilla.org/en-US/docs/Mozilla/Tech/Places/Frecency_algorithm), alltså både _frequency_ och _recency_.
 Som standard lägger `fasd` till kommandot `z` som låter dig göra snabb `cd` med en delsträng av en _frecent_ katalog.
@@ -335,7 +343,7 @@ Mer avancerade verktyg finns för att snabbt få en översikt av katalogstruktur
     - Filer sorteras efter hur nyligen de ändrats
     - Utdata är färgsatt
 
-    En exempelutdata kan se ut så här
+   En exempelutdata kan se ut så här
 
     ```
     -rw-r--r--   1 user group 1.1M Jan 14 09:53 baz
@@ -354,18 +362,14 @@ När du kör `marco` ska nuvarande arbetskatalog sparas på något sätt, och n�
 För enklare felsökning kan du skriva koden i en fil `marco.sh` och (om)ladda definitionerna i skalet genom att köra `source marco.sh`.
 
 {% comment %}
-marco() {
-    export MARCO=$(pwd)
-}
+marco() { export MARCO=$(pwd) }
 
-polo() {
-    cd "$MARCO"
-}
+polo() { cd "$MARCO" }
 {% endcomment %}
 
 1. Säg att du har ett kommando som sällan misslyckas.
-För att felsöka det behöver du fånga utdata, men det kan ta tid innan du får en körning som faktiskt fallerar.
-Skriv ett bash-skript som kör följande skript tills det misslyckas, fångar standard output och felström till filer och skriver ut allt i slutet.
+För att felsöka det behöver du fånga utdata, men det kan ta tid innan du får en körning som faktiskt misslyckas.
+Skriv ett bash-skript som kör följande skript tills det misslyckas, fångar standard ut och felström till filer och skriver ut allt i slutet.
 Bonuspoäng om du också rapporterar hur många körningar det tog innan skriptet misslyckades.
 
     ```bash
@@ -385,15 +389,9 @@ Bonuspoäng om du också rapporterar hur många körningar det tog innan skripte
 {% comment %}
 #!/usr/bin/env bash
 
-count=0
-until [[ "$?" -ne 0 ]];
-do
-  count=$((count+1))
-  ./random.sh &> out.txt
-done
+count=0 until [[ "$?" -ne 0 ]]; do count=$((count+1)) ./random.sh &> out.txt done
 
-echo "hittade fel efter $count körningar"
-cat out.txt
+echo "hittade fel efter $count körningar" cat out.txt
 {% endcomment %}
 
 1. Som vi tog upp i föreläsningen kan `find` med `-exec` vara mycket kraftfullt för att utföra operationer på filer vi söker efter.
@@ -403,7 +401,7 @@ När vi kopplar ihop kommandon med rör kopplar vi STDOUT till STDIN, men vissa 
 För att överbrygga detta finns kommandot [`xargs`](https://www.man7.org/linux/man-pages/man1/xargs.1.html), som kör ett kommando med STDIN som argument.
 Till exempel tar `ls | xargs rm` bort filerna i aktuell katalog.
 
-    Din uppgift är att skriva ett kommando som rekursivt hittar alla HTML-filer i mappen och gör en zip av dem.
+    Din uppgift är att skriva ett kommando som rekursivt hittar alla HTML-filer i katalogen och gör en zip av dem.
     Observera att kommandot ska fungera även om filnamnen innehåller blanksteg (tips: titta på flaggan `-d` för `xargs`).
     {% comment %}
     find . -type f -name "*.html" | xargs -d '\n'  tar -cvzf archive.tar.gz

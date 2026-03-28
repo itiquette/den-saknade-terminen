@@ -14,15 +14,15 @@ video:
 En _utvecklingsmiljö_ är en uppsättning verktyg för att utveckla programvara.
 Kärnan i en utvecklingsmiljö är textredigering, tillsammans med funktioner som syntaxmarkering, typkontroll, kodformatering och autokomplettering.
 _Integrerade utvecklingsmiljöer_ (IDE:er) som [VS Code][vs-code] samlar all denna funktionalitet i en enda applikation.
-Terminalbaserade arbetsflöden för utveckling kombinerar verktyg som [tmux](https://github.com/tmux/tmux) (en terminalmultiplexer), [Vim](https://www.vim.org/) (en textredigerare), [Zsh](https://www.zsh.org/) (ett skal) och språkspecifika kommandoradsverktyg, som [Ruff](https://docs.astral.sh/ruff/) (en Python-linter och kodformatterare) och [Mypy](https://mypy-lang.org/) (en typkontroll för Python).
+Terminalbaserade arbetsflöden för utveckling kombinerar verktyg som [tmux](https://github.com/tmux/tmux) (en terminalmultiplexer), [Vim](https://www.vim.org/) (en textredigerare), [Zsh](https://www.zsh.org/) (ett skal) och språkspecifika kommandoradsverktyg, som [Ruff](https://docs.astral.sh/ruff/) (en Python-linter och kodformaterare) och [Mypy](https://mypy-lang.org/) (en typkontrollerare för Python).
 
 IDE:er och terminalbaserade arbetsflöden har båda sina styrkor och svagheter.
 Grafiska IDE:er kan till exempel vara lättare att lära sig, och dagens IDE:er har i allmänhet bättre AI-integration direkt ur lådan, som AI-autokomplettering.
 Terminalbaserade arbetsflöden är å andra sidan lätta och kan vara ditt enda alternativ i miljöer där du inte har ett GUI eller inte kan installera programvara.
-Vi rekommenderar att du skaffar grundläggande vana vid båda och uppnår god behärskning av minst ett av dem.
-Om du inte redan har en föredragen IDE rekommenderar vi att börja med [VS Code][vs-code].
+Vi rekommenderar att du skaffar grundläggande vana vid båda och behärskar minst en av dem bra.
+Om du inte redan har ett IDE du föredrar rekommenderar vi att du börjar med [VS Code][vs-code].
 
-I den här föreläsningen går vi igenom:
+I föreläsningen går vi igenom:
 
 - [Textredigering och Vim](#textredigering-och-vim)
 - [Kodintelligens och språkservrar](#kodintelligens-och-språkservrar)
@@ -52,30 +52,29 @@ Chansen är stor att de verktyg du använder för textredigering stöder Vim-lä
 Vim är en _modal redigerare_: den har olika arbetslägen för olika typer av uppgifter.
 
 - **Normal**: för att flytta runt i en fil och göra ändringar
-- **Insert**: för att infoga text
-- **Replace**: för att ersätta text
-- **Visual** (vanligt, rad eller block): för att markera textblock
-- **Command-line**: för att köra ett kommando
+- **Infoga** (Insert): för att infoga text
+- **Ersätt** (Replace): för att ersätta text
+- **Visuellt** (Visual) (vanligt, rad eller block): för att markera textblock
+- **Kommandorad** (Command-line): för att köra ett kommando
 
 Tangenttryckningar betyder olika saker i olika lägen.
-Bokstaven `x` i Insert-läge skriver till exempel bara in tecknet "x", men i Normal-läge raderar den tecknet under markören, och i Visual-läge raderar den markeringen.
+Bokstaven `x` i Infoga-läge skriver till exempel bara in tecknet "x", men i Normal-läge raderar den tecknet under markören, och i Visuellt-läge raderar den markeringen.
 
 I standardkonfigurationen visar Vim aktuellt läge längst ned till vänster.
 Start-/standardläget är Normal-läge.
-Du kommer oftast att växla mellan Normal-läge och Insert-läge.
+Du kommer oftast att växla mellan Normal-läge och Infoga-läge.
 
-Du byter läge genom att trycka `<ESC>` (escape-tangenten) för att gå tillbaka till Normal-läge från vilket läge som helst.
-Från Normal-läge går du till Insert med `i`, Replace med `R`, Visual med `v`, Visual Line med `V`, Visual Block med `<C-v>` (Ctrl-V, ibland skrivet `^V`) och Command-line med `:`.
+Du byter läge genom att trycka `<ESC>` (escape-tangenten) för att gå tillbaka till Normal-läge från vilket läge som helst. Från Normal-läge går du till Infoga med `i`, Ersätt med `R`, Visuellt med `v`, Visuell rad med `V`, Visuellt block med `<C-v>` (Ctrl-V, ibland skrivet `^V`) och Kommandorad med `:`.
 
-Du använder `<ESC>` mycket i Vim.
-Överväg att mappa om Caps Lock till Escape ([instruktioner för macOS](https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_macOS)) eller skapa en [alternativ mappning](https://vim.fandom.com/wiki/Avoid_the_escape_key#Mappings) för `<ESC>` med en enkel tangentsekvens.
+Du använder ofta `<ESC>` i Vim.
+Överväg att mappa om Caps Lock till Escape ([instruktioner för macOS](https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_macOS)) eller att skapa en [alternativ mappning](https://vim.fandom.com/wiki/Avoid_the_escape_key#Mappings) för `<ESC>` med en enkel tangentsekvens.
 
 ## Grunderna: infoga text
 
-Tryck `i` från Normal-läge för att gå till Insert-läge.
+Tryck `i` från Normal-läge för att gå till Infoga-läge.
 Nu fungerar Vim som vilken annan textredigerare som helst, tills du trycker `<ESC>` för att gå tillbaka till Normal-läge.
 Detta, tillsammans med grunderna ovan, räcker för att börja redigera filer med Vim.
-Det är dock inte särskilt effektivt om du tillbringar all tid i Insert-läge.
+Det är dock inte särskilt effektivt om du tillbringar all tid i Infoga-läge.
 
 ## Vims gränssnitt är ett programmeringsspråk
 
@@ -95,7 +94,7 @@ Rörelser i Vim kallas också "substantiv", eftersom de syftar på textstycken.
 - Scroll: `Ctrl-u` (upp), `Ctrl-d` (ner)
 - Fil: `gg` (början av fil), `G` (slutet av fil)
 - Radnummer: `:{number}<CR>` eller `{number}G` (rad {number})
-    - `<CR>` syftar på carriage return / enter-tangenten
+    - `<CR>` syftar på vagnretur / Retur/Enter-tangenten
 - Övrigt: `%` (matchande tecken, som parentes eller klammer)
 - Sök tecken: `f{character}`, `t{character}`, `F{character}`, `T{character}`
     - find/to framåt/bakåt efter {character} på aktuell rad
@@ -104,11 +103,11 @@ Rörelser i Vim kallas också "substantiv", eftersom de syftar på textstycken.
 
 ### Markering
 
-Visual-lägen:
+Visuella lägen:
 
-- Visual: `v`
-- Visual Line: `V`
-- Visual Block: `Ctrl-v`
+- Visuellt: `v`
+- Visuell rad: `V`
+- Visuellt block: `Ctrl-v`
 
 Du kan använda rörelsetangenterna för att göra en markering.
 
@@ -118,7 +117,7 @@ Allt du brukade göra med musen gör du nu med tangentbordet via redigeringskomm
 Här börjar Vims gränssnitt verkligen likna ett programmeringsspråk.
 Vims redigeringskommandon kallas också "verb", eftersom verb agerar på substantiv.
 
-- `i` gå till Insert-läge
+- `i` gå till Infoga-läge
     - men för textmanipulation/radering vill du använda något bättre än backsteg
 - `o` / `O` infoga rad under / över
 - `d{motion}` radera {motion}
@@ -128,7 +127,7 @@ Vims redigeringskommandon kallas också "verb", eftersom verb agerar på substan
     - motsvarar `d{motion}` följt av `i`
 - `x` radera tecken (motsvarar `dl`)
 - `s` ersätt tecken (motsvarar `cl`)
-- Visual-läge + redigering
+- Visuellt-läge + redigering
     - markera text, `d` för att radera eller `c` för att ändra
 - `u` för ångra, `<C-r>` för gör om
 - `y` för kopiera / "yanka" (vissa andra kommandon som `d` kopierar också)
@@ -177,12 +176,12 @@ Vi använder följande kommandosekvens för att rätta felen, med start i Normal
     - `G` för att hoppa till slutet av filen
     - `o` för att **o**ppna en ny rad under
     - skriv `if __name__ == "__main__": main()`
-        - om redigeraren har Python-stöd kan den autoindenta i Insert-läge
+        - om redigeraren har Python-stöd kan den autoindenta i Infoga-läge
     - `<ESC>` för att gå tillbaka till Normal-läge
 - Börjar på 0 i stället för 1
     - `/` följt av `range` och `<CR>` för att söka efter "range"
     - `ww` för att flytta två **w**ord framåt (du kan också använda `2w`, men i praktiken är det vanligt att upprepa tangenten vid små antal)
-    - `i` för att gå till **i**nsert-läge och lägg till `1,`
+    - `i` för att gå till **I**nfoga-läge och lägg till `1,`
     - `<ESC>` för att gå tillbaka till Normal-läge
     - `e` för att hoppa till **e**nd of word för nästa ord
     - `a` för att börja **a**ppendera text, och lägg till `+ 1`
@@ -225,7 +224,7 @@ Genom att installera tillägg och språkserver för de språk du arbetar med kan
 - **Hitta referenser.** Motsatsen till ovan, hitta alla ställen där ett visst objekt, till exempel ett fält eller en typ, refereras.
 - **Hjälp med importer.** Organisera importer, ta bort oanvända importer, flagga saknade importer.
 - **Kodkvalitet.** Dessa verktyg kan användas fristående, men funktionaliteten tillhandahålls ofta av språkservrar också.
-Kodformatering autoindenterar och autoformatterar kod, och typkontroller och linters hittar fel i koden medan du skriver.
+Kodformatering autoindenterar och autoformaterar kod, och typkontroller och linters hittar fel i koden medan du skriver.
 Vi går djupare i den här klassen av funktionalitet i [föreläsningen om kodkvalitet]({{ '/2026/code-quality/' | relative_url }}).
 
 ## Konfigurera språkservrar
@@ -233,7 +232,7 @@ Vi går djupare i den här klassen av funktionalitet i [föreläsningen om kodkv
 För vissa språk räcker det att installera tillägget och språkservern.
 För andra språk behöver du tala om för IDE:n hur din miljö ser ut för att få maximal nytta av språkservern.
 Att koppla VS Code till din [Python-miljö](https://code.visualstudio.com/docs/python/environments) gör till exempel att språkservern kan se dina installerade paket.
-Miljöer behandlas mer ingående i [föreläsningen om paketering och leverans av kod]({{ '/2026/shipping-code/' | relative_url }}).
+Miljöer behandlas mer ingående i [föreläsningen om paketering och distribution av kod]({{ '/2026/shipping-code/' | relative_url }}).
 
 Beroende på språk kan det finnas inställningar att konfigurera för språkservern.
 Med Python-stöd i VS Code kan du till exempel stänga av statisk typkontroll för projekt som inte använder Pythons valfria typannoteringar.
@@ -286,7 +285,7 @@ Vi kan styra kompletteringen med kodkommentarer:
 
 ```python
 def extract(content: str) -> list[str]:
-    # extract all Markdown links from the content
+    # extrahera alla Markdown-länkar ur innehållet
 ```
 
 Den här gången ger modellen en bättre komplettering:
@@ -298,7 +297,7 @@ Den här gången ger modellen en bättre komplettering:
 ```
 
 Här ser vi en nackdel med det här AI-kodverktyget: det kan bara ge kompletteringar vid markören.
-I det här fallet hade det varit bättre att lägga `import re` på modulnivå i stället för inuti funktionen.
+Här hade det varit bättre att lägga `import re` på modulnivå i stället för inuti funktionen.
 
 Exemplet ovan använde ett dåligt funktionsnamn för att visa hur kodkomplettering kan styras med kommentarer.
 I praktiken vill du skriva kod med mer beskrivande funktionsnamn, som `extract_links`, och du vill skriva docstrings.
@@ -338,7 +337,7 @@ Kodagenter behandlas mer ingående i föreläsningen om [agentdriven kodning]({{
 ## Rekommenderad programvara
 
 Några populära AI-IDE:er är [VS Code][vs-code] med tillägget [GitHub Copilot][github-copilot] och [Cursor](https://cursor.com/).
-GitHub Copilot finns just nu [gratis för studenter](https://github.com/education/students), lärare och förvaltare av populära öppen källkod-projekt.
+GitHub Copilot finns just nu [gratis för studenter](https://github.com/education/students), lärare och ansvariga för populära öppen källkod-projekt.
 Det här området utvecklas snabbt.
 Många av de ledande produkterna har ungefär likvärdig funktionalitet.
 
@@ -350,8 +349,8 @@ Vi uppmuntrar dig att utforska området själv.
 Det finns många listor över populära IDE-tillägg på nätet, till exempel [Vim Awesome](https://vimawesome.com/) för Vim-insticksmoduler och [VS Code-tillägg sorterade efter popularitet](https://marketplace.visualstudio.com/search?target=VSCode&category=All%20categories&sortBy=Installs).
 
 - [Utvecklingscontainrar](https://containers.dev/): stöds av populära IDE:er (t.ex. [stöds av VS Code](https://code.visualstudio.com/docs/devcontainers/containers)), och låter dig använda en container för att köra utvecklingsverktyg.
-Detta kan vara hjälpsamt för portabilitet eller isolering.
-[Föreläsningen om paketering och leverans av kod]({{ '/2026/shipping-code/' | relative_url }}) går djupare på containrar.
+Det kan vara hjälpsamt för portabilitet eller isolering.
+[Föreläsningen om paketering och distribution av kod]({{ '/2026/shipping-code/' | relative_url }}) går djupare på containrar.
 - Fjärrutveckling: utveckla på en fjärrmaskin via SSH (t.ex. med [Remote SSH-insticksmodulen för VS Code](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)).
 Det kan vara praktiskt om du till exempel vill utveckla och köra kod på en kraftig GPU-maskin i molnet.
 - Samarbetsredigering: redigera samma fil i Google Docs-stil (t.ex. med [Live Share-insticksmodulen för VS Code](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare)).
@@ -364,5 +363,5 @@ Det finns sannolikt ett bättre sätt.
 1. Genomför en utmaning från [VimGolf](https://www.vimgolf.com/).
 1. Konfigurera ett IDE-tillägg och en språkserver för ett projekt du arbetar med.
 Säkerställ att förväntad funktionalitet, till exempel hoppa till definition även för biblioteksberoenden, fungerar som den ska.
-Om du inte har kod att använda till övningen kan du ta ett öppen källkod-projekt från GitHub (som [det här](https://github.com/spf13/cobra)).
-1. Bläddra i en lista över IDE-tillägg och installera ett som verkar användbart för dig.
+Om du inte har kod att använda till övningen kan du hämta ett öppen källkod-projekt från GitHub (som [det här](https://github.com/spf13/cobra)).
+1. Bläddra i en lista över IDE-tillägg och installera något som verkar användbart för dig.

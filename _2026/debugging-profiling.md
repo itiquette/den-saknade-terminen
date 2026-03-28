@@ -14,24 +14,24 @@ video:
 
 En gyllene regel inom programmering är att kod inte gör det du förväntar dig att den ska göra, utan det du säger åt den att göra.
 Att överbrygga den luckan kan ibland vara ganska svårt.
-I den här föreläsningen går vi igenom användbara tekniker för att hantera felaktig och resurshungrig kod: felsökning och profilering.
+I föreläsningen går vi igenom användbara tekniker för att hantera felaktig och resurshungrig kod: felsökning och profilering.
 
 # Felsökning (debugging)
 
 ## Printf-felsökning och loggning
 
-> "The most effective debugging tool is still careful thought, coupled with judiciously placed print statements" — Brian Kernighan, _Unix for Beginners_.
+> "Det effektivaste felsökningsverktyget är fortfarande eftertanke, i kombination med välplacerade utskriftssatser" — Brian Kernighan, _Unix for Beginners_.
 
-Ett första sätt att felsöka ett program är att lägga till utskriftssatser kring där du upptäckt problemet, och fortsätta iterera tills du extraherat tillräcklig information för att förstå vad som orsakar felet.
+Ett sätt att felsöka ett program är att lägga till utskriftssatser kring där du upptäckt problemet, och fortsätta iterera tills du har tillräcklig information för att förstå vad som orsakar felet.
 
 Ett andra sätt är att använda loggning i ditt program, i stället för ad hoc-utskriftssatser.
-Loggning är i princip "utskrift med mer omsorg", och görs vanligtvis med ett loggningsramverk som har inbyggt stöd för saker som:
+Loggning är i princip "utskrift med mer omsorg", och sker vanligtvis med ett loggningsramverk som har inbyggt stöd för saker som:
 
 - möjligheten att styra loggarna (eller delmängder av loggarna) till andra utmatningsplatser,
 - att sätta allvarlighetsnivåer (som INFO, DEBUG, WARN, ERROR, etc.) och filtrera utdata utifrån dessa,
 - stöd för strukturerad loggning av data kopplad till loggposter, som sedan kan extraheras enklare i efterhand.
 
-Loggsatser lägger du också ofta in proaktivt medan du programmerar så att datan du behöver för att felsöka redan kan finnas där.
+Loggsatser lägger du ofta in proaktivt medan du programmerar så att datan du behöver för att felsöka redan kan finnas där.
 Och när du väl hittat och rättat ett problem med utskriftssatser är det ofta värt att konvertera dessa utskrifter till riktiga loggsatser innan du tar bort dem.
 På så sätt har du redan den diagnostiska information du behöver om liknande programfel uppstår i framtiden, utan att behöva ändra koden.
 
@@ -45,9 +45,9 @@ För tredjepartsbibliotek, kontrollera om de stödjer felsökningsloggning via m
 ## Felsökare
 
 Printf-felsökning fungerar bra när du vet vad du ska skriva ut och enkelt kan modifiera och köra om koden.
-Felsökare blir värdefulla när du inte vet vilken information du behöver, när programfelet bara visar sig under svårreproducerade förhållanden, eller när det är dyrt att modifiera och starta om programmet (långa uppstartstider, komplext tillstånd att återskapa, etc.).
+Felsökare blir värdefulla när du inte vet vilken information du behöver, när programfelet bara visar sig under svårreproducerade förhållanden, eller när det är dyrt att modifiera och starta om programmet (långa uppstartstider, komplexa tillstånd att återskapa, etc.).
 
-Felsökare är program som låter dig interagera med programmets körning medan den sker, och låter dig:
+Felsökare är program som låter dig interagera med programmets körning, och låter dig:
 
 - Stoppa körningen när den når en viss rad.
 - Stega en instruktion i taget.
@@ -56,8 +56,7 @@ Felsökare är program som låter dig interagera med programmets körning medan 
 - Och många fler avancerade funktioner.
 
 De flesta programmeringsspråk stödjer (eller kommer med) någon form av felsökare.
-De mest mångsidiga är **allmänna felsökare** som [`gdb`](https://www.gnu.org/software/gdb/) (GNU Debugger) och [`lldb`](https://lldb.llvm.org/) (LLVM Debugger), som kan felsöka vilken nativ binär som helst.
-Många språk har också **språkspecifika felsökare** som integrerar tätare med körmiljön (som Pythons pdb eller Javas jdb).
+De mest mångsidiga är **allmänna felsökare** som [`gdb`](https://www.gnu.org/software/gdb/) (GNU Debugger) och [`lldb`](https://lldb.llvm.org/) (LLVM Debugger), som kan felsöka vilken nativ binär som helst. Många språk har också **språkspecifika felsökare** som integrerar tätare med körmiljön (som Pythons pdb eller Javas jdb).
 
 `gdb` är den faktiska standardfelsökaren för C, C++, Rust och andra kompilerade språk.
 Den låter dig undersöka i princip vilken process som helst och se dess aktuella maskintillstånd: register, stack, programräknare och mer.
@@ -77,8 +76,8 @@ Några användbara GDB-kommandon:
 ### Inspelnings-/uppspelningsfelsökning
 
 Några av de mest frustrerande programfelen är så kallade _Heisenfel_ (_Heisenbugs_): programfel som verkar försvinna eller ändra beteende när du försöker observera dem.
-Race conditions, tidsberoende programfel och problem som bara dyker upp under vissa systemförhållanden tillhör den här kategorin.
-Traditionell felsökning är ofta värdelös här eftersom nästa körning ger annat beteende (t.ex. kan utskriftssatser sakta ner koden så mycket att racet inte längre händer).
+Kapplöpningsproblem (race conditions), tidsberoende programfel och problem som bara dyker upp under vissa systemförhållanden tillhör den kategorin.
+Traditionell felsökning är ofta värdelös här eftersom nästa körning ger annat beteende (t.ex. kan utskriftssatser sakta ner koden så mycket att kapplöpningen inte längre händer).
 
 **Inspelnings-/uppspelningsfelsökning** (record-replay) löser detta genom att spela in ett programs körning och låta dig spela upp den deterministiskt så många gånger du behöver.
 Ännu bättre är att du kan gå _baklänges_ i körningen för att hitta exakt var något gick fel.
@@ -104,7 +103,7 @@ Eftersom körningen är deterministisk kan du använda kommandon för **omvänd 
 - `reverse-next` (`rn`) - Stega baklänges och hoppa över funktionsanrop
 - `reverse-finish` - Kör baklänges tills du går in i aktuell funktion
 
-Detta är otroligt kraftfullt för felsökning.
+Det är otroligt kraftfullt för felsökning.
 Säg att du har en krasch, i stället för att gissa var programfelet är och sätta brytpunkter kan du:
 
 1. Köra till kraschen.
@@ -113,19 +112,17 @@ Säg att du har en krasch, i stället för att gissa var programfelet är och s�
 4. Köra `reverse-continue` för att hitta exakt var den blev korrupt.
 
 **När du ska använda rr:**
-- Flaky tester som fallerar intermittent.
-- Race conditions och trådningsfel.
+- Instabila tester som misslyckas sporadiskt.
+- Kapplöpningsproblem och trådningsfel.
 - Krascher som är svåra att reproducera.
 - Alla programfel där du önskar att du kunde "gå tillbaka i tiden".
 
 > Obs: rr fungerar bara på Linux och kräver hårdvaruprestandaräknare.
-Det fungerar inte i VM:ar som inte exponerar dessa räknare, till exempel på de flesta AWS EC2-instanser, och stödjer inte GPU-åtkomst.
-För macOS, kolla in [Warpspeed](https://warpspeed.dev/).
+Det fungerar inte i VM:ar som inte exponerar dessa räknare, till exempel på de flesta AWS EC2-instanser, och stödjer inte GPU-åtkomst. För macOS, kolla in [Warpspeed](https://warpspeed.dev/).
 
 > **rr och samtidighet**: Eftersom rr spelar in körningen deterministiskt serialiserar det trådschemaläggning.
-Det innebär att vissa race conditions kanske inte visar sig under rr om de beror på specifik timing.
-rr är fortfarande användbart för att felsöka race-problem, när du väl fångat en felande körning kan du spela upp den tillförlitligt, men du kan behöva flera inspelningsförsök för att fånga ett intermittent programfel.
-För programfel utan samtidighet glänser rr mest: du kan alltid reproducera exakt körning och använda omvänd felsökning för att jaga ner korruption.
+Det innebär att vissa kapplöpningsproblem kanske inte visar sig under rr om de beror på specifika tidförhållanden. rr är fortfarande användbart för att felsöka kapplöpningsproblem, när du väl fångat en felande körning kan du spela upp den tillförlitligt, men du kan behöva flera inspelningsförsök för att fånga ett sporadiskt programfel.
+För programfel utan samtidighet glänser rr mest: du kan alltid reproducera exakt körning och använda omvänd felsökning för att spåra korruption.
 
 ## Spårning av systemanrop
 
@@ -160,9 +157,9 @@ strace -T ./my_program
 
 ### bpftrace och eBPF
 
-[eBPF](https://ebpf.io/) (extended Berkeley Packet Filter) är en kraftfull Linux-teknik som låter sandboxade program köras i kärnan.
+[eBPF](https://ebpf.io/) (extended Berkeley Packet Filter) är en kraftfull Linux-teknik som låter isolerade program köras i en sandlåda i kärnan.
 [`bpftrace`](https://github.com/iovisor/bpftrace) ger en högnivåsyntax för att skriva eBPF-program.
-Detta är godtyckliga program som körs i kärnan och har därför stor uttryckskraft (men också en något klumpig awk-liknande syntax).
+Det är godtyckliga program som körs i kärnan och har därför stor uttryckskraft (men också en något klumpig awk-liknande syntax).
 Det vanligaste användningsfallet är att undersöka vilka systemanrop som anropas, inklusive aggregeringar (som antal eller latensstatistik) eller introspektion (eller till och med filtrering på) systemanropsargument.
 
 ```bash
@@ -175,7 +172,7 @@ sudo bpftrace -e 'tracepoint:syscalls:sys_enter_* { @[probe] = count(); }'
 
 Du kan också skriva eBPF-program direkt i C med en verktygskedja som [`bcc`](https://github.com/iovisor/bcc), som också levereras med [många praktiska verktyg](https://www.brendangregg.com/blog/2015-09-22/bcc-linux-4.3-tracing.html) som `biosnoop` för att skriva ut latensfördelningar för diskoperationer eller `opensnoop` för att skriva ut alla öppnade filer.
 
-Där `strace` är användbart eftersom det är lätt att "bara komma igång", är `bpftrace` verktyget du ska ta till när du behöver lägre överkostnad, vill spåra genom kärnfunktioner eller behöver någon form av aggregering.
+Där `strace` är användbart eftersom det är lätt att "bara komma igång", är `bpftrace` verktyget du ska ta till när du behöver lägre belastning, vill spåra genom kärnfunktioner eller behöver någon form av aggregering.
 Notera att `bpftrace` måste köras som `root`, och att det i allmänhet övervakar hela kärnan, inte bara en viss process.
 För att rikta in dig på ett specifikt program kan du filtrera på kommandonamn eller PID:
 
@@ -202,7 +199,7 @@ sudo tcpdump -i any port 80
 sudo tcpdump -i any -w capture.pcap
 ```
 
-För HTTPS-trafik gör krypteringen tcpdump mindre användbart.
+Vid HTTPS-trafik är datan krypterad, vilket gör att tcpdump inte kan visa innehållet.
 Verktyg som [mitmproxy](https://mitmproxy.org/) kan agera avlyssnande proxy för att inspektera krypterad trafik.
 Webbläsarens utvecklarverktyg (Network-fliken) är ofta enklaste sättet att felsöka HTTPS-förfrågningar från webbapplikationer, de visar dekrypterad data för begäran och svar, headers och tidsmätning.
 
@@ -211,7 +208,7 @@ Webbläsarens utvecklarverktyg (Network-fliken) är ofta enklaste sättet att fe
 Minnesfel, buffertöverskridningar, use-after-free, minnesläckor, är bland de farligaste och svåraste att felsöka.
 De kraschar ofta inte direkt utan korruptar minne på sätt som orsakar problem långt senare.
 
-### Sanitizers
+### Sanitizers (saneringsverktyg)
 
 Ett sätt att hitta minnesfel är att använda **sanitizers**, vilket är kompilatorfunktioner som instrumenterar koden för att upptäcka fel vid körning.
 Den mycket använda **AddressSanitizer (ASan)** upptäcker till exempel:
@@ -228,7 +225,7 @@ gcc -fsanitize=address -g program.c -o program
 
 Det finns flera användbara sanitizers:
 
-- **ThreadSanitizer (TSan)**: Upptäcker datarace i multitrådad kod (`-fsanitize=thread`)
+- **ThreadSanitizer (TSan)**: Upptäcker datakapplöpning i multitrådad kod (`-fsanitize=thread`)
 - **MemorySanitizer (MSan)**: Upptäcker läsningar av oinitierat minne (`-fsanitize=memory`)
 - **UndefinedBehaviorSanitizer (UBSan)**: Upptäcker odefinierat beteende som heltalsöverspill (`-fsanitize=undefined`)
 
@@ -248,16 +245,16 @@ Använd Valgrind när:
 - Du inte kan omkompilera (tredjepartsbibliotek).
 - Du behöver specifika verktyg som inte finns som sanitizers.
 
-Valgrind är faktiskt en mycket kraftfull kontrollerad körmiljö, och vi kommer se mer av den senare när vi kommer till profilering.
+Valgrind är faktiskt en väldigt kraftfull kontrollerad körmiljö, och vi kommer se mer av den senare när vi kommer till profilering.
 
 ## AI för felsökning
 
 Stora språkmodeller har blivit förvånansvärt användbara felsökningsassistenter.
 De är särskilt bra på vissa felsökningsuppgifter som kompletterar traditionella verktyg.
 
-**Där LLM:er glänser:**
+**Där LLM:er är starka:**
 
-- **Förklara kryptiska felmeddelanden**: Kompilatorfel, särskilt från C++-templates eller Rusts borrow checker, kan vara notoriskt kryptiska.
+- **Förklara kryptiska felmeddelanden**: Kompilatorfel, särskilt från C++-templates eller Rusts lånekontroll (borrow checker), kan vara ökänt kryptiska.
   LLM:er kan översätta dem till vanlig svenska/engelska och föreslå fixar.
 
 - **Navigera språk- och abstraktionsgränser**: Om du felsöker ett problem som spänner över flera språk (säg ett programfel i ett C-bibliotek som visar sig via en Python-binding), kan LLM:er hjälpa dig navigera lagren.
@@ -267,37 +264,37 @@ De är särskilt bra på vissa felsökningsuppgifter som kompletterar traditione
 
 - **Analysera kraschdumpar och stackspår**: Klistra in ett stackspår och fråga vad som kan ha orsakat det.
 
-> **Obs om debugsymboler**: För meningsfulla stackspår och felsökning, se till att dina binärer (och länkade bibliotek) kompileras med debugsymboler (flaggan `-g`).
+> **Obs om felsökningssymboler**: För meningsfulla stackspår och felsökning, se till att dina binärer (och länkade bibliotek) kompileras med felsökningssymboler (flaggan `-g`).
 Felsökningsinformation lagras typiskt i DWARF-format.
 Dessutom gör kompilering med frame pointers (`-fno-omit-frame-pointer`) stackspår mer tillförlitliga, särskilt för profileringsverktyg.
 Utan detta kan stackspår bara visa minnesadresser eller vara ofullständiga.
-Detta spelar större roll för nativt kompilerade program (C++, Rust) än för Python eller Java.
+Det spelar större roll för nativt kompilerade program (C++, Rust) än för Python eller Java.
 
 **Begränsningar att ha i åtanke:**
-- LLM:er kan hallucinera rimligt klingande men felaktiga förklaringar.
+- LLM:er kan hitta på förklaringar som låter trovärdiga men är felaktiga.
 - De kan föreslå fixar som maskerar programfelet i stället för att lösa det.
 - Verifiera alltid förslag med riktiga felsökningsverktyg.
 - De fungerar bäst som ett komplement till, inte en ersättning för, förståelse av din kod.
 
-> Detta skiljer sig från de [generella AI-kodningsförmågorna]({{ '/2026/development-environment/#ai-powered-development' | relative_url }}) som tas upp i föreläsningen om utvecklingsmiljö.
+> Det skiljer sig från de [generella AI-kodningsförmågorna]({{ '/2026/development-environment/#ai-powered-development' | relative_url }}) som tas upp i föreläsningen om utvecklingsmiljö.
 Här pratar vi specifikt om att använda LLM:er som ett hjälpmedel vid felsökning.
 
 # Profilering
 
 Även om koden funktionellt beter sig som förväntat kanske det inte räcker om den samtidigt slukar all CPU eller allt minne.
 Algoritmkurser lär ofta ut big _O_-notation men inte hur man hittar flaskhalsar i program.
-Eftersom [premature optimization is the root of all evil](https://wiki.c2.com/?PrematureOptimization) bör du lära dig om profileringsverktyg och övervakningsverktyg.
+Eftersom [för tidig optimering är roten till allt ont](https://wiki.c2.com/?PrematureOptimization) bör du lära dig om profileringsverktyg och övervakningsverktyg.
 De hjälper dig förstå vilka delar av programmet som tar mest tid och/eller resurser så att du kan fokusera optimering där den spelar roll.
 
-## Timing
+## Tidmätning
 
 Det enklaste sättet att mäta prestanda är att mäta tid.
 I många scenarier räcker det att bara skriva ut tiden som koden tog mellan två punkter.
 
-Men wall clock-tid kan vara missvisande eftersom datorn kan köra andra processer samtidigt eller vänta på händelser.
+Men faktisk förfluten tid (wall clock) kan vara missvisande eftersom datorn kan köra andra processer samtidigt eller vänta på händelser.
 Kommandot `time` skiljer mellan _Real_, _User_ och _Sys_ tid:
 
-- **Real** - Väggklocktid från start till slut, inklusive väntetid.
+- **Real** - Förfluten tid från start till slut, inklusive väntetid.
 - **User** - Tid som CPU:n spenderar på användarkod.
 - **Sys** - Tid som CPU:n spenderar på kärnkod.
 
@@ -334,29 +331,28 @@ Program kör ofta långsamt när de är resursbegränsade.
 
 ## Visualisering av prestandadata
 
-Människor ser mönster i grafer mycket snabbare än i tabeller med siffror.
-När du analyserar prestanda avslöjar plottning ofta trender, toppar och avvikelser som är osynliga i rådata.
+Människor ser mönster i grafer betydligt snabbare än i tabeller med siffror.
+När du analyserar prestanda avslöjar diagram ofta trender, toppar och avvikelser som är osynliga i rådata.
 
-**Gör data plottbar**: När du lägger till utskrifts- eller loggsatser för felsökning, överväg att formatera utdata så att den enkelt kan plottas senare.
-En enkel tidsstämpel och ett värde i CSV-format (`1705012345,42.5`) är mycket enklare att plotta än en fullständig mening.
-JSON-strukturerade loggar kan också parsas och plottas med minimal ansträngning.
+**Gör data visualiserbar**: När du lägger till utskrifts- eller loggsatser för felsökning, överväg att formatera utdata så att den enkelt kan visas i diagram senare.
+En enkel tidsstämpel och ett värde i CSV-format (`1705012345,42.5`) är betydligt enklare att rita diagram av än en fullständig mening.
+JSON-strukturerade loggar kan också tolkas och visualiseras med minimal ansträngning.
 Med andra ord, logga din data [på ett välstrukturerat sätt](https://vita.had.co.nz/papers/tidy-data.pdf).
 
-**Snabb plottning med gnuplot**: För enkel kommandoradsplottning kan [`gnuplot`](http://www.gnuplot.info/) skapa grafer direkt från datafiler:
+**Snabb diagramritning med gnuplot**: För enkel diagramritning från kommandoraden kan [`gnuplot`](http://www.gnuplot.info/) skapa grafer direkt från datafiler:
 
 ```bash
-# Plotta en enkel CSV med tidsstämpel,värde
+# Rita diagram av en enkel CSV med tidsstämpel,värde
 gnuplot -e "set datafile separator ','; plot 'latency.csv' using 1:2 with lines"
 ```
 
 **Iterativ utforskning med matplotlib och ggplot2**: För djupare analys möjliggör Pythons [`matplotlib`](https://matplotlib.org/) och R:s [`ggplot2`](https://ggplot2.tidyverse.org/) iterativ utforskning.
-Till skillnad från engångsplottning låter dessa verktyg dig snabbt skära och transformera data för att undersöka hypoteser.
-ggplot2:s facet-plottar är särskilt kraftfulla, du kan dela ett dataset över flera subplotar per kategori (t.ex. latens per endpoint eller tid på dygnet) för att få fram mönster som annars skulle döljas.
+Till skillnad från engångsdiagram låter dessa verktyg dig snabbt skära och transformera data för att undersöka hypoteser. ggplot2:s uppdelade diagram är särskilt kraftfulla, du kan dela ett dataset över flera deldiagram per kategori (t.ex. latens per ändpunkt eller tid på dygnet) för att få fram mönster som annars skulle döljas.
 
 **Exempel på användningsfall:**
-- Att plotta request-latens över tid avslöjar periodiska fördröjningar (garbage collection, cron-jobb, trafikmönster) som råa percentiler döljer.
+- Att rita upp svarsfördröjning över tid avslöjar återkommande fördröjningar (skräpsamling, cron-jobb, trafikmönster) som råa percentiler döljer.
 - Att visualisera insertion-tider för en växande datastruktur kan exponera algoritmisk komplexitet, en graf över vector-insertions visar typiska toppar när den underliggande arrayen dubblas.
-- Att facetta metriker över olika dimensioner (request-typ, användarkohort, server) avslöjar ofta att ett "systemomfattande" problem i själva verket är isolerat till en kategori.
+- Att dela upp mätvärden över olika dimensioner (request-typ, användarkohort, server) avslöjar ofta att ett "systemomfattande" problem i själva verket är isolerat till en kategori.
 
 ## CPU-profilerare
 
@@ -364,9 +360,9 @@ Oftast när folk säger _profilerare_ menar de _CPU-profilerare_.
 Det finns två huvudtyper:
 
 - **Spårningsprofilerare** behåller en logg över varje funktionsanrop programmet gör.
-- **Samplingsprofilerare** provar programmet periodiskt (vanligen varje millisekund) och spelar in programmets stack.
+- **Samplingsprofilerare** provar programmet med jämna mellanrum (vanligen varje millisekund) och spelar in programmets stack.
 
-Samplingprofilering har lägre överkostnad och är generellt att föredra i produktion.
+Samplingprofilering har lägre belastning och är generellt att föredra i produktion.
 
 ### perf: samplingsprofileraren
 
@@ -390,14 +386,14 @@ $ perf stat ./slow_program
        12,345,678      branch-misses             #    1.00% of all branches
 ```
 
-Profiler-utdata för verkliga program innehåller ofta stora mängder information.
+Profileringsutdata för verkliga program innehåller ofta stora mängder information.
 Människor är visuella och ganska dåliga på att läsa stora mängder siffror.
-[Flamdiagram (flame graph)](https://www.brendangregg.com/flamegraphs.html) är en visualisering som gör profileringsdata mycket enklare att förstå.
+[Flamdiagram (flame graph)](https://www.brendangregg.com/flamegraphs.html) är en visualisering som gör profileringsdata betydligt enklare att förstå.
 
 Ett flamdiagram visar en hierarki av funktionsanrop längs Y-axeln och tidsåtgång proportionellt mot X-axeln.
 De är interaktiva, du kan klicka för att zooma in i specifika delar av programmet.
 
-[![FlameGraph](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)
+[![Flamdiagram](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)
 
 För att generera ett flamdiagram från `perf`-data:
 
@@ -443,13 +439,13 @@ valgrind --tool=massif ./my_program
 ms_print massif.out.<pid>
 ```
 
-Detta visar heap-användning över tid och hjälper dig identifiera minnesläckor och överdriven allokering.
+Det visar heap-användning över tid och hjälper dig identifiera minnesläckor och överdriven allokering.
 
 > För Python ger [`memory-profiler`](https://pypi.org/project/memory-profiler/) rad-för-rad-information om minnesanvändning.
 
 ## Benchmarking
 
-När du behöver jämföra prestanda mellan olika implementationer eller verktyg är [`hyperfine`](https://github.com/sharkdp/hyperfine) utmärkt för att benchmarka kommandoradsprogram:
+När du behöver jämföra prestanda mellan olika implementationer eller verktyg är [`hyperfine`](https://github.com/sharkdp/hyperfine) utmärkt för att prestandatesta kommandoradsprogram:
 
 ```bash
 $ hyperfine --warmup 3 'fd -e jpg' 'find . -iname "*.jpg"'
@@ -535,18 +531,18 @@ Se dokumentationen för [Firefox Profiler](https://profiler.firefox.com/docs/) o
 
    int main() {
        init();
-       printf("=== Initial state ===\n");
+       printf("=== Starttillstånd ===\n");
        printf("Student 0: id=%d\n", students[0].id);
        printf("Student 1: id=%d\n", students[1].id);
 
        curve_scores(0, 5);
 
-       printf("\n=== After curving ===\n");
+       printf("\n=== Efter kurvanpassning ===\n");
        printf("Student 0: id=%d\n", students[0].id);
        printf("Student 1: id=%d\n", students[1].id);
 
        if (students[1].id != 1002) {
-           printf("\nERROR: Student 1's ID was corrupted! Expected 1002, got %d\n",
+           printf("\nFEL: Student 1:s ID blev korrupt! Förväntade 1002, fick %d\n",
                   students[1].id);
            return 1;
        }
@@ -555,8 +551,7 @@ Se dokumentationen för [Firefox Profiler](https://profiler.firefox.com/docs/) o
    ```
 
    Kompilera med `gcc -g corruption.c -o corruption` och kör programmet.
-   Student 1:s ID blir korrupt, men korruptionen händer i en funktion som bara rör student 0.
-   Använd `rr record ./corruption` och `rr replay` för att hitta boven.
+   Student 1:s ID blir korrupt, men korruptionen händer i en funktion som bara rör student 0. Använd `rr record ./corruption` och `rr replay` för att hitta boven.
    Sätt en watchpoint på `students[1].id` och använd `reverse-continue` efter korruptionen för att hitta exakt vilken kodrad som skrev över värdet.
 
 1. Felsök ett minnesfel med AddressSanitizer.
@@ -569,7 +564,7 @@ Se dokumentationen för [Firefox Profiler](https://profiler.firefox.com/docs/) o
 
    int main() {
        char *greeting = malloc(32);
-       strcpy(greeting, "Hello, world!");
+       strcpy(greeting, "Hej, världen!");
        printf("%s\n", greeting);
 
        free(greeting);
@@ -588,8 +583,8 @@ Se dokumentationen för [Firefox Profiler](https://profiler.firefox.com/docs/) o
    Vilket programfel hittar ASan?
    Fixa problemet den identifierar.
 
-1. Använd `strace` (Linux) eller `dtruss` (macOS) för att spåra systemanropen som görs av ett kommando som `ls -l`.
-   Vilka systemanrop görs?
+1. Använd `strace` (Linux) eller `dtruss` (macOS) för att spåra systemanropen som utförs av ett kommando som `ls -l`.
+   Vilka systemanrop utförs?
    Prova att spåra ett mer komplext program och se vilka filer det öppnar.
 
 1. Använd en LLM för att hjälpa till att felsöka ett kryptiskt felmeddelande.
@@ -623,22 +618,21 @@ Se dokumentationen för [Firefox Profiler](https://profiler.firefox.com/docs/) o
        for (int i = 0; i < 100; i++) {
            r += slow_computation(1000);
        }
-       printf("Result: %f\n", r);
+       printf("Resultat: %f\n", r);
        return 0;
    }
    ```
 
-   Kompilera med debugsymboler: `gcc -g -O2 slow.c -o slow -lm`.
+   Kompilera med felsökningssymboler: `gcc -g -O2 slow.c -o slow -lm`.
    Kör `perf record -g ./slow`, sedan `perf report` för att se var tid spenderas.
    Prova att generera ett flamdiagram med flamegraph-skripten.
 
-1. Använd `hyperfine` för att benchmarka två olika implementationer av samma uppgift (t.ex. `find` vs `fd`, `grep` vs `ripgrep`, eller två versioner av din egen kod).
+1. Använd `hyperfine` för att prestandatesta två olika implementationer av samma uppgift (t.ex. `find` vs `fd`, `grep` vs `ripgrep`, eller två versioner av din egen kod).
 
 1. Använd `htop` för att övervaka systemet medan du kör ett resursintensivt program.
    Prova att använda `taskset` för att begränsa vilka CPU:er en process kan använda: `taskset --cpu-list 0,2 stress -c 3`.
    Varför använder inte `stress` tre CPU:er?
 
 1. Ett vanligt problem är att en port du vill lyssna på redan används av en annan process.
-   Lär dig hitta den processen: kör först `python -m http.server 4444` för att starta en minimal webbserver på port 4444.
-   Kör i en separat terminal `ss -tlnp | grep 4444` för att hitta processen.
+   Lär dig hitta den processen: kör först `python -m http.server 4444` för att starta en minimal webbserver på port 4444. Kör i en separat terminal `ss -tlnp | grep 4444` för att hitta processen.
    Avsluta den med `kill <PID>`.

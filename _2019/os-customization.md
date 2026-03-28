@@ -10,8 +10,7 @@ video:
 special: true
 ---
 
-Det finns mycket du kan göra för att anpassa operativsystemet utöver det
-som finns i inställningsmenyerna.
+Det finns mycket du kan göra för att anpassa operativsystemet utöver det som finns i inställningsmenyerna.
 
 # Tangentomappning
 
@@ -44,28 +43,24 @@ Till exempel kan du göra Dock-ikoner för dolda program genomskinliga:
 defaults write com.apple.dock showhidden -bool true
 ```
 
-Det finns ingen enda komplett lista över alla möjliga inställningar,
-men du hittar listor med specifika anpassningar på nätet, till exempel Mathias Bynens
-[.macos](https://github.com/mathiasbynens/dotfiles/blob/master/.macos).
+Det finns ingen enda komplett lista över alla möjliga inställningar, men du hittar listor med specifika anpassningar på nätet, till exempel Mathias Bynens [.macos](https://github.com/mathiasbynens/dotfiles/blob/master/.macos).
 
 # Fönsterhantering
 
-## Tiling-baserad fönsterhantering
+## Mosaikfönsterhantering
 
-[Tiling window management](https://en.wikipedia.org/wiki/Tiling_window_manager)
-är ett sätt att hantera fönster där du organiserar fönster i ramar som inte överlappar.
-Om du använder ett Unix-baserat operativsystem kan du installera en tiling-fönsterhanterare.
+[Mosaikfönsterhantering](https://en.wikipedia.org/wiki/Tiling_window_manager) är ett sätt att hantera fönster där du organiserar fönster i ramar som inte överlappar.
+Om du använder ett Unix-baserat operativsystem kan du installera en mosaikfönsterhanterare.
 Om du använder något som Windows eller macOS kan du installera program som efterliknar beteendet.
 
 ## Skärmhantering
 
 Du kan sätta upp tangentbordsgenvägar som hjälper dig att hantera fönster över flera skärmar.
 
-## Layouter
+## Fönsterplaceringar
 
-Om du ofta placerar fönster på ett visst sätt på skärmen,
-kan du skripta layouten i stället för att "utföra" den manuellt varje gång.
-Då blir det enkelt att återskapa layouten.
+Om du ofta placerar fönster på ett visst sätt på skärmen, kan du skripta placeringen i stället för att "utföra" den manuellt varje gång.
+Då blir det enkelt att återskapa placeringen.
 
 # Resurser
 
@@ -77,8 +72,7 @@ dokumentation av andras snygga konfigurationer
 
 # Övningar
 
-1. Ta reda på hur du mappar om Caps Lock till något du använder oftare
-   (som Escape, Ctrl eller Backspace).
+1. Ta reda på hur du mappar om Caps Lock till något du använder oftare (som Escape, Ctrl eller Backspace).
 
 1. Skapa en global anpassad tangentbordsgenväg för att öppna ett nytt terminalfönster eller ett nytt webbläsarfönster.
 

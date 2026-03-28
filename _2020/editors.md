@@ -18,7 +18,7 @@ Det är rimligt att det finns olika typer av program för att skriva engelska or
 Som programmerare tillbringar vi största delen av tiden med att redigera kod, så det är värt att investera tid i att behärska en redigerare som passar dina behov.
 Så här lär du dig en ny redigerare:
 
-- Börja med en handledning (dvs. den här föreläsningen plus resurserna vi hänvisar till)
+- Börja med en handledning (dvs. föreläsningen plus resurserna vi hänvisar till)
 - Håll fast vid att använda redigeraren för all textredigering (även om det gör dig långsammare i början)
 - Slå upp saker längs vägen: om det känns som att det borde finnas ett bättre sätt att göra något finns det förmodligen det
 
@@ -33,21 +33,18 @@ Moderna textredigerare är avancerade och kraftfulla verktyg, så lärandet tar 
 Programmerare har [starka åsikter](https://en.wikipedia.org/wiki/Editor_war) om sina textredigerare.
 
 Vilka redigerare är populära i dag?
-Se den här [Stack Overflow-
-undersökningen](https://insights.stackoverflow.com/survey/2019/#development-environments-and-tools)
-(det kan finnas viss snedvridning eftersom Stack Overflow-användare kanske inte är representativa för programmerare i stort).
-[Visual Studio
-Code](https://code.visualstudio.com/) är den mest populära redigeraren.
+Se den här [Stack Overflow- undersökningen](https://insights.stackoverflow.com/survey/2019/#development-environments-and-tools) (det kan finnas viss snedvridning eftersom Stack Overflow-användare kanske inte är representativa för programmerare i stort).
+[Visual Studio Code](https://code.visualstudio.com/) är den mest populära redigeraren.
 [Vim](https://www.vim.org/) är den mest populära kommandoradsbaserade redigeraren.
 
 ## Vim
 
-Alla lärare i den här kursen använder Vim som redigerare.
+Alla lärare i kursen använder Vim som redigerare.
 Vim har en rik historia; den härstammar från redigeraren Vi (1976) och utvecklas fortfarande i dag.
 Vim bygger på flera riktigt smarta idéer, och därför stöder många verktyg ett Vim-emuleringsläge (till exempel har 1,4 miljoner personer installerat [Vim-emulering för VS code](https://github.com/VSCodeVim/Vim)).
 Vim är sannolikt värt att lära sig även om du i slutänden byter till en annan textredigerare.
 
-Det går inte att lära ut all funktionalitet i Vim på 50 minuter, så vi fokuserar på att förklara filosofin bakom Vim, lära ut grunderna, visa mer avancerade funktioner och ge resurser för att bemästra verktyget.
+Det går inte att lära ut all funktionalitet i Vim på 50 minuter, så vi fokuserar på att förklara filosofin bakom Vim, lära ut grunderna, visa mer avancerade funktioner och resurser för att bemästra verktyget.
 
 # Vims filosofi
 
@@ -64,33 +61,30 @@ Vims design bygger på idén att en stor del av programmerartiden går till att 
 Därför har Vim flera arbetslägen.
 
 - **Normal**: för att röra dig i en fil och göra redigeringar
-- **Insert**: för att skriva in text
-- **Replace**: för att ersätta text
-- **Visual** (vanligt, rad eller block): för att markera textblock
-- **Command-line**: för att köra ett kommando
+- **Infoga** (Insert): för att skriva in text
+- **Ersätt** (Replace): för att ersätta text
+- **Visuellt** (Visual) (vanligt, rad eller block): för att markera textblock
+- **Kommandorad** (Command-line): för att köra ett kommando
 
 Tangenttryckningar har olika betydelse i olika lägen.
-Till exempel kommer bokstaven `x` i Insert-läge bara att skriva in tecknet "x", men i Normal-läge tar den bort tecknet under markören, och i Visual-läge tar den bort markeringen.
+Till exempel kommer bokstaven `x` i Infoga-läge bara att skriva in tecknet "x", men i Normal-läge tar den bort tecknet under markören, och i Visuellt-läge tar den bort markeringen.
 
 I standardkonfigurationen visar Vim aktuellt läge nere till vänster.
 Start-/standardläget är Normal-läge.
-Du kommer i allmänhet att tillbringa mest tid mellan Normal-läge och Insert-läge.
+Du kommer i allmänhet att tillbringa mest tid mellan Normal-läge och Infoga-läge.
 
 Du byter läge genom att trycka `<ESC>` (escape) för att gå från vilket läge som helst tillbaka till Normal-läge.
-Från Normal-läge går du till Insert med `i`, Replace med `R`, Visual med `v`, Visual Line med `V`, Visual Block med `<C-v>` (Ctrl-V, ibland också skrivet `^V`) och Command-line med `:`.
+Från Normal-läge går du till Infoga med `i`, Ersätt med `R`, Visuellt med `v`, Visuell rad med `V`, Visuellt block med `<C-v>` (Ctrl-V, ibland också skrivet `^V`) och Kommandorad med `:`.
 
-Du använder tangenten `<ESC>` mycket när du använder Vim: överväg att mappa om Caps Lock till Escape ([macOS-
-instruktioner](https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_macOS))
-eller skapa en [alternativ
-mappning](https://vim.fandom.com/wiki/Avoid_the_escape_key#Mappings) för `<ESC>` med en enkel tangentsekvens.
+Du använder ofta `<ESC>` i Vim: överväg att mappa om Caps Lock till Escape ([macOS- instruktioner](https://vim.fandom.com/wiki/Map_caps_lock_to_escape_in_macOS)) eller att skapa en [alternativ mappning](https://vim.fandom.com/wiki/Avoid_the_escape_key#Mappings) för `<ESC>` med en enkel tangentsekvens.
 
 # Grunder
 
 ## Skriva in text
 
-Från Normal-läge trycker du `i` för att gå till Insert-läge.
+Från Normal-läge trycker du `i` för att gå till Infoga-läge.
 Nu beter sig Vim som vilken annan textredigerare som helst tills du trycker `<ESC>` för att återgå till Normal-läge.
-Detta, tillsammans med grunderna ovan, är allt du behöver för att börja redigera filer i Vim (dock inte särskilt effektivt om du gör all redigering från Insert-läge).
+Detta, tillsammans med grunderna ovan, är allt du behöver för att börja redigera filer i Vim (dock inte särskilt effektivt om du gör all redigering från Infoga-läge).
 
 ## Buffertar, flikar och fönster
 
@@ -122,7 +116,7 @@ Detta läge har många funktioner, bland annat att öppna, spara och stänga fil
 
 Den viktigaste idén i Vim är att Vims gränssnitt i sig är ett programmeringsspråk.
 Tangenttryckningar (med minnesvänliga namn) är kommandon, och kommandona _komponeras_.
-Detta möjliggör effektiv navigering och redigering, särskilt när kommandona sitter i muskelminnet.
+Det möjliggör effektiv navigering och redigering, särskilt när kommandona sitter i muskelminnet.
 
 ## Rörelse
 
@@ -144,11 +138,11 @@ Rörelser i Vim kallas också "substantiv", eftersom de syftar på textenheter.
 
 ## Markering
 
-Visual-lägen:
+Visuella lägen:
 
-- Visual: `v`
-- Visual Line: `V`
-- Visual Block: `Ctrl-v`
+- Visuellt: `v`
+- Visuell rad: `V`
+- Visuellt block: `Ctrl-v`
 
 Du kan använda rörelsetangenter för att göra markering.
 
@@ -158,8 +152,8 @@ Allt du tidigare gjorde med musen gör du nu med tangentbordet, med redigeringsk
 Det är här Vims gränssnitt börjar likna ett programmeringsspråk.
 Vims redigeringskommandon kallas också "verb", eftersom verb agerar på substantiv.
 
-- `i` gå till Insert-läge
-    - men för att manipulera/ta bort text vill du använda något mer än backspace
+- `i` gå till Infoga-läge
+    - men för att manipulera/ta bort text vill du använda något mer än backsteg
 - `o` / `O` infoga rad under / över
 - `d{motion}` ta bort {motion}
     - t.ex. `dw` är ta bort ord, `d$` är ta bort till radslut, `d0` är ta bort till radbörjan
@@ -168,7 +162,7 @@ Vims redigeringskommandon kallas också "verb", eftersom verb agerar på substan
     - som `d{motion}` följt av `i`
 - `x` ta bort tecken (motsvarar `dl`)
 - `s` ersätt tecken (motsvarar `cl`)
-- Visual-läge + manipulation
+- Visuellt-läge + manipulation
     - markera text, `d` för att ta bort eller `c` för att ändra
 - `u` för ångra, `<C-r>` för göra om
 - `y` för kopiera / "yank" (vissa andra kommandon som `d` kopierar också)
@@ -244,13 +238,12 @@ Vi kommer att rätta följande problem:
 {% endcomment %}
 
 Se föreläsningsvideon för demonstrationen.
-Jämför hur ändringarna ovan görs med Vim med hur du hade gjort samma redigeringar i ett annat program.
+Jämför hur ändringarna ovan utförs med Vim med hur du hade gjort samma redigeringar i ett annat program.
 Notera hur få tangenttryckningar som krävs i Vim, vilket låter dig redigera i den hastighet du tänker.
 
 # Anpassa Vim
 
-Vim anpassas via en textbaserad konfigurationsfil i `~/.vimrc`
-(som innehåller Vimscript-kommandon).
+Vim anpassas via en textbaserad konfigurationsfil i `~/.vimrc` (som innehåller Vimscript-kommandon).
 Det finns sannolikt många grundinställningar som du vill slå på.
 
 Vi tillhandahåller en väl dokumenterad grundkonfiguration som du kan använda som startpunkt.
@@ -258,10 +251,7 @@ Vi rekommenderar att du använder den eftersom den rättar till en del av Vims u
 **Ladda ner vår konfiguration [här]({{ '/2020/files/vimrc' | relative_url }}) och spara den som `~/.vimrc`.**
 
 Vim är mycket anpassningsbart, och det är värt att lägga tid på att utforska anpassningsmöjligheter.
-Du kan titta på andras dotfiles på GitHub för inspiration, till exempel lärarnas Vim-konfigurationer
-([Anish](https://github.com/anishathalye/dotfiles/blob/master/vimrc),
-[Jon](https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.lua) (använder [neovim](https://neovim.io/)),
-[Jose](https://github.com/JJGO/dotfiles/blob/master/vim/.vimrc)).
+Du kan titta på andras dotfiles på GitHub för inspiration, till exempel lärarnas Vim-konfigurationer ([Anish](https://github.com/anishathalye/dotfiles/blob/master/vimrc), [Jon](https://github.com/jonhoo/configs/blob/master/editor/.config/nvim/init.lua) (använder [neovim](https://neovim.io/)), [Jose](https://github.com/JJGO/dotfiles/blob/master/vim/.vimrc)).
 Det finns också många bra blogginlägg om ämnet.
 Försök att inte kopiera och klistra in någons fulla konfiguration, utan läs den, förstå den och plocka det du behöver.
 
@@ -274,16 +264,13 @@ Skapa helt enkelt katalogen `~/.vim/pack/vendor/start/` och lägg insticksmodule
 
 Här är några av våra favoritinsticksmoduler:
 
-- [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim): fuzzy filsökare
+- [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim): ungefärlig filsökare
 - [ack.vim](https://github.com/mileszs/ack.vim): kodsökning
 - [nerdtree](https://github.com/scrooloose/nerdtree): filutforskare
 - [vim-easymotion](https://github.com/easymotion/vim-easymotion): magiska rörelser
 
 Vi försöker undvika att ge en överväldigande lång lista med insticksmoduler här.
-Du kan titta i lärarnas dotfiles
-([Anish](https://github.com/anishathalye/dotfiles),
-[Jon](https://github.com/jonhoo/configs),
-[Jose](https://github.com/JJGO/dotfiles)) för att se vilka andra insticksmoduler vi använder.
+Du kan titta i lärarnas dotfiles ([Anish](https://github.com/anishathalye/dotfiles), [Jon](https://github.com/jonhoo/configs), [Jose](https://github.com/JJGO/dotfiles)) för att se vilka andra insticksmoduler vi använder.
 Kolla också in [Vim Awesome](https://vimawesome.com/) för fler bra Vim-insticksmoduler.
 Det finns även mängder av blogginlägg om ämnet: sök till exempel på `Vim-insticksmoduler`.
 
@@ -298,13 +285,12 @@ Om du använder Bash, använd `set -o vi`.
 Om du använder Zsh, `bindkey -v`.
 För Fish, `fish_vi_key_bindings`.
 Dessutom kan du, oavsett skal, sätta `export EDITOR=vim`.
-Detta är miljövariabeln som används för att avgöra vilken redigerare som startas när ett program vill öppna en redigerare.
+Det är miljövariabeln som används för att avgöra vilken redigerare som startas när ett program vill öppna en redigerare.
 Till exempel använder `git` denna redigerare för incheckningsmeddelanden.
 
 ## Readline
 
-Många program använder biblioteket [GNU
-Readline](https://tiswww.case.edu/php/chet/readline/rltop.html) för sitt kommandoradsgränssnitt.
+Många program använder biblioteket [GNU Readline](https://tiswww.case.edu/php/chet/readline/rltop.html) för sitt kommandoradsgränssnitt.
 Readline stöder också (grundläggande) Vim-emulering, som kan aktiveras genom att lägga till följande rad i filen `~/.inputrc`:
 
 ```
@@ -315,12 +301,8 @@ Med den här inställningen får till exempel Python-REPL stöd för Vim-bindnin
 
 ## Övriga
 
-Det finns till och med vim-tangentbindningstillägg för webbläsare
-[browsers](https://vim.fandom.com/wiki/Vim_key_bindings_for_web_browsers) - några populära är
-[Vimium](https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb?hl=en)
-för Google Chrome och [Tridactyl](https://github.com/tridactyl/tridactyl) för Firefox.
-Du kan till och med få Vim-bindningar i [Jupyter
-notebooks](https://github.com/jupyterlab-contrib/jupyterlab-vim).
+Det finns till och med vim-tangentbindningstillägg för webbläsare [browsers](https://vim.fandom.com/wiki/Vim_key_bindings_for_web_browsers) - några populära är [Vimium](https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb?hl=en) för Google Chrome och [Tridactyl](https://github.com/tridactyl/tridactyl) för Firefox.
+Du kan till och med få Vim-bindningar i [Jupyter notebooks](https://github.com/jupyterlab-contrib/jupyterlab-vim).
 Här är en [lång lista](https://reversed.top/2016-08-13/big-list-of-vim-like-software) över program med vim-liknande tangentbindningar.
 
 <span id="advanced-vim"></span>
@@ -355,7 +337,7 @@ Kommandot `:s` (substitute) ([dokumentation](https://vim.fandom.com/wiki/Search_
 - Makron kan vara rekursiva
     - rensa först makrot med `q{character}q`
     - spela in makrot med `@{character}` för att anropa makrot rekursivt
-    (det blir en no-op tills inspelningen är klar)
+  (det blir en no-op tills inspelningen är klar)
 - Exempel: konvertera xml till json ([fil]({{ '/2020/files/example-data.xml' | relative_url }}))
     - Array av objekt med nycklarna "name" / "email"
     - Använd ett Python-program?
@@ -392,23 +374,21 @@ Kommandot `:s` (substitute) ([dokumentation](https://vim.fandom.com/wiki/Search_
 
 # Övningar
 
-1. Slutför `vimtutor`. Obs: den ser bäst ut i ett
-   [80x24](https://en.wikipedia.org/wiki/VT100) (80 kolumner och 24 rader)
-   terminalfönster.
-1. Ladda ner vår [grundläggande vimrc]({{ '/2020/files/vimrc' | relative_url }}) och spara den som `~/.vimrc`. Läs igenom den välkommenterade filen (med Vim!) och observera hur Vim ser ut och beter sig något annorlunda med den nya konfigurationen.
-1. Installera och konfigurera en insticksmodul:
-   [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim).
+1. Slutför `vimtutor`.
+   Obs: den ser bäst ut i ett [80x24](https://en.wikipedia.org/wiki/VT100) (80 kolumner och 24 rader) terminalfönster.
+1. Ladda ner vår [grundläggande vimrc]({{ '/2020/files/vimrc' | relative_url }}) och spara den som `~/.vimrc`.
+   Läs igenom den välkommenterade filen (med Vim!) och observera hur Vim ser ut och beter sig något annorlunda med den nya konfigurationen.
+1. Installera och konfigurera en insticksmodul: [ctrlp.vim](https://github.com/ctrlpvim/ctrlp.vim).
    1. Skapa katalogen för insticksmoduler med `mkdir -p ~/.vim/pack/vendor/start`
-   1. Ladda ner insticksmodulen: `cd ~/.vim/pack/vendor/start; git clone
-      https://github.com/ctrlpvim/ctrlp.vim`
-   1. Läs
-      [dokumentationen](https://github.com/ctrlpvim/ctrlp.vim/blob/master/readme.md)
-      för insticksmodulen. Prova att använda CtrlP för att hitta en fil genom att gå till en projektkatalog, öppna Vim och använda Vim-kommandoraden för att starta `:CtrlP`.
-    1. Anpassa CtrlP genom att lägga till
-       [konfiguration](https://github.com/ctrlpvim/ctrlp.vim/blob/master/readme.md#basic-options)
-       i din `~/.vimrc` så att CtrlP öppnas med Ctrl-P.
+   1. Ladda ner insticksmodulen: `cd ~/.vim/pack/vendor/start; git clone https://github.com/ctrlpvim/ctrlp.vim`
+   1. Läs [dokumentationen](https://github.com/ctrlpvim/ctrlp.vim/blob/master/readme.md) för insticksmodulen.
+      Prova att använda CtrlP för att hitta en fil genom att gå till en projektkatalog, öppna Vim och använda Vim-kommandoraden för att starta `:CtrlP`.
+    1. Anpassa CtrlP genom att lägga till [konfiguration](https://github.com/ctrlpvim/ctrlp.vim/blob/master/readme.md#basic-options) i din `~/.vimrc` så att CtrlP öppnas med Ctrl-P.
 1. För att öva Vim, gör om [Demo](#demo) från föreläsningen på din egen maskin.
-1. Använd Vim för _all_ textredigering under nästa månad. När något känns ineffektivt, eller när du tänker "det måste finnas ett bättre sätt", prova att googla - det finns förmodligen ett. Om du fastnar, kom till mottagningstid eller e-posta oss.
+1. Använd Vim för _all_ textredigering under nästa månad.
+   När något känns ineffektivt, eller när du tänker "det måste finnas ett bättre sätt", prova att googla - det finns förmodligen ett.
+   Om du fastnar, kom till mottagningstid eller e-posta oss.
 1. Konfigurera dina andra verktyg att använda Vim-bindningar (se instruktionerna ovan).
 1. Anpassa din `~/.vimrc` vidare och installera fler insticksmoduler.
-1. (Avancerad) Konvertera XML till JSON ([exempelfil]({{ '/2020/files/example-data.xml' | relative_url }})) med Vim-makron. Försök göra detta själv, men du kan titta i avsnittet [makron](#makron) ovan om du fastnar.
+1. (Avancerad) Konvertera XML till JSON ([exempelfil]({{ '/2020/files/example-data.xml' | relative_url }})) med Vim-makron.
+   Försök göra detta själv, men du kan titta i avsnittet [makron](#makron) ovan om du fastnar.

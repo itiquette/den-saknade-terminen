@@ -12,11 +12,11 @@ video:
 ---
 
 Kodagenter är konversationella AI-modeller med tillgång till verktyg som läsning/skrivning av filer, webbsökning och körning av skalkommandon.
-De finns antingen i IDE:n eller i fristående kommandorads- eller GUI-verktyg.
-Kodagenter är mycket autonoma och kraftfulla verktyg som möjliggör många olika användningsfall.
+De finns i IDE:n, i fristående kommandorads- eller GUI-verktyg.
+Kodagenter är autonoma och kraftfulla verktyg som möjliggör många olika användningsfall.
 
-Den här föreläsningen bygger vidare på materialet om AI-stödd utveckling från föreläsningen [Utvecklingsmiljö och verktyg]({{ '/2026/development-environment/' | relative_url }}).
-Som en snabb demonstration fortsätter vi med exemplet från avsnittet [AI-stödd utveckling]({{ '/2026/development-environment/#ai-powered-development' | relative_url }}):
+Föreläsningen bygger vidare på materialet om AI-stödd utveckling från föreläsningen [Utvecklingsmiljö och verktyg]({{ '/2026/development-environment/' | relative_url }}).
+Som en kort demonstration fortsätter vi med exemplet från avsnittet [AI-stödd utveckling]({{ '/2026/development-environment/#ai-powered-development' | relative_url }}):
 
 ```python
 from urllib.request import urlopen
@@ -55,7 +55,7 @@ En hjälpsam mental modell är att tänka på dig själv som chef för en prakti
 
 # Hur AI-modeller och agenter fungerar
 
-Att fullständigt förklara det inre arbetssättet i moderna [stora språkmodeller (LLM:er)](https://en.wikipedia.org/wiki/Large_language_model) och infrastruktur som agentramverk ligger utanför den här kursens omfång.
+Att fullständigt förklara det inre arbetssättet i moderna [stora språkmodeller (LLM:er)](https://en.wikipedia.org/wiki/Large_language_model) och infrastruktur som agentramverk ligger utanför kursens omfång.
 Det är dock hjälpsamt att ha en övergripande förståelse för några nyckelidéer för att effektivt _använda_ den här tekniken i framkant och förstå dess begränsningar.
 
 LLM:er kan ses som modeller av sannolikhetsfördelningen för fullföljande strängar (utdata) givet promptsträngar (indata).
@@ -88,34 +88,31 @@ Några exempel:
   Att ge en bra specifikation är just nu mer konst än vetenskap.
   Du vill att indata till agenten ska vara tillräckligt beskrivande för att den ska göra det du vill (åtminstone vara på rätt spår så att du kan iterera), men inte så överdetaljerad att du gör för mycket av arbetet själv.
   Testdriven utveckling kan vara särskilt effektivt: skriv tester (eller använd kodagenten för att hjälpa dig skriva tester), granska dem så att de verkligen fångar det du vill och be sedan kodagenten implementera funktionen.
-  Modeller förbättras kontinuerligt, så du behöver hålla din intuition uppdaterad om vad modellerna klarar.
-    > Vi använde Claude Code för att [implementera](https://github.com/missing-semester/missing-semester/pull/345) dessa Tufte-liknande marginalnoter.
+  Modeller förbättras kontinuerligt, så du behöver hålla din intuition uppdaterad om vad modellerna klarar. > Vi använde Claude Code för att [implementera](https://github.com/missing-semester/missing-semester/pull/345) dessa Tufte-liknande marginalnoter.
 {%- comment %}
 Ingen demo behövs här, eftersom introduktionen av en föreläsning redan var en liten demo av att lägga till en ny funktion.
 {% endcomment %}
 - **Fixa fel.** Om du har fel från kompilator, linter, typkontroll eller tester kan du be agenten rätta dem, till exempel med en uppmaning som "fixa problemen med mypy".
   Kodmodeller är särskilt effektiva när du kan få in dem i en återkopplingsslinga, så försök att sätta upp det så att modellen kan köra den felande kontrollen direkt, vilket låter den iterera autonomt.
-  Om det är opraktiskt kan du ge modellen återkoppling manuellt.
-    > I incheckningen [f552b55](https://github.com/missing-semester/missing-semester/commit/f552b5523462b22b8893a8404d2110c4e59613dd) i Missing Semesters kodförråd bad vi Claude Code "Granska föreläsningen om agentdriven kodning för stavfel och grammatiska problem" och bad den därefter att åtgärda problemen den hittade, vilket lades in i [f1e1c41](https://github.com/missing-semester/missing-semester/commit/f1e1c417adba6b4149f7eef91ff5624de40dc637).
+  Om det är opraktiskt kan du ge modellen återkoppling manuellt. > I incheckningen [f552b55](https://github.com/missing-semester/missing-semester/commit/f552b5523462b22b8893a8404d2110c4e59613dd) i Missing Semesters kodförråd bad vi Claude Code "Granska föreläsningen om agentdriven kodning för stavfel och grammatiska problem" och bad den därefter att åtgärda problemen den hittade, vilket lades in i [f1e1c41](https://github.com/missing-semester/missing-semester/commit/f1e1c417adba6b4149f7eef91ff5624de40dc637).
 {%- comment %}
 Demo av en kodagent som åtgärdar programfelet i https://github.com/anishathalye/dotbot/commit/cef40c902ef0f52f484153413142b5154bbc5e99.
 
-Skriv de fallerande testerna för att demonstrera programfelet, och be sedan agenten fixa det.
+Skriv de misslyckade testerna för att demonstrera programfelet, och be sedan agenten fixa det.
 Förberett i grenen demo-bugfix.
 
-Det fallerande testet kan köras med:
+Det misslyckade testet kan köras med:
 
     hatch test tests/test_cli.py::test_issue_357
 
 Du kan ge kodagenten den här uppmaningen:
 
-    Det finns ett programfel som jag har skrivit ett fallerande test för, och du kan reproducera det med `hatch test tests/test_cli.py::test_issue_357`.
+    Det finns ett programfel som jag har skrivit ett misslyckat test för, och du kan reproducera det med `hatch test tests/test_cli.py::test_issue_357`.
     Åtgärda programfelet.
 
 Få den att skapa en incheckning med ändringarna.
 {% endcomment %}
-- **Refaktorering.** Du kan använda kodagenter för att refaktorera kod på olika sätt, från enkla uppgifter som att byta namn på en metod (den här typen av refaktorering stöds också av [kodintelligens]({{ '/2026/development-environment/#code-intelligence-and-language-servers' | relative_url }})) till mer komplexa uppgifter som att bryta ut funktionalitet till en separat modul.
-    > Vi använde Claude Code för att [dela upp](https://github.com/missing-semester/missing-semester/pull/344) agentdriven kodning till en egen föreläsning.
+- **Refaktorering.** Du kan använda kodagenter för att refaktorera kod på olika sätt, från enkla uppgifter som att byta namn på en metod (den typen av refaktorering stöds också av [kodintelligens]({{ '/2026/development-environment/#code-intelligence-and-language-servers' | relative_url }})) till mer komplexa uppgifter som att bryta ut funktionalitet till en separat modul. > Vi använde Claude Code för att [dela upp](https://github.com/missing-semester/missing-semester/pull/344) agentdriven kodning till en egen föreläsning.
 {%- comment %}
 Visa användning i Missing Semester, och påpeka att agenten gjorde några misstag.
 {% endcomment %}
@@ -141,8 +138,7 @@ I Dotbots kodförråd, ge agenten följande uppmaning:
 
     Använd ag-kommandot för att hitta alla omdöpta importer i Python
 {% endcomment %}
-- **Vibekodning.** Agenter är tillräckligt kraftfulla för att du ska kunna implementera vissa applikationer utan att själv skriva en enda rad kod.
-    > [Här är ett exempel](https://github.com/cleanlab/office-presence-dashboard) på ett verkligt projekt som en av instruktörerna vibekodade.
+- **Vibekodning.** Agenter är tillräckligt kraftfulla för att du ska kunna implementera vissa applikationer utan att själv skriva en enda rad kod. > [Här är ett exempel](https://github.com/cleanlab/office-presence-dashboard) på ett verkligt projekt som en av instruktörerna vibekodade.
 {%- comment %}
 I Missing Semesters kodförråd, ge agenten följande uppmaning:
 
@@ -154,13 +150,10 @@ I Missing Semesters kodförråd, ge agenten följande uppmaning:
 Här ger vi en kort översikt över några mer avancerade användningsmönster och förmågor hos kodagenter.
 
 - **Återanvändbara uppmaningar.** Skapa återanvändbara uppmaningar eller mallar.
-  Du kan till exempel skriva en detaljerad uppmaning för kodgranskning på ett särskilt sätt och spara den som en återanvändbar uppmaning.
-    > Agentverktyg utvecklas snabbt.
-    > I vissa verktyg är återanvändbara uppmaningar som fristående funktion avvecklade.
-    > I till exempel Codex och Claude Code [ingår de](https://developers.openai.com/codex/custom-prompts) i [skills (färdigheter)](https://code.claude.com/docs/en/skills).
+  Du kan till exempel skriva en detaljerad uppmaning för kodgranskning på ett särskilt sätt och spara den som en återanvändbar uppmaning. > Agentverktyg utvecklas snabbt. > I vissa verktyg är återanvändbara uppmaningar som fristående funktion avvecklade. > I till exempel Codex och Claude Code [ingår de](https://developers.openai.com/codex/custom-prompts) i [skills (färdigheter)](https://code.claude.com/docs/en/skills).
 - **Parallella agenter.** Kodagenter kan vara långsamma: du kan ge agenten en uppmaning och låta den arbeta på ett problem i tiotals minuter.
   Du kan köra flera kopior av agenter samtidigt, antingen på samma uppgift (LLM:er är stokastiska, så det kan vara hjälpsamt att köra samma sak flera gånger och välja bästa lösningen) eller på olika uppgifter (t.ex. implementera två icke-överlappande funktioner samtidigt).
-  För att undvika att ändringar från olika agenter stör varandra kan du använda [git worktrees](https://git-scm.com/docs/git-worktree), som vi tar upp i föreläsningen om [versionshantering]({{ '/2026/version-control/' | relative_url }}).
+  För att undvika att ändringar från olika agenter stör varandra kan du använda [git-arbetsträd](https://git-scm.com/docs/git-worktree), som vi tar upp i föreläsningen om [versionshantering]({{ '/2026/version-control/' | relative_url }}).
 - **MCP:er.** MCP, som står för _Model Context Protocol_, är ett öppet protokoll som du kan använda för att koppla dina kodagenter till verktyg.
   Till exempel kan denna [Notion MCP-server](https://github.com/makenotion/notion-mcp-server) låta agenten läsa/skriva Notion-dokument, vilket möjliggör användningsfall som "läs specifikationen länkad i {Notion-dokument}, utarbeta en implementationsplan som en ny sida i Notion och implementera sedan en prototyp".
   För att hitta MCP:er kan du använda kataloger som [Pulse](https://www.pulsemcp.com/servers) och [Glama](https://glama.ai/mcp/servers).
@@ -199,7 +192,7 @@ Du skulle förmodligen lägga den sista meningen i en CLAUDE.md-fil.
       Vissa kodagenter kan autogenerera den här filen (t.ex. kommandot `/init` i Claude Code).
       Se [här](https://github.com/pydantic/pydantic-ai/blob/main/CLAUDE.md) för ett verkligt exempel på en `AGENTS.md`.
 {%- comment %}
-Dotbot-exempel, CLAUDE.md som inkluderar @DEVELOPMENT.md och säger att man alltid ska köra typkontroll och kodformatterare efter ändringar i Python-kod.
+Dotbot-exempel, CLAUDE.md som inkluderar @DEVELOPMENT.md och säger att man alltid ska köra typkontroll och kodformaterare efter ändringar i Python-kod.
 
 Exempelprompt, utifrån master:
 
@@ -209,23 +202,23 @@ Det här går snabbt och är bra för demonstrationssyfte.
 {% endcomment %}
     - **Skills (färdigheter).** Innehåll i `AGENTS.md` laddas alltid, i sin helhet, in i agentens kontextfönster.
       _Skills_ lägger till ett lager av indirektion för att undvika kontextuppblåsning: du kan ge agenten en lista med skills och beskrivningar, och agenten kan "öppna" en skill (ladda den i sitt kontextfönster) vid behov.
-    - **Subagenter.** Vissa kodagenter låter dig definiera subagenter, alltså agenter för uppgiftsspecifika arbetsflöden.
-      Toppnivåagenten kan anropa en subagent för att lösa en viss uppgift, vilket gör att både toppnivåagenten och subagenten kan hantera kontext mer effektivt.
-      Toppnivåagentens kontext sväller inte av allt subagenten ser, och subagenten kan få precis den kontext den behöver för uppgiften.
-      Som exempel implementerar vissa kodagenter webbundersökning som en subagent: toppnivåagenten ställer en fråga till subagenten, som gör webbsökning, hämtar enskilda webbsidor, analyserar dem och returnerar ett svar till toppnivåagenten.
-      På så sätt får toppnivåagenten inte sin kontext uppblåst av allt innehåll från hämtade webbsidor, och subagenten får inte resten av toppnivåagentens konversationshistorik i sin kontext.
+    - **Underagenter.** Vissa kodagenter låter dig definiera underagenter, alltså agenter för uppgiftsspecifika arbetsflöden.
+      Toppnivåagenten kan anropa en underagent för att lösa en viss uppgift, vilket gör att både toppnivåagenten och underagenten kan hantera kontext mer effektivt.
+      Toppnivåagentens kontext sväller inte av allt underagenten ser, och underagenten kan få precis den kontext den behöver för uppgiften.
+      Som exempel implementerar vissa kodagenter webbundersökning som en underagent: toppnivåagenten ställer en fråga till underagenten, som gör webbsökning, hämtar enskilda webbsidor, analyserar dem och returnerar ett svar till toppnivåagenten.
+      På så sätt får toppnivåagenten inte sin kontext uppblåst av allt innehåll från hämtade webbsidor, och underagenten får inte resten av toppnivåagentens konversationshistorik i sin kontext.
 
-För många av de avancerade funktioner som kräver att du skriver uppmaningar (t.ex. skills/färdigheter eller subagenter) kan du använda LLM:er för att komma igång.
+För många av de avancerade funktioner som kräver att du skriver uppmaningar (t.ex. skills/färdigheter eller underagenter) kan du använda LLM:er för att komma igång.
 Vissa kodagenter har till och med inbyggt stöd för detta.
-Till exempel kan Claude Code generera en subagent från en kort uppmaning (anropa `/agents` och skapa en ny agent).
-Prova att skapa en subagent med följande uppmaning:
+Till exempel kan Claude Code generera en underagent från en kort uppmaning (anropa `/agents` och skapa en ny agent).
+Prova att skapa en underagent med följande uppmaning:
 
 ```
 En Python-agent för kodkontroll som använder `mypy` och `ruff` för typkontroll, lintning och formatkontroll av alla filer som har ändrats sedan senaste git-incheckning.
 ```
 
-Sedan kan du använda toppnivåagenten för att uttryckligen anropa subagenten med ett meddelande som "använd subagenten för kodkontroll".
-Du kan också vid behov få toppnivåagenten att automatiskt anropa subagenten när det är lämpligt, till exempel efter att Python-filer har ändrats.
+Sedan kan du använda toppnivåagenten för att uttryckligen anropa underagenten med ett meddelande som "använd underagenten för kodkontroll".
+Du kan också vid behov få toppnivåagenten att automatiskt anropa underagenten när det är lämpligt, till exempel efter att Python-filer har ändrats.
 
 # Saker att se upp med
 
@@ -255,7 +248,7 @@ Andra populära kodagenter inkluderar Anthropics [Claude Code](https://www.claud
 1. Om du inte kommer på något kan du prova att använda en AI-agent för att förstå hur säkerhetsrelaterade funktioner fungerar i agenten [opencode](https://github.com/anomalyco/opencode).
 1. Vibekoda en liten app från grunden.
 1. Skriv inte en enda rad kod för hand.
-1. För den kodagent du föredrar, skapa och testa en `AGENTS.md` (eller motsvarande för din agent, som `CLAUDE.md`), en skill (t.ex. [skill in Claude Code](https://code.claude.com/docs/en/skills) eller [skill in Codex](https://developers.openai.com/codex/skills/)) och en subagent (t.ex. [subagent in Claude Code](https://code.claude.com/docs/en/sub-agents)).
+1. För den kodagent du föredrar, skapa och testa en `AGENTS.md` (eller motsvarande för din agent, som `CLAUDE.md`), en skill (t.ex. [skill in Claude Code](https://code.claude.com/docs/en/skills) eller [skill in Codex](https://developers.openai.com/codex/skills/)) och en underagent (t.ex. [underagenter i Claude Code](https://code.claude.com/docs/en/sub-agents)).
 1. Fundera på när du vill använda den ena jämfört med den andra.
 1. Observera att din valda kodagent kanske inte stöder alla dessa funktioner.
 1. Du kan då antingen hoppa över dem eller prova en annan kodagent som har stöd.
@@ -268,4 +261,4 @@ Andra populära kodagenter inkluderar Anthropics [Claude Code](https://www.claud
 1. Det är inte säkert att använda detta läge direkt, men det kan vara acceptabelt att köra en kodagent i en isolerad miljö som en virtuell maskin eller container och sedan aktivera autonom drift.
 1. Få den här uppsättningen att fungera på din dator.
 1. Dokumentation som [Claude Code devcontainers](https://code.claude.com/docs/en/devcontainer) eller [Docker Sandboxes / Claude Code](https://docs.docker.com/ai/sandboxes/agents/claude-code/) kan vara användbar.
-1. Det finns mer än ett sätt att sätta upp detta.
+1. Det finns flera sätt att komma igång på.

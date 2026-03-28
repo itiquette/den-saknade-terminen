@@ -11,38 +11,38 @@ video:
   id: XBiLUNx84CQ
 ---
 
-Det finns många verktyg och tekniker som hjälper utvecklare att skriva kod av hög kvalitet.
-I den här föreläsningen går vi igenom:
+Det finns en uppsjö av verktyg och tekniker som hjälper utvecklare att skriva kod av hög kvalitet.
+I föreläsningen går vi igenom:
 
 - [Formatering](#formatering)
 - [Lintning](#lintning)
 - [Testning](#testning)
-- [Pre-commit-hooks](#pre-commit-hooks)
-- [Kontinuerlig integration](#kontinuerlig-integration)
+- [Pre-commit-krokar](#pre-commit-krokar)
+- [Kontinuerlig integration(CI)](#kontinuerlig-integration)
 - [Kommandokörningar](#kommandokörningar)
 
 Som bonusämne går vi också igenom [reguljära uttryck](#reguljära-uttryck), ett tvärgående ämne som används inom kodkvalitet (t.ex. för att köra en delmängd tester som matchar ett mönster) och i andra områden som IDE:er (t.ex. för sök och ersätt).
 
-Många av dessa verktyg är språkspecifika (t.ex. lintnings-/formateringsverktyget [Ruff](https://docs.astral.sh/ruff/) för Python).
-I vissa fall stöder verktyg flera språk (t.ex. kodformatteraren [Prettier](https://prettier.io/)).
-Koncepten är däremot nästan universella --- du kan hitta kodformatterare, linters, testbibliotek och så vidare för vilket programmeringsspråk som helst.
+Flera av dessa verktyg är språkspecifika (t.ex. lintnings-/formateringsverktyget [Ruff](https://docs.astral.sh/ruff/) för Python).
+I vissa fall stöder verktyg flera språk (t.ex. kodformateraren [Prettier](https://prettier.io/)).
+Koncepten är däremot nästan allmängiltiga --- du kan hitta kodformaterare, linters, testbibliotek och så vidare för vilket programmeringsspråk som helst.
 
 # Formatering
 
-Automatiska kodformatterare snyggar upp ytsyntaxen automatiskt.
-På så sätt kan du fokusera på djupare och mer utmanande problem, medan formatteringsverktyget hanterar vardagsdetaljer som konsekvent användning av `'` kontra `"` i strängar, mellanslag runt binära operatorer (`x + y` i stället för `x+y`), sorterade `import`-satser och att undvika för långa rader.
-En stor fördel med kodformatterare är att de standardiserar kodstilen för alla utvecklare som arbetar i kodbasen.
+Automatiska kodformaterare snyggar upp ytsyntaxen automatiskt.
+På så sätt kan du fokusera på djupare och mer utmanande problem, medan formateringsverktyget hanterar vardagsdetaljer som konsekvent användning av `'` kontra `"` i strängar, mellanslag runt binära operatorer (`x + y` i stället för `x+y`), sorterade `import`-satser och att undvika för långa rader.
+En stor fördel med kodformaterare är att de standardiserar kodstilen för alla utvecklare som arbetar i kodbasen.
 
-Vissa verktyg, som Prettier, är [mycket konfigurerbara](https://prettier.io/docs/configuration), och du bör versionshantera konfigurationsfilen i [versionshantering]({{ '/2026/version-control/' | relative_url }}) för projektet.
+Vissa verktyg, som Prettier, är [i hög grad konfigurerbara](https://prettier.io/docs/configuration), och du bör versionshantera konfigurationsfilen i [versionshantering]({{ '/2026/version-control/' | relative_url }}) för projektet.
 Andra verktyg, som [Black](https://github.com/psf/black) och [gofmt](https://pkg.go.dev/cmd/gofmt), har begränsad eller ingen konfigurerbarhet för att minska [bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality).
 
-Du kan sätta upp [integrering i IDE:n]({{ '/2026/development-environment/#code-intelligence-and-language-servers' | relative_url }}) med din kodformatterare, så att koden formatteras automatiskt medan du skriver eller när du sparar en fil.
+Du kan sätta upp [integrering i IDE:n]({{ '/2026/development-environment/#code-intelligence-and-language-servers' | relative_url }}) med din kodformaterare, så att koden formateras automatiskt medan du skriver eller när du sparar en fil.
 Du kan också lägga till en [EditorConfig](https://editorconfig.org/)-fil i projektet, som kommunicerar projektnivåinställningar till IDE:n, till exempel indenteringsstorlek per filtyp.
 
 # Lintning
 
 Linters kör statisk analys (analyserar din kod utan att köra den) för att hitta antipatterns och potentiella problem i koden.
-Dessa verktyg går djupare än autoformatters och tittar bortom ytsyntax.
+Dessa verktyg går djupare än autoformaterare och tittar bortom ytsyntax.
 Hur djup analysen är varierar mellan verktyg.
 
 Linters kommer med listor av _regler_, med förinställningar som kan konfigureras på projektnivå.
@@ -83,18 +83,18 @@ Tjänster som [Codecov](https://app.codecov.io) erbjuder webbgränssnitt för at
 
 Som alla mätetal är kodtäckning inte perfekt, så överoptimera inte för täckning utan fokusera på att skriva högkvalitativa tester.
 
-<span id="pre-commit-hooks"></span>
-# Pre-commit-hookar
+<span id="pre-commit-krokar"></span>
+# Pre-commit-krokar
 
-Git [pre-commit-hookar](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks), som blir enklare med ramverket [pre-commit](https://pre-commit.com/), kör automatiskt användarspecificerad kod före varje Git-incheckning.
-Projekt använder ofta pre-commit-hookar för att köra formatterare och linters, och ibland tester, automatiskt före varje incheckning för att säkerställa att kod i incheckningen följer projektets kodstil och är fri från vissa typer av problem.
+Git [pre-commit-krokar](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks), som blir enklare med ramverket [pre-commit](https://pre-commit.com/), kör automatiskt användarspecificerad kod före varje Git-incheckning.
+Projekt använder ofta pre-commit-krokar för att köra formaterare och linters, och ibland tester, automatiskt före varje incheckning för att säkerställa att kod i incheckningen följer projektets kodstil och är fri från vissa typer av problem.
 
 # Kontinuerlig integration
 
-Tjänster för kontinuerlig integration (CI), som [GitHub Actions](https://github.com/features/actions), kan köra skript åt dig varje gång du pushar kod (eller vid varje ändringsförfrågan (PR), eller enligt schema).
-Utvecklare använder ofta CI-tjänster för att köra kodkvalitetsverktyg, inklusive formatterare, linters och tester.
+Tjänster för kontinuerlig integration (CI), som [GitHub Actions](https://github.com/features/actions), kan köra skript åt dig varje gång du skickar kod (eller vid varje ändringsförfrågan (PR), eller enligt schema).
+Utvecklare använder ofta CI-tjänster för att köra kodkvalitetsverktyg, inklusive formaterare, linters och tester.
 För kompilerade språk kan du säkerställa att koden kompilerar, och för statiskt typade språk kan du säkerställa att den typkontrollerar.
-Att köra CI vid varje push med nya incheckningar kan fånga fel som förs in i huvudversionen av koden.
+Att köra CI varje gång ny kod skickas kan fånga fel som förs in i huvudversionen av koden.
 Att köra vid ändringsförfrågningar kan fånga problem i bidrag från andra.
 Att köra enligt schema kan fånga problem med externa beroenden (t.ex. när en utvecklare av misstag släpper en brytande ändring som [semver-kompatibel]({{ '/2026/shipping-code/#utgavor-och-versionering' | relative_url }})).
 
@@ -102,7 +102,7 @@ Eftersom CI-skript körs separat från utvecklarnas datorer kan du enkelt köra 
 Det kan till exempel användas för att köra en test-_matris_ över olika operativsystem och versionskombinationer av programmeringsspråk för att säkerställa att programvaran fungerar korrekt på alla.
 
 Generellt ska skriptet som körs i CI inte direkt ändra koden.
-Det kör verktyg i "check-only"-läge i stället för "fix"-läge, så till exempel formatteraren höjer ett fel när koden inte följer formatet.
+Det kör verktyg i "check-only"-läge i stället för "fix"-läge, så till exempel formateraren höjer ett fel när koden inte följer formatet.
 
 Kodförråd innehåller ofta [statusmärken](https://docs.github.com/en/actions/how-tos/monitor-workflows/add-a-status-badge) i README, som visar CI-status och annan information som kodtäckning.
 Nedan är Missing Semesters nuvarande byggstatus.
@@ -112,13 +112,13 @@ Nedan är Missing Semesters nuvarande byggstatus.
 > Vår [länkkontroll](https://github.com/missing-semester/missing-semester/blob/master/.github/workflows/links.yml), som använder GitHub Action [proof-html](https://github.com/anishathalye/proof-html), misslyckas ofta, vanligtvis på grund av problem på tredjepartswebbplatser.
 > Trots det har den hjälpt oss att hitta och fixa många brutna länkar (ibland på grund av stavfel, oftast för att webbplatser flyttar innehåll utan att lägga till omdirigeringar eller för att webbplatser försvinner).
 
-Ett bra sätt att lära sig detaljerna i CI-tjänster, formatterare, linters och testbibliotek är att lära genom exempel.
+Ett bra sätt att lära sig detaljerna i CI-tjänster, formaterare, linters och testbibliotek är att lära genom exempel.
 Hitta högkvalitativa öppen källkod-projekt på GitHub --- ju mer de liknar ditt projekt i språk, domän, storlek, omfattning och så vidare, desto bättre --- och studera deras `pyproject.toml`, `.github/workflows/`, `DEVELOPMENT.md` och andra relevanta filer.
 
-## Kontinuerlig driftsättning
+## Kontinuerlig driftsättning (CD)
 
 Kontinuerlig driftsättning använder CI-infrastruktur för att faktiskt _driftsätta_ ändringar.
-Till exempel använder Missing Semesters kodförråd kontinuerlig driftsättning till GitHub Pages, så att webbplatsen byggs och driftsätts automatiskt när vi `git push`ar uppdaterade föreläsningsanteckningar.
+Till exempel använder Missing Semesters kodförråd kontinuerlig driftsättning till GitHub Pages, så att webbplatsen byggs och driftsätts automatiskt när vi skickar uppdaterade föreläsningsanteckningar med `git push`.
 Du kan bygga andra typer av [artefakter]({{ '/2026/shipping-code/' | relative_url }}) i CI, till exempel binärer för applikationer eller Docker-avbilder för tjänster.
 
 # Kommandokörningar
@@ -136,10 +136,10 @@ Till exempel stöder `scripts`-sektionen i en `package.json` för [npm](https://
 _Reguljära uttryck_, ofta förkortat "regex", är ett språk för att representera mängder av strängar.
 Regex-mönster används ofta för mönstermatchning i olika sammanhang, till exempel kommandoradsverktyg och IDE:er.
 Till exempel stöder [ag](https://github.com/ggreer/the_silver_searcher) regex-mönster för sökning i hela kodbasen (t.ex. `ag "import .* as .*"` hittar alla omdöpta importer i Python), och [go test](https://pkg.go.dev/cmd/go#hdr-Test_packages) stöder alternativet `-run [regexp]` för att välja en delmängd av tester.
-Dessutom har programmeringsspråk inbyggt stöd eller tredjepartsbibliotek för reguljära uttryck, så du kan använda regex för funktioner som mönstermatchning, validering och parsning.
+Dessutom har programmeringsspråk inbyggt stöd eller tredjepartsbibliotek för reguljära uttryck, så du kan använda regex för funktioner som mönstermatchning, validering och tolkning.
 
 För att bygga intuition följer här några exempel på regex-mönster.
-I den här föreläsningen använder vi [Python-syntax för regex](https://docs.python.org/3/library/re.html).
+I föreläsningen använder vi [Python-syntax för regex](https://docs.python.org/3/library/re.html).
 Det finns många regex-varianter med små skillnader mellan dem, särskilt i mer avancerad funktionalitet.
 Du kan använda en webbaserad testare som [regex101](https://regex101.com/) för att utveckla och felsöka reguljära uttryck.
 
@@ -148,7 +148,7 @@ Du kan använda en webbaserad testare som [regex101](https://regex101.com/) för
 - `\d{4}-\d{2}-\d{2}` --- matchar datum i formatet YYYY-MM-DD, till exempel "2026-01-14".
   Utöver att säkerställa att strängen består av fyra siffror, ett bindestreck, två siffror, ett bindestreck och två siffror validerar det inte själva datumet, så "2026-01-99" matchar också detta regex-mönster.
 - `.+@.+` --- matchar e-postadresser, alltså strängar som innehåller text, sedan ett "@" och sedan mer text.
-  Detta gör bara en mycket grundläggande validering och matchar strängar som "nonsense@@@email".
+  Detta gör bara en väldigt grundläggande validering och matchar strängar som "nonsense@@@email".
   Ett regex som matchar e-postadresser utan falska positiva eller negativa [finns](https://pdw.ex-parrot.com/Mail-RFC822-Address.html), men är opraktiskt.
 
 ## Regex-syntax
@@ -195,11 +195,11 @@ I VS Code kan du till exempel använda variabler som `$1`, `$2` och så vidare, 
 [Reguljära språk](https://en.wikipedia.org/wiki/Regular_language) är kraftfulla men begränsade.
 Det finns klasser av strängar som inte kan uttryckas med standardregex (t.ex. är det [inte möjligt](https://en.wikipedia.org/wiki/Pumping_lemma_for_regular_languages) att skriva ett reguljärt uttryck som matchar mängden strängar {a^n b^n \| n &ge; 0}, alltså mängden strängar med ett antal "a" följt av samma antal "b", och mer praktiskt sett är språk som HTML inte reguljära språk).
 I praktiken stöder moderna regex-motorer funktioner som lookahead och backreferences som utökar stödet bortom reguljära språk, och de är extremt användbara i praktiken, men det är viktigt att veta att de fortfarande är begränsade i uttryckskraft.
-För mer avancerade språk kan du behöva använda en kraftfullare typ av parser (se till exempel [pyparsing](https://github.com/pyparsing/pyparsing), en [PEG](https://en.wikipedia.org/wiki/Parsing_expression_grammar)-parser).
+För mer avancerade språk kan du behöva använda en kraftfullare typ av tolk (se till exempel [pyparsing](https://github.com/pyparsing/pyparsing), en [PEG](https://en.wikipedia.org/wiki/Parsing_expression_grammar)-tolk).
 
 ## Lära sig regex
 
-Vi rekommenderar att du lär dig grunderna (det vi har täckt i den här föreläsningen) och sedan tittar i regex-referenser när du behöver dem, i stället för att memorera hela språket.
+Vi rekommenderar att du lär dig grunderna (det vi har täckt i föreläsningen) och sedan tittar i regex-referenser när du behöver dem, i stället för att memorera hela språket.
 
 Samtalsbaserade AI-verktyg kan vara effektiva för att hjälpa dig skapa regex-mönster.
 Prova till exempel att fråga din favorit-LLM med följande fråga:
@@ -213,8 +213,8 @@ Here is an example log line:
 
 # Övningar
 
-1. Konfigurera en formatterare, en linter och pre-commit-hooks för ett projekt du arbetar med.
-   Om du har många fel bör autoformattering ta hand om formateringsfelen.
+1. Konfigurera en formaterare, en linter och pre-commit-krokar för ett projekt du arbetar med.
+   Om du har många fel bör autoformatering ta hand om formateringsfelen.
    För linterfelen kan du prova att använda en [AI-agent]({{ '/2026/agentic-coding/' | relative_url }}) för att fixa alla linterfel.
    Se till att AI-agenten kan köra lintern och observera resultaten, så att den kan arbeta iterativt för att fixa alla problem.
    Granska resultaten noga för att säkerställa att AI inte förstör din kod.
@@ -226,7 +226,7 @@ Here is an example log line:
    Prova att använda en [AI-agent]({{ '/2026/agentic-coding/' | relative_url }}) för att förbättra täckningen.
    Se till att kodagenten kan köra tester med täckning och producera en rad-för-rad-rapport, så att den vet var den ska fokusera.
    Är de AI-genererade testerna faktiskt bra?
-1. Sätt upp kontinuerlig integration som körs vid varje push för ett projekt du arbetar med.
+1. Sätt upp kontinuerlig integration som körs varje gång du skickar kod för ett projekt du arbetar med.
    Låt CI köra formatering, lintning och tester.
    Bryt din kod med flit (t.ex. genom att introducera en linteröverträdelse), och säkerställ att CI fångar det.
 1. Prova att skriva ett [regex-mönster](#reguljära-uttryck) och använd kommandoradsverktyget `grep` [kommandoradsverktyg]({{ '/2026/course-shell/' | relative_url }}) för att hitta förekomster av `subprocess.Popen(..., shell=True)` i din kod.
@@ -237,9 +237,9 @@ Here is an example log line:
 1. Skriv ett regex för att ur JSON-strukturer av formen `{"name": "Alyssa P. Hacker", "college": "MIT"}` fånga namnet (t.ex. `Alyssa P. Hacker` i detta exempel).
    Tips: i ditt första försök kan du råka skriva ett regex som extraherar `Alyssa P. Hacker", "college": "MIT`.
    Läs om giriga kvantifierare i [Python regex-dokumentationen](https://docs.python.org/3/library/re.html) för att förstå hur du fixar det.
-    1. Få regex-mönstret att fungera även när namnet innehåller tecknet `"` (dubbla citattecken kan escapas i JSON med `\"`).
-    1. Vi **rekommenderar inte** att använda reguljära uttryck för avancerade parsningsproblem i praktiken.
-    1. Ta reda på hur du använder ditt programmeringsspråks JSON-parser för denna uppgift.
+    1. Få regex-mönstret att fungera även när namnet innehåller tecknet `"` (dubbla citattecken kan skrivas med undantagstecken i JSON: `\"`).
+    1. Vi **rekommenderar inte** att använda reguljära uttryck för avancerade tolkningsproblem i praktiken.
+    1. Ta reda på hur du använder ditt programmeringsspråks JSON-tolk för denna uppgift.
     1. Skriv ett kommandoradsprogram som tar en JSON-struktur av formen ovan på stdin och skriver ut namnet på stdout.
     1. Du behöver sannolikt bara några få rader kod.
     1. I Python kan du göra det enkelt på en enda rad kod utöver `import json`.

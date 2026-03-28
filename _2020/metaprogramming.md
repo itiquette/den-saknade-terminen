@@ -14,9 +14,9 @@ video:
 
 Vad menar vi med "metaprogrammering"?
 Det var helt enkelt den bästa samlingsterm vi kunde komma på för en uppsättning saker som handlar mer om _process_ än om att skriva kod eller jobba snabbare.
-I den här föreläsningen tittar vi på system för att bygga och testa kod, och för att hantera beroenden.
+I föreläsningen tittar vi på system för att bygga och testa kod, och för att hantera beroenden.
 Det här kan verka ha begränsad betydelse i din vardag som student, men så fort du interagerar med en större kodbas via praktik eller arbetsliv kommer du att se detta överallt.
-Vi bör också nämna att "metaprogrammering" kan betyda "[program som opererar på program](https://en.wikipedia.org/wiki/Metaprogramming)", vilket inte riktigt är den definition vi använder i den här föreläsningen.
+Vi bör också nämna att "metaprogrammering" kan betyda "[program som opererar på program](https://en.wikipedia.org/wiki/Metaprogramming)", vilket inte riktigt är den definition vi använder i föreläsningen.
 
 # Byggsystem
 
@@ -27,7 +27,7 @@ Eller för att kompilera kod från en kurs och sedan köra testerna?
 För de flesta projekt, oavsett om de innehåller kod eller inte, finns en "byggprocess".
 Det är en sekvens av operationer du behöver göra för att gå från indata till utdata.
 Ofta har processen många steg och många grenar.
-Kör detta för att generera den här plottningen, kör det där för att generera de där resultaten, och något annat för att få fram slutartikeln.
+Kör detta för att generera det här diagrammet, kör det där för att generera de där resultaten, och något annat för att få fram slutartikeln.
 Precis som med mycket annat vi sett i kursen är du inte den första som stöter på det här irritationsmomentet, och som tur är finns många verktyg som hjälper.
 
 De kallas vanligtvis "byggsystem", och det finns _många_.
@@ -116,7 +116,7 @@ Vad händer nu om vi kör `make`?
 $ make
 ./plot.py -i data.dat -o plot-data.png
 pdflatex paper.tex
-... lots of output ...
+... massor av utdata ...
 ```
 
 Och där skapades en PDF åt oss.
@@ -150,12 +150,11 @@ Du kan bero på installerade program (som `python`), systempaket (som `openssl`)
 I dag finns de flesta beroenden i ett _kodförråd_ som samlar många beroenden på ett ställe och ger en smidig mekanism för installation.
 Exempel är Ubuntus paketkodförråd för systempaket (som du når via `apt`), RubyGems för Ruby-bibliotek, PyPI för Python-bibliotek och Arch User Repository för användarbidragna Arch-paket.
 
-Eftersom de exakta mekanismerna skiljer sig mycket mellan olika kodförråd och verktyg går vi inte djupt in i något specifikt i den här föreläsningen.
+Eftersom de exakta mekanismerna skiljer sig mycket mellan olika kodförråd och verktyg går vi inte djupt in i något specifikt i föreläsningen.
 Det vi _ska_ gå igenom är viss gemensam terminologi.
 Det första är _versionshantering_.
 De flesta projekt som andra projekt beror på släpper ett _versionsnummer_ vid varje utgåva.
-Ofta ser det ut som 8.1.3 eller 64.1.20192004.
-Det är ofta, men inte alltid, numeriskt.
+Ofta ser det ut som 8.1.3 eller 64.1.20192004. Det är ofta, men inte alltid, numeriskt.
 Versionsnummer fyller flera syften, och ett av de viktigaste är att säkerställa att programvara fortsätter fungera.
 Tänk dig till exempel att jag släpper en ny version av mitt bibliotek där jag bytt namn på en funktion.
 Om någon försöker bygga programvara som beror på biblioteket efter den uppdateringen kan bygget misslyckas eftersom koden anropar en funktion som inte längre finns.
@@ -173,7 +172,7 @@ Reglerna är:
  - Om du _lägger till_ i API:t på ett bakåtkompatibelt sätt, öka minorversionen.
  - Om du ändrar API:t på ett icke bakåtkompatibelt sätt, öka majorversionen.
 
-Detta ger redan stora fördelar.
+Det ger redan stora fördelar.
 Om mitt projekt beror på ditt projekt _bör_ det nu vara säkert att använda senaste utgåva med samma majorversion som jag byggde mot när jag utvecklade, så länge minorversionen är minst lika hög som då.
 Med andra ord: om jag beror på version `1.3.7` av ditt bibliotek _bör_ det vara okej att bygga med `1.3.8`, `1.6.1` eller till och med `1.3.0`.
 Version `2.2.4` är sannolikt inte okej eftersom majorversionen höjts.
@@ -185,8 +184,8 @@ När du arbetar med beroendehanteringssystem kan du också stöta på _låsfiler
 En låsfil är helt enkelt en fil som listar exakt vilka versioner du _just nu_ beror på för varje beroende.
 Vanligtvis måste du uttryckligen köra ett uppdateringskommando för att uppgradera beroenden till nyare versioner.
 Det finns många skäl till det, till exempel att undvika onödiga omkompileringar, få reproducerbara byggen eller undvika automatisk uppgradering till senaste version (som kan vara trasig).
-En extrem variant av denna typ av beroendelåsning är _vendoring_ (att checka in beroenden), där du kopierar in all kod från dina beroenden i ditt eget projekt.
-Det ger total kontroll över ändringar och låter dig göra egna modifieringar, men betyder också att du aktivt måste dra in uppdateringar från förvaltare av ursprungsprojektet över tid.
+En extrem variant av denna typ av beroendelåsning är _beroendeinbäddning_ (vendoring), där du kopierar in all kod från dina beroenden i ditt eget projekt.
+Det ger total kontroll över ändringar och låter dig göra egna modifieringar, men betyder också att du aktivt måste dra in uppdateringar från de ansvariga för ursprungsprojektet över tid.
 
 # System för kontinuerlig integration
 
@@ -199,14 +198,14 @@ Kontinuerlig integration, eller CI, är ett paraplybegrepp för "saker som körs
 Några stora aktörer är Travis CI, Azure Pipelines och GitHub Actions.
 Alla fungerar ungefär likadant.
 Du lägger till en fil i kodförrådet som beskriver vad som ska hända när olika saker händer i kodförrådet.
-Det vanligaste är en regel i stil med "när någon pushar kod, kör testsviten".
+Det vanligaste är en regel i stil med "när någon skickar kod, kör testsviten".
 När händelsen triggas startar CI-leverantören en eller flera virtuella maskiner, kör kommandona i ditt "recept" och sparar sedan vanligtvis resultatet någonstans.
-Du kan till exempel sätta upp notiser när testsviten börjar fallera, eller en liten badge i kodförrådet så länge testerna går igenom.
+Du kan till exempel sätta upp notiser när testsviten börjar misslyckas, eller en liten badge i kodförrådet så länge testerna går igenom.
 
 Som exempel på CI är kursens webbplats uppsatt med GitHub Pages.
-Pages är en CI-åtgärd som kör Jekyll på varje push till `master` och publicerar den byggda sajten på en viss GitHub-domän.
+Pages är en CI-åtgärd som kör Jekyll varje gång kod skickas till `master` och publicerar den byggda sajten på en viss GitHub-domän.
 Det gör det väldigt enkelt för oss att uppdatera webbplatsen.
-Vi gör ändringar lokalt, incheckar med Git och pushar.
+Vi gör ändringar lokalt, checkar in till Git och skickar.
 CI sköter resten.
 
 ## En kort utvikning om testning
@@ -235,7 +234,7 @@ Du kanske redan känner till grundidén med testning, men vi tänkte snabbt näm
      För varje variant (caret, tilde, wildcard, comparison och multiple), försök hitta ett användningsfall där just den typen av krav är rimlig.
   3. Git kan fungera som ett enkelt CI-system i sig.
      I `.git/hooks` i valfritt git-kodförråd hittar du filer (just nu inaktiva) som körs som skript när en viss händelse inträffar.
-     Skriv en [`pre-commit`](https://git-scm.com/docs/githooks#_pre_commit)-hook som kör `make paper.pdf` och vägrar incheckningen om `make` misslyckas.
+     Skriv en [`pre-commit`](https://git-scm.com/docs/githooks#_pre_commit)-krok som kör `make paper.pdf` och vägrar incheckningen om `make` misslyckas.
      Det ska förhindra incheckningar med en obar byggversion av artikeln.
   4. Sätt upp en enkel sida som autopubliceras med [GitHub Pages](https://pages.github.com/).
      Lägg till en [GitHub Action](https://github.com/features/actions) i kodförrådet som kör `shellcheck` på alla skalfiler i kodförrådet (här är [ett sätt att göra det](https://github.com/marketplace/actions/shellcheck)).

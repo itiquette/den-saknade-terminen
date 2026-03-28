@@ -11,10 +11,10 @@ video:
   id: 2sjqTHE0zok
 ---
 
-Versionshanteringssystem (VCS:er) är verktyg som används för att spåra ändringar i källkod (eller andra samlingar av filer och mappar).
+Versionshanteringssystem (VCS:er) är verktyg som används för att spåra ändringar i källkod (eller andra samlingar av filer och kataloger).
 Som namnet antyder hjälper dessa verktyg till att bevara en historik över ändringar.
 Dessutom underlättar de samarbete.
-VCS:er spårar ändringar i en mapp och dess innehåll som en serie ögonblicksbilder (_snapshots_), där varje ögonblicksbild kapslar in hela tillståndet för filer och mappar inom en toppnivåkatalog.
+VCS:er spårar ändringar i en katalog och dess innehåll som en serie ögonblicksbilder (_snapshots_), där varje ögonblicksbild kapslar in hela tillståndet för filer och kataloger inom en toppnivåkatalog.
 VCS:er lagrar också metadata som vem som skapade varje ögonblicksbild, meddelanden kopplade till den och så vidare.
 
 Varför är versionshantering användbart?
@@ -30,11 +30,11 @@ Moderna VCS:er låter dig också enkelt (och ofta automatiskt) svara på frågor
 - Under de senaste 1000 revisionerna, när/varför slutade ett visst enhetstest att fungera?
 
 Även om det finns andra VCS:er är **Git** i praktiken standarden för versionshantering.
-Den här [XKCD-serien](https://xkcd.com/1597/) fångar Gits rykte:
+Den här [XKCD-serien](https://xkcd.com/1597/) beskriver Git på ett träffande sätt:
 
 ![xkcd 1597](https://imgs.xkcd.com/comics/git.png)
 
-Eftersom Gits gränssnitt är en läckande abstraktion kan det bli förvirrande att lära sig Git uppifrån och ner (med start i kommandoraden).
+Eftersom Gits gränssnitt är en läckande abstraktion kan det vara förvirrande att lära sig Git uppifrån och ner (med start i kommandoraden).
 Det går att memorera en handfull kommandon och behandla dem som magiska trollformler, och följa tillvägagångssättet i serien ovan när något går fel.
 
 Även om Git onekligen har ett fult gränssnitt är den underliggande designen och idéerna vackra.
@@ -49,8 +49,8 @@ Git har en välgenomtänkt modell som möjliggör alla fina funktioner i version
 
 ## Ögonblicksbilder {#snapshots}
 
-Git modellerar historiken för en samling filer och mappar inom någon toppnivåkatalog som en serie ögonblicksbilder.
-I Git-terminologi kallas en fil en "blob", och den är bara en hög med byte.
+Git modellerar historiken för en samling filer och kataloger i en toppnivåkatalog som en serie ögonblicksbilder.
+I Git-terminologi kallas en fil en "blob", och den är bara en samling av byte.
 En katalog representeras av ett trädobjekt (`tree`), som mappar namn till blobbar eller andra trädobjekt (så kataloger kan innehålla andra kataloger).
 En ögonblicksbild är det toppnivåträdobjekt (`tree`) som spåras.
 Till exempel kan vi ha ett träd enligt följande:
@@ -92,15 +92,12 @@ o <-- o <-- o <-- o
 I ASCII-bilden ovan motsvarar `o`:na individuella incheckningar (ögonblicksbilder).
 Pilarna pekar på föräldern till varje incheckning (det är en "kommer före"-relation, inte "kommer efter").
 Efter den tredje incheckningen delar historiken upp sig i två separata grenar.
-Detta kan till exempel motsvara två separata funktioner som utvecklas parallellt, oberoende av varandra.
+Det kan till exempel motsvara två separata funktioner som utvecklas parallellt, oberoende av varandra.
 I framtiden kan dessa grenar slås samman för att skapa en ny ögonblicksbild som innehåller båda funktionerna, och ge en ny historik som ser ut så här, med den nyskapade incheckningen för sammanslagningen i fetstil:
 
 <pre class="highlight">
 <code>
-o <-- o <-- o <-- o <---- <strong>o</strong>
-            ^            /
-             \          v
-              --- o <-- o
+o <-- o <-- o <-- o <---- <strong>o</strong> ^ / \ v --- o <-- o
 </code>
 </pre>
 
@@ -113,13 +110,13 @@ Det betyder bara att "redigeringar" av incheckningshistoriken i själva verket s
 Det kan vara lärorikt att se Gits datamodell nedskriven i pseudokod:
 
 ```
-// a file is a bunch of bytes
+// en fil är en samling byte
 type blob = array<byte>
 
-// a directory contains named files and directories
+// en katalog innehåller namngivna filer och kataloger
 type tree = map<string, tree | blob>
 
-// a commit has parents, metadata, and the top-level tree
+// en incheckning har föräldrar, metadata och toppnivåträdet
 type commit = struct {
     parents: array<commit>
     author: string
@@ -212,7 +209,7 @@ Alla `git`-kommandon motsvarar någon manipulation av DAG:en för incheckningar 
 Varje gång du skriver ett kommando, tänk på vilken manipulation kommandot gör i den underliggande grafdatastrukturen.
 Omvänt, om du försöker göra en viss förändring i DAG:en för incheckningar, t.ex. "kasta bort icke-incheckade ändringar och låt refen 'master' peka på incheckningen `5d83f9e`", finns det sannolikt ett kommando för det (t.ex. i detta fall `git checkout master; git reset --hard 5d83f9e`).
 
-# Mellanlager
+# Köytan (staging area)
 
 Det här är ett annat koncept som ligger vid sidan av datamodellen, men som ändå är en del av gränssnittet för att skapa incheckningar.
 
@@ -228,7 +225,7 @@ Git hanterar sådana scenarier genom att låta dig specificera vilka modifiering
 # Git-kommandoradsgränssnitt
 
 För att undvika att duplicera information kommer vi inte förklara kommandona nedan i detalj i dessa föreläsningsanteckningar.
-Se den varmt rekommenderade [Pro Git](https://git-scm.com/book/en/v2) för mer information, eller titta på föreläsningsvideon.
+Se den varmt rekommenderade [Pro Git](https://git-scm.com/book/sv/v2) för mer information, eller titta på föreläsningsvideon.
 
 ## Grunder
 
@@ -254,8 +251,8 @@ Hur ska vi tolka den här utdata?
 Låt oss ändra på det.
 
 ```console
-$ echo "hello, git" > hello.txt
-$ git add hello.txt
+$ echo "hej, git" > hej.txt
+$ git add hej.txt
 $ git status
 On branch master
 
@@ -264,12 +261,12 @@ No commits yet
 Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
 
-        new file:   hello.txt
+        new file:   hej.txt
 
 $ git commit -m 'Initial commit'
 [master (root-commit) 4515d17] Initial commit
  1 file changed, 1 insertion(+)
- create mode 100644 hello.txt
+ create mode 100644 hej.txt
 ```
 
 Här har vi lagt till en fil i indexet med `git add`, och sedan gjort en incheckning med `git commit` med det enkla meddelandet "Initial commit".
@@ -295,23 +292,23 @@ Det här ser inte särskilt grafiskt ut eftersom det bara innehåller en nod.
 Låt oss göra fler ändringar, skapa en ny incheckning och visualisera historiken igen.
 
 ```console
-$ echo "another line" >> hello.txt
+$ echo "en rad till" >> hej.txt
 $ git status
 On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
 
-        modified:   hello.txt
+        modified:   hej.txt
 
 no changes added to commit (use "git add" and/or "git commit -a")
-$ git add hello.txt
+$ git add hej.txt
 $ git status
 On branch master
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
-        modified:   hello.txt
+        modified:   hej.txt
 
 $ git commit -m 'Add a line'
 [master 35f60a8] Add a line
@@ -352,52 +349,52 @@ do so (now or later) by using -b with the checkout command again. Example:
   git checkout -b <new-branch-name>
 
 HEAD is now at 4515d17 Initial commit
-$ cat hello.txt
-hello, git
+$ cat hej.txt
+hej, git
 $ git checkout master
 Previous HEAD position was 4515d17 Initial commit
 Switched to branch 'master'
-$ cat hello.txt
-hello, git
-another line
+$ cat hej.txt
+hej, git
+en rad till
 ```
 
 Git kan visa hur filer utvecklats (skillnader, eller diffs) med kommandot `git diff`:
 
 ```console
-$ git diff 4515d17 hello.txt
-diff --git c/hello.txt w/hello.txt
+$ git diff 4515d17 hej.txt
+diff --git c/hej.txt w/hej.txt
 index 94bab17..f0013b2 100644
---- c/hello.txt
-+++ w/hello.txt
+--- c/hej.txt
++++ w/hej.txt
 @@ -1 +1,2 @@
- hello, git
- +another line
+ hej, git
+ +en rad till
 ```
 
 {% endcomment %}
 
-- `git help <command>`: få hjälp för ett git-kommando
+- `git help <kommando>`: få hjälp för ett git-kommando
 - `git init`: skapar ett nytt git-kodförråd, med data lagrad i katalogen `.git`
 - `git status`: berättar vad som pågår
-- `git add <filename>`: lägger till filer i indexet
+- `git add <filnamn>`: lägger till filer i indexet
 - `git commit`: skapar en ny incheckning
     - Skriv [bra incheckningsmeddelanden](https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)!
     - Ännu fler skäl att skriva [bra incheckningsmeddelanden](https://chris.beams.io/posts/git-commit/)!
 - `git log`: visar en tillplattad historiklogg
 - `git log --all --graph --decorate`: visualiserar historiken som en DAG
-- `git diff <filename>`: visa ändringar du gjort relativt till indexet
-- `git diff <revision> <filename>`: visar skillnader i en fil mellan ögonblicksbilder
+- `git diff <filnamn>`: visa ändringar du gjort relativt till indexet
+- `git diff <revision> <filnamn>`: visar skillnader i en fil mellan ögonblicksbilder
 - `git checkout <revision>`: uppdaterar HEAD (och aktuell gren om du checkar ut en gren)
 
 ## Grenar och sammanslagning
 
 {% comment %}
 
-Grenar låter dig "gaffla" versionshistoriken.
+Grenar låter dig avgrena versionshistoriken.
 Det kan vara användbart för att arbeta på oberoende funktioner eller felrättningar parallellt.
 Kommandot `git branch` kan användas för att skapa nya grenar.
-`git checkout -b <branch name>` skapar en gren och checkar ut den.
+`git checkout -b <grennamn>` skapar en gren och checkar ut den.
 
 Sammanslagning är motsatsen till att dela upp historiken i grenar.
 Det låter dig kombinera versionshistoriker från olika grenar, t.ex. slå samman en funktionsgren tillbaka in i master.
@@ -406,9 +403,9 @@ Kommandot `git merge` används för sammanslagning.
 {% endcomment %}
 
 - `git branch`: visar grenar
-- `git branch <name>`: skapar en gren
-- `git checkout -b <name>`: skapar en gren och växlar till den
-    - samma som `git branch <name>; git checkout <name>`
+- `git branch <namn>`: skapar en gren
+- `git checkout -b <namn>`: skapar en gren och växlar till den
+    - samma som `git branch <namn>; git checkout <namn>`
 - `git merge <revision>`: slår samman med aktuell gren
 - `git mergetool`: använd ett avancerat verktyg för att hjälpa till att lösa sammanslagningskonflikter
 - `git rebase`: basera om en uppsättning patchar på en ny bas
@@ -416,9 +413,9 @@ Kommandot `git merge` används för sammanslagning.
 ## Fjärrförråd
 
 - `git remote`: lista fjärrförråd
-- `git remote add <name> <url>`: lägg till ett fjärrförråd
-- `git push <remote> <local branch>:<remote branch>`: skicka objekt till fjärrförråd och uppdatera fjärrreferens
-- `git branch --set-upstream-to=<remote>/<remote branch>`: sätt upp koppling mellan lokal och fjärrgren
+- `git remote add <namn> <url>`: lägg till ett fjärrförråd
+- `git push <fjärrförråd> <lokal gren>:<fjärrgren>`: skicka objekt till fjärrförråd och uppdatera fjärrreferens
+- `git branch --set-upstream-to=<fjärrförråd>/<fjärrgren>`: sätt upp koppling mellan lokal och fjärrgren
 - `git fetch`: hämta objekt/referenser från ett fjärrförråd
 - `git pull`: samma som `git fetch; git merge`
 - `git clone`: klona kodförråd från fjärrförråd
@@ -426,14 +423,14 @@ Kommandot `git merge` används för sammanslagning.
 ## Ångra
 
 - `git commit --amend`: redigera en inchecknings innehåll eller meddelande
-- `git reset HEAD <file>`: avstaga en fil
-- `git checkout -- <file>`: kasta bort ändringar
+- `git reset HEAD <fil>`: avköa en fil
+- `git checkout -- <fil>`: kasta bort ändringar
 
 # Avancerad Git
 
 - `git config`: Git är [mycket anpassningsbart](https://git-scm.com/docs/git-config)
 - `git clone --depth=1`: ytlig klon, utan hela versionshistoriken
-- `git add -p`: interaktiv mellanlagring
+- `git add -p`: lägg till interaktivt på köytan
 - `git rebase -i`: interaktiv ombasering
 - `git blame`: visa vem som senast redigerade vilken rad
 - `git stash`: ta tillfälligt bort modifieringar i arbetskatalogen
@@ -444,7 +441,7 @@ Kommandot `git merge` används för sammanslagning.
 
 - **Grafiska gränssnitt**: det finns många [GUI-klienter](https://git-scm.com/downloads/guis) för Git.
   Vi använder dem inte personligen utan föredrar kommandoraden.
-- **Skalintegration**: det är väldigt praktiskt att ha Git-status som en del av skalprompten ([zsh](https://github.com/olivierverdier/zsh-git-prompt), [bash](https://github.com/magicmonty/bash-git-prompt)).
+- **Skalintegration**: det är väldigt praktiskt att visa Git-status som en del av skalprompten ([zsh](https://github.com/olivierverdier/zsh-git-prompt), [bash](https://github.com/magicmonty/bash-git-prompt)).
   Detta ingår ofta i ramverk som [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh).
 - **Redigerarintegration**: liknande ovan, praktiska integrationer med många funktioner.
   [fugitive.vim](https://github.com/tpope/vim-fugitive) är standardalternativet för Vim.
@@ -468,7 +465,7 @@ Kommandot `git merge` används för sammanslagning.
 
 # Övningar
 
-1. Om du inte har tidigare erfarenhet av Git, prova antingen att läsa de första kapitlen av [Pro Git](https://git-scm.com/book/en/v2) eller gå igenom en handledning som [Learn Git Branching](https://learngitbranching.js.org/).
+1. Om du inte har tidigare erfarenhet av Git, prova antingen att läsa de första kapitlen av [Pro Git](https://git-scm.com/book/sv/v2) eller gå igenom en handledning som [Learn Git Branching](https://learngitbranching.js.org/).
    När du arbetar igenom den, koppla Git-kommandon till datamodellen.
 1. Klona [kodförrådet för kursens webbplats](https://github.com/missing-semester/missing-semester).
     1. Utforska versionshistoriken genom att visualisera den som en graf.
@@ -493,4 +490,4 @@ Kommandot `git merge` används för sammanslagning.
    Sätt upp din globala gitignore-fil så att den ignorerar OS-specifika eller redigerarspecifika temporära filer, som `.DS_Store`.
 1. Skapa en avgrening av [kodförrådet för kursens webbplats](https://github.com/missing-semester/missing-semester), hitta ett stavfel eller någon annan förbättring du kan göra, och skicka en ändringsförfrågan (PR) på GitHub (du kanske vill titta på [detta](https://github.com/firstcontributions/first-contributions)).
    Skicka bara ändringsförfrågningar som är användbara (spamma oss inte, tack!).
-   Om du inte hittar någon förbättring att göra kan du hoppa över den här övningen.
+   Om du inte hittar någon förbättring att göra kan du hoppa över övningen.

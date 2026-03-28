@@ -13,13 +13,13 @@ video:
 
 En gyllene regel inom programmering är att kod inte gör det du förväntar dig att den ska göra, utan det du säger åt den att göra.
 Att överbrygga den luckan kan ibland vara ganska svårt.
-I den här föreläsningen går vi igenom användbara tekniker för att hantera felaktig och resurshungrig kod: felsökning och profilering.
+I föreläsningen går vi igenom användbara tekniker för att hantera felaktig och resurshungrig kod: felsökning och profilering.
 
 # Felsökning (debugging)
 
 ## Printf-felsökning och loggning
 
-"The most effective debugging tool is still careful thought, coupled with judiciously placed print statements" — Brian Kernighan, _Unix for Beginners_.
+"Det effektivaste felsökningsverktyget är fortfarande eftertanke, i kombination med välplacerade utskriftssatser" — Brian Kernighan, _Unix for Beginners_.
 
 Ett första sätt att felsöka ett program är att lägga till utskriftssatser kring där du upptäckt problemet, och fortsätta iterera tills du extraherat tillräcklig information för att förstå vad som orsakar felet.
 
@@ -44,11 +44,11 @@ $ python logger.py color
 ```
 
 Ett av mina favorittips för mer läsbara loggar är att färgkoda dem.
-Vid det här laget har du troligen märkt att terminalen använder färger för att göra saker mer läsbara.
+Nu har du troligen märkt att terminalen använder färger för att göra saker mer läsbara.
 Men hur gör den det?
-Program som `ls` eller `grep` använder [ANSI-escapekoder](https://en.wikipedia.org/wiki/ANSI_escape_code), som är särskilda teckensekvenser för att tala om för skalet att ändra färg på utdata.
+Program som `ls` eller `grep` använder [ANSI-kontrollkoder](https://en.wikipedia.org/wiki/ANSI_escape_code), som är särskilda teckensekvenser för att tala om för skalet att ändra färg på utdata.
 Till exempel skriver `echo -e "\e[38;2;255;0;0mDet här är rött\e[0m"` ut meddelandet `Det här är rött` i rött i terminalen, så länge terminalen stödjer [äkta färg (true color)](https://github.com/termstandard/colors#truecolor-support-in-output-devices).
-Om din terminal inte stödjer det (t.ex. macOS Terminal.app) kan du använda mer universellt stödda escapekoder för 16 färger, till exempel `echo -e "\e[31;1mDet här är rött\e[0m"`.
+Om din terminal inte stödjer det (t.ex. macOS Terminal.app) kan du använda mer allmänt stödda kontrollkoder för 16 färger, till exempel `echo -e "\e[31;1mDet här är rött\e[0m"`.
 
 Skriptet nedan visar hur man skriver ut många RGB-färger i terminalen (igen, så länge äkta färg stöds).
 
@@ -73,7 +73,7 @@ Som tur är skriver de flesta program sina egna loggar någonstans i systemet.
 I UNIX-system är det vanligt att program skriver loggar under `/var/log`.
 Till exempel placerar webbservern [NGINX](https://www.nginx.com/) sina loggar under `/var/log/nginx`.
 På senare tid har system också börjat använda en **systemlogg**, som i allt högre grad är platsen där alla loggmeddelanden hamnar.
-De flesta (men inte alla) Linux-system använder `systemd`, en systemdaemon som styr många delar av systemet, som vilka tjänster som är aktiverade och körs.
+De flesta (men inte alla) Linux-system använder `systemd`, en systemdemon som styr många delar av systemet, som vilka tjänster som är aktiverade och körs.
 `systemd` lägger loggar under `/var/log/journal` i ett specialformat, och du kan använda kommandot [`journalctl`](https://www.man7.org/linux/man-pages/man1/journalctl.1.html) för att visa meddelandena.
 På macOS finns fortfarande `/var/log/system.log`, men fler och fler verktyg använder systemloggen som kan visas med [`log show`](https://www.manpagez.com/man/1/log/).
 På de flesta UNIX-system kan du också använda [`dmesg`](https://www.man7.org/linux/man-pages/man1/dmesg.1.html) för att komma åt kärnloggen.
@@ -83,11 +83,11 @@ Här är ett exempel på att använda `logger` och kontrollera att posten hamnat
 Dessutom har de flesta programspråk bindningar för loggning till systemloggen.
 
 ```bash
-logger "Hello Logs"
+logger "Hej loggar"
 # På macOS
-log show --last 1m | grep Hello
+log show --last 1m | grep Hej
 # På Linux
-journalctl --since "1m ago" | grep Hello
+journalctl --since "1m ago" | grep Hej
 ```
 
 Som vi såg i föreläsningen om datahantering kan loggar vara väldigt utförliga och kräva viss bearbetning och filtrering för att få fram rätt information.
@@ -142,11 +142,11 @@ De är optimerade för felsökning av C-liknande språk men låter dig undersök
 
 ## Specialiserade verktyg
 
-Även om det du försöker felsöka är en black-box-binär finns verktyg som kan hjälpa.
+Även om det du försöker felsöka är en svart-låda-binär finns verktyg som kan hjälpa.
 När program behöver utföra åtgärder som bara kärnan kan göra använder de [systemanrop](https://en.wikipedia.org/wiki/System_call).
 Det finns kommandon som låter dig spåra vilka systemanrop programmet gör.
 I Linux finns [`strace`](https://www.man7.org/linux/man-pages/man1/strace.1.html), och i macOS/BSD finns [`dtrace`](https://dtrace.org/about/).
-`dtrace` kan vara svårt att använda eftersom det använder sitt eget språk, `D`, men det finns en wrapper som heter [`dtruss`](https://www.manpagez.com/man/1/dtruss/) och ger ett gränssnitt mer likt `strace` (mer detaljer [här](https://8thlight.com/blog/colin-jones/2015/11/06/dtrace-even-better-than-strace-for-osx.html)).
+`dtrace` kan vara svårt att använda eftersom det använder sitt eget språk, `D`, men det finns ett omslutarprogram som heter [`dtruss`](https://www.manpagez.com/man/1/dtruss/) och ger ett gränssnitt mer likt `strace` (mer detaljer [här](https://8thlight.com/blog/colin-jones/2015/11/06/dtrace-even-better-than-strace-for-osx.html)).
 
 Nedan följer exempel på hur `strace` eller `dtruss` används för att visa spårning av systemanropet [`stat`](https://www.man7.org/linux/man-pages/man2/stat.2.html) vid körning av `ls`.
 För en djupare genomgång av `strace` är [den här artikeln](https://blogs.oracle.com/linux/strace-the-sysadmins-microscope-v2) och [det här zinet](https://jvns.ca/strace-zine-unfolded.pdf) bra läsning.
@@ -161,7 +161,7 @@ sudo dtruss -t lstat64_extended ls -l > /dev/null
 I vissa situationer kan du behöva titta på nätverkspaket för att förstå felet i programmet.
 Verktyg som [`tcpdump`](https://www.man7.org/linux/man-pages/man1/tcpdump.1.html) och [Wireshark](https://www.wireshark.org/) är paketanalysverktyg som låter dig läsa innehållet i nätverkspaket och filtrera dem med olika kriterier.
 
-För webbutveckling är utvecklarverktygen i Chrome/Firefox mycket praktiska.
+För webbutveckling är utvecklarverktygen i Chrome/Firefox praktiska.
 De har ett stort antal verktyg, inklusive:
 - Källkod - inspektera HTML/CSS/JS-källkod för vilken webbplats som helst.
 - Live-redigering av HTML, CSS och JS - ändra innehåll, stil och beteende för att testa (du kan själv se att skärmdumpar av webbplatser inte är giltiga bevis).
@@ -172,12 +172,12 @@ De har ett stort antal verktyg, inklusive:
 ## Statisk analys
 
 För vissa problem behöver du inte köra någon kod alls.
-Till exempel kan du, bara genom att noggrant läsa kod, upptäcka att loopvariabeln skuggar ett redan existerande variabel- eller funktionsnamn, eller att ett program läser en variabel innan den definierats.
+Till exempel kan du, bara genom att noggrant läsa kod, upptäcka att slingvariabeln skuggar ett redan existerande variabel- eller funktionsnamn, eller att ett program läser en variabel innan den definierats.
 Det är här verktyg för [statisk analys](https://en.wikipedia.org/wiki/Static_program_analysis) kommer in.
 Program för statisk analys tar källkod som indata och analyserar den med kodregler för att resonera om korrekthet.
 
 I följande Python-exempel finns flera misstag.
-Först skuggar loopvariabeln `foo` den tidigare definitionen av funktionen `foo`.
+Först skuggar slingvariabeln `foo` den tidigare definitionen av funktionen `foo`.
 Vi skrev också `baz` i stället för `bar` på sista raden, så programmet kraschar efter `sleep`-anropet (som tar en minut).
 
 ```python
@@ -194,7 +194,7 @@ time.sleep(60)
 print(baz)
 ```
 
-Verktyg för statisk analys kan identifiera den här typen av problem.
+Verktyg för statisk analys kan identifiera den typen av problem.
 När vi kör [`pyflakes`](https://pypi.org/project/pyflakes) på koden får vi fel kopplade till båda programfelen.
 [`mypy`](https://mypy-lang.org/) är ett annat verktyg som kan upptäcka typkontrollproblem.
 Här varnar `mypy` för att `bar` först är en `int` och sedan castas till `float`.
@@ -215,13 +215,13 @@ Found 3 errors in 1 file (checked 1 source file)
 I föreläsningen om skalverktyg tog vi upp [`shellcheck`](https://www.shellcheck.net/), som är ett liknande verktyg för skalskript.
 
 De flesta redigerare och IDE:er kan visa utdata från dessa verktyg direkt i redigeraren och markera varningar och fel.
-Detta kallas ofta **lintning** och kan också användas för andra typer av problem, som stilavvikelser eller osäkra konstruktioner.
+Det kallas ofta **lintning** och kan också användas för andra typer av problem, som stilavvikelser eller osäkra konstruktioner.
 
 I Vim kan insticksmodulerna [`ale`](https://vimawesome.com/plugin/ale) eller [`syntastic`](https://vimawesome.com/plugin/syntastic) ge den funktionen.
 För Python är [`pylint`](https://github.com/PyCQA/pylint) och [`pep8`](https://pypi.org/project/pep8/) exempel på stil-linters, och [`bandit`](https://pypi.org/project/bandit/) är ett verktyg för att hitta vanliga säkerhetsproblem.
 För andra språk har människor sammanställt omfattande listor över användbara verktyg för statisk analys, till exempel [Awesome Static Analysis](https://github.com/mre/awesome-static-analysis) (du kan titta på avsnittet _Writing_), och för linters finns [Awesome Linters](https://github.com/caramelomartins/awesome-linters).
 
-Ett komplement till stil-lintning är kodformatterare, som [`black`](https://github.com/psf/black) för Python, `gofmt` för Go, `rustfmt` för Rust eller [`prettier`](https://prettier.io/) för JavaScript, HTML och CSS.
+Ett komplement till stil-lintning är kodformaterare, som [`black`](https://github.com/psf/black) för Python, `gofmt` för Go, `rustfmt` för Rust eller [`prettier`](https://prettier.io/) för JavaScript, HTML och CSS.
 Dessa verktyg autoformaterar koden så att den följer vanliga stilkonventioner för det aktuella språket.
 Även om du kanske inte vill ge upp stilkontroll över koden hjälper standardiserat format andra att läsa din kod och gör dig bättre på att läsa andras (stilmässigt standardiserade) kod.
 
@@ -229,10 +229,10 @@ Dessa verktyg autoformaterar koden så att den följer vanliga stilkonventioner 
 
 Även om koden fungerar som väntat kanske det inte räcker om den samtidigt slukar all CPU eller allt minne.
 Algoritmkurser lär ofta ut big _O_-notation men inte hur man hittar flaskhalsar i program.
-Eftersom [premature optimization is the root of all evil](https://wiki.c2.com/?PrematureOptimization) bör du lära dig både profileringsverktyg och övervakningsverktyg.
+Eftersom [för tidig optimering är roten till allt ont](https://wiki.c2.com/?PrematureOptimization) bör du lära dig både profileringsverktyg och övervakningsverktyg.
 De hjälper dig att förstå vilka delar av programmet som tar mest tid och resurser, så att du kan fokusera optimering där den spelar roll.
 
-## Timing
+## Tidmätning
 
 Precis som i felsökningsfallet räcker det i många scenarier att bara skriva ut tiden som koden tog mellan två punkter.
 Här är ett exempel i Python med modulen [`time`](https://docs.python.org/3/library/time.html).
@@ -245,22 +245,22 @@ n = random.randint(1, 10) * 100
 start = time.time()
 
 # Gör lite arbete
-print("Sleeping for {} ms".format(n))
+print("Vilar i {} ms".format(n))
 time.sleep(n/1000)
 
 # Beräkna tid mellan start och nu
 print(time.time() - start)
 
 # Exempelutdata
-# Sleeping for 500 ms
+# Vilar i 500 ms
 # 0.5713930130004883
 ```
 
-Väggklocktid kan dock vara missvisande eftersom datorn kan köra andra processer samtidigt eller vänta på händelser.
+Förfluten tid kan dock vara missvisande eftersom datorn kan köra andra processer samtidigt eller vänta på händelser.
 Det är vanligt att verktyg skiljer på _Real_, _User_ och _Sys_ tid.
 Generellt visar _User_ + _Sys_ hur mycket tid processen faktiskt spenderade på CPU:n (mer förklaring [här](https://stackoverflow.com/questions/556405/what-do-real-user-and-sys-mean-in-the-output-of-time1)).
 
-- _Real_ - Väggklocktid från start till slut, inklusive tid som tas av andra processer och blockeringstid (t.ex. väntan på I/O eller nätverk).
+- _Real_ - Förfluten tid från start till slut, inklusive tid som tas av andra processer och blockeringstid (t.ex. väntan på I/O eller nätverk).
 - _User_ - Tid i CPU:n för användarkod.
 - _Sys_ - Tid i CPU:n för kärnkod.
 
@@ -279,14 +279,13 @@ sys     0m0.012s
 
 ### CPU
 
-Oftast när folk säger _profilerare_ menar de egentligen _CPU-profilerare_, som är vanligast.
-Det finns två huvudtyper av CPU-profilerare: _spårning_ och _sampling_.
-Spårningsprofilerare behåller en logg över varje funktionsanrop programmet gör, medan samplingsprofilerare provar programmet periodiskt (vanligen varje millisekund) och spelar in programmets stack.
+Oftast när folk säger _profilerare_ menar de egentligen _CPU-profilerare_, som är vanligast. Det finns två huvudtyper av CPU-profilerare: _spårning_ och _sampling_.
+Spårningsprofilerare behåller en logg över varje funktionsanrop programmet gör, medan samplingsprofilerare provar programmet med jämna mellanrum (vanligen varje millisekund) och spelar in programmets stack.
 De använder dessa data för att presentera aggregerad statistik över vad programmet lagt mest tid på.
 [Här](https://jvns.ca/blog/2017/12/17/how-do-ruby---python-profilers-work-) finns en bra introduktion om du vill ha mer detaljer.
 
 De flesta programmeringsspråk har någon kommandoradsprofilerare du kan använda för att analysera kod.
-De integreras ofta med fullfjädrade IDE:er, men i den här föreläsningen fokuserar vi på kommandoradsverktygen.
+De integreras ofta med fullfjädrade IDE:er, men i föreläsningen fokuserar vi på kommandoradsverktygen.
 
 I Python kan vi använda modulen `cProfile` för att profilera tid per funktionsanrop.
 Här är ett enkelt exempel som implementerar en rudimentär grep i Python:
@@ -315,12 +314,12 @@ if __name__ == '__main__':
 
 Vi kan profilera den här koden med kommandot nedan.
 Om vi analyserar utdata ser vi att I/O tar mest tid och att kompilering av regex också tar en del tid.
-Eftersom regex bara behöver kompileras en gång kan vi flytta ut det ur loopen.
+Eftersom regex bara behöver kompileras en gång kan vi flytta ut det ur slingan.
 
 ```
 $ python -m cProfile -s tottime grep.py 1000 '^(import|\s*def)[^,]*$' *.py
 
-[omitted program output]
+[utelämnad programutdata]
 
  ncalls  tottime  percall  cumtime  percall filename:lineno(function)
      8000    0.266    0.000    0.292    0.000 {built-in method io.open}
@@ -340,7 +339,7 @@ En invändning mot Pythons `cProfile` (och många profilerare) är att de visar 
 Det kan snabbt bli ointuitivt, särskilt när du använder tredjepartsbibliotek eftersom interna anrop också räknas.
 Ett mer intuitivt sätt att visa profileringsdata är tid per kodrad, vilket är vad radprofilerare (_line profilers_) gör.
 
-Till exempel gör följande Python-kod en förfrågan till kurswebbplatsen och parsar svaret för att hämta alla URL:er på sidan:
+Till exempel gör följande Python-kod en förfrågan till kurswebbplatsen och tolkar svaret för att hämta alla URL:er på sidan:
 
 ```python
 #!/usr/bin/env python
@@ -389,7 +388,7 @@ Line #  Hits         Time  Per Hit   % Time  Line Contents
 I språk som C eller C++ kan minnesläckor göra att programmet aldrig frigör minne som det inte längre behöver.
 För att hjälpa vid minnesfelsökning kan du använda verktyg som [Valgrind](https://valgrind.org/) som hjälper dig att hitta minnesläckor.
 
-I språk med garbage collection, som Python, är minnesprofilerare fortfarande användbara, eftersom objekt inte samlas upp så länge du har referenser till dem.
+I språk med skräpsamling, som Python, är minnesprofilerare fortfarande användbara, eftersom objekt inte samlas upp så länge du har referenser till dem.
 Här är ett exempelprogram och dess utdata när det körs med [memory-profiler](https://pypi.org/project/memory-profiler/) (notera dekoratorn, liksom i `line-profiler`).
 
 ```python
@@ -437,13 +436,13 @@ Därför finns många verktyg för att visa profileringsutdata på ett lättare 
 Ett vanligt sätt att visa CPU-profileringsdata för samplingsprofilerare är [flamdiagram (flame graph)](https://www.brendangregg.com/flamegraphs.html), som visar en hierarki av funktionsanrop längs Y-axeln och tidsåtgång proportionellt längs X-axeln.
 De är också interaktiva, så du kan zooma in i specifika delar av programmet och se stackspår (prova att klicka i bilden nedan).
 
-[![FlameGraph](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)
+[![Flamdiagram](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)](https://www.brendangregg.com/FlameGraphs/cpu-bash-flamegraph.svg)
 
 Anropsgrafer (call graphs) eller kontrollflödesgrafer (control flow graphs) visar relationer mellan underrutiner i ett program genom att representera funktioner som noder och funktionsanrop mellan dem som riktade kanter.
 När detta kombineras med profileringsdata som antal anrop och tidsåtgång kan anropsgrafer vara väldigt användbara för att tolka programmets flöde.
 I Python kan du använda biblioteket [`pycallgraph`](https://pycallgraph.readthedocs.io/) för att generera dem.
 
-![Call Graph](https://upload.wikimedia.org/wikipedia/commons/2/2f/A_Call_Graph_generated_by_pycallgraph.png)
+![Anropsgraf](https://upload.wikimedia.org/wikipedia/commons/2/2f/A_Call_Graph_generated_by_pycallgraph.png)
 
 ## Resursövervakning
 
@@ -460,11 +459,11 @@ För aggregerade mått över alla processer är [`dool`](https://github.com/scot
 - **I/O-operationer** - [`iotop`](https://www.man7.org/linux/man-pages/man8/iotop.8.html) visar liveinformation om I/O-användning och är praktiskt för att se om en process gör tung disk-I/O.
 - **Diskanvändning** - [`df`](https://www.man7.org/linux/man-pages/man1/df.1.html) visar mått per partition och [`du`](https://man7.org/linux/man-pages/man1/du.1.html) visar **d**isk **u**sage per fil i aktuell katalog.
 I dessa verktyg betyder flaggan `-h` **h**uman readable format.
-En mer interaktiv variant av `du` är [`ncdu`](https://dev.yorhel.nl/ncdu), där du kan navigera mappar och radera filer/mappar under navigeringen.
+En mer interaktiv variant av `du` är [`ncdu`](https://dev.yorhel.nl/ncdu), där du kan navigera kataloger och radera filer/kataloger under navigeringen.
 - **Minnesanvändning** - [`free`](https://www.man7.org/linux/man-pages/man1/free.1.html) visar total mängd ledigt och använt minne i systemet.
 Minne visas också i verktyg som `htop`.
 - **Öppna filer** - [`lsof`](https://www.man7.org/linux/man-pages/man8/lsof.8.html) listar filinformation om filer öppnade av processer.
-Det kan vara mycket användbart för att se vilken process som öppnat en viss fil.
+Det kan vara användbart för att se vilken process som öppnat en viss fil.
 - **Nätverksanslutningar och konfiguration** - [`ss`](https://www.man7.org/linux/man-pages/man8/ss.8.html) låter dig övervaka statistik för inkommande och utgående nätverkspaket samt gränssnittsstatistik.
 Ett vanligt användningsfall är att ta reda på vilken process som använder en viss port på en maskin.
 För routing, nätverksenheter och gränssnitt kan du använda [`ip`](https://man7.org/linux/man-pages/man8/ip.8.html).
@@ -475,8 +474,8 @@ Om du vill testa dessa verktyg kan du också skapa artificiell belastning med ko
 
 ### Specialverktyg
 
-Ibland är black-box-benchmarking allt du behöver för att avgöra vilken programvara du ska använda.
-Verktyg som [`hyperfine`](https://github.com/sharkdp/hyperfine) låter dig snabbt benchmarka kommandoradsprogram.
+Ibland är svart-låda-prestandatestning allt du behöver för att avgöra vilken programvara du ska använda.
+Verktyg som [`hyperfine`](https://github.com/sharkdp/hyperfine) låter dig snabbt prestandatesta kommandoradsprogram.
 I föreläsningen om skalverktyg och skriptning rekommenderade vi till exempel `fd` framför `find`.
 Vi kan använda `hyperfine` för att jämföra dem i vanliga uppgifter.
 I exemplet nedan var `fd` 20x snabbare än `find` på min maskin.
@@ -496,7 +495,7 @@ Summary
    21.89 ± 2.33 times faster than 'find . -iname "*.jpg"'
 ```
 
-Precis som i felsökningsfallet kommer webbläsare också med fantastiska verktyg för profilering av sidladdning, så att du kan se var tiden går (laddning, rendering, skriptning osv).
+Precis som i felsökningsfallet kommer webbläsare också med fantastiska verktyg för profilering av sidladdning, så att du kan se var tiden går (laddning, återgivning, skriptning osv).
 Mer information för [Firefox](https://profiler.firefox.com/docs/) och [Chrome](https://developers.google.com/web/tools/chrome-devtools/rendering-tools).
 
 # Övningar

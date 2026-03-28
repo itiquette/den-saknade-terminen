@@ -66,15 +66,15 @@ Några resurser för att komma igång:
 Du är antagligen redan bekant med begreppet demoner (daemons), även om ordet kan kännas nytt.
 De flesta datorer har en serie processer som alltid körs i bakgrunden i stället för att vänta på att en användare startar och interagerar med dem.
 Dessa processer kallas demoner, och program som körs som demoner slutar ofta på `d` för att markera det.
-Till exempel `sshd`, SSH-daemonen, som lyssnar på inkommande SSH-förfrågningar och kontrollerar att fjärranvändaren har nödvändiga uppgifter för att logga in.
+Till exempel `sshd`, SSH-demonen, som lyssnar på inkommande SSH-förfrågningar och kontrollerar att fjärranvändaren har nödvändiga uppgifter för att logga in.
 
-I Linux är `systemd` (systemdaemonen) den vanligaste lösningen för att köra och konfigurera daemonprocesser.
+I Linux är `systemd` (systemdemonen) den vanligaste lösningen för att köra och konfigurera demonprocesser.
 Du kan köra `systemctl status` för att lista demoner som körs just nu.
 Många kan låta obekanta, men de ansvarar för kärndelar av systemet som nätverkshantering, DNS-uppslagning och grafiskt gränssnitt.
 Du interagerar med systemd via `systemctl` för att `enable`, `disable`, `start`, `stop`, `restart` eller kontrollera `status` för tjänster.
 
 Ännu mer intressant är att `systemd` har ett ganska lättillgängligt gränssnitt för att konfigurera och aktivera nya demoner (tjänster).
-Nedan är ett exempel på en daemon som kör en enkel Python-app.
+Nedan är ett exempel på en demon som kör en enkel Python-app.
 Vi går inte in på detaljer, men de flesta fälten är ganska självförklarande.
 
 ```ini
@@ -94,8 +94,8 @@ Restart=on-failure
 WantedBy=multi-user.target
 ```
 
-Om du bara vill köra ett program med viss frekvens behöver du inte bygga en egen daemon.
-Du kan använda [`cron`](https://www.man7.org/linux/man-pages/man8/cron.8.html), en daemon som systemet redan kör för schemalagda uppgifter.
+Om du bara vill köra ett program med viss frekvens behöver du inte bygga en egen demon.
+Du kan använda [`cron`](https://www.man7.org/linux/man-pages/man8/cron.8.html), en demon som systemet redan kör för schemalagda uppgifter.
 
 ## FUSE
 
@@ -110,16 +110,16 @@ I praktiken innebär det att användare kan implementera godtycklig funktionalit
 
 Till exempel kan FUSE användas så att varje operation i ett virtuellt filsystem skickas vidare via SSH till en fjärrmaskin, utförs där och att resultatet skickas tillbaka.
 På så vis kan lokala program se filen som om den låg på din dator, fast den i verkligheten ligger på en fjärrserver.
-Detta är i praktiken vad `sshfs` gör.
+Det är i praktiken vad `sshfs` gör.
 
 Några intressanta exempel på FUSE-filsystem:
-- [sshfs](https://github.com/libfuse/sshfs) - öppna fjärrfiler/-mappar lokalt via en SSH-anslutning.
+- [sshfs](https://github.com/libfuse/sshfs) - öppna fjärrfiler/-kataloger lokalt via en SSH-anslutning.
 - [rclone](https://rclone.org/commands/rclone_mount/) - montera molnlagringstjänster som Dropbox, GDrive, Amazon S3 eller Google Cloud Storage och öppna data lokalt.
 - [gocryptfs](https://nuetzlich.net/gocryptfs/) - krypterat overlaysystem.
   Filer lagras krypterat men när filsystemet monteras visas de som klartext i monteringspunkten.
 - [kbfs](https://keybase.io/docs/kbfs) - distribuerat filsystem med end-to-end-kryptering.
-  Du kan ha privata, delade och publika mappar.
-- [borgbackup](https://borgbackup.readthedocs.io/en/stable/usage/mount.html) - montera deduplicerade, komprimerade och krypterade säkerhetskopior för enklare bläddring.
+  Du kan ha privata, delade och publika kataloger.
+- [borgbackup](https://borgbackup.readthedocs.io/en/stable/usage/mount.html) - montera dubblettborttagna, komprimerade och krypterade säkerhetskopior för enklare bläddring.
 
 ## Säkerhetskopior
 
@@ -128,17 +128,16 @@ Det är lätt att kopiera data, men svårt att säkerhetskopiera data pålitligt
 Här är några bra grunder och fallgropar.
 
 En kopia av data på samma disk är inte en säkerhetskopia, eftersom disken är en enskild felpunkt för all datan.
-På samma sätt är en extern disk hemma en svag backup-lösning eftersom den kan försvinna i brand, inbrott osv.
-I stället rekommenderas säkerhetskopior på annan plats.
+På samma sätt är en extern disk hemma en svag säkerhetskopieringslösning eftersom den kan försvinna i brand, inbrott osv. I stället rekommenderas säkerhetskopior på annan plats.
 
 Synkroniseringslösningar är inte säkerhetskopior.
 Dropbox/GDrive är till exempel bekväma lösningar, men när data raderas eller korruptas sprider de ändringen.
 Av samma skäl är disk-spegling som RAID inte säkerhetskopior.
 Det hjälper inte om data raderas, korruptas eller krypteras av ransomware.
 
-Några kärnegenskaper hos bra backup-lösningar är versionshantering, deduplicering och säkerhet.
+Några kärnegenskaper hos bra säkerhetskopieringslösningar är versionshantering, dubblettborttagning och säkerhet.
 Versionshanterade säkerhetskopior säkerställer att du kan komma åt historiken och återställa filer effektivt.
-Effektiva lösningar använder deduplicering för att bara lagra inkrementella ändringar och minska lagringskostnaden.
+Effektiva lösningar använder dubblettborttagning för att bara lagra inkrementella ändringar och minska lagringskostnaden.
 När det gäller säkerhet bör du fråga dig vad någon behöver veta/ha för att kunna läsa din data och, ännu viktigare, radera all din data och alla tillhörande säkerhetskopior.
 Till sist är det en dålig idé att blint lita på säkerhetskopior.
 Du bör regelbundet verifiera att de faktiskt går att använda för återställning.
@@ -196,9 +195,9 @@ De flesta av er är vana vid en fönsterhanterare med "dra och släpp", som stan
 Fönster ligger "flytande" på skärmen, du kan dra dem, ändra storlek och låta dem överlappa.
 Men detta är bara en _typ_ av fönsterhanterare, ofta kallad "flytande".
 Det finns många andra, särskilt i Linux.
-Ett särskilt vanligt alternativ är "tiling"-fönsterhanterare.
-I en tiling-hanterare överlappar fönster aldrig, utan arrangeras som plattor på skärmen, ungefär som paneler i tmux.
-Skärmen fylls alltid av de öppna fönstren, ordnade enligt någon _layout_.
+Ett särskilt vanligt alternativ är mosaikfönsterhanterare.
+I en mosaikfönsterhanterare överlappar fönster aldrig, utan arrangeras som plattor på skärmen, ungefär som paneler i tmux.
+Skärmen fylls alltid av de öppna fönstren, ordnade enligt någon _placering_.
 Om du bara har ett fönster tar det hela skärmen.
 Om du öppnar ett till krymper det första för att göra plats (ofta något som 2/3 och 1/3).
 Om du öppnar ett tredje krymper de andra igen för att ge plats.
@@ -239,11 +238,11 @@ I stället för tunga verktyg som Word eller LaTeX kan det vara värt att använ
 Du har troligen redan sett Markdown, eller åtminstone någon variant.
 Delmängder används nästan överallt, även om det inte alltid kallas Markdown.
 I grunden är Markdown ett försök att kodifiera hur människor redan brukar markera text när de skriver rena textdokument.
-Betoning (*kursiv*) görs genom att omge ord med `*`.
-Stark betoning (**fetstil**) görs med `**`.
+Betoning (*kursiv*) åstadkoms genom att omge ord med `*`.
+Stark betoning (**fetstil**) åstadkoms med `**`.
 Rader som börjar med `#` är rubriker (och antalet `#` avgör rubriknivå).
 Rader som börjar med `-` är punktlistepunkter, och rader som börjar med ett tal + `.` är numrerade listpunkter.
-Backticks används för ord i `kodstil`, och kodblock kan skrivas genom att indentera med fyra blanksteg eller omge med trippelbackticks:
+Bakåtcitattecken används för ord i `kodstil`, och kodblock kan skrivas genom att indentera med fyra blanksteg eller omge med trippla bakåtcitattecken:
 
     ```
     code goes here
@@ -261,7 +260,7 @@ Det låter dig skriva Lua-skript som kopplar in i operativsystemets funktionalit
 Några exempel på vad du kan göra med Hammerspoon:
 
 - Binda snabbtangenter för att flytta fönster till specifika positioner.
-- Skapa en menyradsknapp som automatiskt lägger ut fönster i en viss layout.
+- Skapa en menyradsknapp som automatiskt lägger ut fönster i en viss placering.
 - Stänga av högtalaren när du kommer till labbet (genom att känna av Wi-Fi-nätverket).
 - Visa en varning om du råkat ta med en väns strömadapter.
 
@@ -271,15 +270,16 @@ Många har gjort sina Hammerspoon-konfigurationer publika, så du kan ofta hitta
 
 ### Resurser
 
-- [Getting Started with Hammerspoon](https://www.hammerspoon.org/go/)
-- [Sample configurations](https://github.com/Hammerspoon/hammerspoon/wiki/Sample-Configurations)
-- [Anish's Hammerspoon config](https://github.com/anishathalye/dotfiles-local/tree/mac/hammerspoon)
+- [Kom igång med Hammerspoon](https://www.hammerspoon.org/go/)
+- [Exempelkonfigurationer](https://github.com/Hammerspoon/hammerspoon/wiki/Sample-Configurations)
+- [Anish Hammerspoon-konfiguration](https://github.com/anishathalye/dotfiles-local/tree/mac/hammerspoon)
 
 ## Uppstart + live-USB
 
 När din maskin startar, innan operativsystemet laddas, initierar [BIOS](https://en.wikipedia.org/wiki/BIOS)/[UEFI](https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface) systemet.
 Under den processen kan du trycka en viss tangentkombination för att konfigurera den inbyggda programvaran (firmware).
-Din dator kan till exempel visa något i stil med "Tryck F9 för att konfigurera BIOS. Tryck F12 för att öppna startmenyn." under uppstart.
+Din dator kan till exempel visa något i stil med "Tryck F9 för att konfigurera BIOS.
+Tryck F12 för att öppna startmenyn." under uppstart.
 Du kan konfigurera många hårdvarurelaterade inställningar i BIOS-menyn.
 Du kan också gå till startmenyn för att starta från en alternativ enhet i stället för hårddisken.
 
@@ -294,7 +294,7 @@ Bland annat kan du, om din befintliga OS-installation går sönder så att den i
 ## Docker, Vagrant, VM:ar, molnet, OpenStack
 
 [Virtuella maskiner](https://en.wikipedia.org/wiki/Virtual_machine) och liknande verktyg som containrar låter dig emulera ett helt datorsystem, inklusive operativsystem.
-Detta kan vara användbart för att skapa isolerade miljöer för testning, utveckling eller utforskning (t.ex. köra potentiellt skadlig kod).
+Det kan vara användbart för att skapa isolerade miljöer för testning, utveckling eller utforskning (t.ex. köra potentiellt skadlig kod).
 
 [Vagrant](https://www.vagrantup.com/) är ett verktyg som låter dig beskriva maskinkonfigurationer (operativsystem, tjänster, paket osv.) i kod och sedan instansiera VM:ar med ett enkelt `vagrant up`.
 [Docker](https://www.docker.com/) är konceptuellt likt men använder containrar i stället.
@@ -330,7 +330,7 @@ Det finns två huvudsakliga sätt att bidra till projekt på GitHub:
   Det hjälper också att kommentera i befintliga diskussioner.
 - Bidra med kod via en [ändringsförfrågan (PR)](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests).
   Det är oftast mer omfattande än att skapa ett ärende.
-  Du kan [skapa en avgrening](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) av ett kodförråd på GitHub, klona din avgrening, skapa en ny gren, göra ändringar (t.ex. åtgärda ett programfel eller implementera en funktion), pusha grenen och sedan [skapa en ändringsförfrågan (PR)](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
-  Efter det följer vanligtvis en dialog med projektets förvaltare, som ger återkoppling på din ändring.
+  Du kan [skapa en avgrening](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) av ett kodförråd på GitHub, klona din avgrening, skapa en ny gren, göra ändringar (t.ex. åtgärda ett programfel eller implementera en funktion), skicka grenen och sedan [skapa en ändringsförfrågan (PR)](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
+  Efter det följer vanligtvis en dialog med de ansvariga för projektet, som ger återkoppling på din ändring.
   Till sist, om allt går väl, slås ändringen samman i det ursprungliga kodförrådet.
   Ofta har större projekt en guide för hur man bidrar, märker nybörjarvänliga ärenden och ibland till och med mentorprogram för att hjälpa nya bidragsgivare in i projektet.

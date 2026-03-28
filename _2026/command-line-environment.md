@@ -17,7 +17,7 @@ Till skillnad från de flesta andra programmeringsspråk är allt i skalskriptni
 
 Skalskriptning är dessutom starkt bunden till _konventioner_.
 För att ett kommandoradsprogram (CLI) ska fungera väl i den större skalmiljön finns några mönster det bör följa.
-Nu går vi igenom centrala begrepp för hur kommandoradsprogram fungerar och vanliga konventioner för hur de används och konfigureras.
+Vi kommer nu att täcka centrala begrepp för hur kommandoradsprogram fungerar såväl som vanliga konventioner för hur de används och konfigureras.
 
 # Kommandoradsgränssnittet
 
@@ -28,14 +28,14 @@ def add(x: int, y: int) -> int:
     return x + y
 ```
 
-Här ser vi tydligt programmets indata och utdata.
-Skalskript kan däremot se ganska annorlunda ut vid första anblick.
+Här kan vi tydligt se programmets in- och utdata.
+Skalskript kan däremot se ganska annorlunda ut vid en första anblick.
 
 ```shell
 #!/usr/bin/env bash
 
 if [[ -f $1 ]]; then
-    echo "Target file already exists"
+    echo "Målfilen finns redan"
     exit 1
 else
     if $DEBUG; then
@@ -57,9 +57,8 @@ För att förstå vad som händer i sådana skript behöver vi några begrepp so
 
 ## Argument
 
-Skalprogram får en lista med argument när de körs.
-Argument är vanliga strängar i skalet,
-och det är upp till programmet hur de tolkas.
+Skalprogram tar emot en lista med argument när de körs.
+Argument är vanliga strängar i skalet, och det är upp till programmet hur de ska tolkas.
 När vi kör `ls -l folder/` kör vi till exempel programmet `/bin/ls` med argumenten `['-l', 'folder/']`.
 
 Inifrån ett skalskript når vi dessa via särskild skalsyntax.
@@ -73,14 +72,10 @@ Flaggor är oftast valfria och ändrar programmets beteende.
 Till exempel ändrar `ls -l` hur `ls` formaterar utdata.
 
 Du ser långa flaggor som `--all` och korta som `-a`, oftast med en bokstav.
-Samma val kan ofta anges i båda formerna,
-`ls -a` och `ls --all` är ekvivalenta.
-Korta flaggor kan ofta grupperas,
-så `ls -l -a` och `ls -la` är också ekvivalenta.
-Ordningen på flaggor spelar vanligtvis ingen roll,
-`ls -la` och `ls -al` ger samma resultat.
-Vissa flaggor återkommer ofta,
-till exempel `--help`, `--verbose` och `--version`.
+Samma val kan ofta anges i båda formerna, `ls -a` och `ls --all` är ekvivalenta.
+Korta flaggor kan ofta grupperas, så `ls -l -a` och `ls -la` är också ekvivalenta.
+Ordningen på flaggor spelar vanligtvis ingen roll, `ls -la` och `ls -al` ger samma resultat.
+Vissa flaggor återkommer ofta, till exempel `--help`, `--verbose` och `--version`.
 
 > Flaggor är ett bra första exempel på skalets konventioner.
 > Skalspråket kräver inte att program använder `-` eller `--` på det här sättet.
@@ -88,8 +83,8 @@ till exempel `--help`, `--verbose` och `--version`.
 > men det skapar förvirring eftersom förväntningen är bindestreck.
 > I praktiken erbjuder de flesta språk bibliotek för CLI-flaggparsning (t.ex. `argparse` i Python).
 
-En annan vanlig CLI-konvention är att ta ett variabelt antal argument av samma typ.
-När argument ges så utför kommandot samma operation för varje argument.
+En annan vanlig CLI-konvention är att ta ett varierande antal argument av samma typ.
+När kommandot ges argument på det här sättet så utförs samma operation för varje argument.
 
 ```shell
 mkdir src
@@ -98,12 +93,11 @@ mkdir docs
 mkdir src docs
 ```
 
-Detta kan först se ut som onödigt syntaktiskt socker,
-men blir väldigt kraftfullt i kombination med _globbing_.
-Globbar är speciella mönster som skalet expanderar innan programmet körs.
+Det kan först se ut som onödigt syntaktiskt socker, men blir väldigt kraftfullt i kombination med _mönstermatchning_ (globbing).
+Mönstermatchning innebär att skalet expanderar speciella mönster innan programmet körs.
 
-Säg att vi vill ta bort alla `.py`-filer i aktuell katalog utan rekursion.
-Utifrån förra föreläsningen kan vi göra:
+Säg att vi utan rekursion vill ta bort alla `.py`-filer i aktuell katalog.
+Utifrån det vi lärde oss i förra föreläsningen kan vi köra:
 
 ```shell
 for file in $(ls | grep -P '\.py$'); do
@@ -111,41 +105,41 @@ for file in $(ls | grep -P '\.py$'); do
 done
 ```
 
-Men vi kan ersätta det med bara `rm *.py`.
+Men det går att ersätta med bara `rm *.py`.
 
 När vi skriver `rm *.py` i terminalen kommer skalet inte anropa `/bin/rm` med argument `['*.py']`.
 I stället letar skalet efter filer i aktuell katalog som matchar mönstret `*.py`, där `*` kan matcha vilken sträng som helst av noll eller fler tecken.
 Om katalogen innehåller `main.py` och `utils.py` får `rm` alltså argumenten `['main.py', 'utils.py']`.
 
-De vanligaste globbarna är jokertecken `*` (noll eller fler av vad som helst), `?` (exakt ett av vad som helst) och klamrar.
+De vanligaste jokertecknen är `*` (noll eller fler av vad som helst), `?` (exakt ett av vad som helst) och klamrar.
 Klamrar `{}` expanderar en kommaseparerad lista av mönster till flera argument.
 
-I praktiken förstås globbar bäst med exempel:
+Mönstermatchning förstås i praktiken bäst med exempel:
 
 ```shell
-touch folder/{a,b,c}.py
+touch katalog/{a,b,c}.py
 # Expanderar till
-touch folder/a.py folder/b.py folder/c.py
+touch katalog/a.py katalog/b.py katalog/c.py
 
-convert image.{png,jpg}
+convert bild.{png,jpg}
 # Expanderar till
-convert image.png image.jpg
+convert bild.png bild.jpg
 
-cp /path/to/project/{setup,build,deploy}.sh /newpath
+cp /sökväg/till/projekt/{setup,build,deploy}.sh /nysökväg
 # Expanderar till
-cp /path/to/project/setup.sh /path/to/project/build.sh /path/to/project/deploy.sh /newpath
+cp /sökväg/till/projekt/setup.sh /sökväg/till/projekt/build.sh /sökväg/till/projekt/deploy.sh /nysökväg
 
-# Globbingtekniker kan kombineras
-mv *{.py,.sh} folder
+# Mönster kan kombineras
+mv *{.py,.sh} katalog
 # Flyttar alla *.py- och *.sh-filer
 ```
 
-> Vissa skal (t.ex. zsh) har ännu mer avancerad globbing som `**` för rekursiva sökvägar.
+> Vissa skal (t.ex. zsh) har en mer avancerad mönstermatchning som `**` för rekursiva sökvägar.
 > `rm **/*.py` tar då bort alla `.py`-filer rekursivt.
 
 ## Strömmar
 
-När vi kör en rörkedja som
+När vi kör en programrörledning som
 
 ```shell
 cat myfile | grep -P '\d+' | uniq -c
@@ -161,7 +155,7 @@ Med operatorn `|` arbetar skalet med dataströmmar som flyter från ett program 
 Vi kan demonstrera samtidigheten:
 
 ```console
-$ (sleep 15 && cat numbers.txt) | grep -P '^\d$' | sort | uniq  &
+$ (sleep 15 && cat tal.txt) | grep -P '^\d$' | sort | uniq  &
 [1] 12345
 $ ps | grep -P '(sleep|cat|grep|sort|uniq)'
   32930 pts/1    00:00:00 sleep
@@ -172,60 +166,58 @@ $ ps | grep -P '(sleep|cat|grep|sort|uniq)'
 ```
 
 Vi ser att alla processer utom `cat` kör direkt.
-Skalet startar processerna och kopplar deras strömmar innan någon av dem är klar.
-`cat` börjar först när `sleep` är klar,
-och dess utdata skickas vidare till `grep` och så vidare.
+Skalet startar processerna och kopplar deras strömmar innan någon av dem är klara.
+`cat` börjar först när `sleep` är klar, och dess utdata skickas vidare till `grep` och så vidare.
 
-Varje program har en inström, stdin (standard input).
+Varje program har en inström, stdin (standard in).
 När du använder rör kopplas stdin automatiskt.
 I skript accepterar många program `-` som filnamn för "läs från stdin":
 
 ```shell
 # Dessa är likvärdiga när data kommer från ett rör
-echo "hello" | grep "hello"
-echo "hello" | grep "hello" -
+echo "hej" | grep "hej"
+echo "hej" | grep "hej" -
 ```
 
 På motsvarande sätt har varje program två utströmmar: stdout och stderr.
-Standard output är den vanligaste och används för att skicka vidare genom ett rör till nästa kommando.
-Standard error är en separat ström för varningar och fel,
-så att den utdata inte tolkas av nästa kommando i kedjan.
+Standard ut är den vanligaste och används för att skicka vidare genom ett rör till nästa kommando.
+Standard error är en separat ström för varningar och fel, så att den utdata inte tolkas av nästa kommando i kedjan.
 
 ```console
-$ ls /nonexistent
-ls: cannot access '/nonexistent': No such file or directory
-$ ls /nonexistent | grep "pattern"
-ls: cannot access '/nonexistent': No such file or directory
+$ ls /ickeexisterande
+ls: cannot access '/ickeexisterande': No such file or directory
+$ ls /ickeexisterande | grep "mönster"
+ls: cannot access '/ickeexisterande': No such file or directory
 # Felmeddelandet syns fortfarande eftersom stderr inte går genom röret
 $ ls /nonexistent 2>/dev/null
 # Ingen utdata - stderr omdirigerades till /dev/null
 ```
 
 Skalet har syntax för att omdirigera strömmar.
-Här är några exempel:
+Här några exempel:
 
 ```shell
 # Omdirigera stdout till en fil (skriv över)
-echo "hello" > output.txt
+echo "hej" > utdata.txt
 
 # Omdirigera stdout till en fil (lägg till)
-echo "world" >> output.txt
+echo "världen" >> utdata.txt
 
 # Omdirigera stderr till en fil
-ls foobar 2> errors.txt
+ls foobar 2> fel.txt
 
 # Omdirigera både stdout och stderr till samma fil
-ls foobar &> all_output.txt
+ls foobar &> all_utdata.txt
 
 # Omdirigera stdin från en fil
-grep "pattern" < input.txt
+grep "mönster" < indata.txt
 
 # Kasta utdata genom att omdirigera till /dev/null
 cmd > /dev/null 2>&1
 ```
 
-Ett annat kraftfullt verktyg i Unix-andan är [`fzf`](https://github.com/junegunn/fzf), en fuzzy finder.
-Det läser rader från stdin och ger ett interaktivt gränssnitt för filtrering och val:
+Ett annat kraftfullt verktyg i sann Unix-anda är [`fzf`](https://github.com/junegunn/fzf), ett program för ungefärlig sökning.
+Det läser rader från stdin med ett interaktivt gränssnitt för filtrering och val:
 
 ```console
 $ ls | fzf
@@ -233,23 +225,17 @@ $ cat ~/.bash_history | fzf
 ```
 
 `fzf` kan integreras med många skaloperationer.
-Vi ser fler användningar när vi pratar skalanpassning.
+Vi kommer att se fler användningsfall när vi pratar skalanpassning.
 
 ## Miljövariabler
 
-För att tilldela variabler i bash använder vi `foo=bar`,
-och värdet nås med `$foo`.
-Observera att `foo = bar` är ogiltig syntax,
-eftersom skalet då tolkar det som att programmet `foo` anropas med argument `['=', 'bar']`.
-I skalskriptning används blanktecken för argumentsplittring,
-vilket kan vara förvirrande tills man vant sig.
+För att tilldela variabler i bash använder vi `foo=bar`, och kommer sedan åt värdet med `$foo`.
+Observera att `foo = bar` är ogiltig syntax, eftersom skalet då kommer att tolka det som att programmet `foo` anropas med argument `['=', 'bar']`.
+I skalskriptning används blanktecken för argumentsplittring, vilket kan vara förvirrande tills man vant sig.
 
-Skalvariabler har inga typer,
-de är alla strängar.
+Skalvariabler har inga typer, de är alla strängar.
 Observera också att enkla och dubbla citationstecken inte är utbytbara.
-Strängar i `'` är bokstavliga och expanderar inte variabler,
-gör inte kommandosubstitution (_command substitution_) och tolkar inte escape-sekvenser.
-Strängar i `"` gör det.
+Strängar i `'` är bokstavliga och expanderar inte variabler, gör inte kommandosubstitution (_command substitution_) och tolkar inte kontrollsekvenser, medan strängar i `"` gör detta.
 
 ```shell
 foo=bar
@@ -269,8 +255,7 @@ echo "$files" | grep ".py"
 ```
 
 placeras stdout från `ls` i variabeln `$files`.
-Innehållet i `$files` innehåller radbrytningar från `ls`,
-vilket gör att program som `grep` kan behandla varje post separat.
+Innehållet i `$files` innehåller radbrytningar från `ls`, vilket gör att program som `grep` kan behandla varje post separat.
 
 En mindre känd närliggande funktion är processsubstitution (_process substitution_).
 `<( CMD )` kör `CMD`, placerar utdata i en temporär fil och ersätter `<()` med filnamnet.
@@ -290,8 +275,7 @@ TZ=Asia/Tokyo date  # skriver ut aktuell tid i Tokyo
 echo $TZ  # blir tomt, eftersom TZ bara sattes för barnkommandot
 ```
 
-Alternativt kan vi använda den inbyggda funktionen `export`,
-som ändrar nuvarande miljö så att alla barnprocesser ärver variabeln:
+Alternativt kan vi använda den inbyggda funktionen `export`, som ändrar nuvarande miljö så att alla barnprocesser ärver variabeln:
 
 ```shell
 export DEBUG=1
@@ -313,14 +297,13 @@ För att ta bort en variabel använder du `unset`, till exempel `unset DEBUG`.
 
 Som vi såg tidigare förmedlas huvudutdata från skalprogram via stdout/stderr och sidoeffekter i filsystemet.
 
-Som standard returnerar ett skalskript exit-kod noll.
-Konventionen är att noll betyder att allt gick bra,
-medan icke-noll betyder att något gick fel.
+Som standard returnerar ett skalskript slutkod noll.
+Konventionen är att noll betyder att allt gick bra, medan icke-noll betyder att något gick fel.
 För att returnera icke-noll använder vi den inbyggda funktionen `exit NUM`.
 Returkoden från senaste kommandot finns i specialvariabeln `$?`.
 
 Skalet har booleska operatorer `&&` och `||` för AND respektive OR.
-Till skillnad från många programmeringsspråk verkar de i skalet på programmens returkoder.
+Till skillnad från vanliga programmeringsspråk verkar operatorerna i skalet på programmens returkoder.
 Båda är [kortslutande](https://en.wikipedia.org/wiki/Short-circuit_evaluation).
 Det betyder att de kan användas för villkorlig körning baserat på om tidigare kommandon lyckades eller misslyckades.
 Lyckat betyder här att returkoden är noll.
@@ -328,10 +311,10 @@ Exempel:
 
 ```shell
 # echo körs bara om grep lyckas (hittar en träff)
-grep -q "pattern" file.txt && echo "Mönster hittat"
+grep -q "mönster" en_fil.txt && echo "Mönster hittat"
 
 # echo körs bara om grep misslyckas (ingen träff)
-grep -q "pattern" file.txt || echo "Mönster saknas"
+grep -q "mönster" en_fil.txt || echo "Mönster saknas"
 
 # true är ett skalprogram som alltid lyckas
 true && echo "Det här skrivs alltid ut"
@@ -340,29 +323,24 @@ true && echo "Det här skrivs alltid ut"
 false || echo "Det här skrivs alltid ut"
 ```
 
-Samma princip gäller för `if` och `while`,
-som båda använder returkoder för beslut:
+Samma princip gäller för `if` och `while`, som båda använder returkoder för beslut:
 
 ```shell
 # if använder returvärdet från villkorskommandot (0 = sant, icke-noll = falskt)
-if grep -q "pattern" file.txt; then
+if grep -q "mönster" en_fil.txt; then
     echo "Hittat"
 fi
 
-# while-loopar fortsätter så länge kommandot returnerar 0
+# while-slingor fortsätter så länge kommandot returnerar 0
 while read line; do
     echo "$line"
-done < file.txt
+done < en_fil.txt
 ```
 
 ## Signaler
 
-Ibland behöver du avbryta ett program medan det kör,
-till exempel om ett kommando tar för lång tid.
-Det enklaste är att trycka `Ctrl-C`,
-och då stoppas kommandot oftast.
-Men hur fungerar det egentligen,
-och varför misslyckas det ibland?
+Ibland behöver du avbryta ett program medan det kör, till exempel om ett kommando tar för lång tid.
+Det enklaste är att trycka `Ctrl-C`, och då stoppas kommandot oftast. Men hur fungerar det egentligen, och varför misslyckas det ibland?
 
 ```console
 $ sleep 100
@@ -372,7 +350,7 @@ $
 
 > Observera att `^C` är hur `Ctrl-C` visas i terminalen.
 
-Under huven händer detta:
+Under ytan händer detta:
 
 1. Vi trycker `Ctrl-C`.
 2. Skalet känner igen den särskilda tangentkombinationen.
@@ -380,9 +358,7 @@ Under huven händer detta:
 4. Signalen avbryter körningen i `sleep`-processen.
 
 Signaler är en särskild kommunikationsmekanism.
-När en process tar emot en signal stoppar den körningen,
-hanterar signalen,
-och kan ändra kontrollflödet utifrån informationen i signalen.
+När en process tar emot en signal stoppar den körningen, hanterar signalen, och kan ändra kontrollflödet utifrån informationen i signalen.
 Därför är signaler _programvaruavbrott_.
 
 När du trycker `Ctrl-C` får alltså skalet anledning att leverera `SIGINT` till processen.
@@ -394,7 +370,7 @@ För att döda programmet kan vi då använda `SIGQUIT` genom att trycka `Ctrl-\
 import signal, time
 
 def handler(signum, time):
-    print("\nI got a SIGINT, but I am not stopping")
+    print("\nJag fick en SIGINT, men jag tänker inte sluta")
 
 signal.signal(signal.SIGINT, handler)
 i = 0
@@ -410,41 +386,35 @@ Notera att `^` är hur `Ctrl` visas i terminalen.
 ```console
 $ python sigint.py
 24^C
-I got a SIGINT, but I am not stopping
+Jag fick en SIGINT, men jag tänker inte sluta
 26^C
-I got a SIGINT, but I am not stopping
+Jag fick en SIGINT, men jag tänker inte sluta
 30^\[1]    39913 quit       python sigint.py
 ```
 
-`SIGINT` och `SIGQUIT` kopplas ofta till terminalhändelser,
-men en mer allmän signal för att be en process avsluta snyggt är `SIGTERM`.
-Den skickas med [`kill`](https://www.man7.org/linux/man-pages/man1/kill.1.html):
-`kill -TERM <PID>`.
+`SIGINT` och `SIGQUIT` kopplas ofta till terminalhändelser, men en mer generell signal för att be en process avsluta snyggt är `SIGTERM`.
+Den skickas med [`kill`](https://www.man7.org/linux/man-pages/man1/kill.1.html): `kill -TERM <PID>`.
 
 Signaler kan göra mer än att avsluta processer.
 `SIGSTOP` pausar till exempel en process.
-I terminalen gör `Ctrl-Z` att skalet skickar `SIGTSTP`,
-alltså terminalvarianten av stopp.
+I terminalen gör `Ctrl-Z` att skalet skickar `SIGTSTP`, alltså terminalvarianten av stopp.
 
 Du kan fortsätta ett pausat jobb i förgrund eller bakgrund med [`fg`](https://www.man7.org/linux/man-pages/man1/fg.1p.html) respektive [`bg`](https://man7.org/linux/man-pages/man1/bg.1p.html).
 
 [`jobs`](https://www.man7.org/linux/man-pages/man1/jobs.1p.html) listar ofärdiga jobb kopplade till aktuell terminalsesssion.
 Du kan referera till jobben med PID (hitta med [`pgrep`](https://www.man7.org/linux/man-pages/man1/pgrep.1.html)).
-Mer intuitivt kan du också referera med procenttecken och jobbnummer från `jobs`.
+Mer intuitivt kan du också hänvisa med procenttecken och jobbnummer från `jobs`.
 För senast bakgrundssatta jobb kan du använda specialparametern `$!`.
 
-Ännu en sak:
-suffixet `&` kör ett kommando i bakgrunden och ger tillbaka prompten,
-men processen kan fortfarande skriva till skalets STDOUT vilket kan vara störande.
+Ännu en sak: suffixet `&` kör ett kommando i bakgrunden och ger tillbaka prompten, men processen kan fortfarande skriva till skalets STDOUT vilket kan vara störande.
 Använd omdirigeringar i sådana fall.
-Motsvarande kan du bakgrundssätta ett redan körande program med `Ctrl-Z` följt av `bg`.
+På motsvarande sätt kan du lägga ett redan körande program i bakgrunden med `Ctrl-Z` följt av `bg`.
 
-Bakgrundsprocesser är fortfarande barnprocesser till terminalen,
-och dör om du stänger terminalen (det skickar `SIGHUP`).
+Bakgrundsprocesser är fortfarande barnprocesser till terminalen, och dör om du stänger terminalen (skickar `SIGHUP`).
 För att undvika det kan du köra programmet via [`nohup`](https://www.man7.org/linux/man-pages/man1/nohup.1.html) (som ignorerar `SIGHUP`) eller använda `disown` om processen redan startat.
-Alternativt kan du använda en terminalmultiplexer, vilket vi tar i nästa avsnitt.
+Alternativt kan du använda en terminalmultiplexer, vilket vi visar i nästa avsnitt.
 
-Nedan är en exempelsession som visar några av dessa koncept.
+Nedan är en exempelsession som visar några av koncepten.
 
 ```
 $ sleep 1000
@@ -471,14 +441,12 @@ $ kill %2
 [2]  + 18745 terminated  nohup sleep 2000
 ```
 
-En särskild signal är `SIGKILL`,
-som inte kan fångas av processen och därför alltid dödar den direkt.
+En särskild signal är `SIGKILL`, som inte kan fångas av processen och därför alltid dödar den direkt.
 Den kan dock ge oönskade bieffekter, till exempel föräldralösa barnprocesser.
 
 Läs mer om signaler [här](https://en.wikipedia.org/wiki/Signal_(IPC)), eller via [`man signal`](https://www.man7.org/linux/man-pages/man7/signal.7.html) eller `kill -l`.
 
-I skalskript kan du använda inbyggda `trap` för att köra kommandon när signaler tas emot,
-vilket är användbart för städning:
+I skalskript kan du använda inbyggda `trap` för att köra kommandon när signaler tas emot, vilket är användbart för uppstädning:
 
 ```shell
 #!/usr/bin/env bash
@@ -498,13 +466,13 @@ För att ett program ska kunna läsa/skriva/ta bort filer och kataloger korrekt 
 Att lista en specifik fil kan ge följande utdata
 
 ```console
-$ ls -l notes.txt
--rw-r--r--  1 alice  users  12693 Jan 11 23:05 notes.txt
+$ ls -l anteckningar.txt
+-rw-r--r--  1 alice  users  12693 Jan 11 23:05 anteckningar.txt
 ```
 
 Här visar `ls` vem som äger filen, användaren `alice`, och gruppen `users`.
 `rw-r--r--` är en kort notation för rättigheterna.
-I detta fall har filen `notes.txt` läs/skriv-rättigheter för användaren alice `rw-`, och endast läsrättigheter för gruppen och övriga användare i filsystemet.
+Här har filen `anteckningar.txt` läs/skriv-rättigheter för användaren alice `rw-`, och endast läsrättigheter för gruppen och övriga användare i filsystemet.
 
 ```console
 $ ./script.sh
@@ -560,9 +528,8 @@ Hittills har vi fokuserat på din lokala maskin, men många av dessa färdighete
 # Fjärrmaskiner
 
 Det har blivit allt vanligare att programmerare arbetar mot fjärrservrar i vardagen.
-Det vanligaste verktyget här är SSH (Secure Shell),
-som hjälper oss att ansluta till en fjärrserver och ger samma skalgränssnitt vi redan känner till.
-Vi ansluter till en server med ett kommando som:
+Det vanligaste verktyget här är SSH (Secure Shell), som hjälper oss att ansluta till en fjärrserver och har ett välkänt skalgränssnitt.
+Vi ansluter till en server med kommandot:
 
 ```bash
 ssh alice@server.mit.edu
@@ -571,8 +538,7 @@ ssh alice@server.mit.edu
 Här försöker vi ansluta som användaren `alice` till servern `server.mit.edu`.
 
 En ofta förbisedd funktion i `ssh` är att köra kommandon icke-interaktivt.
-`ssh` hanterar både stdin till kommandot och stdout tillbaka korrekt,
-så vi kan kombinera det med andra kommandon:
+`ssh` hanterar både stdin till kommandot och stdout tillbaka korrekt, så vi kan kombinera det med andra kommandon:
 
 ```shell
 # Här körs ls på fjärrmaskinen och wc lokalt
@@ -589,8 +555,7 @@ ssh alice@server 'ls | wc -l'
 För att `ssh` ska låta oss köra kommandon på servern måste vi bevisa att vi är behöriga.
 Det kan göras med lösenord eller SSH-nycklar.
 Nyckelbaserad autentisering använder publik nyckelkryptografi för att bevisa att klienten har den privata nyckeln utan att avslöja den.
-Nyckelbaserad autentisering är både smidigare och säkrare,
-så den bör föredras.
+Nyckelbaserad autentisering är både smidigare och säkrare, så den bör föredras.
 Observera att den privata nyckeln (ofta `~/.ssh/id_rsa` och numera oftare `~/.ssh/id_ed25519`) i praktiken är ditt lösenord.
 Behandla den därefter och dela aldrig dess innehåll.
 
@@ -639,24 +604,17 @@ Host *.mit.edu
 
 När du arbetar i kommandoraden vill du ofta köra mer än en sak samtidigt.
 Du kanske till exempel vill ha redigeraren och programmet sida vid sida.
-Det går att lösa med flera terminalfönster,
-men en terminalmultiplexer är mer flexibel.
+Det går att lösa med flera terminalfönster, men en terminalmultiplexer är mer flexibel.
 
-Terminalmultiplexrar som [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html) låter dig dela upp terminalfönster i paneler och flikar,
-så att du kan arbeta effektivt med flera skalsessioner.
+Terminalmultiplexrar som [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html) låter dig dela upp terminalfönster i paneler och flikar, så att du kan arbeta effektivt med flera skalsessioner.
 Dessutom kan du koppla från en pågående session och återansluta senare.
-Det gör terminalmultiplexrar särskilt praktiska på fjärrmaskiner,
-eftersom du slipper `nohup` och liknande knep.
+Det gör terminalmultiplexrar särskilt praktiska på fjärrmaskiner, eftersom du slipper `nohup` och liknande knep.
 
 Den mest populära terminalmultiplexern i dag är [`tmux`](https://www.man7.org/linux/man-pages/man1/tmux.1.html).
-`tmux` är mycket konfigurerbart,
-och med rätt kortkommandon kan du skapa flera flikar och paneler och snabbt växla mellan dem.
+`tmux` är i hög grad konfigurerbart, och med rätt kortkommandon kan du skapa flera flikar och paneler och snabbt växla mellan dem.
 
 `tmux` bygger på att du kan dess kortkommandon.
-De har formen `<C-b> x`, vilket betyder:
-(1) tryck `Ctrl+b`,
-(2) släpp,
-(3) tryck `x`.
+De har formen `<C-b> x`, vilket betyder: (1) tryck `Ctrl+b`, (2) släpp, (3) tryck `x`.
 `tmux` har följande objekt-hierarki:
 
 - **Sessioner** - en session är en separat arbetsyta med ett eller flera fönster.
@@ -692,23 +650,21 @@ Där kommer skalanpassning in.
 
 # Anpassa skalet
 
-Många kommandoradsprogram konfigureras med textfiler som kallas _dotfiles_
-(eftersom filnamnen börjar med `.`, t.ex. `~/.vimrc`, och därför döljs i `ls` som standard).
+Många kommandoradsprogram konfigureras med textfiler som kallas _dotfiles_ (eftersom filnamnen börjar med `.`, t.ex. `~/.vimrc`, och därför döljs i `ls` som standard).
 
 > Dotfiles är ännu en skalkonvention.
 > Punkten i början används för att "dölja" filen i listningar.
 
 Skal är ett exempel på program som konfigureras med sådana filer.
 Vid uppstart läser skalet flera filer för att ladda konfiguration.
-Beroende på skal och om du startar login-/interaktiv session kan processen vara ganska komplex.
-[Här](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html) finns en utmärkt resurs.
+Beroende på skal och om du startar login-/interaktiv session kan processen vara ganska komplex. [Här](https://blog.flowblok.id.au/2013-02/shell-startup-scripts.html) finns en utmärkt resurs.
 
 För `bash` fungerar det på de flesta system att redigera `.bashrc` eller `.bash_profile`.
 Andra verktyg som kan konfigureras via dotfiles:
 
 - `bash` - `~/.bashrc`, `~/.bash_profile`
 - `git` - `~/.gitconfig`
-- `vim` - `~/.vimrc` och mappen `~/.vim`
+- `vim` - `~/.vimrc` och katalogen `~/.vim`
 - `ssh` - `~/.ssh/config`
 - `tmux` - `~/.tmux.conf`
 
@@ -719,19 +675,14 @@ Du ser mönstret ofta vid installation av programvara:
 export PATH="$PATH:path/to/append"
 ```
 
-Här sätter vi `$PATH` till nuvarande värde plus en ny sökväg,
-och låter barnprocesser ärva det.
+Här sätter vi `$PATH` till nuvarande värde plus en ny sökväg, och låter barnprocesser ärva det.
 Då kan de hitta program under `path/to/append`.
 
 Att anpassa skalet betyder ofta att installera nya CLI-verktyg.
 Pakethanterare gör detta enkelt.
 De hanterar nedladdning, installation och uppdateringar.
-Olika operativsystem har olika pakethanterare:
-macOS använder [Homebrew](https://brew.sh/),
-Ubuntu/Debian använder `apt`,
-Fedora använder `dnf`,
-och Arch använder `pacman`.
-Vi går djupare i detta i föreläsningen om att leverera kod.
+Olika operativsystem har olika pakethanterare: macOS använder [Homebrew](https://brew.sh/), Ubuntu/Debian använder `apt`, Fedora använder `dnf`, och Arch använder `pacman`.
+Vi går djupare i detta i föreläsningen om att distribuera kod.
 
 Så här installerar du två användbara verktyg med Homebrew på macOS:
 
@@ -746,7 +697,7 @@ brew install fd
 Efter installation kan du använda `rg` i stället för `grep` och `fd` i stället för `find`.
 
 > **Varning för `curl | bash`**: Du ser ofta installationskommandon som `curl -fsSL https://example.com/install.sh | bash`.
-> Mönstret laddar ner ett skript och kör det direkt,
+> Det här laddar ner ett skript och kör det direkt,
 > vilket är bekvämt men riskabelt eftersom du kör kod du inte granskat.
 > Säkrare är att ladda ner först, granska och sedan köra:
 > ```shell
@@ -759,9 +710,8 @@ Efter installation kan du använda `rg` i stället för `grep` och `fd` i ställ
 När du försöker köra ett kommando som inte är installerat visar skalet `command not found`.
 Webbplatsen [command-not-found.com](https://command-not-found.com) är en bra resurs för att hitta installationsinstruktioner i olika pakethanterare och distributioner.
 
-Ett annat användbart verktyg är [`tldr`](https://tldr.sh/),
-som ger förenklade man-sidor med fokus på exempel.
-I stället för lång dokumentation ser du snabbt vanliga användningsmönster:
+Ett annat användbart verktyg är [`tldr`](https://tldr.sh/), som ger förenklade man-sidor med fokus på exempel.
+I stället för att läsa igenom mängder av dokumentation ser du snabbt vanliga användningsmönster:
 
 ```console
 $ tldr fd
@@ -778,8 +728,7 @@ $ tldr fd
       fd --extension txt
 ```
 
-Ibland behöver du inte ett nytt program,
-utan bara en genväg till ett befintligt kommando med vissa flaggor.
+Ibland behöver du inte ett nytt program, utan bara en genväg till ett befintligt kommando med vissa flaggor.
 Där kommer alias in.
 
 Vi kan skapa egna alias med inbyggda `alias`.
@@ -825,44 +774,34 @@ alias ll
 # Skriver ut ll='ls -lh'
 ```
 
-Alias har begränsningar:
-de kan inte ta argument i mitten av ett kommando.
+Alias har begränsningar: de kan inte ta argument i mitten av ett kommando.
 För mer avancerat beteende bör du använda skalfunktioner.
 
 De flesta skal stöder `Ctrl-R` för omvänd historiksökning.
 Tryck `Ctrl-R` och börja skriva för att söka bland tidigare kommandon.
-Tidigare introducerade vi `fzf` som fuzzy finder.
-Med fzf:s skalintegration blir `Ctrl-R` en interaktiv fuzzy-sökning i hela historiken,
-mycket kraftfullare än standardläget.
+Tidigare introducerade vi `fzf` som ungefärlig sökare.
+Med fzf:s skalintegration blir `Ctrl-R` en interaktiv ungefärlig sökning i hela historiken, betydligt kraftfullare än standardläget.
 
 Hur bör du organisera dina dotfiles?
-De bör ligga i en egen mapp,
-under versionshantering,
-och **symboliskt länkas** in på plats med ett skript.
+De bör ligga i en egen katalog, under versionshantering, och **symboliskt länkas** in på plats med ett skript.
 Det ger:
 
 - **Enkel installation**: på en ny maskin tar det bara någon minut att få allt på plats.
 - **Portabilitet**: dina verktyg fungerar likadant överallt.
 - **Synkronisering**: du kan uppdatera dotfiles var som helst och hålla allt synkroniserat.
-- **Historik**: du kommer sannolikt att underhålla dotfiles länge, och versionshistorik är värdefull.
+- **Historik**: du kommer sannolikt att underhålla dotfiles länge, och då är versionshistorik värdefullt.
 
 Vad ska ligga i dotfiles?
 Lär dig verktygens inställningar via dokumentation på nätet eller [man-sidor](https://en.wikipedia.org/wiki/Man_page).
-Ett annat bra sätt är blogginlägg om specifika program,
-där författare beskriver sina favoritinställningar.
-Du kan också läsa andras dotfiles:
-det finns mängder av [dotfiles-kodförråd](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories) på GitHub.
+Ett annat bra sätt är blogginlägg om specifika program, där författare beskriver sina favoritinställningar.
+Du kan också läsa andras dotfiles: det finns mängder av [dotfiles-kodförråd](https://github.com/search?o=desc&q=dotfiles&s=stars&type=Repositories) på GitHub.
 Se det mest populära [här](https://github.com/mathiasbynens/dotfiles) (kopiera inte blint).
 [Här](https://dotfiles.github.io/) finns ytterligare en bra resurs.
 
-Alla kursens lärare har sina dotfiles offentliga på GitHub:
-[Anish](https://github.com/anishathalye/dotfiles),
-[Jon](https://github.com/jonhoo/configs),
-[Jose](https://github.com/jjgo/dotfiles).
+Alla kursens lärare har sina dotfiles offentliga på GitHub: [Anish](https://github.com/anishathalye/dotfiles), [Jon](https://github.com/jonhoo/configs), [Jose](https://github.com/jjgo/dotfiles).
 
 **Ramverk och insticksmoduler** kan också förbättra skalet.
-Populära ramverk är [prezto](https://github.com/sorin-ionescu/prezto) och [oh-my-zsh](https://ohmyz.sh/),
-plus mindre insticksmoduler för specifika funktioner:
+Populära ramverk är [prezto](https://github.com/sorin-ionescu/prezto) och [oh-my-zsh](https://ohmyz.sh/), plus mindre insticksmoduler för specifika funktioner:
 
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) - färgar giltiga/ogiltiga kommandon medan du skriver
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) - föreslår kommandon från historik medan du skriver
@@ -910,8 +849,7 @@ mike_wilson
 sarah.connor
 ```
 
-Notera att vi använder `"$INSTRUCTIONS"` (citerat) eftersom variabeln innehåller blanksteg,
-och `< users.txt` för att omdirigera filens innehåll till stdin.
+Notera att vi använder `"$INSTRUCTIONS"` (citerat) eftersom variabeln innehåller blanksteg, och `< users.txt` för att omdirigera filens innehåll till stdin.
 
 **AI-skal**: verktyg som [Claude Code](https://docs.anthropic.com/en/docs/claude-code) fungerar som ett meta-skal som tar engelska instruktioner och översätter dem till skaloperationer, filändringar och mer komplexa flerstegsuppgifter.
 
@@ -924,7 +862,7 @@ Det finns många alternativ.
 Eftersom du sannolikt tillbringar hundratals till tusentals timmar i terminalen lönar det sig att utforska inställningarna.
 Exempel på saker du kan vilja justera:
 
-- Fontval
+- Typsnittsval
 - Färgschema
 - Tangentbordsgenvägar
 - Flik-/panelstöd
@@ -933,10 +871,10 @@ Exempel på saker du kan vilja justera:
 
 # Övningar
 
-## Argument och globbar
+## Argument och mönstermatchning
 
 1. Du kan se kommandon som `cmd --flag -- --notaflag`.
-   `--` är ett specialargument som säger åt programmet att sluta parsa flaggor.
+   `--` är ett specialargument som säger åt programmet att sluta tolka flaggor.
    Allt efter `--` behandlas som positionsargument.
    Varför kan det vara användbart?
    Testa `touch -- -myfile` och ta sedan bort filen utan `--`.
@@ -947,7 +885,7 @@ Exempel på saker du kan vilja justera:
     - Filer sorteras efter nyast först.
     - Utdata är färglagd.
 
-    Exempelutdata:
+   Exempelutdata:
 
     ```
     -rw-r--r--   1 user group 1.1M Jan 14 09:53 baz
@@ -968,28 +906,20 @@ ls -lath --color=auto
 
 ## Miljövariabler
 
-1. Skriv bash-funktionerna `marco` och `polo` som gör följande:
-   när du kör `marco` ska nuvarande arbetskatalog sparas,
-   och när du kör `polo` ska du, oavsett var du befinner dig, `cd` tillbaka till katalogen där `marco` kördes.
+1. Skriv bash-funktionerna `marco` och `polo` som gör följande: när du kör `marco` ska nuvarande arbetskatalog sparas, och när du kör `polo` ska du, oavsett var du befinner dig, `cd` tillbaka till katalogen där `marco` kördes.
    För enklare felsökning kan du skriva koden i en fil `marco.sh` och (om)ladda definitionerna med `source marco.sh`.
 
 {% comment %}
-marco() {
-    export MARCO=$(pwd)
-}
+marco() { export MARCO=$(pwd) }
 
-polo() {
-    cd "$MARCO"
-}
+polo() { cd "$MARCO" }
 {% endcomment %}
 
 ## Returkoder
 
 1. Anta att du har ett kommando som sällan misslyckas.
    För felsökning vill du fånga utdata, men det kan ta lång tid att få ett felkörningstillfälle.
-   Skriv ett bash-skript som kör följande skript tills det misslyckas,
-   fångar stdout och stderr till filer,
-   och skriver ut allt i slutet.
+   Skriv ett bash-skript som kör följande skript tills det misslyckas, fångar stdout och stderr till filer, och skriver ut allt i slutet.
    Bonus om du också rapporterar hur många körningar som krävdes innan fel.
 
     ```bash
@@ -1009,21 +939,14 @@ polo() {
 {% comment %}
 #!/usr/bin/env bash
 
-count=0
-until [[ "$?" -ne 0 ]];
-do
-  count=$((count+1))
-  ./random.sh &> out.txt
-done
+count=0 until [[ "$?" -ne 0 ]]; do count=$((count+1)) ./random.sh &> out.txt done
 
-echo "hittade fel efter $count körningar"
-cat out.txt
+echo "hittade fel efter $count körningar" cat out.txt
 {% endcomment %}
 
 ## Signaler och jobbstyrning
 
-1. Starta ett jobb `sleep 10000` i en terminal,
-   bakgrundssätt det med `Ctrl-Z` och fortsätt körningen med `bg`.
+1. Starta ett jobb `sleep 10000` i en terminal, lägg det i bakgrunden med `Ctrl-Z` och fortsätt körningen med `bg`.
    Använd sedan [`pgrep`](https://www.man7.org/linux/man-pages/man1/pgrep.1.html) för att hitta PID och [`pkill`](https://man7.org/linux/man-pages/man1/pgrep.1.html) för att döda processen utan att skriva PID manuellt.
    (Tips: använd flaggorna `-af`.)
 
@@ -1032,9 +955,8 @@ cat out.txt
    Ett sätt är kommandot [`wait`](https://www.man7.org/linux/man-pages/man1/wait.1p.html).
    Testa att starta sleep och låt ett `ls` vänta tills bakgrundsprocessen är klar.
 
-   Den strategin fallerar dock om du startar i en annan bash-session,
-   eftersom `wait` bara fungerar för barnprocesser.
-   En funktion vi inte tog upp är att `kill` returnerar noll vid framgång och icke-noll annars.
+   Den strategin misslyckas dock om du startar i en annan bash-session, eftersom `wait` bara fungerar för barnprocesser.
+   En funktion vi inte nämnde tidigare är att `kill` returnerar noll vid framgång och icke-noll annars.
    `kill -0` skickar ingen signal men ger icke-noll om processen inte finns.
    Skriv en bash-funktion `pidwait` som tar en PID och väntar tills processen avslutas.
    Du bör använda `sleep` för att undvika onödig CPU-förbrukning.
@@ -1042,12 +964,11 @@ cat out.txt
 ## Filer och rättigheter
 
 1. (Avancerad) Skriv ett kommando eller skript som rekursivt hittar den senast modifierade filen i en katalog.
-   Mer allmänt, kan du lista alla filer sorterade efter recency?
+   Mer allmänt, kan du lista alla filer sorterade efter senaste?
 
 ## Terminalmultiplexrar
 
-1. Följ denna `tmux`-[guide](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/),
-   och lär dig sedan några grundläggande anpassningar via [de här stegen](https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/).
+1. Följ denna `tmux`-[guide](https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/), och lär dig sedan några grundläggande anpassningar via [de här stegen](https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/).
 
 ## Alias och dotfiles
 
@@ -1057,14 +978,13 @@ cat out.txt
    Notera: detta gäller Bash.
    Om du använder ZSH, använd `history 1` i stället för bara `history`.
 
-1. Skapa en mapp för dina dotfiles och lägg den under versionshantering.
+1. Skapa en katalog för dina dotfiles och lägg den under versionshantering.
 
 1. Lägg till konfiguration för minst ett program, t.ex. ditt skal, med någon anpassning.
    För att komma igång kan det räcka att ändra skalets prompt genom att sätta `$PS1`.
 
 1. Sätt upp ett sätt att installera dina dotfiles snabbt och utan manuellt arbete på en ny maskin.
-   Det kan vara så enkelt som ett skalskript som kör `ln -s` för varje fil,
-   eller ett [specialiserat verktyg](https://dotfiles.github.io/utilities/).
+   Det kan vara så enkelt som ett skalskript som kör `ln -s` för varje fil, eller ett [specialiserat verktyg](https://dotfiles.github.io/utilities/).
 
 1. Testa installationsskriptet på en ren virtuell maskin.
 
@@ -1105,4 +1025,4 @@ Om du inte är bekant med virtuella maskiner, se [den här](https://hibbard.eu/i
    Koppla sedan bort nätverksadaptern för servern/VM:n.
    Kan mosh återhämta sig korrekt?
 
-1. (Utmaning) Ta reda på vad flaggorna `-N` och `-f` gör i `ssh` och hitta ett kommando för port-forwarding i bakgrunden.
+1. (Utmaning) Ta reda på vad flaggorna `-N` och `-f` gör i `ssh` och hitta ett kommando för portvidarebefordran i bakgrunden.

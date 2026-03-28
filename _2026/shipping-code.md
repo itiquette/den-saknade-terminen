@@ -1,6 +1,6 @@
 ---
 layout: lecture
-title: "Paketera och leverera kod"
+title: "Paketera och distribuera kod"
 description: >
   Lär dig om projektpaketering, miljöer, versionshantering och distribution av bibliotek, applikationer och tjänster.
 thumbnail: /static/assets/thumbnails/2026/lec6.png
@@ -14,12 +14,12 @@ video:
 Att få kod att fungera som tänkt är svårt.
 Att få samma kod att köra på en annan maskin än din egen är ofta ännu svårare.
 
-Att leverera kod innebär att ta koden du skrev och omvandla den till en användbar form som någon annan kan köra utan din dators exakta miljö.
-Att leverera kod kan se ut på många sätt och beror på val av programmeringsspråk, systembibliotek, operativsystem och många andra faktorer.
+Att distribuera kod innebär att ta koden du skrev och omvandla den till en användbar form som någon annan kan köra utan din dators exakta miljö.
+Att distribuera kod kan se ut på många sätt och beror på val av programmeringsspråk, systembibliotek, operativsystem och många andra faktorer.
 Det beror också på vad du bygger; ett programbibliotek, ett kommandoradsverktyg och en webbtjänst har olika krav och driftsättningssteg.
 Oavsett finns ett gemensamt mönster i alla dessa scenarier: vi måste definiera vad leverabeln är --- det vill säga en artefakt --- och vilka antaganden den gör om miljön runt omkring.
 
-I den här föreläsningen går vi igenom:
+I föreläsningen går vi igenom:
 
 - [Beroenden och miljöer](#dependencies--environments)
 - [Artefakter och paketering](#artifacts--packaging)
@@ -37,7 +37,7 @@ Verktygen är annorlunda i andra språks ekosystem, men koncepten är till stor 
 
 I modern programvaruutveckling är abstraktionslager överallt.
 Program flyttar naturligt över logik till andra bibliotek eller tjänster.
-Detta introducerar dock ett beroendeförhållande mellan ditt program och biblioteken det behöver för att fungera.
+Det introducerar dock ett beroendeförhållande mellan ditt program och biblioteken det behöver för att fungera.
 I Python gör vi till exempel ofta följande för att hämta innehållet på en webbsida:
 
 ```python
@@ -135,7 +135,7 @@ Använd i stället separata miljöer.
 
 I vissa språk definieras installationsprotokollet inte av ett verktyg utan som en specifikation.
 I Python definierar [PEP 517](https://peps.python.org/pep-0517/) gränssnittet för byggsystem och [PEP 621](https://peps.python.org/pep-0621/) specificerar hur projektmetadata lagras i `pyproject.toml`.
-Detta har gjort det möjligt att förbättra `pip` och ta fram mer optimerade verktyg som `uv`.
+Det har gjort det möjligt att förbättra `pip` och ta fram mer optimerade verktyg som `uv`.
 För att installera `uv` räcker det att köra `pip install uv`.
 
 Att använda `uv` i stället för `pip` följer samma gränssnitt men är betydligt snabbare:
@@ -172,7 +172,7 @@ $ source venv311/bin/activate && python --version
 Python 3.11.10
 ```
 
-Detta hjälper när du behöver testa kod mot flera Python-versioner eller när ett projekt kräver en specifik version.
+Det hjälper när du behöver testa kod mot flera Python-versioner eller när ett projekt kräver en specifik version.
 
 > I vissa språk får varje projekt automatiskt sin egen miljö för beroenden i stället för att du skapar den manuellt, men principen är densamma.
 De flesta språk har i dag också en mekanism för att hantera flera språkversioner på samma system och sedan välja version per projekt.
@@ -187,10 +187,10 @@ Tänk på detta exempel där vi har en Python-fil `greet.py` i nuvarande katalog
 ```console
 $ cat greet.py
 def greet(name):
-    return f"Hello, {name}!"
+    return f"Hej, {name}!"
 
 $ python -c "from greet import greet; print(greet('World'))"
-Hello, World!
+Hej, World!
 
 $ cd /tmp
 $ python -c "from greet import greet; print(greet('World'))"
@@ -234,7 +234,7 @@ import typer
 
 
 def greet(name: str) -> str:
-    return f"Hello, {name}!"
+    return f"Hej, {name}!"
 
 
 def cli():
@@ -282,10 +282,10 @@ Om vi sedan ger denna wheel till någon annan kan de installera den genom att k�
 ```console
 $ uv pip install ./greeting-0.1.0-py3-none-any.whl
 $ greet Alice
-Hello, Alice!
+Hej, Alice!
 ```
 
-Detta installerar biblioteket vi byggde tidigare i deras miljö, inklusive kommandoradsverktyget `greet`.
+Det installerar biblioteket vi byggde tidigare i deras miljö, inklusive kommandoradsverktyget `greet`.
 
 Det finns begränsningar med detta tillvägagångssätt.
 Om biblioteket beror på plattformsspecifika bibliotek, till exempel CUDA för GPU-acceleration, fungerar artefakten bara på system med dessa bibliotek installerade, och vi kan behöva bygga separata wheels för olika plattformar (Linux, macOS, Windows) och arkitekturer (x86, ARM).
@@ -312,8 +312,8 @@ Att hålla koll på pågående ändringar i varje beroende är dock opraktiskt, 
 
 > Du kan visualisera hela beroendeträdet för projektet med `uv tree`, som visar alla paket och deras transitiva beroenden i trädformat.
 
-För att förenkla detta finns konventioner för versionssättning av programvara, och en av de vanligaste är [Semantic Versioning](https://semver.org/) eller SemVer.
-Under Semantic Versioning har en version formatet MAJOR.MINOR.PATCH där varje värde är ett heltal.
+För att förenkla detta finns konventioner för versionssättning av programvara, och en av de vanligaste är [semantisk versionshantering](https://semver.org/) (SemVer).
+Under semantisk versionshantering har en version formatet MAJOR.MINOR.PATCH där varje värde är ett heltal.
 Kortversionen är att en uppgradering av:
 
 - PATCH (t.ex. 1.2.3 → 1.2.4) bör bara innehålla buggfixar och vara helt bakåtkompatibel.
@@ -328,22 +328,22 @@ I `pyproject.toml` har vi olika sätt att begränsa intervall av kompatibla vers
 ```toml
 [project]
 dependencies = [
-    "requests==2.32.3",  # Exact version - only this specific version
-    "click>=8.0",        # Minimum version - 8.0 or newer
-    "numpy>=1.24,<2.0",  # Range - at least 1.24 but less than 2.0
-    "pandas~=2.1.0",     # Compatible release - >=2.1.0 and <2.2.0
+    "requests==2.32.3",  # Exakt version - bara just den här versionen
+    "click>=8.0",        # Minimiversion - 8.0 eller nyare
+    "numpy>=1.24,<2.0",  # Intervall - minst 1.24 men lägre än 2.0
+    "pandas~=2.1.0",     # Kompatibel utgåva - >=2.1.0 och <2.2.0
 ]
 ```
 
 Versionsspecifikationer finns i många pakethanterare (npm, cargo, osv.) med varierande exakta betydelser.
 Operatorn `~=` är Pythons operator för kompatibel utgåva --- `~=2.1.0` betyder "vilken version som helst kompatibel med 2.1.0", vilket motsvarar `>=2.1.0` och `<2.2.0`.
-Detta är ungefär ekvivalent med caret-operatorn (`^`) i npm och cargo, som följer SemVers kompatibilitetsbegrepp.
+Det är ungefär ekvivalent med caret-operatorn (`^`) i npm och cargo, som följer SemVers kompatibilitetsbegrepp.
 
-All programvara använder inte semantisk versionering.
+All programvara använder inte semantisk versionshantering.
 Ett vanligt alternativ är Calendar Versioning (CalVer), där versioner baseras på utgivningsdatum i stället för semantisk betydelse.
 Ubuntu använder till exempel versioner som `24.04` (april 2024) och `24.10` (oktober 2024).
 CalVer gör det lätt att se hur gammal en utgåva är, men kommunicerar inget om kompatibilitet.
-Slutligen är semantisk versionering inte ofelbar, och förvaltare kan oavsiktligt introducera brytande ändringar i minor- eller patch-versioner.
+Slutligen är semantisk versionshantering inte ofelbar, och de ansvariga kan oavsiktligt introducera brytande ändringar i minor- eller patch-versioner.
 
 # Reproducerbarhet {#reproducibility}
 
@@ -385,7 +385,7 @@ För applikationer säkerställer låsning till exakta versioner reproducerbarhe
 
 För projekt som kräver maximal reproducerbarhet kan verktyg som [Nix](https://nixos.org/) och [Bazel](https://bazel.build/) användas för hermetiska byggen.
 Det betyder att all indata --- även kompilatorer, systembibliotek och själva byggmiljön --- är låst och innehållsadresserad.
-Detta garanterar bit-för-bit-identiska utdata oavsett när eller var bygget körs.
+Det garanterar bit-för-bit-identiska utdata oavsett när eller var bygget körs.
 
 > Du kan till och med använda NixOS för att hantera hela datorinstallationen så att du enkelt kan sätta upp nya kopior av din miljö och hantera komplett konfiguration genom versionskontrollerade konfigurationsfiler.
 
@@ -397,8 +397,8 @@ I de fallen är bästa åtgärd att ha en återställningsplan, där versionsupp
 
 # VM:ar och containrar {#vms--containers}
 
-När du börjar förlita dig på mer komplexa beroenden är det sannolikt att beroendena för din kod sträcker sig utanför vad pakethanteraren kan hantera.
-En vanlig orsak är behovet av att gränssnitta mot specifika systembibliotek eller hårdvarudrivrutiner.
+När du börjar förlita dig på mer komplexa beroenden är det sannolikt att beroendena för din kod sträcker sig bortom vad pakethanteraren kan hantera.
+En vanlig orsak är behovet av gränssnitt mot specifika systembibliotek eller hårdvarudrivrutiner.
 I vetenskaplig beräkning och AI behöver program till exempel ofta specialiserade bibliotek och drivrutiner för att använda GPU-hårdvara.
 Många systemnivåberoenden (GPU-drivrutiner, specifika kompilatorversioner, delade bibliotek som OpenSSL) kräver fortfarande systemomfattande installation.
 
@@ -419,8 +419,8 @@ När du avslutar stoppas containern.
 ```console
 $ docker run -it python:3.12 python
 Python 3.12.7 (main, Nov  5 2024, 02:53:25) [GCC 12.2.0] on linux
->>> print("Hello from inside a container!")
-Hello from inside a container!
+>>> print("Hej från insidan av en container!")
+Hej från insidan av en container!
 ```
 
 I praktiken kan ditt program bero på hela filsystemet.
@@ -462,13 +462,12 @@ COPY . /app
 ```
 
 I föregående exempel ser vi att vi i stället för att installera `uv` från källkod kopierar den förbyggda binären från avbilden `ghcr.io/astral-sh/uv:latest`.
-Detta kallas _builder_-mönstret.
+Det kallas _builder_-mönstret.
 Med detta mönster behöver vi inte skicka med alla verktyg som krävs för att kompilera koden, bara den slutliga binären som behövs för att köra applikationen (`uv` i detta fall).
 
 Docker har viktiga begränsningar att känna till.
 För det första är containeravbilder ofta plattformsspecifika --- en avbild byggd för `linux/amd64` körs inte nativt på `linux/arm64` (Apple Silicon Macs) utan emulering, vilket är långsamt.
-För det andra kräver Docker-containrar en Linux-kärna, så på macOS och Windows kör Docker i praktiken en lättviktig Linux-VM under huven, vilket ger överkostnad.
-För det tredje är Dockers isolering svagare än VM:ars --- containrar delar värdens kärna, vilket är en säkerhetsrisk i miljöer med flera hyresgäster.
+För det andra kräver Docker-containrar en Linux-kärna, så på macOS och Windows kör Docker i praktiken en lättviktig Linux-VM under huven, vilket ger viss prestandaförlust. För det tredje är Dockers isolering svagare än VM:ars --- containrar delar värdens kärna, vilket är en säkerhetsrisk i miljöer med flera hyresgäster.
 
 > Numera använder fler projekt också nix för att hantera även "systemomfattande" bibliotek och applikationer per projekt via [nix flakes](https://serokell.io/blog/practical-nix-flakes).
 
@@ -476,7 +475,7 @@ För det tredje är Dockers isolering svagare än VM:ars --- containrar delar v�
 
 Mjukvara är i grunden konfigurerbar.
 I föreläsningen om [kommandoradsmiljön]({{ '/2026/command-line-environment/' | relative_url }}) såg vi program som tar emot alternativ via flaggor, miljövariabler eller konfigurationsfiler (så kallade dotfiles).
-Detta gäller även mer komplexa applikationer, och det finns etablerade mönster för att hantera konfiguration i skala.
+Det gäller även mer komplexa applikationer, och det finns etablerade mönster för att hantera konfiguration i skala.
 Programkonfiguration bör inte vara inbakad i koden utan tillhandahållas vid körning.
 Två vanliga sätt är miljövariabler och konfigurationsfiler.
 
@@ -504,7 +503,7 @@ server:
 
 En bra tumregel för konfiguration är att samma kodbas ska kunna driftsättas till olika miljöer (utveckling, test och produktion) med endast konfigurationsändringar, aldrig kodändringar.
 
-Bland många konfigurationsalternativ finns ofta känslig data som API-nycklar.
+Bland konfigurationsalternativ finns ofta känslig data som API-nycklar.
 Hemligheter måste hanteras varsamt för att undvika oavsiktlig exponering och får inte inkluderas i versionshantering.
 
 # Tjänster och orkestrering {#services--orchestration}
@@ -516,7 +515,7 @@ I stället för att paketera allt i en monolitisk applikation bryter moderna ark
 Som exempel, om vi avgör att applikationen kan tjäna på att använda cache, kan vi i stället för att bygga en egen lösning utnyttja etablerade lösningar som [Redis](https://redis.io/) eller [Memcached](https://memcached.org/).
 Vi skulle kunna bädda in Redis i applikationens beroenden genom att bygga den i containern, men det innebär att harmonisera alla beroenden mellan Redis och vår applikation, vilket kan vara utmanande eller omöjligt.
 I stället kan vi driftsätta varje applikation separat i sin egen container.
-Detta kallas ofta en mikrotjänstarkitektur där varje komponent körs som en oberoende tjänst som kommunicerar över nätverket, typiskt via HTTP-API:er.
+Det kallas ofta en mikrotjänstarkitektur där varje komponent körs som en oberoende tjänst som kommunicerar över nätverket, typiskt via HTTP-API:er.
 
 [Docker Compose](https://docs.docker.com/compose/) är ett verktyg för att definiera och köra applikationer med flera containrar.
 I stället för att hantera containrar individuellt deklarerar du alla tjänster i en enda YAML-fil och orkestrerar dem tillsammans.
@@ -570,10 +569,10 @@ WantedBy=multi-user.target
 Den här systemd-enhetsfilen säkerställer att applikationen startar när systemet startar (efter att Docker är redo), och ger standardkommandon som `systemctl start myapp`, `systemctl stop myapp` och `systemctl status myapp`.
 
 När driftsättningskraven blir mer komplexa --- med behov av skalning över flera maskiner, feltolerans när tjänster kraschar och hög tillgänglighet --- går organisationer över till mer avancerade containerorkestreringsplattformar som Kubernetes (k8s), som kan hantera tusentals containrar över kluster av maskiner.
-Kubernetes har dock en brant inlärningskurva och betydande driftsmässig överkostnad, så det är ofta överdrivet för mindre projekt.
+Kubernetes har dock en brant inlärningskurva och betydande driftsmässig belastning, så det är ofta överdrivet för mindre projekt.
 
 Denna uppsättning med flera containrar är delvis möjlig eftersom moderna tjänster kommunicerar via standardiserade API:er, särskilt REST-API:er över HTTP.
-Till exempel, när ett program interagerar med en LLM-leverantör som OpenAI eller Anthropic skickar det under huven en HTTP-begäran till deras servrar och parsar svaret:
+Till exempel, när ett program interagerar med en LLM-leverantör som OpenAI eller Anthropic skickar det under huven en HTTP-begäran till deras servrar och tolkar svaret:
 
 ```console
 $ curl https://api.anthropic.com/v1/messages \
@@ -590,21 +589,21 @@ När du har visat att koden fungerar kan du vilja distribuera den så att andra 
 Distribution finns i många former och är starkt kopplad till programmeringsspråket och de miljöer du arbetar med.
 
 Den enklaste distributionsformen är att ladda upp artefakter som människor kan ladda ner och installera lokalt.
-Detta är fortfarande vanligt och kan ses på platser som [Ubuntus paketarkiv](http://archive.ubuntu.com/ubuntu/pool/main/), som i princip är en HTTP-kataloglistning med `.deb`-filer.
+Det är fortfarande vanligt och kan ses på platser som [Ubuntus paketarkiv](http://archive.ubuntu.com/ubuntu/pool/main/), som i princip är en HTTP-kataloglistning med `.deb`-filer.
 
 I dag har GitHub blivit den faktiska standardplattformen för att publicera källkod och artefakter.
-Även om källkoden ofta är offentligt tillgänglig låter GitHub Releases förvaltare bifoga förbyggda binärer och andra artefakter till taggade versioner.
+Även om källkoden ofta är offentligt tillgänglig låter GitHub Releases de ansvariga bifoga förbyggda binärer och andra artefakter till taggade versioner.
 
 Pakethanterare stödjer ibland installation direkt från GitHub, antingen från källkod eller från en förbyggd wheel:
 
 ```console
-# Install from source (will clone and build)
+# Installera från källkod (klonar och bygger)
 $ pip install git+https://github.com/psf/requests.git
 
-# Install from a specific tag/branch
+# Installera från en specifik tagg/gren
 $ pip install git+https://github.com/psf/requests.git@v2.32.3
 
-# Install a wheel directly from a GitHub release
+# Installera en wheel direkt från en GitHub-utgåva
 $ pip install https://github.com/user/repo/releases/download/v1.0/package-1.0-py3-none-any.whl
 ```
 
@@ -652,7 +651,7 @@ $ uv pip install --index-url https://test.pypi.org/simple/ greeting
 
 En nyckelfråga vid publicering av programvara är tillit.
 Hur verifierar användare att paketet de laddar ner faktiskt kommer från dig och inte har manipulerats?
-Paketregister använder checksummor för att verifiera integritet, och vissa ekosystem stödjer paketsignering för att ge kryptografiskt bevis på upphov.
+Paketregister använder checksummor för att verifiera integritet, och vissa ekosystem stödjer paketsignering för att ge kryptografiskt bevis på upphovsperson.
 
 Olika språk har egna paketregister: [crates.io](https://crates.io) för Rust, [npm](https://www.npmjs.com) för JavaScript, [RubyGems](https://rubygems.org) för Ruby, och [Docker Hub](https://hub.docker.com) för container images.
 För privata eller interna paket sätter organisationer ofta upp egna paketförråd (som en privat PyPI-server eller ett privat Docker-register) eller använder hanterade lösningar från molnleverantörer.
@@ -678,10 +677,10 @@ For HTTP-based APIs, the [OpenAPI specification](https://www.openapis.org/) (for
    Kör `which deactivate` och resonera kring vad bash-funktionen deactivate gör.
 1. Skapa ett Python-paket med `pyproject.toml` och installera det i en virtuell miljö.
    Skapa en lockfile och inspektera den.
-1. Installera Docker och använd det för att bygga Missing Semester-kursens webbplats lokalt med docker compose.
+1. Installera Docker och använd det för att bygga Den saknade terminen-kursens webbplats lokalt med docker compose.
 1. Skriv en Dockerfile för en enkel Python-applikation.
    Skriv sedan en `docker-compose.yml` som kör applikationen tillsammans med en Redis-cache.
 1. Publicera ett Python-paket till TestPyPI (publicera inte till riktiga PyPI om det inte är värt att dela!).
-   Bygg sedan en Docker-avbild med paketet och pusha den till `ghcr.io`.
+   Bygg sedan en Docker-avbild med paketet och skicka den till `ghcr.io`.
 1. Bygg en webbplats med [GitHub Pages](https://docs.github.com/en/pages/quickstart).
    Extra (icke-)poäng: konfigurera den med en egen domän.

@@ -25,7 +25,8 @@ phony: true
 
 # Bortom MIT
 
-Vi har också delat kursen bortom MIT i hopp om att fler ska ha nytta av materialet. Du hittar inlägg och diskussioner på
+Vi har också delat kursen bortom MIT i hopp om att fler ska ha nytta av materialet.
+Du hittar inlägg och diskussioner på
 
 - [Hacker News](https://news.ycombinator.com/item?id=19078281)
 - [Lobsters](https://lobste.rs/s/h6157x/mit_hacker_tools_lecture_series_on)
@@ -36,4 +37,4 @@ Vi har också delat kursen bortom MIT i hopp om att fler ska ha nytta av materia
 
 # Tack
 
-Den här kursen gavs inom [SIPB IAP 2019](https://sipb.mit.edu/iap/2019/) och medarrangerades av [SIPB](https://sipb.mit.edu/) och [MIT EECS](https://www.eecs.mit.edu/).
+Kursen gavs inom [SIPB IAP 2019](https://sipb.mit.edu/iap/2019/) och medarrangerades av [SIPB](https://sipb.mit.edu/) och [MIT EECS](https://www.eecs.mit.edu/).

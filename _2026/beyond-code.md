@@ -11,27 +11,26 @@ video:
   id: 2DOEATfXT8k
 ---
 
-Att vara en bra programvaruingenjör handlar inte bara om att skriva kod som fungerar.
-Det handlar om att skriva kod som andra (inklusive framtida du) kan förstå, underhålla och bygga vidare på.
-Det handlar om att kommunicera tydligt, bidra genomtänkt och vara en god medborgare i de ekosystem du deltar i --- oavsett om de bygger på öppen källkod eller är proprietära.
+Att vara en bra programvaruingenjör handlar inte bara om att skriva fungerande kod.
+Det handlar om att skriva kod som andra (även ditt framtida jag) kan förstå, underhålla och bygga vidare på.
+Det handlar om att kommunicera tydligt, bidra genomtänkt och att vara en god medborgare i de ekosystem du deltar i --- oavsett om de bygger på öppen källkod eller är proprietära.
 
 # Envägskommunikation
 
-En stor del av programvaruingenjörsarbete handlar om att skriva för människor som saknar din nuvarande kontext: teamkamrater som ansluter senare, förvaltare som tar över din kod eller du själv om sex månader när du har glömt varför du gjorde ett visst val.
-Ett nyckelråd för all den typen av skrivande är att målet är att fånga och förmedla *varför*, inte bara *vad*.
+En stor del av programvaruingenjörsarbete handlar om att skriva för människor som saknar din nuvarande kontext: teammedlemmar som ansluter senare, de som tar över ansvaret för din kod eller du själv om sex månader när du har glömt varför du gjorde ett visst val.
+Ett nyckelråd för den här typen av skrivande är att målet är att fånga och förmedla *varför*, inte bara *vad*.
 Vad-frågan brukar vara självförklarande, medan *varför* är dyrköpt kunskap som lätt går förlorad över tid.
 
 Den vanligaste formen av kommunikation mellan ingenjörer (förutom själva koden) är kanske kodkommentarer.
 Jag har personligen upplevt att många kodkommentarer är värdelösa.
 Men de behöver inte vara det.
-Bra kommentarer förklarar sådant som koden själv inte kan: *varför* något görs på ett visst sätt, inte *hur* det fungerar (det visar koden).
+Bra kommentarer förklarar sådant som koden själv inte kan: *varför* något utförs på ett visst sätt, inte *hur* det fungerar (det visar koden).
 De kan spara timmar av förvirring, medan dåliga kommentarer tillför brus eller, ännu värre, vilseleder.
 
 Typer av kommentarer som nästan alltid är värda att skriva:
 
 - **TODOs**: Markera ofullständig eller opolerad kod, men lämna tillräckligt med kontext så att någon annan förstår vad som återstår och varför det sköts upp.
-  "TODO: optimera" är värdelöst.
-  "TODO: den här O(n²)-loopen är okej för `n<100`, men behöver indexering om vi skalar" är handlingsbart.
+  "TODO: optimera" är värdelöst. "TODO: den här O(n²)-slingan är okej för `n<100`, men behöver indexering om vi skalar" går att agera på.
 - **Referenser**: Länka till externa källor när koden implementerar en algoritm från en artikel, anpassar kod från annat håll eller kodar beteende som specificeras i dokumentation.
   Använd permanenta länkar.
   Notera eventuella avvikelser från referensen.
@@ -72,7 +71,7 @@ Generellt bör meddelandets brödtext svara på:
 
 > Skala såklart detaljnivån med komplexiteten.
 > En enradig stavfelsfix behöver bara ett ämnesfält.
-> En subtil fix av race condition som tog timmar att felsöka förtjänar stycken som förklarar problem och lösning.
+> En subtil fix av ett kapplöpningsproblem som tog timmar att felsöka förtjänar stycken som förklarar problem och lösning.
 
 För komplexa ändringar kan det vara användbart att följa strukturen Problem → Lösning → Konsekvenser.
 Börja med begränsningen eller den tvingande faktorn.
@@ -84,7 +83,7 @@ Verklig ingenjörskonst handlar om att balansera målkonflikter, och att dokumen
 LLM:er _kan_ vara hjälpsamma när man skriver incheckningsmeddelanden.
 Om du bara riktar en modell mot ändringen och ber den skriva incheckningsmeddelandet har LLM:en dock bara tillgång till _vad_, inte _varför_.
 Resultatet blir då mest beskrivande (motsatsen till vad vi vill ha).
-Om du använde en LLM för att hjälpa till med ändringen från början är det ofta mycket bättre att be LLM:en skriva incheckningen i samma session, eftersom konversationen i sig är en rik källa till kontext om ändringen.
+Om du använde en LLM för att hjälpa till med ändringen från början är det ofta betydligt bättre att be LLM:en skriva incheckningen i samma session, eftersom konversationen i sig är en rik källa till kontext om ändringen.
 Annars, eller utöver det, är ett bra trick att uttryckligen säga att du vill ha ett incheckningsmeddelande fokuserat på "varför" (och andra nyanser enligt råden ovan), och sedan _be den fråga dig om saknad kontext_.
 I praktiken agerar du som ett MCP-"verktyg" för kodagenten, som den kan använda för att "läsa" kontext.
 
@@ -94,7 +93,7 @@ Blanda inte refaktorering med nya funktioner och kombinera inte orelaterade felr
 Det gör historien grumlig kring vilka ändringar som löste vilket problem, och det kommer nästan säkert att bromsa den slutliga granskningen av ändringarna.
 Det ger dig också superkrafter via `git bisect`, men det är en historia för en annan gång.
 
-> En notering när du börjar vara mer noggrann med tekniskt skrivande och använder det mer brett är att du behöver respektera läsaren.
+> När du börjar skriva mer teknisk text är det värt att tänka på att respektera läsarens tid.
 > Det är lätt att överförklara när man väl har börjat, men du måste stå emot impulsen, annars läser läsaren _inget_ av det du skrivit.
 > Förklara "varför" och lita på att läsaren kan ta reda på "hur" för sin situation.
 
@@ -105,11 +104,11 @@ Den tiden är oftast uppdelad i samarbete och utbildning, och vinsten av att bli
 
 ## Bidra
 
-Oavsett om du skickar en felrapport, bidrar med en enkel felrättning eller implementerar en stor funktion är det värt att komma ihåg att det oftast finns långt fler användare än bidragsgivare, och långt fler bidragsgivare än förvaltare.
-Som följd är förvaltarnas tid hårt belastad.
-Om du vill öka sannolikheten att ditt bidrag leder någonstans produktivt behöver du se till att bidraget har hög signal och lågt brus, och är värt förvaltarnas tid.
+Oavsett om du skickar en felrapport, bidrar med en enkel felrättning eller implementerar en stor funktion är det värt att komma ihåg att det oftast finns långt fler användare än bidragsgivare, och långt fler bidragsgivare än de som ansvarar för projekten.
+Som följd är de ansvariges tid hårt belastad.
+Om du vill öka sannolikheten att ditt bidrag leder någonstans produktivt behöver du se till att bidraget har hög signal och lågt brus, och är värt de ansvariges tid.
 
-En bra felrapport respekterar till exempel förvaltarens tid genom att ge allt som behövs för att förstå och reproducera problemet:
+En bra felrapport respekterar till exempel den ansvariges tid genom att ge allt som behövs för att förstå och reproducera problemet:
 
 - **Miljö**: OS, versionsnummer, relevant konfiguration.
 - **Vad du förväntade dig** kontra **vad som faktiskt hände**.
@@ -118,18 +117,17 @@ En bra felrapport respekterar till exempel förvaltarens tid genom att ge allt s
 - **Vad du redan har provat**: Detta förhindrar dubbla förslag och visar att du har gjort en egen undersökning.
 
 > Om du hittar en säkerhetssårbarhet ska du inte posta den publikt.
-> Kontakta förvaltarna privat först och ge dem rimlig tid att fixa den innan offentliggörande.
+> Kontakta de ansvariga privat först och ge dem rimlig tid att fixa den innan offentliggörande.
 > Många projekt har en `SECURITY.md` eller liknande för detta ändamål.
 
-**Se till att du söker efter befintliga ärenden.**
-Din felrapport eller ändringsönskan kanske redan är rapporterad, och det är bättre att tillföra information i befintliga diskussioner än att skapa dubbletter.
-Det minskar dessutom brus för förvaltarna.
+**Se till att du söker efter befintliga ärenden.** Din felrapport eller ändringsönskan kanske redan är rapporterad, och det är bättre att tillföra information i befintliga diskussioner än att skapa dubbletter.
+Det minskar dessutom brus för de ansvariga.
 
 Minimala reproducerbara exempel är guld, om du kan få fram ett.
-De sparar förvaltaren enormt mycket tid och arbete, och att reproducera programfelet pålitligt är ofta den svåraste delen av att fixa det.
+De sparar den ansvarige enormt mycket tid och arbete, och att reproducera programfelet pålitligt är ofta den svåraste delen av att fixa det.
 Arbetet du lägger på att isolera problemet hjälper dessutom ofta dig att förstå det bättre och leder ibland till att du hittar lösningen själv.
 
-Om du inte får svar direkt, kom ihåg att förvaltare ofta är volontärer med begränsad tid.
+Om du inte får svar direkt, kom ihåg att de ansvariga ofta är volontärer med begränsad tid.
 Om du väntar på svar är en artig uppföljning efter ett par veckor okej.
 Dagliga pingar är det inte.
 På samma sätt är "jag också"-kommentarer, eller felrapporter som bara är inklistrad terminalutskrift, oftast kontraproduktiva för möjligheten att frågan får fart.
@@ -141,14 +139,14 @@ En stavningsrättning eller dokumentationsförbättring är ett utmärkt första
 
 > Kontrollera vilken licens projektet använder, eftersom all kod du bidrar med hamnar under samma licens.
 > Var särskilt uppmärksam på copyleft-licenser (som GPL), som kräver att derivat också är öppen källkod och kan få konsekvenser för din arbetsgivare om du rör sådan kod.
-> [choosealicense.com](https://choosealicense.com/) har mer användbar information.
+> [choosealicense.com](https://choosealicense.com/) har ytterligare användbar information.
 
 När du har bestämt dig för att öppna en ändringsförfrågan (PR), se först till att isolera ändringen du faktiskt vill få accepterad.
 Om din ändringsförfrågan samtidigt ändrar en massa andra orelaterade saker är chansen stor att granskaren skickar tillbaka den och ber dig städa upp.
 Det liknar hur du bör dela upp git-incheckningar i semantiskt relaterade delar.
 
 I vissa fall, om du har många till synes spretiga ändringar men alla behövs för att möjliggöra en funktion, kan det vara okej att öppna en större ändringsförfrågan som fångar allt.
-I så fall är disciplin i incheckningar extra viktig så att förvaltare kan välja att granska ändringen en incheckning i taget.
+I så fall är disciplin i incheckningar extra viktig så att de ansvariga kan välja att granska ändringen en incheckning i taget.
 
 Se sedan till att du förklarar "varför" bakom ändringen väl.
 Beskriv inte bara _vad_ som ändrades --- förklara _varför_ ändringen behövs och _varför_ detta är ett bra sätt att lösa problemet.
@@ -159,23 +157,23 @@ Beroende på `CONTRIBUTING.md` och typen av ändring kan granskare också förv�
 > Att skapa en avgrening (om licensen tillåter) bör reserveras för fall där de bidrag du vill göra ligger utanför ramarna för originalprojektet.
 > Om du skapar en avgrening, se till att du erkänner originalprojektet.
 
-AI gör det mycket enkelt att snabbt generera kod och ändringsförfrågningar som ser rimliga ut.
+AI gör det väldigt enkelt att snabbt generera kod och ändringsförfrågningar som ser rimliga ut.
 Det ursäktar dig dock inte från att förstå vad du bidrar med.
-Om du skickar in AI-genererad kod som du inte kan förklara belastar du förvaltare med att granska och eventuellt underhålla kod som inte ens författaren förstår.
-Det är okej att använda AI för att hjälpa dig identifiera problem och ta fram lösningar/funktioner, **så länge du fortfarande gör ditt grundarbete** och förädlar resultatet till ett bidrag som är värt att ta in, i stället för att lämna det arbetet till (redan hårt belastade) förvaltare.
+Om du skickar in AI-genererad kod som du inte kan förklara belastar du de ansvariga med att granska och eventuellt underhålla kod som inte ens författaren förstår.
+Det är okej att använda AI för att hjälpa dig identifiera problem och ta fram lösningar/funktioner, **så länge du fortfarande gör ditt grundarbete** och förädlar resultatet till ett bidrag som är värt att ta in, i stället för att lämna det arbetet till (redan hårt belastade) ansvariga.
 
-Kom ihåg att när förvaltare accepterar en ändringsförfrågan accepterar de också ett långsiktigt ansvar.
+Kom ihåg att när de ansvariga accepterar en ändringsförfrågan accepterar de också ett långsiktigt ansvar.
 De kommer att underhålla koden långt efter att bidragsgivaren har gått vidare, och kan därför tacka nej till ändringar som är välmenande men inte passar projektets riktning, tillför komplexitet de inte vill underhålla eller där behovet helt enkelt inte är tillräckligt väl dokumenterat.
 Det är _du_ som bidragsgivare som måste argumentera för varför det är värt underhållsbördan att acceptera bidraget.
 
-> När du får återkoppling på en ändringsförfrågan, kom ihåg att din kod inte är du.
+> När du får återkoppling på en ändringsförfrågan, skilj på dig själv och din kod.
 > Granskare försöker göra koden bättre, inte kritisera dig personligen.
 > Ställ förtydligande frågor om du inte håller med.
-> Du kanske lär dig något, eller så gör de det.
+> Du eller granskaren kanske lär dig något.
 
 ## Granska
 
-Du kanske tänker att kodgranskning är något seniora utvecklare gör, men du kommer sannolikt att bli ombedd att granska kod mycket tidigare än du tror, och ditt perspektiv är värdefullt.
+Du kanske tänker att kodgranskning är något seniora utvecklare gör, men du kommer sannolikt att bli ombedd att granska kod betydligt tidigare än du tror, och ditt perspektiv är värdefullt.
 Nya ögon fångar sådant erfarna utvecklare missar, och frågor från någon som är mindre bekant med koden avslöjar ofta antaganden som borde dokumenteras eller förenklas.
 
 Granskning är också ett av de snabbaste sätten att lära sig.
@@ -185,25 +183,18 @@ De är inte bara byråkrati.
 
 Bra kodgranskning är en färdighet du behöver träna upp över tid, men det finns några tips som kan göra den betydligt bättre på kort tid:
 
-- **Granska koden, inte personen**:
-  "Den här funktionen är svår att förstå" jämfört med "Du skrev förvirrande kod."
-- **Föredra handlingsbara kommentarer**:
-  "Kan du ersätta dessa globala variabler med en konfigurations-dataklass" är lättare att agera på än "Använd inte globala variabler här"
-- **Ställ frågor i stället för att ställa krav**:
-  "Vad händer om X är nullvärde här?" bjuder in till diskussion bättre än "Hantera fallet med nullvärde."
-- **Förklara "varför"**:
-  "Överväg att använda en konstant här" är mindre användbart än "Överväg att använda en konstant här så att vi enkelt kan justera tidsgränsen utifrån miljö."
-- **Skilj blockerande problem från förslag**:
-  Var tydlig med vad som måste ändras kontra vad som är en smakfråga.
-- **Uppmärksamma det som är bra**:
-  Att lyfta smarta lösningar eller rena implementationer är uppmuntrande och hjälper författaren att veta vad hen ska fortsätta med.
-- **Vet när du ska sluta**:
-  Bidragsgivare har begränsat med tid och tålamod, och den tiden används inte alltid bäst till att hantera alla smånitar.
+- **Granska koden, inte personen**: "Den här funktionen är svår att förstå" jämfört med "Du skrev förvirrande kod."
+- **Föredra handlingsbara kommentarer**: "Kan du ersätta dessa globala variabler med en konfigurations-dataklass" är lättare att agera på än "Använd inte globala variabler här"
+- **Ställ frågor i stället för att ställa krav**: "Vad händer om X är nullvärde här?" bjuder in till diskussion bättre än "Hantera fallet med nullvärde."
+- **Förklara "varför"**: "Överväg att använda en konstant här" är mindre användbart än "Överväg att använda en konstant här så att vi enkelt kan justera tidsgränsen utifrån miljö."
+- **Skilj blockerande problem från förslag**: Var tydlig med vad som måste ändras kontra vad som är en smakfråga.
+- **Uppmärksamma det som är bra**: Att lyfta smarta lösningar eller rena implementationer är uppmuntrande och hjälper författaren att veta vad hen ska fortsätta med.
+- **Vet när du ska sluta**: Bidragsgivare har begränsat med tid och tålamod, och den tiden används inte alltid bäst till att hantera alla smånitar.
   Fokusera på de stora sakerna och överväg att städa upp småsaker själv i efterhand.
 
 > AI-verktyg kan fånga vissa problem, men de ersätter inte mänsklig granskning.
 > De missar kontext, förstår inte produktkrav och kan självsäkert föreslå fel saker.
-> De är värda att använda som första pass, men inte som ersättning för genomtänkt mänsklig granskning.
+> De är värda att använda som första pass, men inte som ersättning för tänkande mänsklig granskning.
 
 # Utbildning
 
@@ -222,7 +213,7 @@ Några särskilt värdefulla råd är:
   Det signalerar självförtroende, inte svaghet.
   På samma sätt, om någon ställer frågor till dig som du inte kan svaret på, är det bäst att säga "jag vet inte", och eventuellt följa upp med "men jag tror ..." eller "men jag kan ta reda på det".
 - **Acceptera inte ofullständiga svar**: Fortsätt ställa följdfrågor tills du faktiskt förstår.
-- **Gör lite research först**: Grundläggande förarbete hjälper dig att ställa mer träffsäkra frågor (även om informella frågor mellan kollegor förstås är helt okej).
+- **Gör lite förarbete först**: Grundläggande förarbete hjälper dig att ställa mer träffsäkra frågor (även om informella frågor mellan kollegor förstås är helt okej).
 
 Kom ihåg att välformulerade frågor gynnar hela gemenskaper.
 De synliggör dolda antaganden som andra också behöver förstå.
@@ -274,7 +265,7 @@ Om du är osäker på om AI-hjälp ingår i ramarna för en viss uppgift, fråga
 
 1. Hitta ett öppet ärende i ett projekt du använder (kolla etiketter som "good first issue" eller "help wanted" om de finns).
 1. Utvärdera ärendet mot kriterierna från föreläsningen.
-1. Verkar det värdera förvaltarens tid och innehålla all information som behövs för felsökning, eller förväntar du dig att förvaltaren behöver flera frågerundor med den som rapporterat för att nå rotproblemet?
+1. Verkar det värdera den ansvariges tid och innehålla all information som behövs för felsökning, eller förväntar du dig att den ansvarige behöver flera frågerundor med den som rapporterat för att nå rotproblemet?
 
 1. Tänk på ett programfel du har stött på i programvara du använder (eller hitta ett i ett ärendehanteringssystem).
 1. Öva på att skapa ett minimalt reproducerbart exempel.
@@ -289,4 +280,4 @@ Om du är osäker på om AI-hjälp ingår i ramarna för en viss uppgift, fråga
 1. Gå till Stack Overflow och hitta en fråga inom en teknik du kan som har ett högt uppröstat svar.
 1. Hitta sedan en fråga som stängts eller röstats ned kraftigt.
 1. Jämför dem med råden från föreläsningen.
-1. Var det förutsägbart vilken fråga som skulle få bättre svar?
+1. Gick det att förutse vilken fråga som skulle få bättre svar?
