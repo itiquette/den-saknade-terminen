@@ -208,7 +208,7 @@ Några särskilt värdefulla råd är:
   Det hjälper den som svarar att identifiera dina verkliga kunskapsluckor.
 - **Ställ ja/nej-frågor**: "Är X sant?" förhindrar utsvävande förklaringar och leder ofta ändå till nyttig utveckling.
 - **Var specifik**: "Hur fungerar SQL-joins?" är för vagt.
-  "Inkluderar en LEFT JOIN rader där högra tabellen inte har någon match?" går att besvara.
+  "Omfattar en LEFT JOIN rader där högra tabellen inte har någon match?" går att besvara.
 - **Säg till när du inte förstår**: Avbryt för att fråga om obekanta termer.
   Det signalerar självförtroende, inte svaghet.
   På samma sätt, om någon ställer frågor till dig som du inte kan svaret på, är det bäst att säga "jag vet inte", och eventuellt följa upp med "men jag tror ..." eller "men jag kan ta reda på det".

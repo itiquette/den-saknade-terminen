@@ -51,7 +51,7 @@ Du kan till och med avbryta agenten om den är på väg åt fel håll.
 En hjälpsam mental modell är att tänka på dig själv som chef för en praktikant: praktikanten gör grovjobbet men behöver vägledning och gör ibland fel som måste rättas.
 
 > För en tydligare demonstration kan du som uppföljning be agenten köra det resulterande skriptet.
-> Observera utdata och be den göra en ändring (t.ex. att endast inkludera absoluta URL:er).
+> Observera utdata och be den göra en ändring (t.ex. att enbart ta med absoluta URL:er).
 
 # Hur AI-modeller och agenter fungerar
 
@@ -192,7 +192,7 @@ Du skulle förmodligen lägga den sista meningen i en CLAUDE.md-fil.
       Vissa kodagenter kan autogenerera den här filen (t.ex. kommandot `/init` i Claude Code).
       Se [här](https://github.com/pydantic/pydantic-ai/blob/main/CLAUDE.md) för ett verkligt exempel på en `AGENTS.md`.
 {%- comment %}
-Dotbot-exempel, CLAUDE.md som inkluderar @DEVELOPMENT.md och säger att man alltid ska köra typkontroll och kodformaterare efter ändringar i Python-kod.
+Dotbot-exempel, CLAUDE.md som innefattar @DEVELOPMENT.md och säger att man alltid ska köra typkontroll och kodformaterare efter ändringar i Python-kod.
 
 Exempelprompt, utifrån master:
 

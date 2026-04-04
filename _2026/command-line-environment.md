@@ -880,7 +880,7 @@ Exempel på saker du kan vilja justera:
    Testa `touch -- -myfile` och ta sedan bort filen utan `--`.
 
 1. Läs [`man ls`](https://www.man7.org/linux/man-pages/man1/ls.1.html) och skriv ett `ls`-kommando som listar filer på följande sätt:
-    - Inkluderar alla filer, även dolda.
+    - Visar alla filer, även dolda.
     - Storlekar visas i läsbart format för människor (t.ex. 454M i stället för 454279954).
     - Filer sorteras efter nyast först.
     - Utdata är färglagd.

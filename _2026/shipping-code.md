@@ -348,7 +348,7 @@ Slutligen är semantisk versionshantering inte ofelbar, och de ansvariga kan oav
 # Reproducerbarhet {#reproducibility}
 
 I modern programvaruutveckling vilar koden du skriver ovanpå många abstraktionslager.
-Det inkluderar språkets körmiljö, tredjepartsbibliotek, operativsystemet eller till och med hårdvaran.
+Det omfattar språkets körmiljö, tredjepartsbibliotek, operativsystemet eller till och med hårdvaran.
 Skillnader i något av dessa lager kan ändra kodens beteende eller till och med hindra den från att fungera som avsett.
 Dessutom påverkar även skillnader i underliggande hårdvara din förmåga att leverera programvara.
 
@@ -446,7 +446,7 @@ Avbilder byggs i lager, där varje instruktion (`FROM`, `RUN`, `COPY`, etc.) i e
 Docker cachelagrar dessa lager, så om du ändrar en rad i Dockerfile behöver bara det lagret och efterföljande lager byggas om.
 
 Föregående Dockerfile har flera problem: den använder full Python-avbild i stället för slim-variant, kör separata `RUN`-kommandon som skapar onödiga lager, versioner är inte låsta, och den rensar inte pakethanterarens cache vilket skickar med onödiga filer.
-Andra vanliga misstag inkluderar att osäkert köra containrar som superanvändare och att av misstag baka in hemligheter i lager.
+Andra vanliga misstag omfattar att osäkert köra containrar som superanvändare och att av misstag baka in hemligheter i lager.
 
 Här är en förbättrad version.
 
@@ -504,7 +504,7 @@ server:
 En bra tumregel för konfiguration är att samma kodbas ska kunna driftsättas till olika miljöer (utveckling, test och produktion) med endast konfigurationsändringar, aldrig kodändringar.
 
 Bland konfigurationsalternativ finns ofta känslig data som API-nycklar.
-Hemligheter måste hanteras varsamt för att undvika oavsiktlig exponering och får inte inkluderas i versionshantering.
+Hemligheter måste hanteras varsamt för att undvika oavsiktlig exponering och får inte ingå i versionshantering.
 
 # Tjänster och orkestrering {#services--orchestration}
 
