@@ -265,7 +265,7 @@ De är särskilt bra på vissa felsökningsuppgifter som kompletterar traditione
 - **Analysera kraschdumpar och stackspår**: Klistra in ett stackspår och fråga vad som kan ha orsakat det.
 
 > **Obs om felsökningssymboler**: För meningsfulla stackspår och felsökning, se till att dina binärer (och länkade bibliotek) kompileras med felsökningssymboler (flaggan `-g`).
-Felsökningsinformation lagras typiskt i DWARF-format.
+Felsökningsinformation lagras vanligtvis i DWARF-format.
 Dessutom gör kompilering med frame pointers (`-fno-omit-frame-pointer`) stackspår mer tillförlitliga, särskilt för profileringsverktyg.
 Utan detta kan stackspår bara visa minnesadresser eller vara ofullständiga.
 Det spelar större roll för nativt kompilerade program (C++, Rust) än för Python eller Java.

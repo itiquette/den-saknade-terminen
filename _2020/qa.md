@@ -99,8 +99,8 @@ Här är några av dem vi nämnde, och se [Filesystem Hierarchy Standard](https:
 - `/tmp` - temporära filer (även `/var/tmp`).
   Rensas ofta mellan omstarter.
 - `/usr/` - skrivskyddad användardata.
-  + `/usr/bin` - icke-essentiella kommandobinärer.
-  + `/usr/sbin` - icke-essentiella systembinärer, vanligtvis avsedda att köras av root.
+  + `/usr/bin` - icke-nödvändiga kommandobinärer.
+  + `/usr/sbin` - icke-nödvändiga systembinärer, vanligtvis avsedda att köras av root.
   + `/usr/local/bin` - binärer för användarkompilerade program.
 - `/var` - föränderliga filer som loggar eller cache.
 
@@ -131,10 +131,10 @@ Du beräknar manuellt tiden mellan olika delar av koden.
 Genom att upprepa detta kan du i praktiken göra en binärsökning genom koden och hitta segmentet som tar längst tid.
 
 För mer avancerade verktyg låter Valgrinds [Callgrind](https://valgrind.org/docs/manual/cl-manual.html) dig köra programmet och mäta hur lång tid allt tar samt hela anropsstackar, alltså vilken funktion som anropat vilken.
-Det producerar sedan en annoterad version av programmets källkod med tidsåtgång per rad.
+Det producerar sedan en kommenterad version av programmets källkod med tidsåtgång per rad.
 Det saktar dock ner programmet ungefär en storleksordning och stödjer inte trådar.
-För andra fall kan [`perf`](https://www.brendangregg.com/perf.html) och andra språkspecifika sampling-profilerare snabbt ge användbar data.
-[Flamdiagram](https://www.brendangregg.com/flamegraphs.html) är en bra visualisering av utdata från sådana sampling-profilerare.
+För andra fall kan [`perf`](https://www.brendangregg.com/perf.html) och andra språkspecifika stickprovsprofilerare snabbt ge användbar data.
+[Flamdiagram](https://www.brendangregg.com/flamegraphs.html) är en bra visualisering av utdata från sådana stickprovsprofilerare.
 Du bör också försöka använda verktyg som är specifika för språket eller uppgiften du jobbar med.
 För webbutveckling har till exempel utvecklarverktygen i Chrome och Firefox utmärkta profilerare.
 
@@ -149,7 +149,7 @@ Särskilt [`bpftrace`](https://github.com/iovisor/bpftrace) är värt att titta 
 Några av våra favoriter, främst för säkerhet och användbarhet:
 
 - [uBlock Origin](https://github.com/gorhill/uBlock) - en [bred blockerare](https://github.com/gorhill/uBlock/wiki/Blocking-mode) som inte bara stoppar annonser utan även många former av tredjepartskommunikation som en sida försöker göra.
-  Det inkluderar även inline-skript och andra typer av resursladdning.
+  Det omfattar även inline-skript och andra typer av resursladdning.
   Om du är villig att lägga tid på konfiguration för att få saker att fungera, testa [medium mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-medium-mode) eller till och med [hard mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-hard-mode).
   Det kommer att göra att vissa sajter inte fungerar förrän du justerat inställningarna tillräckligt, men det förbättrar också din säkerhet på nätet markant.
   Annars är [easy mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-easy-mode) redan ett bra standardläge som blockerar de flesta annonser och spårare.
@@ -239,7 +239,7 @@ Några ytterligare tips:
   Till skillnad från andra redigerare lagrar vim ett träd av ändringar, så även om du ångrar och sedan gör en annan ändring kan du fortfarande gå tillbaka till ursprungsläget genom att navigera i trädet.
   Tillägg som [gundo.vim](https://github.com/sjl/gundo.vim) och [undotree](https://github.com/mbbill/undotree) visar trädet grafiskt.
 - Tidsbaserad ångra - kommandona `:earlier` och `:later` låter dig navigera filer via tidsreferenser i stället för en ändring i taget.
-- [Persistent undo](https://vim.fandom.com/wiki/Using_undo_branches#Persistent_undo) är en fantastisk inbyggd vim-funktion som är avstängd som standard.
+- Beständig ångringshistorik ([Persistent undo](https://vim.fandom.com/wiki/Using_undo_branches#Persistent_undo)) är en fantastisk inbyggd vim-funktion som är avstängd som standard.
   Den bevarar ångrahistorik mellan vim-sessioner.
   Genom att sätta `undofile` och `undodir` i `.vimrc` sparar vim filspecifik ändringshistorik.
 - Leader key - leader-tangenten är en specialtangent som ofta lämnas till användaren för egna kommandon.

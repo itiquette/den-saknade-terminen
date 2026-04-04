@@ -515,7 +515,7 @@ I stället för att paketera allt i en monolitisk applikation bryter moderna ark
 Som exempel, om vi avgör att applikationen kan tjäna på att använda cache, kan vi i stället för att bygga en egen lösning utnyttja etablerade lösningar som [Redis](https://redis.io/) eller [Memcached](https://memcached.org/).
 Vi skulle kunna bädda in Redis i applikationens beroenden genom att bygga den i containern, men det innebär att harmonisera alla beroenden mellan Redis och vår applikation, vilket kan vara utmanande eller omöjligt.
 I stället kan vi driftsätta varje applikation separat i sin egen container.
-Det kallas ofta en mikrotjänstarkitektur där varje komponent körs som en oberoende tjänst som kommunicerar över nätverket, typiskt via HTTP-API:er.
+Det kallas ofta en mikrotjänstarkitektur där varje komponent körs som en oberoende tjänst som kommunicerar över nätverket, vanligtvis via HTTP-API:er.
 
 [Docker Compose](https://docs.docker.com/compose/) är ett verktyg för att definiera och köra applikationer med flera containrar.
 I stället för att hantera containrar individuellt deklarerar du alla tjänster i en enda YAML-fil och orkestrerar dem tillsammans.
@@ -628,7 +628,7 @@ $ uv pip install numpy --verbose --no-cache 2>&1 | grep -F '.whl'
 DEBUG Selecting: numpy==2.2.1 [compatible] (numpy-2.2.1-cp312-cp312-macosx_14_0_arm64.whl)
 ```
 
-Här indikerar `cp312-cp312-macosx_14_0_arm64` att denna wheel är specifik för CPython 3.12 på macOS 14+ för ARM64 (Apple Silicon).
+Här anger `cp312-cp312-macosx_14_0_arm64` att denna wheel är specifik för CPython 3.12 på macOS 14+ för ARM64 (Apple Silicon).
 Om du är på en annan plattform laddar `pip` ner en annan wheel eller bygger från källkod.
 
 Omvänt behöver vi, för att andra ska kunna hitta paketet vi skapat, publicera det till något av dessa register.

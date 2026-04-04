@@ -236,7 +236,7 @@ Beräkningstänkande är fortfarande värdefullt.
 # Rekommenderad programvara
 
 Många IDE:er och AI-kodtillägg innehåller kodagenter (se rekommendationerna från [föreläsningen om utvecklingsmiljö]({{ '/2026/development-environment/' | relative_url }})).
-Andra populära kodagenter inkluderar Anthropics [Claude Code](https://www.claude.com/product/claude-code), OpenAI:s [Codex](https://openai.com/codex/) och agenter med öppen källkod som [opencode](https://github.com/anomalyco/opencode).
+Bland andra populära kodagenter finns Anthropics [Claude Code](https://www.claude.com/product/claude-code), OpenAI:s [Codex](https://openai.com/codex/) och agenter med öppen källkod som [opencode](https://github.com/anomalyco/opencode).
 
 # Övningar
 

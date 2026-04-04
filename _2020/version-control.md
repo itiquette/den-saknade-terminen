@@ -40,7 +40,7 @@ Det går att memorera en handfull kommandon och behandla dem som magiska trollfo
 Även om Git onekligen har ett fult gränssnitt är den underliggande designen och idéerna vackra.
 Ett fult gränssnitt måste _memoreras_, men en vacker design kan _förstås_.
 Därför ger vi en förklaring nerifrån och upp av Git, med start i datamodellen och därefter kommandoraden.
-När datamodellen väl är förstådd blir kommandona lättare att förstå i termer av hur de manipulerar den underliggande datamodellen.
+När datamodellen väl är förstådd blir kommandona lättare att förstå utifrån hur de manipulerar den underliggande datamodellen.
 
 # Gits datamodell
 
@@ -51,7 +51,7 @@ Git har en välgenomtänkt modell som möjliggör alla fina funktioner i version
 
 Git modellerar historiken för en samling filer och kataloger i en toppnivåkatalog som en serie ögonblicksbilder.
 I Git-terminologi kallas en fil en "blob", och den är bara en samling av byte.
-En katalog representeras av ett trädobjekt (`tree`), som mappar namn till blobbar eller andra trädobjekt (så kataloger kan innehålla andra kataloger).
+En katalog representeras av ett trädobjekt (`tree`), som kopplar namn till blobbar eller andra trädobjekt (så kataloger kan innehålla andra kataloger).
 En ögonblicksbild är det toppnivåträdobjekt (`tree`) som spåras.
 Till exempel kan vi ha ett träd enligt följande:
 

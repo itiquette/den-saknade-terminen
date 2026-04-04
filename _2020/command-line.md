@@ -134,7 +134,7 @@ $ jobs
 
 ```
 
-En särskild signal är `SIGKILL`, eftersom processen inte kan fånga den och den alltid terminerar processen omedelbart.
+En särskild signal är `SIGKILL`, eftersom processen inte kan fånga den och den alltid dödar processen omedelbart.
 Den kan dock ge otrevliga bieffekter, till exempel att efterlämna föräldralösa barnprocesser.
 
 Du kan läsa mer om dessa och andra signaler [här](https://en.wikipedia.org/wiki/Signal_(IPC)) eller genom att skriva [`man signal`](https://www.man7.org/linux/man-pages/man7/signal.7.html) eller `kill -l`.
@@ -456,7 +456,7 @@ Till exempel är skalet `zsh` en övermängd av `bash` och erbjuder många prakt
 
 **Ramverk** kan också förbättra ditt skal.
 Några populära generella ramverk är [prezto](https://github.com/sorin-ionescu/prezto) och [oh-my-zsh](https://ohmyz.sh/), samt mindre ramverk som fokuserar på specifika funktioner, till exempel [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) eller [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search).
-Skal som [fish](https://fishshell.com/) inkluderar många av dessa användarvänliga funktioner som standard.
+Skal som [fish](https://fishshell.com/) har många av dessa användarvänliga funktioner som standard.
 Några sådana funktioner är:
 
 - Högerprompt

@@ -34,7 +34,7 @@ Grafen över inlärningskurvor för redigerare är en myt.
 Att lära sig grunderna i en kraftfull redigerare är ganska enkelt, även om det kan ta år att bemästra allt.
 
 Vilka redigerare är populära i dag?
-Se den här [Stack Overflow-undersökningen](https://insights.stackoverflow.com/survey/2018/#development-environments-and-tools) (det kan finnas viss bias eftersom Stack Overflow-användare inte nödvändigtvis representerar programmerare i stort).
+Se den här [Stack Overflow-undersökningen](https://insights.stackoverflow.com/survey/2018/#development-environments-and-tools) (det kan finnas viss snedvridning eftersom Stack Overflow-användare inte nödvändigtvis representerar programmerare i stort).
 
 ## Kommandoradsredigerare
 

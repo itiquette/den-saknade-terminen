@@ -57,7 +57,7 @@ Om du är extra försiktig, använd en som krypterar lösenorden lokalt på din 
 Använd den för att generera lösenord till alla webbplatser du bryr dig om redan nu.
 Slå sedan på tvåfaktorsautentisering, helst med en [FIDO/U2F](https://fidoalliance.org/)-dongel (till exempel en [YubiKey](https://www.yubico.com/quiz/), som har [20% rabatt för studenter](https://www.yubico.com/why-yubico/for-education/)).
 TOTP (som Google Authenticator eller Duo) fungerar också i nödfall, men [skyddar inte mot nätfiske](https://twitter.com/taviso/status/1082015009348104192).
-SMS är i stort sett värdelöst, om inte din hotmodell enbart består av slumpmässiga främlingar som snappar upp lösenord i transit.
+SMS är i stort sett värdelöst, om inte din hotmodell enbart består av slumpmässiga främlingar som snappar upp lösenord under överföring.
 
 Värt att uppmärksamma om pappersnycklar: tjänster ger dig ofta en "reservnyckel" som kan användas som andra faktor om du tappar din riktiga.
 (Ha alltid en reservdongel på en säker plats.)

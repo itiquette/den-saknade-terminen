@@ -83,7 +83,7 @@ Vanligen har användare två nycklar: en tilläggsnyckel som kan skapa nya säke
 Den senare förvaras offline.
 
 Observera att detta är ett ganska svårt scenario, eftersom du behöver kunna göra ändringar samtidigt som du förhindrar att en angripare raderar dina data.
-Befintliga kommersiella lösningar inkluderar [Tarsnap](https://www.tarsnap.com/) och [Borgbase](https://www.borgbase.com/).
+Bland befintliga kommersiella lösningar finns [Tarsnap](https://www.tarsnap.com/) och [Borgbase](https://www.borgbase.com/).
 
 
 ## Ytterligare överväganden

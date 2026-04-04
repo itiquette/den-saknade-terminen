@@ -296,8 +296,8 @@ Bland annat kan du, om din befintliga OS-installation går sönder så att den i
 [Virtuella maskiner](https://en.wikipedia.org/wiki/Virtual_machine) och liknande verktyg som containrar låter dig emulera ett helt datorsystem, inklusive operativsystem.
 Det kan vara användbart för att skapa isolerade miljöer för testning, utveckling eller utforskning (t.ex. köra potentiellt skadlig kod).
 
-[Vagrant](https://www.vagrantup.com/) är ett verktyg som låter dig beskriva maskinkonfigurationer (operativsystem, tjänster, paket osv.) i kod och sedan instansiera VM:ar med ett enkelt `vagrant up`.
-[Docker](https://www.docker.com/) är konceptuellt likt men använder containrar i stället.
+[Vagrant](https://www.vagrantup.com/) är ett verktyg som låter dig beskriva maskinkonfigurationer (operativsystem, tjänster, paket osv.) i kod och sedan skapa VM:ar med ett enkelt `vagrant up`.
+[Docker](https://www.docker.com/) är i grunden likt men använder containrar i stället.
 
 Du kan också hyra virtuella maskiner i molnet, och det är ett trevligt sätt att få direkt tillgång till:
 

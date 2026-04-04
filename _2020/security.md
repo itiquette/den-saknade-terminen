@@ -33,7 +33,7 @@ Det är användbart till exempel när man bedömer styrkan i ett lösenord.
 Som [XKCD-serien](https://xkcd.com/936/) ovan illustrerar är ett lösenord som "correcthorsebatterystaple" säkrare än ett som "Tr0ub4dor&3".
 Men hur kvantifierar man det?
 
-Entropi mäts i _bitar_, och när man väljer helt uniformt från en mängd möjliga utfall är entropin lika med `log_2(antal möjligheter)`.
+Entropi mäts i _bitar_, och när man väljer helt likformigt från en mängd möjliga utfall är entropin lika med `log_2(antal möjligheter)`.
 En rättvis slantsingling ger 1 bit entropi.
 Ett tärningskast (med en sexsidig tärning) har cirka 2,58 bitar entropi.
 
@@ -46,7 +46,7 @@ För att stå emot offlinegissning behövs ett starkare lösenord (t.ex. 80 bita
 
 # Hashfunktioner
 
-En [kryptografisk hashfunktion](https://en.wikipedia.org/wiki/Cryptographic_hash_function) mappar data av godtycklig storlek till en fast storlek och har vissa specialegenskaper.
+En [kryptografisk hashfunktion](https://en.wikipedia.org/wiki/Cryptographic_hash_function) avbildar data av godtycklig storlek på en fast storlek och har vissa specialegenskaper.
 En grov specifikation av en hashfunktion är:
 
 ```
@@ -54,7 +54,7 @@ hash(value: array<byte>) -> vector<byte, N>  (for some fixed N)
 ```
 
 Ett exempel på hashfunktion är [SHA1](https://en.wikipedia.org/wiki/SHA-1), som används i Git.
-Den mappar indata av godtycklig storlek till utdata på 160 bitar (som kan representeras som 40 hexadecimala tecken).
+Den avbildar indata av godtycklig storlek på utdata på 160 bitar (som kan representeras som 40 hexadecimala tecken).
 Vi kan testa SHA1 på indata med kommandot `sha1sum`:
 
 ```console
@@ -171,10 +171,10 @@ Och förstås har `verify` den självklara korrekthetsegenskapen att `verify(mes
 
 ## Nyckeldistribution
 
-Asymmetrisk kryptografi är fantastisk, men den har en stor utmaning i att distribuera publika nycklar och mappa dem till verkliga identiteter.
+Asymmetrisk kryptografi är fantastisk, men den har en stor utmaning i att distribuera publika nycklar och koppla dem till verkliga identiteter.
 Det finns många lösningar på detta.
-Signal har en enkel modell: trust on first use, plus stöd för nyckelutbyte utanför bandet (du verifierar vänners "safety numbers" personligen).
-PGP har en annan modell, [web of trust](https://en.wikipedia.org/wiki/Web_of_trust).
+Signal har en enkel modell: tillit vid första användning (_trust on first use_), plus stöd för nyckelutbyte utanför bandet (du verifierar vänners säkerhetsnummer personligen).
+PGP har en annan modell, [tillitsnätverk (_web of trust_)](https://en.wikipedia.org/wiki/Web_of_trust).
 Keybase har ytterligare en modell med [sociala bevis](https://keybase.io/blog/chat-apps-softer-than-tofu) (tillsammans med andra smarta idéer).
 Varje modell har sina styrkor.
 Vi (föreläsarna) gillar Keybases modell.
@@ -237,7 +237,7 @@ security concepts, tips
 # Övningar
 
 1. **Entropi.**
-    1. Anta att ett lösenord väljs som en konkatenering av fyra ord i gemener, där varje ord väljs uniformt slumpmässigt från en ordlista med 100 000 ord.
+    1. Anta att ett lösenord väljs som en sammansättning av fyra ord i gemener, där varje ord väljs likformigt slumpmässigt från en ordlista med 100 000 ord.
        Ett exempel på ett sådant lösenord är `correcthorsebatterystaple`.
        Hur många entropibitar har detta?
     1. Tänk på ett alternativt schema där ett lösenord väljs som en sekvens av 8 slumpmässiga alfanumeriska tecken (inklusive både gemener och versaler).

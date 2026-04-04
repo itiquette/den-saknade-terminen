@@ -377,7 +377,7 @@ ffmpeg -loglevel panic -i /dev/video0 -frames 1 -f image2 -
    Det kan finnas en lämplig flagga i verktyget du använder för att extrahera uppstartsloggarna, eller så kan du använda `sed '0,/STRING/d'` för att ta bort alla rader före en rad som matchar `STRING`.
    Ta sedan bort delar av raden som _alltid_ varierar (som tidsstämpeln).
    Avdubbla därefter indata och behåll antal för varje rad (`uniq` är din vän).
-   Och till sist, eliminera alla rader vars antal är 3 (eftersom de _delades_ av alla uppstarter).
+   Och till sist, ta bort alla rader vars antal är 3 (eftersom de _delades_ av alla uppstarter).
 6. Hitta en datamängd på nätet, som [den här](https://commons.wikimedia.org/wiki/Data:Wikipedia_statistics/data.tab), [den här](https://ucr.fbi.gov/crime-in-the-u.s/2016/crime-in-the-u.s.-2016/topic-pages/tables/table-1), eller kanske en [härifrån](https://www.springboard.com/blog/data-science/free-public-data-sets-data-science-project/).
    Hämta den med `curl` och extrahera bara två kolumner med numeriska data.
    Om du hämtar HTML-data kan [`pup`](https://github.com/EricChiang/pup) vara hjälpsamt.
