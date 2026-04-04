@@ -454,7 +454,7 @@ Kommandot `git merge` används för sammanslagning.
 
 # Resurser
 
-- [Pro Git](https://git-scm.com/book/en/v2) är **starkt rekommenderad läsning**.
+- [Pro Git](https://git-scm.com/book/en/v2) är **varmt rekommenderad läsning**.
   Att gå igenom kapitel 1--5 bör lära dig det mesta du behöver för att använda Git skickligt, nu när du förstår datamodellen.
   De senare kapitlen har intressant, avancerat material.
 - [Oh Shit, Git!?!](https://ohshitgit.com/) är en kort guide för hur man återhämtar sig från vanliga Git-misstag.

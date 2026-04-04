@@ -17,7 +17,7 @@ _Integrerade utvecklingsmiljöer_ (IDE:er) som [VS Code][vs-code] samlar all den
 Terminalbaserade arbetsflöden för utveckling kombinerar verktyg som [tmux](https://github.com/tmux/tmux) (en terminalmultiplexer), [Vim](https://www.vim.org/) (en textredigerare), [Zsh](https://www.zsh.org/) (ett skal) och språkspecifika kommandoradsverktyg, som [Ruff](https://docs.astral.sh/ruff/) (en Python-linter och kodformaterare) och [Mypy](https://mypy-lang.org/) (en typkontrollerare för Python).
 
 IDE:er och terminalbaserade arbetsflöden har båda sina styrkor och svagheter.
-Grafiska IDE:er kan till exempel vara lättare att lära sig, och dagens IDE:er har i allmänhet bättre AI-integration direkt ur lådan, som AI-autokomplettering.
+Grafiska IDE:er kan till exempel vara lättare att lära sig, och dagens IDE:er har i allmänhet bättre AI-integration direkt vid installation, som AI-autokomplettering.
 Terminalbaserade arbetsflöden är å andra sidan lätta och kan vara ditt enda alternativ i miljöer där du inte har ett GUI eller inte kan installera programvara.
 Vi rekommenderar att du skaffar grundläggande vana vid båda och behärskar minst en av dem bra.
 Om du inte redan har ett IDE du föredrar rekommenderar vi att du börjar med [VS Code][vs-code].

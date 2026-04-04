@@ -34,13 +34,13 @@ Den här [XKCD-serien](https://xkcd.com/1597/) fångar Gits rykte:
 
 ![xkcd 1597](https://imgs.xkcd.com/comics/git.png)
 
-Eftersom Gits gränssnitt är en läckande abstraktion kan det bli förvirrande att lära sig Git uppifrån och ner (med start i kommandoraden).
+Eftersom Gits gränssnitt är en läckande abstraktion kan det bli förvirrande att lära sig Git uppifrån och ned (med start i kommandoraden).
 Det går att memorera en handfull kommandon och behandla dem som magiska trollformler, och följa tillvägagångssättet i serien ovan när något går fel.
 
 Även om Git onekligen har ett fult gränssnitt är den underliggande designen och idéerna vackra.
 Ett fult gränssnitt måste _memoreras_, men en vacker design kan _förstås_.
 Därför ger vi en förklaring nerifrån och upp av Git, med start i datamodellen och därefter kommandoraden.
-När datamodellen väl är förstådd blir kommandona lättare att förstå i termer av hur de manipulerar den underliggande datamodellen.
+När datamodellen väl är förstådd blir kommandona lättare att förstå utifrån hur de manipulerar den underliggande datamodellen.
 
 # Gits datamodell
 
@@ -50,7 +50,7 @@ Gits genialitet ligger i dess välgenomtänkta datamodell som möjliggör alla f
 
 Git modellerar historiken för en samling filer och kataloger inom någon toppnivåkatalog som en serie ögonblicksbilder.
 I Git-terminologi kallas en fil en "blob", och den är bara en hög med byte.
-En katalog representeras av ett trädobjekt (`tree`), som mappar namn till blobbar eller andra trädobjekt (så kataloger kan innehålla andra kataloger).
+En katalog representeras av ett trädobjekt (`tree`), som kopplar namn till blobbar eller andra trädobjekt (så kataloger kan innehålla andra kataloger).
 En ögonblicksbild är det toppnivåträdobjekt (`tree`) som spåras.
 Till exempel kan vi ha ett träd enligt följande:
 
@@ -298,7 +298,7 @@ Det finns många värdar för Git-kodförråd, som [GitLab](https://about.gitlab
 
 # Resurser
 
-- [Pro Git](https://git-scm.com/book/en/v2) är **starkt rekommenderad läsning**.
+- [Pro Git](https://git-scm.com/book/en/v2) är **varmt rekommenderad läsning**.
 Att gå igenom kapitel 1--5 bör lära dig det mesta du behöver för att använda Git skickligt, nu när du förstår datamodellen.
 De senare kapitlen har intressant, avancerat material.
 - [Oh Shit, Git!?!](https://ohshitgit.com/) är en kort guide för hur man återhämtar sig från vanliga Git-misstag.

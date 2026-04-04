@@ -26,19 +26,19 @@ Representerar du ett företag, universitet eller annan organisation som använde
 
 Som datavetare vet vi att datorer är fantastiska på att hjälpa till med repetitiva uppgifter.
 Alltför ofta glömmer vi dock att detta gäller lika mycket för _hur vi använder_ datorn som för de beräkningar vi vill att våra program ska utföra.
-Det finns en uppsjö av verktyg tillgängliga som gör oss produktivare och låter oss lösa mer komplexa problem i allt datorrelaterat arbete.
+Det finns en uppsjö av tillgängliga verktyg som gör oss produktivare och låter oss lösa mer komplexa problem i allt datorrelaterat arbete.
 Trots det använder många av oss bara en liten del av verktygen.
 Vi kan precis tillräckligt många magiska rader utantill för att komma vidare och kopierar blint kommandon från internet när vi kör fast.
 
 Kursen är ett försök att [åtgärda det]({{ '/about/' | relative_url }}).
 
-Vi vill lära dig att få ut mer av verktygen du redan känner till, visa nya verktyg att lägga i verktygslådan, och förhoppningsvis väcka din nyfikenhet i att utforska (och kanske bygga) flera verktyg själv.
+Vi vill lära dig att få ut mer av verktygen du redan känner till, visa nya verktyg att lägga i verktygslådan, och förhoppningsvis väcka din nyfikenhet att utforska (och kanske bygga) fler verktyg själv.
 Vi tror att det här är den saknade terminen i de flesta datavetenskapliga utbildningar.
 
 # Kursupplägg
 
 Den poängfria kursen består av nio föreläsningar på en timme vardera, där varje föreläsning fokuserar på ett [särskilt ämne]({{ '/2026/' | relative_url }}).
-Föreläsningarna är till stor del fristående, men allt efter terminen fortgår, antar vi att du kan innehållet från tidigare pass.
+Föreläsningarna är till stor del fristående, men allt eftersom terminen fortgår, antar vi att du kan innehållet från tidigare pass.
 Vi har föreläsningsanteckningar på nätet, men en del innehåll som tas upp på en föreläsning (t.ex. demos) kanske inte finns i anteckningarna.
 Precis som för tidigare år spelar vi in föreläsningarna och publicerar dem [på nätet](https://www.youtube.com/@MissingSemester).
 
@@ -47,7 +47,7 @@ För att du ska kunna ta till dig innehållet i din egen takt innehåller varje 
 Vi kommer inte att ha särskilda mottagningstider, men vi uppmuntrar dig att ställa frågor på [OSSU Discord](https://ossu.dev/#community), i `#missing-semester-forum`, eller via e-post till [missing-semester@mit.edu](mailto:missing-semester@mit.edu).
 
 På grund av tidsbrist går det inte täcka alla verktyg på samma detaljnivå som en fullskalig kurs.
-Vi kommer att försöka hänvisa dig till fördjupande resurser i ett verktyg eller ämne när det går, men om något verkligen fångar ditt intresse, tveka inte på höra av dig och be om tips.
+Vi kommer att försöka hänvisa dig till fördjupande resurser i ett verktyg eller ämne när det går, men om något verkligen fångar ditt intresse, tveka inte att höra av dig och be om tips.
 
 Har du synpunkter på kursen får du gärna e-posta dem till [missing-semester@mit.edu](mailto:missing-semester@mit.edu).
 
@@ -65,7 +65,7 @@ Du kan inte trycka på en knapp som inte finns, eller ge ett röstkommando som i
 För att fullt ut utnyttja verktygen i din dator behöver vi gå tillbaka till grunderna och använda ett textbaserat gränssnitt: skalet.
 
 Nästan alla plattformar du kan få tag i har ett skal i någon form, och många har flera skal att välja mellan.
-Detaljerna skiljer sig, men i grunden är de ungefär lika: de låter dig köra program, ge dem indata och läsa deras utdata på ett semistrukturerat sätt.
+Detaljerna skiljer sig, men i grunden är de ungefär lika: de låter dig köra program, ge dem indata och läsa deras utdata på ett halvstrukturerat sätt.
 
 För att öppna en skalprompt (där du kan skriva kommandon) behöver du först en terminal, som är det visuella gränssnittet till ett skal.
 Din enhet har troligen ett skal installerat, annars är den enkel att installera:
@@ -92,7 +92,7 @@ Skalet är inte bara (oftast) betydligt snabbare än att "klicka runt".
 Det ger också en uttryckskraft som du sällan hittar i ett enskilt grafiskt program.
 Som vi ska se ger skalet dig möjlighet att _kombinera_ program på kreativa sätt för att automatisera nästan vilken uppgift som helst.
 
-Att kunna skalet är också väldigt nyttigt när du navigerar i världen av fri programvara och öppen källkod, där installationsinstruktioner ofta kräver skalet, när du bygger kontinuerlig integration för projekt (som i [föreläsningen om kodkvalitet]({{ '/2026/code-quality/' | relative_url }})), och när du felsöker programfel när andra program kraschar.
+Att kunna skalet är också väldigt nyttigt när du rör dig i världen kring fri programvara och öppen källkod, där installationsinstruktioner ofta kräver skalet, när du bygger kontinuerlig integration för projekt (som i [föreläsningen om kodkvalitet]({{ '/2026/code-quality/' | relative_url }})), och när du felsöker programfel när andra program kraschar.
 
 ## Navigera i skalet
 

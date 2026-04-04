@@ -19,7 +19,7 @@ I föreläsningen går vi igenom:
 - [Testning](#testning)
 - [Pre-commit-krokar](#pre-commit-krokar)
 - [Kontinuerlig integration(CI)](#kontinuerlig-integration)
-- [Kommandokörningar](#kommandokörningar)
+- [Kommandokörare](#kommandokörare)
 
 Som bonusämne går vi också igenom [reguljära uttryck](#reguljära-uttryck), ett tvärgående ämne som används inom kodkvalitet (t.ex. för att köra en delmängd tester som matchar ett mönster) och i andra områden som IDE:er (t.ex. för sök och ersätt).
 
@@ -34,14 +34,14 @@ På så sätt kan du fokusera på djupare och mer utmanande problem, medan forma
 En stor fördel med kodformaterare är att de standardiserar kodstilen för alla utvecklare som arbetar i kodbasen.
 
 Vissa verktyg, som Prettier, är [i hög grad konfigurerbara](https://prettier.io/docs/configuration), och du bör versionshantera konfigurationsfilen i [versionshantering]({{ '/2026/version-control/' | relative_url }}) för projektet.
-Andra verktyg, som [Black](https://github.com/psf/black) och [gofmt](https://pkg.go.dev/cmd/gofmt), har begränsad eller ingen konfigurerbarhet för att minska [bikeshedding](https://en.wikipedia.org/wiki/Law_of_triviality).
+Andra verktyg, som [Black](https://github.com/psf/black) och [gofmt](https://pkg.go.dev/cmd/gofmt), har begränsad eller ingen konfigurerbarhet för att minska [trivialitetsdebatter](https://en.wikipedia.org/wiki/Law_of_triviality) (s.k. _bikeshedding_).
 
 Du kan sätta upp [integrering i IDE:n]({{ '/2026/development-environment/#code-intelligence-and-language-servers' | relative_url }}) med din kodformaterare, så att koden formateras automatiskt medan du skriver eller när du sparar en fil.
 Du kan också lägga till en [EditorConfig](https://editorconfig.org/)-fil i projektet, som kommunicerar projektnivåinställningar till IDE:n, till exempel indenteringsstorlek per filtyp.
 
 # Lintning
 
-Linters kör statisk analys (analyserar din kod utan att köra den) för att hitta antipatterns och potentiella problem i koden.
+Linters kör statisk analys (analyserar din kod utan att köra den) för att hitta antimönster och potentiella problem i koden.
 Dessa verktyg går djupare än autoformaterare och tittar bortom ytsyntax.
 Hur djup analysen är varierar mellan verktyg.
 
@@ -66,13 +66,13 @@ semgrep -l python -e "subprocess.Popen(..., shell=True, ...)"
 Programvarutestning är en standardteknik för att öka din tillit till att koden är korrekt.
 Du skriver kod, och sedan skriver du kod som kör den kod du skrev och kastar ett fel om koden inte fungerar som förväntat.
 
-Du kan skriva tester för kodblock på olika granularitetsnivåer: _enhetstester_ för enskilda funktioner, _integrationstester_ för samspel mellan moduler eller tjänster och _funktionella tester_ för end-to-end-scenarier.
+Du kan skriva tester för kodblock på olika granularitetsnivåer: _enhetstester_ för enskilda funktioner, _integrationstester_ för samspel mellan moduler eller tjänster och _funktionella tester_ för heltäckande scenarier.
 Du kan arbeta med _testdriven utveckling_, där du skriver tester innan du skriver implementationen.
 När du hittar programfel i koden kan du skriva _regressionstester_ så att du fångar om funktionaliteten går sönder i framtiden.
-Du kan skriva _property-baserade tester_, introducerade i [QuickCheck](https://hackage.haskell.org/package/QuickCheck) i Haskell och implementerade i många bibliotek, som [Hypothesis](https://hypothesis.readthedocs.io/) för Python.
+Du kan skriva _egenskapsbaserade tester_, introducerade i [QuickCheck](https://hackage.haskell.org/package/QuickCheck) i Haskell och implementerade i många bibliotek, som [Hypothesis](https://hypothesis.readthedocs.io/) för Python.
 Vilken teststrategi som passar beror på projektet, och du kommer sannolikt att använda en kombination.
 
-Om programmet har externa beroenden som en databas eller ett webb-API kan det vara hjälpsamt att _mocka_ dessa beroenden i testerna i stället för att låta koden interagera med tredjepartsberoenden vid testkörning.
+Om programmet har externa beroenden som en databas eller ett webb-API kan det vara hjälpsamt att _simulera_ dessa beroenden i testerna i stället för att låta koden interagera med tredjepartsberoenden vid testkörning.
 
 ## Kodtäckning
 
@@ -102,7 +102,7 @@ Eftersom CI-skript körs separat från utvecklarnas datorer kan du enkelt köra 
 Det kan till exempel användas för att köra en test-_matris_ över olika operativsystem och versionskombinationer av programmeringsspråk för att säkerställa att programvaran fungerar korrekt på alla.
 
 Generellt ska skriptet som körs i CI inte direkt ändra koden.
-Det kör verktyg i "check-only"-läge i stället för "fix"-läge, så till exempel formateraren höjer ett fel när koden inte följer formatet.
+Det kör verktyg i kontrollläge i stället för rättningsläge, så till exempel formateraren höjer ett fel när koden inte följer formatet.
 
 Kodförråd innehåller ofta [statusmärken](https://docs.github.com/en/actions/how-tos/monitor-workflows/add-a-status-badge) i README, som visar CI-status och annan information som kodtäckning.
 Nedan är Missing Semesters nuvarande byggstatus.
@@ -121,9 +121,9 @@ Kontinuerlig driftsättning använder CI-infrastruktur för att faktiskt _drifts
 Till exempel använder Missing Semesters kodförråd kontinuerlig driftsättning till GitHub Pages, så att webbplatsen byggs och driftsätts automatiskt när vi skickar uppdaterade föreläsningsanteckningar med `git push`.
 Du kan bygga andra typer av [artefakter]({{ '/2026/shipping-code/' | relative_url }}) i CI, till exempel binärer för applikationer eller Docker-avbilder för tjänster.
 
-# Kommandokörningar
+# Kommandokörare
 
-Kommandokörningar som [just](https://github.com/casey/just) förenklar uppgiften att köra kommandon i projektets kontext.
+Kommandokörare som [just](https://github.com/casey/just) förenklar uppgiften att köra kommandon i projektets kontext.
 När du bygger upp infrastruktur för kodkvalitet i projektet vill du inte att utvecklarna ska behöva memorera kommandon som `uv run ruff check --fix`.
 Med ett sådant verktyg kan detta bli `just lint`, och du kan ha motsvarande kommandon som `just format`, `just typecheck` och så vidare för alla olika verktyg som en utvecklare kan vilja köra i projektet.
 
@@ -175,7 +175,7 @@ Här är några grundläggande byggstenar:
 - `^` matchar början av raden
 - `$` matchar slutet av raden
 
-## Capture groups och referenser
+## Fångstgrupper och referenser
 
 Om du använder regex-grupper `(...)` kan du referera till delmängder av matchningen för extrahering eller sök-och-ersätt.
 För att till exempel extrahera bara månaden från ett datum i stil med YYYY-MM-DD kan du använda följande Python-kod:

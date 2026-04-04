@@ -58,7 +58,7 @@ En hjälpsam mental modell är att tänka på dig själv som chef för en prakti
 Att fullständigt förklara det inre arbetssättet i moderna [stora språkmodeller (LLM:er)](https://en.wikipedia.org/wiki/Large_language_model) och infrastruktur som agentramverk ligger utanför kursens omfång.
 Det är dock hjälpsamt att ha en övergripande förståelse för några nyckelidéer för att effektivt _använda_ den här tekniken i framkant och förstå dess begränsningar.
 
-LLM:er kan ses som modeller av sannolikhetsfördelningen för fullföljande strängar (utdata) givet promptsträngar (indata).
+LLM:er kan ses som modeller av sannolikhetsfördelningen för kompletteringssträngar (utdata) givet promptsträngar (indata).
 LLM-inferens (det som händer när du t.ex. skickar en fråga till en konversationsapp) _drar stickprov_ från denna sannolikhetsfördelning.
 LLM:er har ett fast _kontextfönster_, den maximala längden på in- och utsträngarna.
 
@@ -150,7 +150,7 @@ I Missing Semesters kodförråd, ge agenten följande uppmaning:
 Här ger vi en kort översikt över några mer avancerade användningsmönster och förmågor hos kodagenter.
 
 - **Återanvändbara uppmaningar.** Skapa återanvändbara uppmaningar eller mallar.
-  Du kan till exempel skriva en detaljerad uppmaning för kodgranskning på ett särskilt sätt och spara den som en återanvändbar uppmaning. > Agentverktyg utvecklas snabbt. > I vissa verktyg är återanvändbara uppmaningar som fristående funktion avvecklade. > I till exempel Codex och Claude Code [ingår de](https://developers.openai.com/codex/custom-prompts) i [skills (färdigheter)](https://code.claude.com/docs/en/skills).
+  Du kan till exempel skriva en detaljerad uppmaning för kodgranskning på ett särskilt sätt och spara den som en återanvändbar uppmaning. > Agentverktyg utvecklas snabbt. > I vissa verktyg är återanvändbara uppmaningar som fristående funktion avvecklade. > I till exempel Codex och Claude Code [ingår de](https://developers.openai.com/codex/custom-prompts) i [färdigheter (_skills_)](https://code.claude.com/docs/en/skills).
 - **Parallella agenter.** Kodagenter kan vara långsamma: du kan ge agenten en uppmaning och låta den arbeta på ett problem i tiotals minuter.
   Du kan köra flera kopior av agenter samtidigt, antingen på samma uppgift (LLM:er är stokastiska, så det kan vara hjälpsamt att köra samma sak flera gånger och välja bästa lösningen) eller på olika uppgifter (t.ex. implementera två icke-överlappande funktioner samtidigt).
   För att undvika att ändringar från olika agenter stör varandra kan du använda [git-arbetsträd](https://git-scm.com/docs/git-worktree), som vi tar upp i föreläsningen om [versionshantering]({{ '/2026/version-control/' | relative_url }}).
@@ -200,15 +200,15 @@ Exempelprompt, utifrån master:
 
 Det här går snabbt och är bra för demonstrationssyfte.
 {% endcomment %}
-    - **Skills (färdigheter).** Innehåll i `AGENTS.md` laddas alltid, i sin helhet, in i agentens kontextfönster.
-      _Skills_ lägger till ett lager av indirektion för att undvika kontextuppblåsning: du kan ge agenten en lista med skills och beskrivningar, och agenten kan "öppna" en skill (ladda den i sitt kontextfönster) vid behov.
+    - **Färdigheter (_skills_).** Innehåll i `AGENTS.md` laddas alltid, i sin helhet, in i agentens kontextfönster.
+      _Färdigheter_ lägger till ett lager av indirektion för att undvika kontextuppblåsning: du kan ge agenten en lista med färdigheter och beskrivningar, och agenten kan "öppna" en färdighet (ladda den i sitt kontextfönster) vid behov.
     - **Underagenter.** Vissa kodagenter låter dig definiera underagenter, alltså agenter för uppgiftsspecifika arbetsflöden.
       Toppnivåagenten kan anropa en underagent för att lösa en viss uppgift, vilket gör att både toppnivåagenten och underagenten kan hantera kontext mer effektivt.
       Toppnivåagentens kontext sväller inte av allt underagenten ser, och underagenten kan få precis den kontext den behöver för uppgiften.
       Som exempel implementerar vissa kodagenter webbundersökning som en underagent: toppnivåagenten ställer en fråga till underagenten, som gör webbsökning, hämtar enskilda webbsidor, analyserar dem och returnerar ett svar till toppnivåagenten.
       På så sätt får toppnivåagenten inte sin kontext uppblåst av allt innehåll från hämtade webbsidor, och underagenten får inte resten av toppnivåagentens konversationshistorik i sin kontext.
 
-För många av de avancerade funktioner som kräver att du skriver uppmaningar (t.ex. skills/färdigheter eller underagenter) kan du använda LLM:er för att komma igång.
+För många av de avancerade funktioner som kräver att du skriver uppmaningar (t.ex. färdigheter eller underagenter) kan du använda LLM:er för att komma igång.
 Vissa kodagenter har till och med inbyggt stöd för detta.
 Till exempel kan Claude Code generera en underagent från en kort uppmaning (anropa `/agents` och skapa en ny agent).
 Prova att skapa en underagent med följande uppmaning:
@@ -228,7 +228,7 @@ De är inte "intelligenta" på samma sätt som människor.
 Granska AI-utdata för korrekthet och säkerhetsfel.
 Ibland kan det vara svårare att verifiera kod än att skriva koden själv.
 För kritisk kod kan det vara bättre att skriva den för hand.
-AI kan fastna i kaninhål och försöka vilseleda dig, så var uppmärksam på felsökningsspiraler.
+AI kan hamna på villovägar och försöka vilseleda dig, så var uppmärksam på felsökningsspiraler.
 Använd inte AI som krycka, och var vaksam på överberoende eller ytlig förståelse.
 Det finns fortfarande en stor klass av programmeringsuppgifter som AI ännu inte klarar.
 Beräkningstänkande är fortfarande värdefullt.
@@ -248,7 +248,7 @@ Andra populära kodagenter inkluderar Anthropics [Claude Code](https://www.claud
 1. Om du inte kommer på något kan du prova att använda en AI-agent för att förstå hur säkerhetsrelaterade funktioner fungerar i agenten [opencode](https://github.com/anomalyco/opencode).
 1. Vibekoda en liten app från grunden.
 1. Skriv inte en enda rad kod för hand.
-1. För den kodagent du föredrar, skapa och testa en `AGENTS.md` (eller motsvarande för din agent, som `CLAUDE.md`), en skill (t.ex. [skill in Claude Code](https://code.claude.com/docs/en/skills) eller [skill in Codex](https://developers.openai.com/codex/skills/)) och en underagent (t.ex. [underagenter i Claude Code](https://code.claude.com/docs/en/sub-agents)).
+1. För den kodagent du föredrar, skapa och testa en `AGENTS.md` (eller motsvarande för din agent, som `CLAUDE.md`), en färdighet (t.ex. [_skill_ i Claude Code](https://code.claude.com/docs/en/skills) eller [_skill_ i Codex](https://developers.openai.com/codex/skills/)) och en underagent (t.ex. [underagenter i Claude Code](https://code.claude.com/docs/en/sub-agents)).
 1. Fundera på när du vill använda den ena jämfört med den andra.
 1. Observera att din valda kodagent kanske inte stöder alla dessa funktioner.
 1. Du kan då antingen hoppa över dem eller prova en annan kodagent som har stöd.

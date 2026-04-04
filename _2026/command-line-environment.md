@@ -15,7 +15,7 @@ Som vi tog upp i förra föreläsningen är de flesta skal inte bara en startare
 I praktiken erbjuder de ett helt programmeringsspråk med vanliga mönster och abstraktioner.
 Till skillnad från de flesta andra programmeringsspråk är allt i skalskriptning designat kring att köra program och låta dem kommunicera enkelt och effektivt.
 
-Skalskriptning är dessutom starkt bunden till _konventioner_.
+Skalskriptning är dessutom starkt kopplad till _konventioner_.
 För att ett kommandoradsprogram (CLI) ska fungera väl i den större skalmiljön finns några mönster det bör följa.
 Vi kommer nu att täcka centrala begrepp för hur kommandoradsprogram fungerar såväl som vanliga konventioner för hur de används och konfigureras.
 
@@ -806,7 +806,7 @@ Populära ramverk är [prezto](https://github.com/sorin-ionescu/prezto) och [oh-
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) - färgar giltiga/ogiltiga kommandon medan du skriver
 - [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) - föreslår kommandon från historik medan du skriver
 - [zsh-completions](https://github.com/zsh-users/zsh-completions) - fler kompletteringsdefinitioner
-- [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search) - fish-lik historiksökning
+- [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search) - fish-liknande historiksökning
 - [powerlevel10k](https://github.com/romkatv/powerlevel10k) - snabbt, anpassningsbart prompttema
 
 Skal som [fish](https://fishshell.com/) har många av dessa funktioner som standard.

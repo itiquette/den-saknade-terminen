@@ -197,7 +197,7 @@ print(baz)
 Verktyg för statisk analys kan identifiera den typen av problem.
 När vi kör [`pyflakes`](https://pypi.org/project/pyflakes) på koden får vi fel kopplade till båda programfelen.
 [`mypy`](https://mypy-lang.org/) är ett annat verktyg som kan upptäcka typkontrollproblem.
-Här varnar `mypy` för att `bar` först är en `int` och sedan castas till `float`.
+Här varnar `mypy` för att `bar` först är en `int` och sedan omvandlas till `float`.
 Notera igen att alla dessa problem upptäcktes utan att köra koden.
 
 ```bash
@@ -419,7 +419,7 @@ Line #    Mem usage  Increment   Line Contents
 
 Precis som med `strace` för felsökningsfallet kan du vilja ignorera kodens detaljer och behandla det du kör som en svart låda när du profilerar.
 Kommandot [`perf`](https://www.man7.org/linux/man-pages/man1/perf.1.html) abstraherar bort CPU-skillnader och rapporterar inte tid eller minne direkt, utan systemhändelser relaterade till programmet.
-Till exempel kan `perf` enkelt rapportera dålig cachelokalitet, höga nivåer av page faults eller livelocks.
+Till exempel kan `perf` enkelt rapportera dålig cachelokalitet, höga nivåer av sidfel eller låsningsloopar.
 Här är en översikt:
 
 - `perf list` - Lista händelser som kan spåras med perf.
@@ -579,5 +579,5 @@ Utmaning: uppnå samma sak med [`cgroups`](https://www.man7.org/linux/man-pages/
 Prova att begränsa minnesförbrukningen för `stress -m`.
 
 1. (Avancerad) Kommandot `curl ipinfo.io` gör en HTTP-förfrågan och hämtar information om din publika IP.
-Öppna [Wireshark](https://www.wireshark.org/) och försök sniffa request- och reply-paketen som `curl` skickar och tar emot.
+Öppna [Wireshark](https://www.wireshark.org/) och försök fånga upp förfrågnings- och svarspaketen som `curl` skickar och tar emot.
 (Tips: använd filtret `http` för att bara se HTTP-paket.)

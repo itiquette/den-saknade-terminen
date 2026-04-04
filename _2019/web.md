@@ -57,7 +57,7 @@ En annan fördel med upplägget är att det, till skillnad från bokmärken, fun
 ## Integritetstillägg
 
 Numera kan webbsurfning bli ganska störig på grund av annonser och påträngande spårning.
-En bra annonsblockerare blockerar inte bara annonsinnehåll, utan kan också blockera suspekta och skadliga webbplatser eftersom de ofta finns i vanliga blocklistor.
+En bra annonsblockerare blockerar inte bara annonsinnehåll, utan kan också blockera misstänkta och skadliga webbplatser eftersom de ofta finns i vanliga blocklistor.
 Ibland förbättras även laddningstider eftersom färre förfrågningar skickas.
 Några rekommendationer:
 
@@ -145,7 +145,7 @@ Följande skript aktiverar till exempel vim-liknande navigering med tangenterna 
 Det finns också skriptarkiv som [OpenUserJS](https://openuserjs.org/) och [Greasy Fork](https://greasyfork.org/en).
 Men var försiktig: att installera användarskript från andra kan vara väldigt farligt, eftersom de i princip kan göra vad som helst, till exempel stjäla dina kortuppgifter.
 Installera aldrig ett skript om du inte läst hela själv, förstått vad det gör, och är helt säker på att det inte gör något misstänkt.
-Installera aldrig skript med minifierad eller obfuskerad kod som du inte kan läsa.
+Installera aldrig skript med komprimerad eller fördunklad kod som du inte kan läsa.
 
 ## Webb-API:er
 

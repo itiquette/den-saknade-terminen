@@ -17,7 +17,7 @@ Det handlar om att kommunicera tydligt, bidra genomtänkt och att vara en god me
 
 # Envägskommunikation
 
-En stor del av programvaruingenjörsarbete handlar om att skriva för människor som saknar din nuvarande kontext: teammedlemmar som ansluter senare, de som tar över ansvaret för din kod eller du själv om sex månader när du har glömt varför du gjorde ett visst val.
+En stor del av programvaruingenjörsarbete handlar om att skriva för människor som saknar din nuvarande kontext: kollegor som ansluter senare, de som tar över ansvaret för din kod eller du själv om sex månader när du har glömt varför du gjorde ett visst val.
 Ett nyckelråd för den här typen av skrivande är att målet är att fånga och förmedla *varför*, inte bara *vad*.
 Vad-frågan brukar vara självförklarande, medan *varför* är dyrköpt kunskap som lätt går förlorad över tid.
 
@@ -37,7 +37,7 @@ Typer av kommentarer som nästan alltid är värda att skriva:
 - **Korrekthetsargument**: Förklara *varför* icke-trivial kod ger korrekta resultat.
   Koden visar stegen.
   En kommentar förklarar varför stegen fungerar.
-- **Lärdomar den hårda vägen**: Om du har lagt 30+ minuter på att felsöka något och fixen är en icke-uppenbar trollformel, dokumentera den.
+- **Lärdomar den hårda vägen**: Om du har lagt 30+ minuter på att felsöka något och lösningen är en icke-uppenbar trollformel, dokumentera den.
   Ditt tidigare jag insåg inte att den behövdes.
   Framtida läsare gör det inte heller.
 - **Motivering för konstanter**: Magiska tal förtjänar en förklaring.
@@ -70,7 +70,7 @@ Generellt bör meddelandets brödtext svara på:
 - Vad kan vara överraskande med den här lösningen?
 
 > Skala såklart detaljnivån med komplexiteten.
-> En enradig stavfelsfix behöver bara ett ämnesfält.
+> En enradig stavfelsrättning behöver bara ett ämnesfält.
 > En subtil fix av ett kapplöpningsproblem som tog timmar att felsöka förtjänar stycken som förklarar problem och lösning.
 
 För komplexa ändringar kan det vara användbart att följa strukturen Problem → Lösning → Konsekvenser.
@@ -106,7 +106,7 @@ Den tiden är oftast uppdelad i samarbete och utbildning, och vinsten av att bli
 
 Oavsett om du skickar en felrapport, bidrar med en enkel felrättning eller implementerar en stor funktion är det värt att komma ihåg att det oftast finns långt fler användare än bidragsgivare, och långt fler bidragsgivare än de som ansvarar för projekten.
 Som följd är de ansvariges tid hårt belastad.
-Om du vill öka sannolikheten att ditt bidrag leder någonstans produktivt behöver du se till att bidraget har hög signal och lågt brus, och är värt de ansvariges tid.
+Om du vill öka sannolikheten att ditt bidrag leder någonstans produktivt behöver du se till att bidraget har högt informationsvärde och lite brus, och är värt de ansvariges tid.
 
 En bra felrapport respekterar till exempel den ansvariges tid genom att ge allt som behövs för att förstå och reproducera problemet:
 
@@ -116,7 +116,7 @@ En bra felrapport respekterar till exempel den ansvariges tid genom att ge allt 
   "Klicka på knappen" är mindre användbart än "Klicka på knappen Submit på sidan /settings medan du är inloggad som administratör."
 - **Vad du redan har provat**: Detta förhindrar dubbla förslag och visar att du har gjort en egen undersökning.
 
-> Om du hittar en säkerhetssårbarhet ska du inte posta den publikt.
+> Om du hittar en säkerhetssårbarhet ska du inte publicera den offentligt.
 > Kontakta de ansvariga privat först och ge dem rimlig tid att fixa den innan offentliggörande.
 > Många projekt har en `SECURITY.md` eller liknande för detta ändamål.
 
@@ -124,12 +124,12 @@ En bra felrapport respekterar till exempel den ansvariges tid genom att ge allt 
 Det minskar dessutom brus för de ansvariga.
 
 Minimala reproducerbara exempel är guld, om du kan få fram ett.
-De sparar den ansvarige enormt mycket tid och arbete, och att reproducera programfelet pålitligt är ofta den svåraste delen av att fixa det.
+De sparar den ansvarige enormt mycket tid och arbete, och att reproducera programfelet pålitligt är ofta den svåraste delen av att åtgärda det.
 Arbetet du lägger på att isolera problemet hjälper dessutom ofta dig att förstå det bättre och leder ibland till att du hittar lösningen själv.
 
 Om du inte får svar direkt, kom ihåg att de ansvariga ofta är volontärer med begränsad tid.
 Om du väntar på svar är en artig uppföljning efter ett par veckor okej.
-Dagliga pingar är det inte.
+Dagliga påminnelser är det inte.
 På samma sätt är "jag också"-kommentarer, eller felrapporter som bara är inklistrad terminalutskrift, oftast kontraproduktiva för möjligheten att frågan får fart.
 
 Om du vill bidra med kod bör du också sätta dig in i riktlinjerna för bidrag.
@@ -164,7 +164,7 @@ Det är okej att använda AI för att hjälpa dig identifiera problem och ta fra
 
 Kom ihåg att när de ansvariga accepterar en ändringsförfrågan accepterar de också ett långsiktigt ansvar.
 De kommer att underhålla koden långt efter att bidragsgivaren har gått vidare, och kan därför tacka nej till ändringar som är välmenande men inte passar projektets riktning, tillför komplexitet de inte vill underhålla eller där behovet helt enkelt inte är tillräckligt väl dokumenterat.
-Det är _du_ som bidragsgivare som måste argumentera för varför det är värt underhållsbördan att acceptera bidraget.
+Det är _du_ som bidragsgivare som måste argumentera för varför bidraget är värt att acceptera trots underhållsbördan.
 
 > När du får återkoppling på en ändringsförfrågan, skilj på dig själv och din kod.
 > Granskare försöker göra koden bättre, inte kritisera dig personligen.
@@ -189,7 +189,7 @@ Bra kodgranskning är en färdighet du behöver träna upp över tid, men det fi
 - **Förklara "varför"**: "Överväg att använda en konstant här" är mindre användbart än "Överväg att använda en konstant här så att vi enkelt kan justera tidsgränsen utifrån miljö."
 - **Skilj blockerande problem från förslag**: Var tydlig med vad som måste ändras kontra vad som är en smakfråga.
 - **Uppmärksamma det som är bra**: Att lyfta smarta lösningar eller rena implementationer är uppmuntrande och hjälper författaren att veta vad hen ska fortsätta med.
-- **Vet när du ska sluta**: Bidragsgivare har begränsat med tid och tålamod, och den tiden används inte alltid bäst till att hantera alla smånitar.
+- **Vet när du ska sluta**: Bidragsgivare har begränsat med tid och tålamod, och den tiden används inte alltid bäst till att hantera alla smådetaljer.
   Fokusera på de stora sakerna och överväg att städa upp småsaker själv i efterhand.
 
 > AI-verktyg kan fånga vissa problem, men de ersätter inte mänsklig granskning.
@@ -233,12 +233,12 @@ Det finns en betydande skillnad mellan "det här är helt vibekodat" och "jag sk
 Vi har till exempel använt LLM:er för att hjälpa till att skriva delar av dessa föreläsningsanteckningar, inklusive korrekturläsning, brainstorming och framtagning av första utkast till kodsnuttar och övningar.
 
 Du behöver också följa normerna i teamen och projekten du bidrar till.
-Vissa team har striktare policyer kring användning av AI än andra (t.ex. av compliance- eller data residency-skäl), och du vill inte råka bryta mot dem.
+Vissa team har striktare policyer kring användning av AI än andra (t.ex. av efterlevnads- eller datalagringsrelaterade skäl), och du vill inte råka bryta mot dem.
 Öppenhet om hur du använder AI hjälper till att förebygga potentiellt kostsamma misstag.
 
 > Om ditt mål är att lära dig i arbetet, tänk på att om du låter AI göra allt eller nästan allt arbete åt dig kan det motverka syftet.
 > Du lär dig sannolikt mer om hur man skriver uppmaningar (och kanske granskning av AI-utdata) än om själva uppgiften.
-> Särskilt i lärandesituationer kan poängen vara resan, inte destinationen, så att använda AI för att "snabbt få lösningen" är ett anti-mål.
+> Särskilt i lärandesituationer kan poängen vara resan, inte destinationen, så att använda AI för att "snabbt få lösningen" motverkar syftet.
 
 En relaterad fråga uppstår i intervjuer och andra bedömningssituationer.
 De är ofta avsedda att utvärdera _dina_ färdigheter och förmågor, inte en LLM:s.

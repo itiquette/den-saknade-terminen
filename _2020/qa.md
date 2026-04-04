@@ -63,7 +63,7 @@ Generellt är Bash-skript bra för korta och enkla engångsskript där du bara v
 Bash har dock flera egenheter som gör det svårt att arbeta med i större program eller skript:
 
 - Bash är lätt att få rätt i enkla fall men kan vara väldigt svårt att få rätt för alla möjliga indata.
-  Till exempel har mellanslag i skriptargument orsakat otaliga buggar i Bash-skript.
+  Till exempel har mellanslag i skriptargument orsakat otaliga programfel i Bash-skript.
 - Bash lämpar sig dåligt för kodåteranvändning, så det kan vara svårt att återanvända delar av tidigare program.
   Mer generellt finns inget tydligt bibliotekstänk i Bash.
 - Bash förlitar sig på många magiska strängar som `$?` eller `$@` för specifika värden, medan andra språk ofta använder explicita namn, som `exitCode` eller `sys.args`.
@@ -180,7 +180,7 @@ I [anteckningarna om redigerare]({{ '/2020/editors/#macros' | relative_url }}) (
 
 För tabellformad data, ofta i CSV-format, är Python-biblioteket [pandas](https://pandas.pydata.org/) ett utmärkt verktyg.
 Inte bara för att det gör det enkelt att definiera komplexa operationer som group by, joins eller filter, utan också för att det gör det enkelt att rita diagram över olika egenskaper i datan.
-Det stödjer även export till många tabellformat, inklusive XLS, HTML och LaTeX. Alternativt har programspråket R (ett möjligen [dåligt](https://arrgh.tim-smith.us/) språk) mycket funktionalitet för statistik över data och kan vara användbart som sista steg i din pipeline.
+Det stödjer även export till många tabellformat, inklusive XLS, HTML och LaTeX. Alternativt har programspråket R (ett möjligen [dåligt](https://arrgh.tim-smith.us/) språk) mycket funktionalitet för statistik över data och kan vara användbart som sista steg i din bearbetningskedja.
 [ggplot2](https://ggplot2.tidyverse.org/) är ett utmärkt diagrambibliotek i R.
 
 ## Vad är skillnaden mellan Docker och en virtuell maskin? {#what-is-the-difference-between-docker-and-a-virtual-machine}

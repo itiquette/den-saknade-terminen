@@ -56,7 +56,7 @@ Några bra alternativ är:
 Om du är extra försiktig, använd en som krypterar lösenorden lokalt på din dator, i stället för att lagra dem i klartext på servern.
 Använd den för att generera lösenord till alla webbplatser du bryr dig om redan nu.
 Slå sedan på tvåfaktorsautentisering, helst med en [FIDO/U2F](https://fidoalliance.org/)-dongel (till exempel en [YubiKey](https://www.yubico.com/quiz/), som har [20% rabatt för studenter](https://www.yubico.com/why-yubico/for-education/)).
-TOTP (som Google Authenticator eller Duo) fungerar också i nödfall, men [skyddar inte mot phishing](https://twitter.com/taviso/status/1082015009348104192).
+TOTP (som Google Authenticator eller Duo) fungerar också i nödfall, men [skyddar inte mot nätfiske](https://twitter.com/taviso/status/1082015009348104192).
 SMS är i stort sett värdelöst, om inte din hotmodell enbart består av slumpmässiga främlingar som snappar upp lösenord i transit.
 
 Värt att uppmärksamma om pappersnycklar: tjänster ger dig ofta en "reservnyckel" som kan användas som andra faktor om du tappar din riktiga.
@@ -100,7 +100,7 @@ Vad är det egentligen du försöker skydda dig mot?
       Exakta krypteringsinställningar spelar stor roll.
  - [Plausible deniability](https://en.wikipedia.org/wiki/Plausible_deniability) ("vad verkar vara problemet, konstapeln?"): vanligtvis sämre prestanda, och lättare att tappa data.
    Svårt att faktiskt bevisa att det ger [deniable encryption](https://en.wikipedia.org/wiki/Deniable_encryption).
-   Se [diskussionen här](https://security.stackexchange.com/questions/135846/is-plausible-deniability-actually-feasible-for-encrypted-volumes-disks), och överväg sedan om du vill prova [VeraCrypt](https://www.veracrypt.fr/en/Home.html) (den underhållna forken av gamla goda TrueCrypt).
+   Se [diskussionen här](https://security.stackexchange.com/questions/135846/is-plausible-deniability-actually-feasible-for-encrypted-volumes-disks), och överväg sedan om du vill prova [VeraCrypt](https://www.veracrypt.fr/en/Home.html) (den underhållna avgreningen av gamla goda TrueCrypt).
  - Krypterade säkerhetskopior: använd [Tarsnap](https://www.tarsnap.com/) eller [Borgbase](https://www.borgbase.com/)
     - Tänk på om en angripare kan radera dina säkerhetskopior om de får tag i din laptop.
 

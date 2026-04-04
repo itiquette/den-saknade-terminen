@@ -351,8 +351,8 @@ Till skillnad från engångsdiagram låter dessa verktyg dig snabbt skära och t
 
 **Exempel på användningsfall:**
 - Att rita upp svarsfördröjning över tid avslöjar återkommande fördröjningar (skräpsamling, cron-jobb, trafikmönster) som råa percentiler döljer.
-- Att visualisera insertion-tider för en växande datastruktur kan exponera algoritmisk komplexitet, en graf över vector-insertions visar typiska toppar när den underliggande arrayen dubblas.
-- Att dela upp mätvärden över olika dimensioner (request-typ, användarkohort, server) avslöjar ofta att ett "systemomfattande" problem i själva verket är isolerat till en kategori.
+- Att visualisera insättningstider för en växande datastruktur kan avslöja algoritmisk komplexitet, en graf över vektorinsättningar visar typiska toppar när den underliggande arrayen dubblas.
+- Att dela upp mätvärden över olika dimensioner (förfrågningstyp, användarkohort, server) avslöjar ofta att ett "systemomfattande" problem i själva verket är isolerat till en kategori.
 
 ## CPU-profilerare
 
@@ -443,7 +443,7 @@ Det visar heap-användning över tid och hjälper dig identifiera minnesläckor 
 
 > För Python ger [`memory-profiler`](https://pypi.org/project/memory-profiler/) rad-för-rad-information om minnesanvändning.
 
-## Benchmarking
+## Prestandajämförelse
 
 När du behöver jämföra prestanda mellan olika implementationer eller verktyg är [`hyperfine`](https://github.com/sharkdp/hyperfine) utmärkt för att prestandatesta kommandoradsprogram:
 

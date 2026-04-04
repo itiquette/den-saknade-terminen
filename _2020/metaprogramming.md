@@ -199,8 +199,8 @@ Några stora aktörer är Travis CI, Azure Pipelines och GitHub Actions.
 Alla fungerar ungefär likadant.
 Du lägger till en fil i kodförrådet som beskriver vad som ska hända när olika saker händer i kodförrådet.
 Det vanligaste är en regel i stil med "när någon skickar kod, kör testsviten".
-När händelsen triggas startar CI-leverantören en eller flera virtuella maskiner, kör kommandona i ditt "recept" och sparar sedan vanligtvis resultatet någonstans.
-Du kan till exempel sätta upp notiser när testsviten börjar misslyckas, eller en liten badge i kodförrådet så länge testerna går igenom.
+När händelsen utlöses startar CI-leverantören en eller flera virtuella maskiner, kör kommandona i ditt "recept" och sparar sedan vanligtvis resultatet någonstans.
+Du kan till exempel sätta upp notiser när testsviten börjar misslyckas, eller ett litet statusmärke i kodförrådet så länge testerna går igenom.
 
 Som exempel på CI är kursens webbplats uppsatt med GitHub Pages.
 Pages är en CI-åtgärd som kör Jekyll varje gång kod skickas till `master` och publicerar den byggda sajten på en viss GitHub-domän.
@@ -217,8 +217,8 @@ Du kanske redan känner till grundidén med testning, men vi tänkte snabbt näm
  - Enhetstest: ett "mikrotest" som testar en specifik funktion isolerat.
  - Integrationstest: ett "makrotest" som kör en större del av systemet för att kontrollera att olika funktioner eller komponenter fungerar _tillsammans_.
  - Regressionstest: ett test som implementerar ett mönster som _tidigare_ orsakade ett programfel, för att säkerställa att programfelet inte återkommer.
- - Mockning: att ersätta en funktion, modul eller typ med en fejkimplementation för att undvika att testa orelaterad funktionalitet.
-   Till exempel kan du "mocka nätverket" eller "mocka disken".
+ - Simulering: att ersätta en funktion, modul eller typ med en låtsasimplementation för att undvika att testa orelaterad funktionalitet.
+   Till exempel kan du "simulera nätverket" eller "simulera disken".
 
 # Övningar
 

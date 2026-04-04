@@ -212,7 +212,7 @@ I just _det här_ exemplet spelar det ingen roll om vi sorterar på hela raden, 
 Om vi i stället vill ha de _minst_ vanliga kan vi använda `head` i stället för `tail`.
 Det finns också `sort -r`, som sorterar omvänt.
 
-Okej, det här är ganska coolt, men vi vill kanske bara ha användarnamnen, och kanske inte en per rad.
+Okej, det här är ganska häftigt, men vi vill kanske bara ha användarnamnen, och kanske inte en per rad.
 
 ```bash
 ssh myserver journalctl

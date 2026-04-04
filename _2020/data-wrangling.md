@@ -222,7 +222,7 @@ I just _detta_ exempel spelar sortering på hela raden ingen roll, men vi är h�
 Om vi ville ha de _minst_ vanliga kunde vi använda `head` i stället för `tail`.
 Det finns också `sort -r`, som sorterar i omvänd ordning.
 
-Okej, detta är ganska coolt, men vad om vi vill extrahera bara användarnamnen som en kommaseparerad lista i stället för en per rad, kanske för en konfigurationsfil?
+Okej, detta är ganska häftigt, men vad om vi vill extrahera bara användarnamnen som en kommaseparerad lista i stället för en per rad, kanske för en konfigurationsfil?
 
 ```bash
 ssh myserver journalctl

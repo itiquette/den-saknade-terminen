@@ -17,7 +17,7 @@ Att få samma kod att köra på en annan maskin än din egen är ofta ännu svå
 Att distribuera kod innebär att ta koden du skrev och omvandla den till en användbar form som någon annan kan köra utan din dators exakta miljö.
 Att distribuera kod kan se ut på många sätt och beror på val av programmeringsspråk, systembibliotek, operativsystem och många andra faktorer.
 Det beror också på vad du bygger; ett programbibliotek, ett kommandoradsverktyg och en webbtjänst har olika krav och driftsättningssteg.
-Oavsett finns ett gemensamt mönster i alla dessa scenarier: vi måste definiera vad leverabeln är --- det vill säga en artefakt --- och vilka antaganden den gör om miljön runt omkring.
+Oavsett finns ett gemensamt mönster i alla dessa scenarier: vi måste definiera vad slutprodukten är --- det vill säga en artefakt --- och vilka antaganden den gör om miljön runt omkring.
 
 I föreläsningen går vi igenom:
 
@@ -97,7 +97,7 @@ I vissa språk som Rust är verktygskedjan enhetlig --- `cargo` hanterar bygg, t
 I andra som Python sker enhetligheten på specifikationsnivå --- i stället för ett enda verktyg finns standardiserade specifikationer som definierar hur paketering fungerar, vilket möjliggör flera konkurrerande verktyg för varje uppgift (`pip` vs [`uv`](https://docs.astral.sh/uv/), `setuptools` vs [`hatch`](https://hatch.pypa.io/) vs [`poetry`](https://python-poetry.org/)).
 Och i vissa ekosystem som LaTeX levereras distributioner som TeX Live eller MacTeX med tusentals förinstallerade paket.
 
-Att introducera beroenden introducerar också beroendekonflikter.
+Att lägga till beroenden medför också beroendekonflikter.
 Konflikter uppstår när program kräver inkompatibla versioner av samma beroende.
 Om till exempel `tensorflow==2.3.0` kräver `numpy>=1.16.0,<1.19.0` och `pandas==1.2.0` kräver `numpy>=1.16.5`, så är alla versioner som uppfyller `numpy>=1.16.5,<1.19.0` giltiga.
 Men om ett annat paket i projektet kräver `numpy>=1.19` har du en konflikt utan någon giltig version som uppfyller alla krav.
@@ -462,7 +462,7 @@ COPY . /app
 ```
 
 I föregående exempel ser vi att vi i stället för att installera `uv` från källkod kopierar den förbyggda binären från avbilden `ghcr.io/astral-sh/uv:latest`.
-Det kallas _builder_-mönstret.
+Det kallas byggarmönstret (eng. _builder pattern_).
 Med detta mönster behöver vi inte skicka med alla verktyg som krävs för att kompilera koden, bara den slutliga binären som behövs för att köra applikationen (`uv` i detta fall).
 
 Docker har viktiga begränsningar att känna till.

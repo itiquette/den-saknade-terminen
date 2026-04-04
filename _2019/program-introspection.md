@@ -40,8 +40,8 @@ Några kommandon:
 - `c` - fortsätt
 - `step` / `next` / `finish` - stega in / stega över / stega ut
 - `p {variable}` - skriv ut variabelvärde
-- `watch {expression}` - sätt en bevakningspunkt som triggar när uttryckets värde ändras
-- `rwatch {expression}` - sätt en bevakningspunkt som triggar när värdet läses
+- `watch {expression}` - sätt en bevakningspunkt som utlöses när uttryckets värde ändras
+- `rwatch {expression}` - sätt en bevakningspunkt som utlöses när värdet läses
 - `layout`
 
 ## PDB

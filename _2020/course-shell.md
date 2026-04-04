@@ -48,7 +48,7 @@ Du kan inte trycka på en knapp som inte finns eller ge ett röstkommando som in
 För att fullt ut utnyttja verktygen i din dator behöver vi gå tillbaka till grunderna och använda ett textbaserat gränssnitt: skalet.
 
 Nästan alla plattformar du kan få tag i har ett skal i någon form, och många av dem har flera skal att välja mellan.
-Detaljerna skiljer sig, men i grunden är de ungefär lika: de låter dig köra program, ge dem indata och läsa deras utdata på ett semistrukturerat sätt.
+Detaljerna skiljer sig, men i grunden är de ungefär lika: de låter dig köra program, ge dem indata och läsa deras utdata på ett halvstrukturerat sätt.
 
 I föreläsningen fokuserar vi på Bourne Again SHell, eller "bash".
 Det är ett av de mest använda skalen, och dess syntax liknar det du ser i många andra skal.

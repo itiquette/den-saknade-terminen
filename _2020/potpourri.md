@@ -156,7 +156,7 @@ De flesta tjänster på nätet har "API:er" som låter dig komma åt deras data 
 Till exempel har USA:s regering ett API för väderprognoser, vilket du kan använda för att enkelt hämta väderprognos i ditt skal.
 
 De flesta API:er har liknande format.
-De är strukturerade URL:er, ofta under `api.service.com`, där path och query-parametrar anger vilken data du vill läsa eller vilken åtgärd du vill utföra.
+De är strukturerade URL:er, ofta under `api.service.com`, där sökvägs- och frågeparametrar anger vilken data du vill läsa eller vilken åtgärd du vill utföra.
 För väderdatan i USA gör du till exempel en GET-förfrågan (med `curl`, till exempel) till https://api.weather.gov/points/42.3604,-71.094 för att få prognosen för en viss plats.
 Svaret innehåller i sin tur flera andra URL:er för mer specifika prognoser i regionen.
 Vanligtvis är svaren i JSON-format, som du sedan kan skicka vidare till ett verktyg som [`jq`](https://stedolan.github.io/jq/) för att forma datan till det du behöver.
@@ -206,7 +206,7 @@ Det är definitivt värt att testa.
 
 ## VPN
 
-VPN är väldigt hajpat i dag, men det är inte självklart att det finns [någon bra anledning](https://web.archive.org/web/20230710155258/https://gist.github.com/joepie91/5a9909939e6ce7d09e29).
+VPN är väldigt upphaussat i dag, men det är inte självklart att det finns [någon bra anledning](https://web.archive.org/web/20230710155258/https://gist.github.com/joepie91/5a9909939e6ce7d09e29).
 Du bör veta vad en VPN gör och inte gör för dig.
 I bästa fall är en VPN _egentligen_ bara ett sätt att byta internetleverantör ur internets perspektiv.
 All din trafik ser ut att komma från VPN-leverantören i stället för din "riktiga" plats, och nätverket du är ansluten till ser bara krypterad trafik.
@@ -242,7 +242,7 @@ Betoning (*kursiv*) åstadkoms genom att omge ord med `*`.
 Stark betoning (**fetstil**) åstadkoms med `**`.
 Rader som börjar med `#` är rubriker (och antalet `#` avgör rubriknivå).
 Rader som börjar med `-` är punktlistepunkter, och rader som börjar med ett tal + `.` är numrerade listpunkter.
-Bakåtcitattecken används för ord i `kodstil`, och kodblock kan skrivas genom att indentera med fyra blanksteg eller omge med trippla bakåtcitattecken:
+Bakåtcitattecken används för ord i `kodstil`, och kodblock kan skrivas genom att göra indrag med fyra blanksteg eller omge med trippla bakåtcitattecken:
 
     ```
     code goes here

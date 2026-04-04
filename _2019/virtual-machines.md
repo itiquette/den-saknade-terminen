@@ -37,7 +37,7 @@ Virtuella maskiner är generellt långsammare än att köra direkt på hårdvara
 ## Konfiguration
 
 - **Resurser**: delas med värdmaskinen.
-Tänk på detta när du allokerar fysiska resurser.
+Tänk på detta när du tilldelar fysiska resurser.
 
 - **Nätverk**: många alternativ.
 Standard-NAT fungerar bra i de flesta fall.

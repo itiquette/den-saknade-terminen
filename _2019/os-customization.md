@@ -59,7 +59,7 @@ Du kan sätta upp tangentbordsgenvägar som hjälper dig att hantera fönster ö
 
 ## Fönsterplaceringar
 
-Om du ofta placerar fönster på ett visst sätt på skärmen, kan du skripta placeringen i stället för att "utföra" den manuellt varje gång.
+Om du ofta placerar fönster på ett visst sätt på skärmen, kan du skapa skript för placeringen i stället för att "utföra" den manuellt varje gång.
 Då blir det enkelt att återskapa placeringen.
 
 # Resurser
