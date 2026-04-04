@@ -12,12 +12,12 @@ video:
 ---
 
 Som vi tog upp i förra föreläsningen är de flesta skal inte bara en startare för andra program.
-I praktiken erbjuder de ett helt programmeringsspråk med vanliga mönster och abstraktioner.
+I praktiken erbjuder de ett helt programmeringsspråk med välkända mönster och abstraktioner.
 Till skillnad från de flesta andra programmeringsspråk är allt i skalskriptning designat kring att köra program och låta dem kommunicera enkelt och effektivt.
 
 Skalskriptning är dessutom starkt kopplad till _konventioner_.
 För att ett kommandoradsprogram (CLI) ska fungera väl i den större skalmiljön finns några mönster det bör följa.
-Vi kommer nu att täcka centrala begrepp för hur kommandoradsprogram fungerar såväl som vanliga konventioner för hur de används och konfigureras.
+Vi kommer nu att täcka centrala begrepp för hur kommandoradsprogram fungerar såväl som vedertagna konventioner för hur de används och konfigureras.
 
 # Kommandoradsgränssnittet
 
@@ -711,7 +711,7 @@ När du försöker köra ett kommando som inte är installerat visar skalet `com
 Webbplatsen [command-not-found.com](https://command-not-found.com) är en bra resurs för att hitta installationsinstruktioner i olika pakethanterare och distributioner.
 
 Ett annat användbart verktyg är [`tldr`](https://tldr.sh/), som ger förenklade man-sidor med fokus på exempel.
-I stället för att läsa igenom mängder av dokumentation ser du snabbt vanliga användningsmönster:
+I stället för att läsa igenom mängder av dokumentation ser du snabbt vanligt förekommande användningsmönster:
 
 ```console
 $ tldr fd

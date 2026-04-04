@@ -222,7 +222,7 @@ För Python är [`pylint`](https://github.com/PyCQA/pylint) och [`pep8`](https:/
 För andra språk har människor sammanställt omfattande listor över användbara verktyg för statisk analys, till exempel [Awesome Static Analysis](https://github.com/mre/awesome-static-analysis) (du kan titta på avsnittet _Writing_), och för linters finns [Awesome Linters](https://github.com/caramelomartins/awesome-linters).
 
 Ett komplement till stil-lintning är kodformaterare, som [`black`](https://github.com/psf/black) för Python, `gofmt` för Go, `rustfmt` för Rust eller [`prettier`](https://prettier.io/) för JavaScript, HTML och CSS.
-Dessa verktyg autoformaterar koden så att den följer vanliga stilkonventioner för det aktuella språket.
+Dessa verktyg autoformaterar koden så att den följer vedertagna stilkonventioner för det aktuella språket.
 Även om du kanske inte vill ge upp stilkontroll över koden hjälper standardiserat format andra att läsa din kod och gör dig bättre på att läsa andras (stilmässigt standardiserade) kod.
 
 # Profilering
