@@ -1,7 +1,7 @@
 # Setup
 title: 'Den saknade terminen'
-url: https://itiquette.github.io
-baseurl: /den-saknade-terminen
+url: https://den-saknade-terminen.l10n.se
+baseurl: ""
 thumbnail: "/static/assets/thumbnails/default.png"
 
 # Settings
